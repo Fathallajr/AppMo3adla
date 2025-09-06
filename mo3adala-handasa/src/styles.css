@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Cairo font */
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/cairo/v28/SLXGc1nY6HkvalI.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F, U+202A-202E, U+2066-2069;
+}
+
+html[lang="ar"][dir="rtl"] body {
+  @apply bg-slate-50 text-slate-900 font-cairo antialiased;
+}
