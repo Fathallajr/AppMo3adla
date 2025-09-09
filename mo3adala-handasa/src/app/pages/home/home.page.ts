@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { fadeInUp, staggerList } from '../../shared/animations';
+import { fadeInUp, staggerList, homePageTransition, cardAnimation } from '../../shared/animations';
 import { SeoService } from '../../core/seo.service';
 import { CanonicalService } from '../../core/canonical.service';
 import { JsonLdService } from '../../core/jsonld.service';
@@ -12,12 +12,15 @@ import { SuccessStudentsComponent } from '../../shared/components/success-studen
 	selector: 'app-home-page',
 	standalone: true,
 	imports: [CommonModule, RouterLink, WhatIsEquationComponent, SuccessStudentsComponent],
-	animations: [fadeInUp, staggerList],
+	animations: [fadeInUp, staggerList, homePageTransition, cardAnimation],
 	templateUrl: './home.page.html',
 	styleUrls: ['./home.page.css'],
 })
 export class HomePageComponent {
-	features = ['مناهج مُحدّثة', 'شرح بسيط + أمثلة', 'خطط مذاكرة تناسب وقتك', 'دعم ومتابعة'];
+	@ViewChild('reviewsTrack', { static: false }) reviewsTrack!: ElementRef<HTMLDivElement>;
+	
+	features = ['مناهج بسيطة مُحدّثة 2026 ', 'شرح + أمثلة + امتحانات إلكترونية', 'خطط مذاكرة تناسب وقتك', 'دعم ومتابعة علي مدار 24 ساعة'];
+	
 	constructor(private seo: SeoService, private canonical: CanonicalService, private jsonld: JsonLdService) {
 		const siteUrl = (typeof window !== 'undefined' ? (window as any)['NG_SITE_URL'] : process.env['NG_SITE_URL']) || 'https://example.com';
 		const title = 'معادلة كلية هندسة — طريقك السريع لدخول هندسة';
@@ -44,5 +47,21 @@ export class HomePageComponent {
 				"query-input": "required name=query"
 			}
 		}, 'website-ld');
+	}
+
+	scrollReviewsPrev() {
+		if (this.reviewsTrack) {
+			const track = this.reviewsTrack.nativeElement;
+			const cardWidth = track.querySelector('.carousel-figure')?.clientWidth || 300;
+			track.scrollBy({ left: cardWidth + 16, behavior: 'smooth' });
+		}
+	}
+
+	scrollReviewsNext() {
+		if (this.reviewsTrack) {
+			const track = this.reviewsTrack.nativeElement;
+			const cardWidth = track.querySelector('.carousel-figure')?.clientWidth || 300;
+			track.scrollBy({ left: -(cardWidth + 16), behavior: 'smooth' });
+		}
 	}
 }

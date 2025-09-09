@@ -1,3 +1,92 @@
-/* Footer-specific styles if needed */
+/* Footer-specific styles */
+footer {
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+footer * {
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+/* Social media icons hover effects */
+.social-icon {
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(234, 88, 12, 0.3);
+}
+
+/* Newsletter input focus */
+.newsletter-input:focus {
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
+}
+
+/* Newsletter button hover */
+.newsletter-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.4);
+}
+
+/* Link hover effects */
+.footer-link {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.footer-link:hover {
+  transform: translateX(4px);
+}
+
+/* Contact info icons */
+.contact-icon {
+  transition: all 0.3s ease;
+}
+
+.contact-icon:hover {
+  transform: scale(1.1);
+  background-color: #ea580c;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .newsletter-input {
+    font-size: 14px;
+  }
+  
+  .newsletter-button {
+    font-size: 14px;
+    padding: 0.5rem 1rem;
+  }
+  
+  .social-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
+
+/* Animation for newsletter section */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.newsletter-section {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Gradient text effect for headings */
+.footer-heading {
+  background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
 
 

@@ -1,0 +1,125 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50" [@subPageTransition]>
+  <div class="container mx-auto px-4 py-16">
+    <!-- Header Section -->
+    <div class="text-center mb-16" [@fadeInUp]>
+      <h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+        المدرسين
+      </h1>
+      <p class="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+        تعرف على نخبة من أفضل المدرسين في ابلكيشن معادلة كلية كلية الهندسة، خبراء في تخصصاتهم ومتفانين في تعليم الطلاب
+      </p>
+    </div>
+
+    <!-- Teachers Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-16" [@cascadeAnimation]>
+      <!-- Teacher Card 1 -->
+      <div class="bg-white rounded-xl shadow-lg p-4 hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2" 
+           [@cardAnimation]
+           (click)="viewTeacherDetails(1)">
+        <div class="text-center">
+          <div class="w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden border-3 border-blue-200">
+            <img src="/assets/teachers/ahmed-mohamed.jpg" 
+                 alt="د. أحمد محمد" 
+                 class="w-full h-full object-cover"
+                 onerror="this.src='/assets/logo.png'">
+          </div>
+          <h3 class="text-lg font-semibold text-slate-900 mb-1"> المهندس أحمد فتح الله</h3>
+          <p class="text-blue-600 font-medium mb-2 text-sm">أستاذ الرياضيات</p>
+          <div class="mt-3 text-blue-600 text-xs font-medium">
+            اضغط للمزيد ←
+          </div>
+        </div>
+      </div>
+
+      <!-- Teacher Card 2 -->
+      <div class="bg-white rounded-xl shadow-lg p-4 hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2" 
+           [@cardAnimation]
+           (click)="viewTeacherDetails(2)">
+        <div class="text-center">
+          <div class="w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden border-3 border-green-200">
+            <img src="/assets/teachers/sara-ahmed.jpg" 
+                 alt="د. سارة أحمد" 
+                 class="w-full h-full object-cover"
+                 onerror="this.src='/assets/logo.png'">
+          </div>
+          <h3 class="text-lg font-semibold text-slate-900 mb-1"> المهندس أحمد الشامي </h3>
+          <p class="text-green-600 font-medium mb-2 text-sm">أستاذ الفيزياء</p>
+          <div class="mt-3 text-green-600 text-xs font-medium">
+            اضغط للمزيد ←
+          </div>
+        </div>
+      </div>
+
+      <!-- Teacher Card 3 -->
+      <div class="bg-white rounded-xl shadow-lg p-4 hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2" 
+           [@cardAnimation]
+           (click)="viewTeacherDetails(3)">
+        <div class="text-center">
+          <div class="w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden border-3 border-orange-200">
+            <img src="/assets/teachers/mohamed-hassan.jpg" 
+                 alt="د. محمد حسن" 
+                 class="w-full h-full object-cover"
+                 onerror="this.src='/assets/logo.png'">
+          </div>
+          <h3 class="text-lg font-semibold text-slate-900 mb-1"> المهندس أحمد ابوزيد </h3>
+          <p class="text-orange-600 font-medium mb-2 text-sm">أستاذ الكيمياء</p>
+          <div class="mt-3 text-orange-600 text-xs font-medium">
+            اضغط للمزيد ←
+          </div>
+        </div>
+      </div>
+
+      <!-- Teacher Card 4 -->
+      <div class="bg-white rounded-xl shadow-lg p-4 hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2" 
+           [@cardAnimation]
+           (click)="viewTeacherDetails(4)">
+        <div class="text-center">
+          <div class="w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden border-3 border-purple-200">
+            <img src="/assets/teachers/fatma-mahmoud.jpg" 
+                 alt="د. فاطمة محمود" 
+                 class="w-full h-full object-cover"
+                 onerror="this.src='/assets/logo.png'">
+          </div>
+          <h3 class="text-lg font-semibold text-slate-900 mb-1"> مستر إبرام سامي</h3>
+          <p class="text-purple-600 font-medium mb-2 text-sm">أستاذة اللغة الإنجليزية</p>
+          <div class="mt-3 text-purple-600 text-xs font-medium">
+            اضغط للمزيد ←
+          </div>
+        </div>
+      </div>
+
+      <!-- Teacher Card 5 -->
+      <div class="bg-white rounded-xl shadow-lg p-4 hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2" 
+           [@cardAnimation]
+           (click)="viewTeacherDetails(5)">
+        <div class="text-center">
+          <div class="w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden border-3 border-indigo-200">
+            <img src="/assets/teachers/ali-saad.jpg" 
+                 alt="د. علي سعد" 
+                 class="w-full h-full object-cover"
+                 onerror="this.src='/assets/logo.png'">
+          </div>
+          <h3 class="text-lg font-semibold text-slate-900 mb-1"> دكتور سعد العميري</h3>
+          <p class="text-indigo-600 font-medium mb-2 text-sm">أستاذ الهندسة المدنية</p>
+          <div class="mt-3 text-indigo-600 text-xs font-medium">
+            اضغط للمزيد ←
+          </div>
+        </div>
+      </div>
+
+      <!-- Teacher Card 6 -->
+    
+    </div>
+
+    <!-- Call to Action Section -->
+    <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-center text-white">
+      <h2 class="text-3xl font-bold mb-4">كن أنت التالي!</h2>
+      <p class="text-xl mb-6 opacity-90">
+        ابدأ رحلتك نحو النجاح المهني معنا في كلية الهندسة
+      </p>
+      <a routerLink="/contact" class="inline-block bg-white text-blue-600 font-semibold px-8 py-3 rounded-lg hover:bg-gray-100 transition-colors duration-300">
+        ابدأ الآن
+      </a>
+    </div>
+  </div>
+</div>

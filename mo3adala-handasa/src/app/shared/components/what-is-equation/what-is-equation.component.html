@@ -1,6 +1,72 @@
-<section class="mx-auto max-w-3xl px-4 py-12 text-center" @fadeInUp>
-	<h2 class="text-2xl font-bold mb-3 text-primary">{{ title }}</h2>
-	<p class="text-slate-700 leading-8">{{ text }}</p>
+<section class="mx-auto max-w-6xl px-4 py-12" @fadeInUp>
+	<div class="text-center mb-8">
+		<h2 class="text-2xl font-bold mb-3 text-primary">{{ title }}</h2>
+		<p class="text-slate-700 leading-8">{{ text }}</p>
+	</div>
+	
+	<!-- Video Section -->
+	<div class="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-8 shadow-lg">
+		<div class="max-w-4xl mx-auto">
+			<h3 class="text-xl font-bold text-slate-900 mb-4 text-center">
+				شاهد الفيديو التوضيحي
+			</h3>
+			<p class="text-slate-600 text-center mb-6">
+				تعرف على ابلكيشن معادلة كلية هندسة بالتفصيل وكيفية الاستعداد لها
+			</p>
+			
+			<!-- Video Container -->
+			<div class="relative bg-black rounded-xl overflow-hidden shadow-2xl" style="padding-bottom: 56.25%;">
+				<iframe 
+					class="absolute top-0 left-0 w-full h-full"
+					src="https://www.youtube.com/embed/I0cZmNowy7g?si=bbYuol5uNrHvBzdC"
+					title="ابلكيشن معادلة كلية هندسة - شرح مفصل"
+					frameborder="0"
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+					allowfullscreen>
+				</iframe>
+			</div>
+			
+			<!-- Video Features -->
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+				<div class="text-center p-4 bg-white rounded-lg shadow-sm">
+					<div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
+						<svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+						</svg>
+					</div>
+					<h4 class="font-semibold text-slate-900 mb-1">شرح مفصل</h4>
+					<p class="text-sm text-slate-600">تعرف على كل تفاصيل المعادلة</p>
+				</div>
+				
+				<div class="text-center p-4 bg-white rounded-lg shadow-sm">
+					<div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
+						<svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+						</svg>
+					</div>
+					<h4 class="font-semibold text-slate-900 mb-1">نصائح عملية</h4>
+					<p class="text-sm text-slate-600">كيفية الاستعداد والنجاح</p>
+				</div>
+				
+				<div class="text-center p-4 bg-white rounded-lg shadow-sm">
+					<div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
+						<svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+						</svg>
+					</div>
+					<h4 class="font-semibold text-slate-900 mb-1">بداية سريعة</h4>
+					<p class="text-sm text-slate-600">ابدأ رحلتك نحو النجاح</p>
+				</div>
+			</div>
+			
+			<!-- Call to Action -->
+			<div class="text-center mt-6">
+				<a routerLink="/contact" class="inline-block bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-orange-700 transition-colors duration-300">
+					ابدأ رحلتك الآن
+				</a>
+			</div>
+		</div>
+	</div>
 </section>
 
 

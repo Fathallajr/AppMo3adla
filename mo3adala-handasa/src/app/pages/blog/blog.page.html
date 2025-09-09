@@ -1,5 +1,5 @@
 <section class="mx-auto max-w-3xl px-4 py-16">
-	<h2 class="text-2xl font-bold mb-6 text-primary">المدونة</h2>
+	<h2 class="text-2xl font-bold mb-6 text-primary">أخبار المعادلة</h2>
 	<ng-container *ngIf="posts?.length; else empty">
 		<article *ngFor="let p of posts" class="border-b border-slate-200 py-4">
 			<h3 class="text-lg font-bold"><a [routerLink]="['/blog', p.slug]" class="hover:underline text-slate-900">{{ p.title }}</a></h3>

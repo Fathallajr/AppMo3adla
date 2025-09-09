@@ -1,0 +1,31 @@
+<div class="loading-overlay" [class.fade-out]="fadeOut" *ngIf="showLoading">
+  <div class="loading-container">
+    <!-- Logo -->
+    <div class="loading-logo">
+      <img src="/assets/logo2.png" alt=" ابلكيشن معادلة كلية هندسة" class="logo-image">
+      <h2 class="logo-text"> ابلكيشن معادلة كلية هندسة </h2>
+    </div>
+
+    <!-- Loading Animation -->
+    <div class="loading-animation">
+      <div class="spinner">
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width.%]="loadingProgress"></div>
+      </div>
+      <div class="progress-text">{{ loadingProgress | number:'1.0-0' }}%</div>
+    </div>
+
+    <!-- Loading Text -->
+    <div class="loading-text">
+      <p>{{ loadingText }}</p>
+    </div>
+  </div>
+</div>

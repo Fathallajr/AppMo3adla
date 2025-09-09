@@ -1,0 +1,39 @@
+/* Schools page specific styles */
+.school-card {
+  transition: all 0.3s ease;
+}
+
+.school-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.school-logo {
+  transition: transform 0.3s ease;
+}
+
+.school-card:hover .school-logo {
+  transform: scale(1.1);
+}
+
+.program-tag {
+  transition: all 0.2s ease;
+}
+
+.program-tag:hover {
+  background-color: #3b82f6;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .school-card {
+    padding: 1rem;
+  }
+  
+  .school-logo {
+    width: 4rem;
+    height: 4rem;
+  }
+}

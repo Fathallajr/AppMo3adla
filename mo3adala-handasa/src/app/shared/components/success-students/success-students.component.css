@@ -15,9 +15,34 @@
 .swiper-track{
 	-ms-overflow-style: none; /* IE and Edge */
 	scrollbar-width: none; /* Firefox */
+	scroll-behavior: smooth;
 }
 .swiper-track::-webkit-scrollbar{ /* Chrome, Safari */
 	display: none;
+}
+
+/* Swiper buttons */
+.swiper-button {
+	transition: all 0.3s ease;
+}
+
+.swiper-button:hover {
+	transform: scale(1.1);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.swiper-button:active {
+	transform: scale(0.95);
+}
+
+/* Carousel figure animations */
+.carousel-figure {
+	transition: all 0.3s ease;
+}
+
+.carousel-figure:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 

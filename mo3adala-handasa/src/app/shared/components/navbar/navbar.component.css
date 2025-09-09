@@ -1,3 +1,358 @@
 /* Additional navbar-specific styles (kept minimal; Tailwind handles most) */
 
+/* EMERGENCY FONT FIX - Force Cairo on all navbar text */
+nav ul li a {
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+nav ul li a span {
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+/* Force all navbar items to be aligned */
+nav ul {
+  display: flex !important;
+  align-items: center !important;
+}
+
+nav ul li {
+  display: flex !important;
+  align-items: center !important;
+}
+
+nav ul li a, nav ul li button {
+  display: flex !important;
+  align-items: center !important;
+  line-height: 1 !important;
+}
+
+/* Target specific text elements that are not using Cairo */
+nav ul li a[routerLink="/faq"] {
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+nav ul li a[routerLink="/blog"] {
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+nav ul li a[routerLink="/engineers"] {
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+nav ul li a[routerLink="/social"] {
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+/* Apply Cairo font to entire navbar */
+nav {
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+nav * {
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+/* Force Cairo font on all navbar elements */
+a, button, span, div, li, ul {
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+/* Specific targeting for navbar links */
+.nav-link, .nav-link span {
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+/* Mobile menu font */
+.mobile-nav-link, .mobile-registration-btn, .mobile-contact-btn {
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+/* ULTRA STRONG font override for all text elements */
+nav a, nav button, nav span, nav div, nav li, nav ul, nav p, nav h1, nav h2, nav h3, nav h4, nav h5, nav h6 {
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+  font-weight: inherit !important;
+}
+
+/* Target specific navbar text elements */
+nav ul li a span {
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+/* Override any Tailwind font classes */
+.font-cairo, .font-semibold, .font-medium, .font-bold {
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+/* Navbar link styles */
+.nav-link {
+  position: relative;
+  color: #64748b;
+  font-weight: 500;
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+  transition: all 0.3s ease;
+}
+
+.nav-link.active {
+  color: #ea580c;
+  font-weight: 600;
+}
+
+/* Registration form button styles */
+.registration-btn {
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  box-shadow: 0 4px 6px -1px rgba(22, 163, 74, 0.3);
+  color: white !important;
+  font-weight: 600;
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+
+/* Contact button special styles */
+.contact-btn {
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+  box-shadow: 0 4px 6px -1px rgba(234, 88, 12, 0.3);
+  color: white !important;
+  font-weight: 600;
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+.contact-btn.active {
+  color: white !important;
+}
+
+/* Active indicator line animation */
+.nav-link span {
+  transition: all 0.3s ease;
+  transform: scaleX(0);
+}
+
+.nav-link.active span {
+  transform: scaleX(1);
+}
+
+/* Hover effect for active indicator */
+.nav-link:hover span {
+  transform: scaleX(0.5);
+  background-color: #fb923c;
+}
+
+/* Mobile Menu Styles */
+.mobile-nav-link {
+  color: #64748b;
+  font-weight: 500;
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+  transition: all 0.3s ease;
+  animation: slideInDown 0.3s ease-out;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobile-nav-link:hover {
+  color: #ea580c;
+  background-color: #fff7ed;
+}
+
+.mobile-nav-link.active {
+  color: #c2410c;
+  font-weight: 600;
+  background-color: #fed7aa;
+}
+
+.mobile-registration-btn {
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  color: white !important;
+  font-weight: 600;
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+  margin: 0.5rem 0;
+  animation: slideInDown 0.3s ease-out;
+  animation-delay: 0.1s;
+  animation-fill-mode: both;
+}
+
+
+.mobile-contact-btn {
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+  color: white !important;
+  font-weight: 600;
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+  margin: 0.5rem 0;
+  animation: slideInDown 0.3s ease-out;
+  animation-delay: 0.2s;
+  animation-fill-mode: both;
+}
+
+.mobile-contact-btn.active {
+  color: white !important;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .nav-link {
+    padding: 0.125rem 0.25rem;
+    font-size: 0.625rem;
+  }
+  
+  .registration-btn {
+    padding: 0.125rem 0.25rem;
+    font-size: 0.625rem;
+  }
+  
+  .contact-btn {
+    padding: 0.125rem 0.25rem;
+    font-size: 0.625rem;
+  }
+
+  /* Mobile menu container */
+  .mobile-menu-container {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+  }
+
+  .mobile-menu-container.open {
+    max-height: 500px;
+  }
+}
+
+/* Tablet responsiveness */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .nav-link {
+    padding: 0.125rem 0.25rem;
+    font-size: 0.625rem;
+  }
+  
+  .registration-btn {
+    padding: 0.125rem 0.25rem;
+    font-size: 0.625rem;
+  }
+  
+  .contact-btn {
+    padding: 0.125rem 0.25rem;
+    font-size: 0.625rem;
+  }
+}
+
+/* Medium screens */
+@media (min-width: 1025px) and (max-width: 1280px) {
+  .nav-link {
+    padding: 0.25rem 0.375rem;
+    font-size: 0.7rem;
+  }
+  
+  .registration-btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.7rem;
+  }
+  
+  .contact-btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.7rem;
+  }
+}
+
+/* Large screens */
+@media (min-width: 1281px) {
+  .nav-link {
+    padding: 0.375rem 0.625rem;
+    font-size: 0.8rem;
+  }
+  
+  .registration-btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8rem;
+  }
+  
+  .contact-btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Dropdown Styles */
+.dropdown-menu {
+  transform: translateY(-10px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+}
+
+.dropdown-menu.show {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+.dropdown-item {
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #fff7ed;
+  color: #ea580c;
+}
+
+/* NUCLEAR OPTION - Force Cairo font on EVERYTHING in navbar */
+nav, nav *, nav a, nav button, nav span, nav div, nav li, nav ul, nav p, nav h1, nav h2, nav h3, nav h4, nav h5, nav h6, nav strong, nav b, nav em, nav i {
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+/* ULTRA STRONG ALIGNMENT - Force all navbar items to same level */
+nav ul li {
+  vertical-align: middle !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+nav ul li a, nav ul li button {
+  vertical-align: middle !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  height: auto !important;
+  line-height: 1.2 !important;
+}
+
+/* Target the specific problematic elements */
+nav ul li a {
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+nav ul li a span {
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+/* Override any inherited fonts */
+* {
+  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+}
+
+/* Smooth transitions for all navbar elements */
+nav {
+  transition: all 0.3s ease;
+}
+
+/* Focus states for accessibility */
+.nav-link:focus {
+  outline: 2px solid #ea580c;
+  outline-offset: 2px;
+}
+
+.registration-btn:focus {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.contact-btn:focus {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
 
