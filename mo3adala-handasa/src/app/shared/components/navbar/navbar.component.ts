@@ -16,12 +16,25 @@ export class NavbarComponent implements OnInit {
 	currentRoute = '';
 	isMobileMenuOpen = false;
 	isRequirementsDropdownOpen = false;
+	isNewsDropdownOpen = false;
+	isMobileNewsDropdownOpen = false;
+	isMobile = false;
 
 	constructor(private router: Router) {
 		if (typeof window !== 'undefined') {
+			this.checkScreenSize();
 			window.addEventListener('scroll', () => {
 				this.scrolled = window.scrollY > 8;
 			});
+			window.addEventListener('resize', () => {
+				this.checkScreenSize();
+			});
+		}
+	}
+
+	checkScreenSize() {
+		if (typeof window !== 'undefined') {
+			this.isMobile = window.innerWidth < 1280;
 		}
 	}
 
@@ -66,5 +79,17 @@ export class NavbarComponent implements OnInit {
 
 	closeRequirementsDropdown() {
 		this.isRequirementsDropdownOpen = false;
+	}
+
+	toggleNewsDropdown() {
+		this.isNewsDropdownOpen = !this.isNewsDropdownOpen;
+	}
+
+	closeNewsDropdown() {
+		this.isNewsDropdownOpen = false;
+	}
+
+	toggleMobileNewsDropdown() {
+		this.isMobileNewsDropdownOpen = !this.isMobileNewsDropdownOpen;
 	}
 }

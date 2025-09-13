@@ -1,15 +1,133 @@
-<section class="bg-surface">
-	<div class="mx-auto max-w-6xl px-4 py-16">
-		<div @fadeInUp class="text-center space-y-4">
-			<img src="/assets/logo2.png" alt="ابلكيشن معادلة كلية هندسة" class="mx-auto h-24 w-24 object-contain" loading="lazy" />
-			<h1 class="text-3xl sm:text-4xl font-extrabold"> ابلكيشن معادلة كلية هندسة .. دايماً في ضهرك </h1>
-			<p class="text-slate-600">بنجهّزك لاجتياز معادلة كلية الهندسة بخطوات واضحة ومحتوى مُبسّط وتمارين عملية وامتحانات دورية ومتابعة مستمرة</p>
-			<br>
-			<div class="flex justify-center gap-3">
-				<a routerLink="/contact" class="bg-primary text-white px-5 py-2 rounded-md transition-all duration-500 ease-in-out hover:bg-primaryDark">ابدأ الآن</a>
-				<a routerLink="/faq" class="px-5 py-2 rounded-md border border-primary text-primary transition-all duration-500 ease-in-out hover:bg-white">الأسئلة الشائعة</a>
+<!-- Hero Section with Background Image -->
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+	<!-- Background Image with Overlay -->
+	<div class="absolute inset-0 z-0">
+		<div class="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/70 z-10"></div>
+		<div class="w-full h-full bg-cover bg-center bg-no-repeat" 
+			 style="background-image: url('/assets/success.png'), linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+		</div>
+	</div>
+
+	<!-- Floating Success Students Animation -->
+	<div class="absolute inset-0 z-20 overflow-hidden">
+		<!-- Floating Student Images with Enhanced Effects -->
+		<div class="absolute top-10 left-10 w-16 h-16 rounded-full overflow-hidden border-4 border-white/40 shadow-2xl animate-float-slow hover:scale-110 transition-transform duration-300 group">
+			<img src="/assets/success.png" alt="طالب ناجح" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.src='/assets/logo.png'">
+			<div class="absolute inset-0 bg-gradient-to-t from-orange-500/20 to-transparent"></div>
+		</div>
+		<div class="absolute top-20 right-20 w-20 h-20 rounded-full overflow-hidden border-4 border-white/40 shadow-2xl animate-float-medium hover:scale-110 transition-transform duration-300 group">
+			<img src="/assets/success.png" alt="طالب ناجح" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.src='/assets/logo.png'">
+			<div class="absolute inset-0 bg-gradient-to-t from-green-500/20 to-transparent"></div>
+		</div>
+		<div class="absolute bottom-32 left-16 w-14 h-14 rounded-full overflow-hidden border-4 border-white/40 shadow-2xl animate-float-fast hover:scale-110 transition-transform duration-300 group">
+			<img src="/assets/success.png" alt="طالب ناجح" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.src='/assets/logo.png'">
+			<div class="absolute inset-0 bg-gradient-to-t from-blue-500/20 to-transparent"></div>
+		</div>
+		<div class="absolute top-1/2 left-8 w-12 h-12 rounded-full overflow-hidden border-4 border-white/40 shadow-2xl animate-float-medium hover:scale-110 transition-transform duration-300 group">
+			<img src="/assets/success/5.jpg" alt="طالب ناجح" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.src='/assets/logo.png'">
+			<div class="absolute inset-0 bg-gradient-to-t from-purple-500/20 to-transparent"></div>
+		</div>
+		<div class="absolute top-1/3 right-8 w-16 h-16 rounded-full overflow-hidden border-4 border-white/40 shadow-2xl animate-float-fast hover:scale-110 transition-transform duration-300 group">
+			<img src="/assets/success/6.jpg" alt="طالب ناجح" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.src='/assets/logo.png'">
+			<div class="absolute inset-0 bg-gradient-to-t from-pink-500/20 to-transparent"></div>
+		</div>
+		<div class="absolute bottom-1/3 left-1/4 w-14 h-14 rounded-full overflow-hidden border-4 border-white/40 shadow-2xl animate-float-slow hover:scale-110 transition-transform duration-300 group">
+			<img src="/assets/success/7.jpg" alt="طالب ناجح" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.src='/assets/logo.png'">
+			<div class="absolute inset-0 bg-gradient-to-t from-yellow-500/20 to-transparent"></div>
+		</div>
+		<div class="absolute top-2/3 right-1/4 w-16 h-16 rounded-full overflow-hidden border-4 border-white/40 shadow-2xl animate-float-medium hover:scale-110 transition-transform duration-300 group">
+			<img src="/assets/success.jpg" alt="طالب ناجح" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.src='/assets/logo.png'">
+			<div class="absolute inset-0 bg-gradient-to-t from-red-500/20 to-transparent"></div>
+		</div>
+
+		<!-- Additional Floating Elements -->
+		<div class="absolute top-1/4 left-1/3 w-8 h-8 bg-orange-500/30 rounded-full animate-float-fast"></div>
+		<div class="absolute bottom-1/4 right-1/3 w-6 h-6 bg-blue-500/30 rounded-full animate-float-slow"></div>
+		<div class="absolute top-3/4 left-1/2 w-4 h-4 bg-green-500/30 rounded-full animate-float-medium"></div>
+		<div class="absolute bottom-1/2 right-1/5 w-10 h-10 bg-purple-500/30 rounded-full animate-float-fast"></div>
+	</div>
+
+	
+	<!-- Main Content -->
+	<div class="relative z-30 mx-auto max-w-6xl px-4 text-center">
+		<div @fadeInUp class="space-y-6">
+			<!-- Logo with Enhanced Glow Effect -->
+			<!-- <div class="relative inline-block group">
+				<div class="absolute inset-0 bg-orange-500/30 rounded-full blur-xl animate-pulse-glow"></div>
+				<div class="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-yellow-400/20 rounded-full blur-2xl animate-pulse"></div>
+				<img src="/assets/logo2.png" alt="ابلكيشن معادلة كلية هندسة" 
+					 class="relative mx-auto h-32 w-32 object-contain drop-shadow-2xl animate-bounce-slow group-hover:scale-110 transition-transform duration-500" loading="lazy" />
+			</div> -->
+			
+			<!-- Main Heading with White Text -->
+			 <br>
+			 <br>
+			<h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
+				ابلكيشن معادلة كلية هندسة
+				<br>
+				<span class="text-2xl sm:text-3xl lg:text-4xl text-white/90 mt-2 block">
+					دايماً في ضهرك
+				</span>
+			</h1>
+			
+			<!-- Description with Glow -->
+			<p class="text-lg sm:text-xl text-white/90 max-w-4xl mx-auto leading-relaxed drop-shadow-lg">
+				بنجهّزك لاجتياز معادلة كلية الهندسة بخطوات واضحة ومحتوى مُبسّط وتمارين عملية وامتحانات دورية ومتابعة مستمرة
+			</p>
+			
+			<!-- Success Stats -->
+			<div class="flex flex-wrap justify-center gap-6 mt-8">
+				<div class="text-center">
+					<div class="text-3xl font-bold text-orange-400">1,000+</div>
+					<div class="text-white/80 text-sm">طالب ناجح</div>
+				</div>
+				<div class="text-center">
+					<div class="text-3xl font-bold text-orange-400">5,000+</div>
+					<div class="text-white/80 text-sm">فيديو تعليمي</div>
+				</div>
+				<div class="text-center">
+					<div class="text-3xl font-bold text-orange-400">80%</div>
+					<div class="text-white/80 text-sm">معدل النجاح</div>
+				</div>
+			</div>
+			
+			<!-- Call to Action Buttons -->
+			<div class="flex flex-col sm:flex-row justify-center gap-6 mt-10">
+				<a routerLink="/contact" 
+				   class="group relative px-10 py-5 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-full text-xl shadow-2xl hover:shadow-orange-500/40 transition-all duration-500 hover:scale-110 hover:from-orange-600 hover:to-orange-700 animate-fade-in-scale">
+					<span class="relative z-10 flex items-center gap-2">
+						ابدأ الآن
+						<svg class="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+						</svg>
+					</span>
+					<div class="absolute inset-0 bg-gradient-to-r from-orange-400 to-orange-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+					<div class="absolute inset-0 bg-white/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+				</a>
+				<a routerLink="/faq" 
+				   class="group px-10 py-5 border-2 border-white/40 text-white font-bold rounded-full text-xl backdrop-blur-sm hover:bg-white/20 hover:border-white/60 transition-all duration-500 hover:scale-110 animate-fade-in-scale">
+					<span class="flex items-center gap-2">
+						الأسئلة الشائعة
+						<svg class="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+						</svg>
+					</span>
+				</a>
 			</div>
 		</div>
+	</div>
+
+	<!-- Scroll Indicator -->
+	<div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30 animate-bounce">
+		<svg class="w-6 h-6 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+		</svg>
+	</div>
+</section>
+
+<!-- Features Section -->
+<section class="bg-surface py-16">
+	<div class="mx-auto max-w-6xl px-4">
 		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-12" @staggerList>
 			<div class="p-4 bg-white rounded-lg border-2 border-primary/20 hover:border-primary transition" *ngFor="let f of features">{{ f }}</div>
 		</div>

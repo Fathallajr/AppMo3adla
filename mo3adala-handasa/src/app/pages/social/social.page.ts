@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SocialLinksComponent } from '../../shared/components/social-links/social-links.component';
 import { SeoService } from '../../core/seo.service';
 import { CanonicalService } from '../../core/canonical.service';
 
 @Component({
 	selector: 'app-social-page',
 	standalone: true,
-	imports: [CommonModule, SocialLinksComponent],
+	imports: [CommonModule],
 	templateUrl: './social.page.html',
 	styleUrls: ['./social.page.css'],
 })
