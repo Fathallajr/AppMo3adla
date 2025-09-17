@@ -1,30 +1,290 @@
-/* انيميشن Fade بسيط وجميل */
+/* انيميشن محسن وجميل */
 main {
   position: relative;
+  overflow: hidden;
+}
+
+/* FORCE CAIRO FONT ON NAVBAR - ULTIMATE SOLUTION */
+nav,
+nav *,
+nav a,
+nav button,
+nav span,
+nav div,
+nav li,
+nav ul {
+  font-family: 'Cairo', sans-serif !important;
+}
+
+/* Override any inherited fonts */
+nav a:link,
+nav a:visited,
+nav a:hover,
+nav a:active,
+nav a:focus {
+  font-family: 'Cairo', sans-serif !important;
+}
+
+/* Force Cairo on all navbar text elements */
+nav .text-sm,
+nav .text-base,
+nav .text-lg,
+nav .text-xl,
+nav .text-2xl,
+nav .text-xs,
+nav .font-medium,
+nav .font-semibold,
+nav .font-bold,
+nav .font-extrabold {
+  font-family: 'Cairo', sans-serif !important;
 }
 
 /* تحسين الانيميشن للعناصر */
 * {
-  transition: opacity 0.3s ease-in-out;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 /* تأثير fade للعناصر */
 .fade-in {
   opacity: 0;
-  animation: fadeIn 0.4s ease-in-out forwards;
+  animation: fadeIn 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* تأثير hover بسيط */
-.hover-fade:hover {
-  opacity: 0.8;
-  transition: opacity 0.2s ease;
+/* تأثير hover محسن للأزرار */
+.btn-hover {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-hover:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.btn-hover:active {
+  transform: translateY(0) scale(0.98);
+  transition: all 0.1s ease;
+}
+
+/* تأثير hover للروابط */
+.link-hover {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+}
+
+.link-hover:hover {
+  transform: translateY(-1px);
+  color: #f97316;
+}
+
+.link-hover::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #f97316, #ea580c);
+  transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.link-hover:hover::after {
+  width: 100%;
+}
+
+/* تأثير hover للبطاقات */
+.card-hover {
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* تأثير hover للصور */
+.image-hover {
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
+}
+
+.image-hover:hover {
+  transform: scale(1.05);
+}
+
+.image-hover img {
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.image-hover:hover img {
+  transform: scale(1.1);
+}
+
+/* تأثير loading */
+.loading-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* تأثير shimmer للعناصر */
+.shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* تأثير ripple للأزرار */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.ripple:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* تأثير slide للقوائم */
+.slide-in {
+  animation: slideIn 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* تأثير bounce للعناصر */
+.bounce-in {
+  animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* تأثير wave للعناصر */
+.wave {
+  position: relative;
+  overflow: hidden;
+}
+
+.wave::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.wave:hover::before {
+  left: 100%;
+}
+
+/* تأثير glow للعناصر المهمة */
+.glow {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.glow:hover {
+  box-shadow: 0 0 20px rgba(249, 115, 22, 0.4);
+  transform: scale(1.02);
+}
+
+/* تأثير typing للنصوص */
+.typing {
+  overflow: hidden;
+  border-right: 2px solid #f97316;
+  white-space: nowrap;
+  animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: #f97316; }
+}
+
+/* Loading Spinner Animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Loading Progress Bar Animation */
+@keyframes progressFill {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }

@@ -8,6 +8,48 @@
   font-family: 'Cairo', sans-serif !important;
 }
 
+/* NUCLEAR FONT OVERRIDE - FORCE CAIRO EVERYWHERE */
+nav,
+nav *,
+nav a,
+nav button,
+nav span,
+nav div,
+nav li,
+nav ul,
+nav p,
+nav h1,
+nav h2,
+nav h3,
+nav h4,
+nav h5,
+nav h6 {
+  font-family: 'Cairo', sans-serif !important;
+  font-weight: inherit !important;
+}
+
+/* Force Cairo on all text content */
+nav a,
+nav button,
+nav span,
+nav div {
+  font-family: 'Cairo', sans-serif !important;
+}
+
+/* Override any Tailwind font classes */
+nav .font-sans,
+nav .font-serif,
+nav .font-mono,
+nav .font-cairo,
+nav .text-sm,
+nav .text-base,
+nav .text-lg,
+nav .text-xl,
+nav .text-2xl,
+nav .text-xs {
+  font-family: 'Cairo', sans-serif !important;
+}
+
 nav,
 nav *,
 nav a,
@@ -74,13 +116,46 @@ nav ul li a, nav ul li button {
   color: #64748b;
   font-weight: 500;
   font-family: 'Cairo', sans-serif !important;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
+}
+
+/* Force Cairo on all navbar links */
+nav a {
+  font-family: 'Cairo', sans-serif !important;
+}
+
+/* Force Cairo on all navbar buttons */
+nav button {
+  font-family: 'Cairo', sans-serif !important;
+}
+
+/* Force Cairo on all navbar spans */
+nav span {
+  font-family: 'Cairo', sans-serif !important;
+}
+
+/* Navbar link hover effect - clean and modern */
+.nav-link:hover {
+  color: #ea580c;
+  transform: translateY(-1px);
+  text-shadow: 0 1px 2px rgba(234, 88, 12, 0.2);
 }
 
 .nav-link.active {
   color: #ea580c;
   font-weight: 600;
+  transform: translateY(-1px);
+  text-shadow: 0 1px 2px rgba(234, 88, 12, 0.2);
 }
+
+.nav-link.active:hover {
+  color: #ea580c;
+  transform: translateY(-2px);
+  text-shadow: 0 2px 4px rgba(234, 88, 12, 0.3);
+}
+
+/* Removed active underline effect */
 
 /* Button styles */
 .registration-btn {
@@ -89,6 +164,19 @@ nav ul li a, nav ul li button {
   color: white !important;
   font-weight: 600;
   font-family: 'Cairo', sans-serif !important;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.registration-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(22, 163, 74, 0.4);
+}
+
+.registration-btn:active {
+  transform: translateY(0) scale(0.98);
+  transition: all 0.1s ease;
 }
 
 .contact-btn {
@@ -97,6 +185,19 @@ nav ul li a, nav ul li button {
   color: white !important;
   font-weight: 600;
   font-family: 'Cairo', sans-serif !important;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(234, 88, 12, 0.4);
+}
+
+.contact-btn:active {
+  transform: translateY(0) scale(0.98);
+  transition: all 0.1s ease;
 }
 
 .contact-btn.active {
@@ -108,33 +209,51 @@ nav ul li a, nav ul li button {
   color: #64748b;
   font-weight: 500;
   font-family: 'Cairo', sans-serif !important;
-  transition: all 0.3s ease;
-  animation: slideInDown 0.3s ease-out;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  animation: slideInDown 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   border-radius: 0.5rem;
   margin: 0.125rem 0;
+  position: relative;
+  overflow: hidden;
 }
 
 @keyframes slideInDown {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-15px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
+/* Mobile navbar link hover effect - clean and modern */
 .mobile-nav-link:hover {
   color: #ea580c;
   background-color: #fff7ed;
+  transform: translateX(5px) translateY(-1px);
+  text-shadow: 0 1px 2px rgba(234, 88, 12, 0.2);
 }
+
+/* Removed duplicate mobile hover effect */
 
 .mobile-nav-link.active {
   color: #c2410c;
   font-weight: 600;
   background-color: #fed7aa;
+  transform: translateY(-1px);
+  text-shadow: 0 1px 2px rgba(194, 65, 12, 0.2);
 }
+
+.mobile-nav-link.active:hover {
+  color: #ea580c;
+  background-color: #fff7ed;
+  transform: translateX(5px) translateY(-2px);
+  text-shadow: 0 2px 4px rgba(234, 88, 12, 0.3);
+}
+
+/* Removed mobile active underline effect */
 
 .mobile-registration-btn {
   background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
@@ -142,18 +261,38 @@ nav ul li a, nav ul li button {
   font-weight: 600;
   font-family: 'Cairo', sans-serif !important;
   margin: 0.5rem 0;
-  animation: slideInDown 0.3s ease-out;
+  animation: slideInDown 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   animation-delay: 0.1s;
   animation-fill-mode: both;
   border-radius: 0.5rem;
   box-shadow: 0 2px 4px rgba(22, 163, 74, 0.2);
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.mobile-registration-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.mobile-registration-btn:active::before {
+  width: 300px;
+  height: 300px;
 }
 
 .mobile-registration-btn:hover {
   background: linear-gradient(135deg, #15803d 0%, #166534 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(22, 163, 74, 0.3);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(22, 163, 74, 0.4);
 }
 
 .mobile-contact-btn {
@@ -162,18 +301,38 @@ nav ul li a, nav ul li button {
   font-weight: 600;
   font-family: 'Cairo', sans-serif !important;
   margin: 0.5rem 0;
-  animation: slideInDown 0.3s ease-out;
+  animation: slideInDown 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   animation-delay: 0.2s;
   animation-fill-mode: both;
   border-radius: 0.5rem;
   box-shadow: 0 2px 4px rgba(234, 88, 12, 0.2);
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.mobile-contact-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.mobile-contact-btn:active::before {
+  width: 300px;
+  height: 300px;
 }
 
 .mobile-contact-btn:hover {
   background: linear-gradient(135deg, #c2410c 0%, #9a3412 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(234, 88, 12, 0.3);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(234, 88, 12, 0.4);
 }
 
 .mobile-contact-btn.active {
@@ -219,5 +378,50 @@ nav a[routerLink],
 nav button[class],
 nav span[class],
 nav div[class] {
+  font-family: 'Cairo', sans-serif !important;
+}
+
+/* FORCE CAIRO ON ALL NAVBAR ELEMENTS - NUCLEAR OPTION */
+nav a,
+nav button,
+nav span,
+nav div,
+nav li,
+nav ul,
+nav * {
+  font-family: 'Cairo', sans-serif !important;
+}
+
+/* Force Cairo on all text elements */
+nav a:not([class*="btn"]),
+nav button:not([class*="btn"]),
+nav span,
+nav div {
+  font-family: 'Cairo', sans-serif !important;
+}
+
+/* Override Tailwind classes specifically */
+nav .text-sm,
+nav .text-base,
+nav .text-lg,
+nav .text-xs,
+nav .font-medium,
+nav .font-semibold,
+nav .font-bold,
+nav .font-extrabold {
+  font-family: 'Cairo', sans-serif !important;
+}
+
+/* Force Cairo on all links regardless of state */
+nav a:link,
+nav a:visited,
+nav a:hover,
+nav a:active,
+nav a:focus {
+  font-family: 'Cairo', sans-serif !important;
+}
+
+/* Override any inherited fonts */
+nav * {
   font-family: 'Cairo', sans-serif !important;
 }

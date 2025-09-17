@@ -2,6 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Performance optimizations */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeSpeed;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Optimize images */
+img {
+  max-width: 100%;
+  height: auto;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Optimize animations - removed unused float animations */
+
 /* Cairo font */
 @font-face {
   font-family: 'Cairo';
@@ -12,6 +48,60 @@
   unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F, U+202A-202E, U+2066-2069;
 }
 
+/* Import custom animations */
+@import './app/shared/styles/animations.css';
+
 html[lang="ar"][dir="rtl"] body {
   @apply bg-slate-50 text-slate-900 font-cairo antialiased;
+}
+
+/* ULTIMATE CAIRO FONT FIX - GLOBAL OVERRIDE */
+nav,
+nav *,
+nav a,
+nav button,
+nav span,
+nav div,
+nav li,
+nav ul,
+nav p,
+nav h1,
+nav h2,
+nav h3,
+nav h4,
+nav h5,
+nav h6 {
+  font-family: 'Cairo', sans-serif !important;
+}
+
+/* Force Cairo on all navbar states */
+nav a:link,
+nav a:visited,
+nav a:hover,
+nav a:active,
+nav a:focus {
+  font-family: 'Cairo', sans-serif !important;
+}
+
+/* Override Tailwind font classes in navbar */
+nav .font-sans,
+nav .font-serif,
+nav .font-mono,
+nav .font-cairo,
+nav .text-sm,
+nav .text-base,
+nav .text-lg,
+nav .text-xl,
+nav .text-2xl,
+nav .text-xs,
+nav .font-medium,
+nav .font-semibold,
+nav .font-bold,
+nav .font-extrabold {
+  font-family: 'Cairo', sans-serif !important;
+}
+
+/* Nuclear option - force Cairo everywhere */
+* {
+  font-family: 'Cairo', sans-serif !important;
 }

@@ -1,13 +1,27 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ViewportScroller } from '@angular/common';
 
 @Component({
 	selector: 'app-footer',
 	standalone: true,
-	imports: [RouterLink],
+	imports: [],
 	templateUrl: './footer.component.html',
 	styleUrls: ['./footer.component.css'],
 })
 export class FooterComponent { 
-	year = new Date().getFullYear(); 
+	year = new Date().getFullYear();
+
+	constructor(private viewportScroller: ViewportScroller) {}
+
+	scrollToTop() {
+		// التمرير إلى الأعلى بسلاسة
+		window.scrollTo({
+			top: 0,
+			left: 0,
+			behavior: 'smooth'
+		});
+		
+		// استخدام ViewportScroller كبديل
+		this.viewportScroller.scrollToPosition([0, 0]);
+	}
 }

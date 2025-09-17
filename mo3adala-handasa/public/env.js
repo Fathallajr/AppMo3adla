@@ -6,7 +6,7 @@ window.NG_GISCUS_REPO = window.NG_GISCUS_REPO || '';
 window.NG_GISCUS_REPO_ID = window.NG_GISCUS_REPO_ID || '';
 window.NG_GISCUS_CATEGORY = window.NG_GISCUS_CATEGORY || '';
 window.NG_GISCUS_CATEGORY_ID = window.NG_GISCUS_CATEGORY_ID || '';
-// Socials
+// Socials - Updated with correct links
 window.NG_FB = window.NG_FB || 'https://www.facebook.com/Appmo3adla?mibextid=JpSO2FKliISFprGe';
 window.NG_FB_GROUP = window.NG_FB_GROUP || 'https://facebook.com/groups/575668737026816/';
 window.NG_YT = window.NG_YT || 'https://youtube.com/@app.mo3adla?si=lH73vGJ1r2X4P2TA';

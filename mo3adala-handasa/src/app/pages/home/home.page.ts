@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { fadeInUp, staggerList, homePageTransition, cardAnimation } from '../../shared/animations';
@@ -6,24 +6,23 @@ import { SeoService } from '../../core/seo.service';
 import { CanonicalService } from '../../core/canonical.service';
 import { JsonLdService } from '../../core/jsonld.service';
 import { WhatIsEquationComponent } from '../../shared/components/what-is-equation/what-is-equation.component';
-import { SuccessStudentsComponent } from '../../shared/components/success-students/success-students.component';
 
 @Component({
 	selector: 'app-home-page',
 	standalone: true,
-	imports: [CommonModule, RouterLink, WhatIsEquationComponent, SuccessStudentsComponent],
+	imports: [CommonModule, RouterLink, WhatIsEquationComponent],
 	animations: [fadeInUp, staggerList, homePageTransition, cardAnimation],
 	templateUrl: './home.page.html',
 	styleUrls: ['./home.page.css'],
 })
-export class HomePageComponent {
+export class HomePageComponent implements OnInit {
 	@ViewChild('reviewsTrack', { static: false }) reviewsTrack!: ElementRef<HTMLDivElement>;
 	
 	features = ['مناهج بسيطة مُحدّثة 2026 ', 'شرح + أمثلة + امتحانات إلكترونية', 'خطط مذاكرة تناسب وقتك', 'دعم ومتابعة علي مدار 24 ساعة'];
 	
 	constructor(private seo: SeoService, private canonical: CanonicalService, private jsonld: JsonLdService) {
 		const siteUrl = (typeof window !== 'undefined' ? (window as any)['NG_SITE_URL'] : process.env['NG_SITE_URL']) || 'https://example.com';
-		const title = 'معادلة كلية هندسة — طريقك السريع لدخول هندسة';
+		const title = 'ابلكيشن معادلة كلية هندسة';
 		const description = 'بنجهّزك لاجتياز معادلة كلية الهندسة بخطوات واضحة ومحتوى مُبسّط وتمارين عملية.';
 		this.seo.setTitle(title);
 		this.seo.setDescription(description);
@@ -47,6 +46,30 @@ export class HomePageComponent {
 				"query-input": "required name=query"
 			}
 		}, 'website-ld');
+	}
+
+	ngOnInit() {
+		// العودة إلى أعلى الصفحة عند تحميل الصفحة
+		if (typeof window !== 'undefined') {
+			window.scrollTo(0, 0);
+		}
+		
+		// Preload critical images for faster loading
+		this.preloadImages();
+	}
+	
+	private preloadImages() {
+		if (typeof window !== 'undefined') {
+			const criticalImages = [
+				'/assets/teacher.png',
+				'/assets/student1.png'
+			];
+			
+			criticalImages.forEach(src => {
+				const img = new Image();
+				img.src = src;
+			});
+		}
 	}
 
 	scrollReviewsPrev() {

@@ -1,5 +1,16 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /private/
 
-# sitemap will be generated to /sitemap.xml at build
+# Important pages
+Allow: /
+Allow: /engineers/
+Allow: /teacher-details/
+Allow: /home/
+
+Sitemap: https://appmo3adla.com/sitemap.xml
+
+# Crawl delay (optional)
+Crawl-delay: 1
 

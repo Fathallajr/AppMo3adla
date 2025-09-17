@@ -1,4 +1,39 @@
-/* Home page specific styles */
+/* Home page specific styles - OPTIMIZED FOR SPEED */
+
+/* PERFORMANCE OPTIMIZATIONS */
+.hero-section {
+  background-attachment: fixed;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Optimize floating animations for performance */
+.animate-float-slow,
+.animate-float-medium,
+.animate-float-fast {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Optimize images for faster loading */
+img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Background image optimization */
+.bg-cover {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  will-change: transform;
+  transform: translateZ(0);
+}
 
 /* Advanced Floating Animations */
 @keyframes float-slow {
@@ -142,18 +177,7 @@
   animation: bounce-slow 4s ease-in-out infinite;
 }
 
-.animate-gradient {
-  background-size: 200% 200%;
-  animation: gradient 4s ease infinite;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-.animate-slide-in-up {
-  animation: slide-in-up 1s ease-out forwards;
-}
+/* Kept only essential animations */
 
 .animate-fade-in-scale {
   animation: fade-in-scale 0.8s ease-out forwards;
@@ -162,6 +186,36 @@
 /* Hero Section Enhancements */
 .hero-section {
   background-attachment: fixed;
+}
+
+/* YouTube Videos Styles */
+.aspect-video {
+	aspect-ratio: 16 / 9;
+}
+
+/* Responsive video grid */
+@media (max-width: 768px) {
+	.aspect-video {
+		height: 200px;
+	}
+}
+
+@media (min-width: 768px) {
+	.aspect-video {
+		height: 250px;
+	}
+}
+
+@media (min-width: 1024px) {
+	.aspect-video {
+		height: 300px;
+	}
+}
+
+/* Video hover effects */
+.video-card:hover iframe {
+	transform: scale(1.02);
+	transition: transform 0.3s ease;
 }
 
 /* Responsive adjustments */

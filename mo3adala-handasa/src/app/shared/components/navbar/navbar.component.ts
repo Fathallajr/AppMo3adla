@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, Router, NavigationEnd } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, ViewportScroller } from '@angular/common';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -18,9 +18,10 @@ export class NavbarComponent implements OnInit {
 	isRequirementsDropdownOpen = false;
 	isNewsDropdownOpen = false;
 	isMobileNewsDropdownOpen = false;
+	isMobileRequirementsDropdownOpen = false;
 	isMobile = false;
 
-	constructor(private router: Router) {
+	constructor(private router: Router, private viewportScroller: ViewportScroller) {
 		if (typeof window !== 'undefined') {
 			this.checkScreenSize();
 			window.addEventListener('scroll', () => {
@@ -58,10 +59,15 @@ export class NavbarComponent implements OnInit {
 
 	scrollToTop() {
 		if (typeof window !== 'undefined') {
+			// التمرير إلى الأعلى بسلاسة
 			window.scrollTo({
 				top: 0,
+				left: 0,
 				behavior: 'smooth'
 			});
+			
+			// استخدام ViewportScroller كبديل
+			this.viewportScroller.scrollToPosition([0, 0]);
 		}
 	}
 
@@ -71,6 +77,8 @@ export class NavbarComponent implements OnInit {
 
 	closeMobileMenu() {
 		this.isMobileMenuOpen = false;
+		// التمرير إلى الأعلى عند إغلاق القائمة المحمولة
+		this.scrollToTop();
 	}
 
 	toggleRequirementsDropdown() {
@@ -79,6 +87,8 @@ export class NavbarComponent implements OnInit {
 
 	closeRequirementsDropdown() {
 		this.isRequirementsDropdownOpen = false;
+		// التمرير إلى الأعلى عند إغلاق القائمة المنسدلة
+		this.scrollToTop();
 	}
 
 	toggleNewsDropdown() {
@@ -87,9 +97,27 @@ export class NavbarComponent implements OnInit {
 
 	closeNewsDropdown() {
 		this.isNewsDropdownOpen = false;
+		// التمرير إلى الأعلى عند إغلاق القائمة المنسدلة
+		this.scrollToTop();
 	}
 
 	toggleMobileNewsDropdown() {
 		this.isMobileNewsDropdownOpen = !this.isMobileNewsDropdownOpen;
+	}
+
+	toggleMobileRequirementsDropdown() {
+		this.isMobileRequirementsDropdownOpen = !this.isMobileRequirementsDropdownOpen;
+	}
+
+	closeMobileNewsDropdown() {
+		this.isMobileNewsDropdownOpen = false;
+		// التمرير إلى الأعلى عند إغلاق القائمة المنسدلة المحمولة
+		this.scrollToTop();
+	}
+
+	closeMobileRequirementsDropdown() {
+		this.isMobileRequirementsDropdownOpen = false;
+		// التمرير إلى الأعلى عند إغلاق القائمة المنسدلة المحمولة
+		this.scrollToTop();
 	}
 }
