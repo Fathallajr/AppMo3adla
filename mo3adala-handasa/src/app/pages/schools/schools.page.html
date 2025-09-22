@@ -5,9 +5,6 @@
       <h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
         المدارس والمعاهد المؤهلة للمعادلة
       </h1>
-      <p class="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-        تعرف على المؤسسات التعليمية المعتمدة التي تمنح شهادات تؤهل للالتحاق بمعادلة كلية الهندسة
-      </p>
     </div>
 
     <!-- Filter and Search Section -->
@@ -22,7 +19,7 @@
               type="text" 
               [(ngModel)]="searchTerm"
               (ngModelChange)="onSearchChange()"
-              placeholder="ابحث عن المعهد أو المدرسة..."
+              placeholder="ابحث عن المعهد أو المدرسة"
               class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-right"
             >
             <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -59,7 +56,7 @@
             <svg class="w-4 h-4 inline ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
             </svg>
-            مسح الفلاتر
+            مسح الفلتر
           </button>
         </div>
       </div>
@@ -69,7 +66,7 @@
         <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
           <div class="text-center sm:text-right">
             <p class="text-gray-600">
-              <span class="font-semibold text-blue-600 text-lg">{{ schools.length }}</span> 
+              <span class="font-semibold text-blue-600 text-lg">{{ totalFilteredCount }}</span> 
               <span class="text-gray-500">مؤسسة تعليمية</span>
               <span *ngIf="selectedFilter !== 'الكل' || searchTerm.trim()" class="text-gray-400">
                 من أصل {{ allSchools.length }}
@@ -80,20 +77,24 @@
           <!-- Quick Stats -->
           <div class="flex gap-4 text-xs text-gray-500">
             <div class="stat-card text-center p-2 rounded-lg hover:bg-blue-50 cursor-pointer">
-              <div class="font-semibold text-blue-600">{{ getCountByCategory('المعاهد') }}</div>
-              <div>معاهد</div>
+              <div class="font-semibold text-blue-600">{{ getCountByCategory('المعاهد الفنية') }}</div>
+              <div>المعاهد الفنية</div>
             </div>
             <div class="stat-card text-center p-2 rounded-lg hover:bg-green-50 cursor-pointer">
-              <div class="font-semibold text-green-600">{{ getCountByCategory('معهد فني صناعي 3 سنين') }}</div>
-              <div>فني 3 سنين</div>
+              <div class="font-semibold text-green-600">{{ getCountByCategory('مدارس الثانوية الصناعية نظام 3 سنوات') }}</div>
+              <div>3 سنوات صناعي</div>
             </div>
             <div class="stat-card text-center p-2 rounded-lg hover:bg-purple-50 cursor-pointer">
-              <div class="font-semibold text-purple-600">{{ getCountByCategory('معهد فني صناعي 5 سنين') }}</div>
-              <div>فني 5 سنين</div>
+              <div class="font-semibold text-purple-600">{{ getCountByCategory('مدارس الثانوية الصناعية نظام 5 سنوات') }}</div>
+              <div>5 سنوات صناعي</div>
             </div>
             <div class="stat-card text-center p-2 rounded-lg hover:bg-orange-50 cursor-pointer">
-              <div class="font-semibold text-orange-600">{{ getCountByCategory('مدارس تكنولوجية') }}</div>
-              <div>تكنولوجية</div>
+              <div class="font-semibold text-orange-600">{{ getCountByCategory('مدارس تكنولوجية نظام 3 سنوات') }}</div>
+              <div>تكنولوجية 3 سنوات</div>
+            </div>
+            <div class="stat-card text-center p-2 rounded-lg hover:bg-orange-50 cursor-pointer">
+              <div class="font-semibold text-orange-600">{{ getCountByCategory('مدارس تكنولوجية نظام 5 سنوات') }}</div>
+              <div>تكنولوجية 5 سنوات</div>
             </div>
           </div>
         </div>
@@ -117,7 +118,7 @@
     </div>
 
     <!-- Schools Grid -->
-    <div *ngIf="schools.length > 0" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 mb-16" [@staggerList]>
+    <div *ngIf="schools.length > 0" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 mb-8" [@staggerList]>
       <!-- School Card -->
       <div *ngFor="let school of schools" 
            class="bg-white rounded-lg shadow-md p-3 hover:shadow-lg transition-all duration-300 cursor-pointer" 
@@ -133,38 +134,18 @@
           
           <!-- School Info -->
           <h3 class="text-sm font-semibold text-slate-900 mb-1 leading-tight">{{ school.name }}</h3>
-          <p class="text-blue-600 font-medium text-xs mb-2">{{ school.type }}</p>
+          <p *ngIf="school.category" class="text-orange-500 font-medium text-xs mb-2">{{ school.category }}</p>
           
-          <!-- Programs -->
-          <div class="mb-2">
-            <div class="flex flex-wrap gap-1 justify-center">
-              <span *ngFor="let program of school.programs.slice(0, 2)" 
-                    class="px-1 py-0.5 bg-blue-100 text-blue-700 text-xs rounded-full">
-                {{ program }}
-              </span>
-              <span *ngIf="school.programs.length > 2" class="px-1 py-0.5 bg-gray-100 text-gray-600 text-xs rounded-full">
-                +{{ school.programs.length - 2 }}
-              </span>
-            </div>
-          </div>
-          
-          <!-- Stats -->
-          <div class="flex justify-center gap-2 text-xs text-slate-500">
-            <div class="flex items-center gap-1">
-              <svg class="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-              </svg>
-              {{ school.established }}
-            </div>
-            <div class="flex items-center gap-1">
-              <svg class="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
-              </svg>
-              {{ school.students }}
-            </div>
-          </div>
         </div>
       </div>
+    </div>
+
+    <!-- Load More Button -->
+    <div *ngIf="canLoadMore" class="text-center mb-16">
+      <button (click)="loadMore()" class="px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+        عرض المزيد
+      </button>
+      <div class="text-xs text-gray-500 mt-2">{{ schools.length }} من {{ totalFilteredCount }}</div>
     </div>
 
     <!-- Call to Action Section -->

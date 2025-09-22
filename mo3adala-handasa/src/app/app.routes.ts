@@ -4,8 +4,6 @@ export const routes: Routes = [
 	{ path: '', loadComponent: () => import('./pages/home/home.page').then(m => m.HomePageComponent) },
 	{ path: 'faq', loadComponent: () => import('./pages/faq/faq.page').then(m => m.FaqPageComponent) },
 	{ path: 'contact', loadComponent: () => import('./pages/contact/contact.page').then(m => m.ContactPageComponent) },
-	{ path: 'blog', loadComponent: () => import('./pages/blog/blog.page').then(m => m.BlogPageComponent) },
-	{ path: 'blog/:slug', loadComponent: () => import('./pages/blog-post/blog-post.page').then(m => m.BlogPostPageComponent) },
 	{ path: 'news/equation', loadComponent: () => import('./pages/news-equation/news-equation.page').then(m => m.NewsEquationPageComponent) },
 	{ path: 'news/app', loadComponent: () => import('./pages/news-app/news-app.page').then(m => m.NewsAppPageComponent) },
 	{ path: 'news/detail/:id', loadComponent: () => import('./pages/news-detail/news-detail.page').then(m => m.NewsDetailPageComponent) },

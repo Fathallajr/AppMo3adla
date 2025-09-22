@@ -1,8 +1,0 @@
-<section class="mx-auto max-w-3xl px-4 py-16" *ngIf="post" @fadeInUp>
-	<h1 class="text-3xl font-extrabold mb-2">{{ post.title }}</h1>
-	<p class="text-slate-500 mb-6">{{ post.date | date:'longDate' }}</p>
-	<article class="prose prose-slate" [innerHTML]="post.html"></article>
-	<div id="giscus_container" class="mt-10"></div>
-</section>
-
-

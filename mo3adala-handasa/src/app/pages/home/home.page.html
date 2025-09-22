@@ -1,12 +1,11 @@
 <!-- Hero Section with Background Image -->
 <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
-	<!-- Background Image with Overlay -->
-	<div class="absolute inset-0 z-0">
-		<div class="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/70 z-10"></div>
-		<div class="w-full h-full bg-cover bg-center bg-no-repeat" 
-			 style="background-image: url('/assets/success.png'), linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-		</div>
-	</div>
+    <!-- Background Image with Overlay -->
+    <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/70 z-10"></div>
+        <!-- Use real img for better LCP and priority loading -->
+        <img src="/assets/success.png" alt="طلاب ناجحون" class="w-full h-full object-cover" fetchpriority="high" decoding="async">
+    </div>
 
 	<!-- Floating Success Students Animation -->
 	
@@ -292,7 +291,7 @@
 				<!-- Video 1 -->
 				<div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
 					<div class="relative bg-black rounded-t-xl overflow-hidden" style="padding-bottom: 56.25%;">
-						<iframe 
+                        <iframe loading="lazy"
 							class="absolute top-0 left-0 w-full h-full"
 							src="https://www.youtube.com/embed/b7iw4mWn_cU?si=NpDUIWPZ4ZCWFNGg"
 							title="آراء الطلاب اللي نجحوا معنا"
@@ -319,7 +318,7 @@
 				<!-- Video 2 -->
 				<div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
 					<div class="relative bg-black rounded-t-xl overflow-hidden" style="padding-bottom: 56.25%;">
-						<iframe 
+                        <iframe loading="lazy"
 							class="absolute top-0 left-0 w-full h-full"
 							src="https://www.youtube.com/embed/vInf5Gn9kJc?si=d3cHTykD2_fQgFyB"
 							title="كيفية الاستعداد لمعادلة كلية هندسة"
@@ -346,7 +345,7 @@
 				<!-- Video 3 -->
 				<div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
 					<div class="relative bg-black rounded-t-xl overflow-hidden" style="padding-bottom: 56.25%;">
-						<iframe 
+                        <iframe loading="lazy"
 							class="absolute top-0 left-0 w-full h-full"
 							src="https://www.youtube.com/embed/SB213xLyXx0?si=ohk-bqJe9z70ZtXR"
 							title="نصائح مهمة لاجتياز معادلة كلية هندسة"
