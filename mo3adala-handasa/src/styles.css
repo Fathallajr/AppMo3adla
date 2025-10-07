@@ -38,6 +38,156 @@ img {
 
 /* Optimize animations - removed unused float animations */
 
+/* WhatsApp Floating Button Animation */
+@keyframes pulse-whatsapp {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+  }
+}
+
+.floating-whatsapp {
+  animation: float-gentle 3s ease-in-out infinite;
+}
+
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Beautiful WhatsApp Float Animations */
+@keyframes whatsapp-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes online-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes float-circle-1 {
+  0%, 100% {
+    transform: translate(-20px, -30px) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate(-40px, -60px) scale(1.2);
+    opacity: 0.6;
+  }
+}
+
+@keyframes float-circle-2 {
+  0%, 100% {
+    transform: translate(20px, -40px) scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate(40px, -70px) scale(1.3);
+    opacity: 0.5;
+  }
+}
+
+@keyframes float-circle-3 {
+  0%, 100% {
+    transform: translate(-10px, -50px) scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate(-30px, -80px) scale(1.1);
+    opacity: 0.7;
+  }
+}
+
+@keyframes blink-support {
+  0%, 70% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  85% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive adjustments for beautiful WhatsApp */
+@media (max-width: 768px) {
+  .whatsapp-float-container {
+    bottom: 20px !important;
+    right: 20px !important;
+  }
+  
+  .whatsapp-main-btn {
+    width: 55px !important;
+    height: 55px !important;
+  }
+  
+  .whatsapp-main-btn svg {
+    width: 28px !important;
+    height: 28px !important;
+  }
+  
+  .whatsapp-message {
+    bottom: 70px !important;
+    max-width: 180px !important;
+    font-size: 12px !important;
+  }
+  
+  /* Support label responsive */
+  .whatsapp-float-container > div:first-child {
+    bottom: 50px !important;
+    right: 2px !important;
+    font-size: 7px !important;
+    padding: 2px 4px !important;
+  }
+  
+  .floating-circles .circle {
+    display: none; /* Hide floating circles on mobile for performance */
+  }
+  
+  .ripple-effect {
+    width: 55px !important;
+    height: 55px !important;
+  }
+}
+
 /* Cairo font */
 @font-face {
   font-family: 'Cairo';

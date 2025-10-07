@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
-import { subPageTransition, cardAnimation, staggerList, waveAnimation, cascadeAnimation } from '../../shared/animations';
+import { subPageTransition, cardAnimation, staggerList, waveAnimation, cascadeAnimation, fadeInUp } from '../../shared/animations';
 
 @Component({
   selector: 'app-engineers-page',
@@ -9,7 +9,7 @@ import { subPageTransition, cardAnimation, staggerList, waveAnimation, cascadeAn
   imports: [CommonModule, RouterLink],
   templateUrl: './engineers.page.html',
   styleUrls: ['./engineers.page.css'],
-  animations: [subPageTransition, cardAnimation, staggerList, waveAnimation, cascadeAnimation]
+  animations: [subPageTransition, cardAnimation, staggerList, waveAnimation, cascadeAnimation, fadeInUp]
 })
 export class EngineersPageComponent {
   constructor(private router: Router) {}

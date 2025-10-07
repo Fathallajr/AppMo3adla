@@ -135,6 +135,62 @@
 					</div>
 				</div>
 			</li>
+			<li class="relative group flex items-center">
+				<button 
+					class="relative px-2 py-1 text-gray-700 flex items-center gap-1"
+					(click)="togglePlatformDropdown()"
+					[class.text-orange-600]="isPlatformDropdownOpen"
+					style="font-family: 'Cairo', sans-serif !important;">
+					<span style="font-family: 'Cairo', sans-serif !important;">المنصة</span>
+					<svg class="w-3 h-3 transition-transform duration-200" [class.rotate-180]="isPlatformDropdownOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+					</svg>
+				</button>
+				
+				<!-- Dropdown Menu -->
+				<div class="absolute top-full left-0 mt-1 w-72 xl:w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200" 
+					 [class.opacity-100]="isPlatformDropdownOpen"
+					 [class.visible]="isPlatformDropdownOpen"
+					 style="font-family: 'Cairo', sans-serif !important;">
+					<div class="py-2">
+						<!-- تسجيل دخول -->
+						<a href="https://app-mo3adlet-handsa.com/student/index.php" 
+						   target="_blank"
+						   (click)="closePlatformDropdown()"
+						   class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors" style="font-family: 'Cairo', sans-serif !important;">
+							<div class="flex items-center gap-3">
+								<div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+									<svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+									</svg>
+								</div>
+								<div>
+									<div class="font-semibold">تسجيل دخول</div>
+									<div class="text-xs text-gray-500">ادخل إلى حسابك في المنصة التعليمية</div>
+								</div>
+							</div>
+						</a>
+						
+						<!-- إنشاء حساب جديد -->
+						<a href="https://app-mo3adlet-handsa.com/register.php" 
+						   target="_blank"
+						   (click)="closePlatformDropdown()"
+						   class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors border-t border-gray-100" style="font-family: 'Cairo', sans-serif !important;">
+							<div class="flex items-center gap-3">
+								<div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+									<svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+									</svg>
+								</div>
+								<div>
+									<div class="font-semibold">إنشاء حساب جديد</div>
+									<div class="text-xs text-gray-500">سجل الآن كطالب جديد في المنصة</div>
+								</div>
+							</div>
+						</a>
+					</div>
+				</div>
+			</li>
 			<li>
 			<a routerLink="/faq" 
 			   (click)="scrollToTop()"
@@ -149,14 +205,6 @@
 			   [class]="isActiveRoute('/engineers') ? 'nav-link active' : 'nav-link'"
 			   class="relative px-2 py-1 text-gray-700 link-hover" style="font-family: 'Cairo', sans-serif !important;">
 					<span style="font-family: 'Cairo', sans-serif !important;">المهندسين</span>
-				</a>
-			</li>
-			<li>
-			<a href="https://app-mo3adlet-handsa.com/index.php" 
-			   target="_blank"
-			   class="relative px-2 py-1 text-gray-700 hover:text-orange-600 transition-all duration-300 link-hover" 
-			   style="font-family: 'Cairo', sans-serif !important;">
-					<span style="font-family: 'Cairo', sans-serif !important;">المنصة</span>
 				</a>
 			</li>
 			<li>
@@ -238,6 +286,51 @@
 					</a>
 				</div>
 			</div>
+			<div class="px-4 py-2">
+				<button 
+					(click)="toggleMobilePlatformDropdown()"
+					class="flex items-center justify-between w-full text-base font-medium text-gray-700 hover:text-orange-600 transition-all duration-300 px-4 py-3 rounded-lg hover:bg-gray-50 btn-hover ripple" 
+					style="font-family: 'Cairo', sans-serif !important;">
+					المنصة
+					<svg class="w-4 h-4 transition-transform duration-200" [class.rotate-180]="isMobilePlatformDropdownOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+					</svg>
+				</button>
+				<div class="mt-2 space-y-1" [class.hidden]="!isMobilePlatformDropdownOpen">
+					<a href="https://app-mo3adlet-handsa.com/student/index.php" 
+					   target="_blank"
+					   (click)="closeMobilePlatformDropdown()"
+					   class="block px-8 py-3 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all duration-300 link-hover" style="font-family: 'Cairo', sans-serif !important;">
+						<div class="flex items-center gap-3">
+							<div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+								<svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+								</svg>
+							</div>
+							<div>
+								<div class="font-semibold">تسجيل دخول</div>
+								<div class="text-xs text-gray-500">ادخل إلى حسابك في المنصة التعليمية</div>
+							</div>
+						</div>
+					</a>
+					<a href="https://app-mo3adlet-handsa.com/register.php" 
+					   target="_blank"
+					   (click)="closeMobilePlatformDropdown()"
+					   class="block px-8 py-3 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all duration-300 link-hover" style="font-family: 'Cairo', sans-serif !important;">
+						<div class="flex items-center gap-3">
+							<div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+								<svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+								</svg>
+							</div>
+							<div>
+								<div class="font-semibold">إنشاء حساب جديد</div>
+								<div class="text-xs text-gray-500">سجل الآن كطالب جديد في المنصة</div>
+							</div>
+						</div>
+					</a>
+				</div>
+			</div>
 			<a routerLink="/faq" 
 			   (click)="closeMobileMenu()"
 			   [class]="isActiveRoute('/faq') ? 'mobile-nav-link active' : 'mobile-nav-link'"
@@ -249,12 +342,6 @@
 			   [class]="isActiveRoute('/engineers') ? 'mobile-nav-link active' : 'mobile-nav-link'"
 			   class="block px-4 py-3 rounded-lg text-base font-medium hover:bg-gray-50 transition-all duration-300 link-hover" style="font-family: 'Cairo', sans-serif !important;">
 				المهندسين
-			</a>
-			<a href="https://app-mo3adlet-handsa.com/index.php" 
-			   target="_blank"
-			   (click)="closeMobileMenu()"
-			   class="mobile-nav-link block px-4 py-3 rounded-lg text-base font-medium hover:bg-gray-50 transition-all duration-300 link-hover" style="font-family: 'Cairo', sans-serif !important;">
-				المنصة التعليمية
 			</a>
 			<a routerLink="/social" 
 			   (click)="closeMobileMenu()"

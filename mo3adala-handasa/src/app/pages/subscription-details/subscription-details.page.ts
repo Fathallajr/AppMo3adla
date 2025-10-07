@@ -11,8 +11,8 @@ import { CommonModule } from '@angular/common';
 export class SubscriptionDetailsPageComponent implements OnInit {
 	currentMonth = '';
 	subscriptionDetails = {
-		month: 'يناير 2024',
-		price: '500',
+		month: ' أكتوبر',
+		price: '700',
 		currency: 'ج',
 		features: [
 			'فيديوهات تأسيسية في جميع المواد',
@@ -32,26 +32,43 @@ export class SubscriptionDetailsPageComponent implements OnInit {
 			'وصول مدى الحياة للمحتوى',
 			'شهادة إنجاز معتمدة'
 		],
-		googleFormLink: 'https://forms.gle/MfMS3vVHU9gcdum87',
+		googleFormLink: 'https://forms.gle/sQxtMjAikcMt7uSP6',
 		vodafoneNumbers: [
-			'01040490778',
-			'01040490779',
-			'01080681865',
-			'01025326080'
+			{ number: '01040490778', owner: 'احمد ع********* س***' },
+			{ number: '01040490779', owner: 'س ف** ص*** ا***' },
+			{ number: '01080681865', owner: 'ابرآم س*** م****' },
+			{ number: '01025326080', owner: 'احمد م**** ا***** ز***' }
 		],
 		requiredInfo: [
 			'رقم الموبايل اللي حولت منه 📲',
 			'سكرين شوت بالتحويل 🖼',
 			'وقت وتاريخ التحويل ⏳'
 		],
-		warningMessage: 'لا يوجد سحب إشتراك نهائيا لأي سبب من الأسباب',
-		subtitle: 'مسك الختام .. الجولة الحاسمة '
+		whatsappNumber: '201554843745',
+		subscriptionWarnings: {
+			validity: {
+				title: 'مدة صلاحية الاشتراك:',
+				points: [
+					'الكود شغال لغاية آخر الشهر فقط',
+					'مع انتهاء الشهر بيقفل المحتوى تلقائياً',
+					'عند تجديد الاشتراك الكود الجديد بيفتحلك كل المحتوى من الأول'
+				]
+			},
+			refund: {
+				title: 'سياسة الاسترداد:',
+				points: [
+					'السحب متاح خلال أسبوع من الاشتراك مع استرداد نصف المبلغ فقط',
+					'بعد الأسبوع، لا يُمكن استرداد أي مبلغ'
+				]
+			}
+		},
+		subtitle: ' الشهر الأول لدفعة 2026 '
 	};
 
 	constructor() { }
 
 	ngOnInit(): void {
-		this.updateCurrentMonth();
+		// this.updateCurrentMonth(); // معطل لاستخدام الشهر المحدد يدوياً
 	}
 
 	private updateCurrentMonth(): void {
@@ -67,6 +84,12 @@ export class SubscriptionDetailsPageComponent implements OnInit {
 
 	openGoogleForm(): void {
 		window.open(this.subscriptionDetails.googleFormLink, '_blank');
+	}
+
+	openWhatsApp(): void {
+		const message = encodeURIComponent('السلام عليكم، أريد إرسال سكرين شوت التحويل للاشتراك في المنصة');
+		const whatsappUrl = `https://wa.me/${this.subscriptionDetails.whatsappNumber}?text=${message}`;
+		window.open(whatsappUrl, '_blank');
 	}
 
 	formatPrice(price: string): string {

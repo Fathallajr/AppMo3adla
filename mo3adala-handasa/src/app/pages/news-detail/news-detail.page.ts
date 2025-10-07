@@ -92,7 +92,7 @@ export class NewsDetailPageComponent implements OnInit {
 					</ul>
 				</div>
 			`,
-			date: '2025-01-15',
+			date: '2025-06-22',
 			author: 'فريق المعادلة',
 			category: 'شروط المعادلة',
 			image: '/assets/success.png',
@@ -134,7 +134,7 @@ export class NewsDetailPageComponent implements OnInit {
 					</p>
 				</div>
 			`,
-			date: '2025-01-10',
+			date: '2025-06-22',
 			author: 'فريق المعادلة',
 			category: 'قبول خاص',
 			image: '/assets/we.jpg',
@@ -183,7 +183,7 @@ export class NewsDetailPageComponent implements OnInit {
 					</ul>
 				</div>
 			`,
-			date: '2025-06-14',
+			date: '2025-06-22',
 			author: 'فريق المعادلة',
 			category: 'أخبار التطبيق',
 			important: false,
@@ -232,7 +232,7 @@ export class NewsDetailPageComponent implements OnInit {
 					</ul>
 				</div>
 			`,
-			date: '2025-06-14',
+			date: '2025-06-22',
 			author: 'فريق المعادلة',
 			category: 'الكورسات والدورات',
 			image: '/assets/news4.png',

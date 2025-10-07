@@ -13,9 +13,9 @@ import { CanonicalService } from '../../core/canonical.service';
 export class ContactPageComponent {
 	private readonly seo = inject(SeoService);
 	private readonly canonical = inject(CanonicalService);
-	studentWhatsapp = (typeof window !== 'undefined' ? (window as any)['NG_STUDENT_WHATSAPP'] : process.env['NG_STUDENT_WHATSAPP']) || '201064746369';
-	parentWhatsapp = (typeof window !== 'undefined' ? (window as any)['NG_PARENT_WHATSAPP'] : process.env['NG_PARENT_WHATSAPP']) || '201234567890';
-	phoneNumber = (typeof window !== 'undefined' ? (window as any)['NG_PHONE_NUMBER'] : process.env['NG_PHONE_NUMBER']) || '+201064746369';
+	studentWhatsapp = (typeof window !== 'undefined' ? (window as any)['NG_STUDENT_WHATSAPP'] : process.env['NG_STUDENT_WHATSAPP']) || '201554843745';
+	parentWhatsapp = (typeof window !== 'undefined' ? (window as any)['NG_PARENT_WHATSAPP'] : process.env['NG_PARENT_WHATSAPP']) || '201554843745';
+	phoneNumber = (typeof window !== 'undefined' ? (window as any)['NG_PHONE_NUMBER'] : process.env['NG_PHONE_NUMBER']) || '+201554843745';
 
 	constructor() {
 		if (typeof window !== 'undefined') {

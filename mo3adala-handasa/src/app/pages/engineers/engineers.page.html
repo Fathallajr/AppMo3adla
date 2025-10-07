@@ -12,118 +12,65 @@
 
     <!-- Teachers Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-16" [@cascadeAnimation]>
-      <!-- Teacher Card 1 -->
-      <div class="bg-white rounded-xl shadow-lg p-4 hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2" 
-           [@cardAnimation]
-           (click)="viewTeacherDetails(1)">
+      <!-- 1) المهندس أحمد فتح الله -->
+      <div class="bg-white rounded-xl shadow-lg p-4 hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2" [@cardAnimation] (click)="viewTeacherDetails(1)">
         <div class="text-center">
           <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 rounded-full overflow-hidden border-3 border-blue-200">
-            <img src="assets/teacher.jpg" 
-                 alt="المهندس أحمد فتح الله" 
-                 class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                 loading="lazy"
-                 decoding="async"
-                 style="max-width: 100%; height: auto;"
-                 onerror="this.src='/assets/logo.png'">
+            <img src="assets/teacher.jpg" alt="المهندس أحمد فتح الله" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" loading="lazy" decoding="async" style="max-width: 100%; height: auto;" onerror="this.src='/assets/logo.png'">
           </div>
           <h3 class="text-lg font-semibold text-slate-900 mb-1">المهندس أحمد فتح الله</h3>
           <p class="text-blue-600 font-medium mb-2 text-sm">أستاذ الرياضيات العامة والخاصة</p>
-          <div class="mt-3 text-blue-600 text-xs font-medium">
-            اضغط للمزيد ←
-          </div>
+          <div class="mt-3 text-blue-600 text-xs font-medium">اضغط للمزيد ←</div>
         </div>
       </div>
 
-      <!-- Teacher Card 2 -->
-      <div class="bg-white rounded-xl shadow-lg p-4 hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2" 
-           [@cardAnimation]
-           (click)="viewTeacherDetails(2)">
+      <!-- 2) المهندس أحمد أبو زيد -->
+      <div class="bg-white rounded-xl shadow-lg p-4 hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2" [@cardAnimation] (click)="viewTeacherDetails(2)">
         <div class="text-center">
           <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 rounded-full overflow-hidden border-3 border-green-200">
-            <img src="assets/teacher1.jpg"  
-             alt="المهندس أحمد أبو زيد" 
-                 class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                 loading="lazy"
-                 decoding="async"
-                 style="max-width: 100%; height: auto;"
-                 onerror="this.src='/assets/logo.png'">
+            <img src="assets/teacher1.jpg" alt="المهندس أحمد أبو زيد" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" loading="lazy" decoding="async" style="max-width: 100%; height: auto;" onerror="this.src='/assets/logo.png'">
           </div>
           <h3 class="text-lg font-semibold text-slate-900 mb-1">المهندس أحمد ابو زيد</h3>
           <p class="text-green-600 font-medium mb-2 text-sm">أستاذ الميكانيكا</p>
-          <div class="mt-3 text-green-600 text-xs font-medium">
-            اضغط للمزيد ←
-          </div>
+          <div class="mt-3 text-green-600 text-xs font-medium">اضغط للمزيد ←</div>
         </div>
       </div>
 
-      <!-- Teacher Card 3 -->
-      <div class="bg-white rounded-xl shadow-lg p-4 hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2" 
-           [@cardAnimation]
-           (click)="viewTeacherDetails(3)">
-        <div class="text-center">
-          <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 rounded-full overflow-hidden border-3 border-orange-200">
-            <img src="assets/teacher4.jpg" 
-                alt="دكتور سعد العميري" 
-                 class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                 loading="lazy"
-                 decoding="async"
-                 style="max-width: 100%; height: auto;"
-                 onerror="this.src='/assets/logo.png'">
-          </div>
-          <h3 class="text-lg font-semibold text-slate-900 mb-1"> دكتور سعد العميري</h3>
-          <p class="text-orange-600 font-medium mb-2 text-sm">أستاذ الكيمياء</p>
-          <div class="mt-3 text-orange-600 text-xs font-medium">
-            اضغط للمزيد ←
-          </div>
-        </div>
-      </div>
-
-      
-      <!-- Teacher Card 4 -->
-      <div class="bg-white rounded-xl shadow-lg p-4 hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2" 
-           [@cardAnimation]
-           (click)="viewTeacherDetails(4)">
-        <div class="text-center">
-          <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 rounded-full overflow-hidden border-3 border-purple-200">
-            <img src="assets/teacher3.jpg" 
-                 alt="م/ أحمد الشامي" 
-                 class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                 loading="lazy"
-                 decoding="async"
-                 style="max-width: 100%; height: auto;"
-                 onerror="this.src='/assets/logo.png'">
-          </div>
-          <h3 class="text-lg font-semibold text-slate-900 mb-1"> المهندس أحمد الشامي</h3>
-          <p class="text-purple-600 font-medium mb-2 text-sm">أستاذ الفيزياء</p>
-          <div class="mt-3 text-purple-600 text-xs font-medium">
-            اضغط للمزيد ←
-          </div>
-        </div>
-      </div>
-      <!-- Teacher Card 5 -->
-      <div class="bg-white rounded-xl shadow-lg p-4 hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2" 
-           [@cardAnimation]
-           (click)="viewTeacherDetails(5)">
+      <!-- 3) مستر إبرام سامي -->
+      <div class="bg-white rounded-xl shadow-lg p-4 hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2" [@cardAnimation] (click)="viewTeacherDetails(5)">
         <div class="text-center">
           <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 rounded-full overflow-hidden border-3 border-indigo-200">
-            <img src="assets/teacher2.jpg" 
-                 alt="م/ إبرام سامي" 
-                 class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                 loading="lazy"
-                 decoding="async"
-                 style="max-width: 100%; height: auto;"
-                 onerror="this.src='/assets/logo.png'">
+            <img src="assets/teacher2.jpg" alt="م/ إبرام سامي" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" loading="lazy" decoding="async" style="max-width: 100%; height: auto;" onerror="this.src='/assets/logo.png'">
           </div>
-          <h3 class="text-lg font-semibold text-slate-900 mb-1">مستر إبرام سامي </h3>
+          <h3 class="text-lg font-semibold text-slate-900 mb-1">مستر إبرام سامي</h3>
           <p class="text-indigo-600 font-medium mb-2 text-sm">أستاذ اللغة الإنجليزية</p>
-          <div class="mt-3 text-indigo-600 text-xs font-medium">
-            اضغط للمزيد ←
-          </div>
+          <div class="mt-3 text-indigo-600 text-xs font-medium">اضغط للمزيد ←</div>
         </div>
       </div>
 
-      <!-- Teacher Card 6 -->
-    
+      <!-- 4) المهندس أحمد الشامي -->
+      <div class="bg-white rounded-xl shadow-lg p-4 hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2" [@cardAnimation] (click)="viewTeacherDetails(4)">
+        <div class="text-center">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 rounded-full overflow-hidden border-3 border-purple-200">
+            <img src="assets/teacher3.jpg" alt="م/ أحمد الشامي" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" loading="lazy" decoding="async" style="max-width: 100%; height: auto;" onerror="this.src='/assets/logo.png'">
+          </div>
+          <h3 class="text-lg font-semibold text-slate-900 mb-1">المهندس أحمد الشامي</h3>
+          <p class="text-purple-600 font-medium mb-2 text-sm">أستاذ الفيزياء</p>
+          <div class="mt-3 text-purple-600 text-xs font-medium">اضغط للمزيد ←</div>
+        </div>
+      </div>
+
+      <!-- 5) دكتور سعد العميري -->
+      <div class="bg-white rounded-xl shadow-lg p-4 hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2" [@cardAnimation] (click)="viewTeacherDetails(3)">
+        <div class="text-center">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 rounded-full overflow-hidden border-3 border-orange-200">
+            <img src="assets/teacher4.jpg" alt="دكتور سعد العميري" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" loading="lazy" decoding="async" style="max-width: 100%; height: auto;" onerror="this.src='/assets/logo.png'">
+          </div>
+          <h3 class="text-lg font-semibold text-slate-900 mb-1">دكتور سعد العميري</h3>
+          <p class="text-orange-600 font-medium mb-2 text-sm">أستاذ الكيمياء</p>
+          <div class="mt-3 text-orange-600 text-xs font-medium">اضغط للمزيد ←</div>
+        </div>
+      </div>
     </div>
 
     <!-- Call to Action Section -->

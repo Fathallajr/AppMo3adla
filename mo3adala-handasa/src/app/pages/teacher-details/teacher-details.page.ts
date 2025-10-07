@@ -52,12 +52,12 @@ export class TeacherDetailsPageComponent implements OnInit {
       specialization: 'الرياضيات العامة والخاصة',
       bio: '',
       email: 'ahmed.fathallah@engineering.edu',
-      phone: '+201064746369',
+      phone: '+201554843745',
       office: 'مبنى الرياضيات - الطابق الثالث - مكتب 301',
       officeHours: 'الأحد - الخميس: 10:00 ص - 2:00 م',
       socialLinks: {
         facebook: 'https://www.facebook.com/share/1D7WGR9Ccz/',
-        whatsapp: 'https://wa.me/201064746369',
+        whatsapp: 'https://wa.me/201554843745',
         youtube: 'https://youtube.com/@mr-ahmed-fathallah?si=QVMnPGojPl1KKAkm'
       },
       demoVideo: {

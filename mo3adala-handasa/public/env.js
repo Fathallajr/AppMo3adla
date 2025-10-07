@@ -1,7 +1,7 @@
 // Runtime environment variables (override in deploys)
 window.NG_SITE_URL = window.NG_SITE_URL || 'https://example.com';
 window.NG_FORMSPREE_ENDPOINT = window.NG_FORMSPREE_ENDPOINT || 'https://formspree.io/f/XXXXXXX';
-window.NG_WHATSAPP = window.NG_WHATSAPP || '201234567890';
+window.NG_WHATSAPP = window.NG_WHATSAPP || '201554843745';
 window.NG_GISCUS_REPO = window.NG_GISCUS_REPO || '';
 window.NG_GISCUS_REPO_ID = window.NG_GISCUS_REPO_ID || '';
 window.NG_GISCUS_CATEGORY = window.NG_GISCUS_CATEGORY || '';

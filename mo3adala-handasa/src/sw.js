@@ -1,59 +1,81 @@
-// Service Worker for Performance Optimization
-const CACHE_NAME = 'mo3adala-handasa-v2';
-const urlsToCache = [
+// Service Worker with network-first strategy for navigations to avoid blank screen on mobile
+const CACHE_VERSION = 'v3';
+const STATIC_CACHE = `mo3adala-static-${CACHE_VERSION}`;
+const RUNTIME_CACHE = `mo3adala-runtime-${CACHE_VERSION}`;
+
+const STATIC_ASSETS = [
   '/',
+  '/index.html',
   '/assets/logo2.png',
-  '/assets/teacher.png',
-  '/assets/teacher1.png',
-  '/assets/teacher2.png',
-  '/assets/teacher3.png',
-  '/assets/teacher4.png',
-  '/assets/student.png',
-  '/assets/student1.png',
-  '/assets/student2.png',
-  '/assets/student3.png',
-  '/assets/student4.png',
-  '/assets/student5.png',
-  '/assets/student6.png',
-  'https://fonts.gstatic.com/s/cairo/v28/SLXGc1nY6HkvalI.woff2'
+  '/assets/logo.png',
 ];
 
-// Install event
-self.addEventListener('install', event => {
+self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        return cache.addAll(urlsToCache);
-      })
+    caches.open(STATIC_CACHE).then((cache) => cache.addAll(STATIC_ASSETS)).catch(() => undefined)
   );
 });
 
-// Fetch event
-self.addEventListener('fetch', event => {
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    (async () => {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((key) => {
+        if (key !== STATIC_CACHE && key !== RUNTIME_CACHE) {
+          return caches.delete(key);
+        }
+      }));
+      await self.clients.claim();
+    })()
+  );
+});
+
+function isNavigationRequest(request) {
+  return request.mode === 'navigate' || (request.method === 'GET' && request.headers.get('accept')?.includes('text/html'));
+}
+
+// Network-first for navigations (serves latest index and routes) to prevent stale shell
+// Stale-while-revalidate for static assets
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+
+  if (isNavigationRequest(request)) {
+    event.respondWith(
+      (async () => {
+        try {
+          const networkResponse = await fetch(request);
+          const cache = await caches.open(RUNTIME_CACHE);
+          cache.put('/', networkResponse.clone()).catch(() => undefined);
+          return networkResponse;
+        } catch (err) {
+          const cache = await caches.open(STATIC_CACHE);
+          return (await cache.match('/index.html')) || (await cache.match('/')) || Response.error();
+        }
+      })()
+    );
+    return;
+  }
+
+  if (request.url.includes('/assets/')) {
+    event.respondWith(
+      (async () => {
+        const cache = await caches.open(STATIC_CACHE);
+        const cached = await cache.match(request);
+        const networkPromise = fetch(request)
+          .then((response) => {
+            cache.put(request, response.clone()).catch(() => undefined);
+            return response;
+          })
+          .catch(() => undefined);
+        return cached || networkPromise || fetch(request);
+      })()
+    );
+    return;
+  }
+
+  // Default: try cache, then network
   event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Return cached version or fetch from network
-        return response || fetch(event.request);
-      })
+    caches.match(request).then((cached) => cached || fetch(request))
   );
 });
-
-// Activate event
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
-  );
-});
-
-
-
-

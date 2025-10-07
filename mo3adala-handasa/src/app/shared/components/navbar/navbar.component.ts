@@ -19,6 +19,8 @@ export class NavbarComponent implements OnInit {
 	isNewsDropdownOpen = false;
 	isMobileNewsDropdownOpen = false;
 	isMobileRequirementsDropdownOpen = false;
+	isPlatformDropdownOpen = false;
+	isMobilePlatformDropdownOpen = false;
 	isMobile = false;
 
 	constructor(private router: Router, private viewportScroller: ViewportScroller) {
@@ -117,6 +119,26 @@ export class NavbarComponent implements OnInit {
 
 	closeMobileRequirementsDropdown() {
 		this.isMobileRequirementsDropdownOpen = false;
+		// التمرير إلى الأعلى عند إغلاق القائمة المنسدلة المحمولة
+		this.scrollToTop();
+	}
+
+	togglePlatformDropdown() {
+		this.isPlatformDropdownOpen = !this.isPlatformDropdownOpen;
+	}
+
+	closePlatformDropdown() {
+		this.isPlatformDropdownOpen = false;
+		// التمرير إلى الأعلى عند إغلاق القائمة المنسدلة
+		this.scrollToTop();
+	}
+
+	toggleMobilePlatformDropdown() {
+		this.isMobilePlatformDropdownOpen = !this.isMobilePlatformDropdownOpen;
+	}
+
+	closeMobilePlatformDropdown() {
+		this.isMobilePlatformDropdownOpen = false;
 		// التمرير إلى الأعلى عند إغلاق القائمة المنسدلة المحمولة
 		this.scrollToTop();
 	}
