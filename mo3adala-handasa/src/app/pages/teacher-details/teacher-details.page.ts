@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { SeoService } from '../../core/seo.service';
+import { CanonicalService } from '../../core/canonical.service';
 
 interface Teacher {
   id: number;
@@ -28,6 +30,7 @@ interface Teacher {
     topic?: string;
     description?: string;
   };
+  isComingSoon?: boolean;
 }
 
 @Component({
@@ -48,16 +51,16 @@ export class TeacherDetailsPageComponent implements OnInit {
       subject: ' ',
       image: 'assets/teacher.jpg',
       degree: '  ',
-      experience: 9,
+      experience: 13,
       specialization: 'الرياضيات العامة والخاصة',
       bio: '',
       email: 'ahmed.fathallah@engineering.edu',
       phone: '+201554843745',
       office: 'مبنى الرياضيات - الطابق الثالث - مكتب 301',
-      officeHours: 'الأحد - الخميس: 10:00 ص - 2:00 م',
+      officeHours: 'الأحد - الخميس: 10:00 ص - 10:00 م',
       socialLinks: {
         facebook: 'https://www.facebook.com/share/1D7WGR9Ccz/',
-        whatsapp: 'https://wa.me/201554843745',
+        whatsapp: 'https://api.whatsapp.com/send/?phone=201064746369&text&type=phone_number&app_absent=0',
         youtube: 'https://youtube.com/@mr-ahmed-fathallah?si=QVMnPGojPl1KKAkm'
       },
       demoVideo: {
@@ -74,17 +77,17 @@ export class TeacherDetailsPageComponent implements OnInit {
       subject: '',
       image: 'assets/teacher1.jpg',
       degree: '',
-      experience: 6,
+      experience: 10,
       specialization: 'الميكانيكا',
       bio: '',
       email: 'ahmed.abouzeid@engineering.edu',
       phone: '+201151016262',
       office: 'مبنى الميكانيكا - الطابق الثاني - مكتب 205',
-      officeHours: 'الأحد - الأربعاء: 9:00 ص - 1:00 م',
+      officeHours: 'الأحد - الأربعاء: 10:00 ص - 10:00 م',
       socialLinks: {
-        facebook: 'https://www.facebook.com/share/19rxae4tSv/',
+        facebook: 'https://www.facebook.com/share/1EbNiiV1X2/',
         whatsapp: 'https://wa.me/201151016262',
-        youtube: 'https://youtube.com/@ahmed_abozeid?si=6iNPTZ2o5zAuuIsN'
+        youtube: 'https://youtube.com/@ahmed_abozeed?si=mfu1-CgVSm1LsMUQ'
       },
       demoVideo: {
         youtubeId: 'KjYtUgx7Txk',
@@ -100,13 +103,13 @@ export class TeacherDetailsPageComponent implements OnInit {
       subject: '',
       image: 'assets/teacher4.jpg',
       degree: '',
-      experience: 4,
+      experience: 8,
       specialization: 'الكيمياء ',
       bio: '',
       email: 'saad.alomairi@engineering.edu',
       phone: '+201148068718',
       office: 'مبنى الكيمياء - الطابق الأول - مكتب 101',
-      officeHours: 'السبت - الأربعاء: 8:00 ص - 12:00 م',
+      officeHours: 'السبت - الأربعاء: 10:00 ص - 10:00 م',
       socialLinks: {
         facebook: 'https://www.facebook.com/share/1BBUji24Kc/',
         whatsapp: 'https://wa.me/201148068718',
@@ -126,13 +129,13 @@ export class TeacherDetailsPageComponent implements OnInit {
       subject: '',
       image: 'assets/teacher3.jpg',
       degree: 'ماجستير في الفيزياء',
-      experience: 5,
+      experience: 8,
       specialization: 'الفيزياء',
       bio: '',
       email: 'ahmed.alshami@engineering.edu',
       phone: '+201000278286',
       office: 'مبنى الفيزياء - الطابق الثاني - مكتب 202',
-      officeHours: 'الأحد - الخميس: 11:00 ص - 3:00 م',
+      officeHours: 'الأحد - الخميس: 10:00 ص - 10:00 م',
       socialLinks: {
         facebook: 'https://www.facebook.com/share/1B4CMMLdP7/',
         whatsapp: 'https://wa.me/201000278286',
@@ -148,38 +151,57 @@ export class TeacherDetailsPageComponent implements OnInit {
     },
     {
       id: 5,
-      name: 'م/ إبرام سامي',
-      subject: '',
-      image: 'assets/teacher2.jpg',
+      name: 'د/ عمر أحمد عبد الفتاح',
+      subject: ' ',
+      image: 'assets/teacher2.png',
       degree: '',
-      experience: 11,
-      specialization: 'اللغة الإنجليزية ',
+      experience: 6,
+      specialization: 'اللغة الإنجليزية',
       bio: '',
-      email: 'ibram.samy@engineering.edu',
-      phone: '+201099267711',
-      office: 'مبنى اللغات - الطابق الثالث - مكتب 303',
-      officeHours: 'الأحد - الخميس: 9:00 ص - 2:00 م',
+      email: '',
+      phone: '+201020107762',
+      office: '',
+      officeHours: '',
       socialLinks: {
-        facebook: 'https://www.facebook.com/share/1B6khgmjSt/',
-        whatsapp: 'https://wa.me/201099267711',
-        youtube: 'https://youtube.com/@ebraamsamy7649?si=rOKfbKl3jmdKnHro'
+        facebook: 'https://www.facebook.com/profile.php?id=61563784603700&rdid=6uU0ecDTzK2l1m02&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F17HrGLn8RK%2F#',
+        whatsapp: 'https://wa.me/201020107762',
+        youtube: 'https://www.youtube.com/@dr_omar'
       },
       demoVideo: {
-        youtubeId: 'xtBmX2DMMBo',
-        duration: '14 دقيقة',
-        level: 'متقدم',
-        topic: 'اللغة الإنجليزية التقنية',
-        description: 'شرح مفاهيم اللغة الإنجليزية التقنية والأكاديمية'
+        youtubeId: 'GxL4Fnd_YMk',
+        duration: '10 دقيقة',
+        topic: 'شرح الاستنتاج والنصح deduction must can\'t could should',
+        description: 'شرح الاستنتاج والنصح باستخدام must, can\'t, could, should'
       }
     }
   ];
 
-  constructor(private route: ActivatedRoute, private router: Router, private sanitizer: DomSanitizer) {}
+  constructor(
+    private route: ActivatedRoute, 
+    private router: Router, 
+    private sanitizer: DomSanitizer,
+    private seo: SeoService,
+    private canonical: CanonicalService
+  ) {}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.teacherId = +params['id'];
       this.teacher = this.teachers.find(t => t.id === this.teacherId) || null;
+      
+      // Update page title when teacher is loaded
+      if (this.teacher && typeof window !== 'undefined') {
+        const siteUrl = (window as any)['NG_SITE_URL'] || 'https://appmo3adla.com';
+        const title = `${this.teacher.name} - ${this.teacher.subject} - ابلكيشن معادلة كلية هندسة`;
+        const description = `تعرف على الأستاذ ${this.teacher.name} مدرس ${this.teacher.subject} في معادلة كلية الهندسة`;
+        const url = `${siteUrl}/teacher/${this.teacher.id}`;
+        
+        this.seo.setTitle(title);
+        this.seo.setDescription(description);
+        this.seo.setOgTags({ title, description, url });
+        this.seo.setTwitterTags({ title, description });
+        this.canonical.setCanonical(url);
+      }
       
       if (!this.teacher) {
         this.router.navigate(['/engineers']);

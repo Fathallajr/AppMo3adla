@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { SeoService } from '../../core/seo.service';
+import { CanonicalService } from '../../core/canonical.service';
 
 @Component({
 	selector: 'app-news-app',
@@ -12,7 +14,37 @@ import { RouterLink } from '@angular/router';
 export class NewsAppPageComponent implements OnInit {
 	newsItems = [
 		{
+			id: 0,
+			title: 'تفاصيل خطة الإنجليزي مع دكتور عمر أحمد أسطورة اللغة الانجليزية وصلت 🔥',
+			excerpt: 'الإنجليزي من النهاردة اتحول من عقدة… إلى لعبة 💪 - خطة شاملة لتعلم اللغة الإنجليزية مع دكتور عمر أحمد',
+			date: '2025-11-03',
+			image: '/assets/خبر الإنجليزي.jpg',
+			slug: 'english-plan-dr-omar-2025',
+			category: 'الكورسات والدورات',
+			important: true
+		},
+		{
 			id: 1,
+			title: 'نظام المتابعة في الابلكيشن حاجة تانية ',
+			excerpt: 'المتابعة في الابلكيشن حاجة تانية - نظام تقييمات شامل مع ثواب وعقاب لضمان التزام الطلاب',
+			date: '2025-11-01',
+			image: '/assets/نظام المتابعة.jpg',
+			slug: 'monitoring-system-2025',
+			category: 'أنظمة الأبلكيشن',
+			important: true
+		},
+		{
+			id: 2,
+			title: 'أسبوع مجاني لطلاب معادلة كلية الهندسة!',
+			excerpt: 'احتفالًا بطلاب المعادلة، فريق أبلكيشن معادلة كلية هندسة بيفتح باب الأكواد المجانية لمدة أسبوع كامل! 🔥',
+			date: '2025-10-21',
+			image: '/assets/news6.jpg',
+			slug: 'free-week-codes-2025',
+			category: 'عروض خاصة',
+			important: false
+		},
+		{
+			id: 3,
 			title: 'كتاب امتحانات الأبلكيشن',
 			excerpt: 'كتاب امتحانات الأبلكيشن يضم مجموعة كبيرة من الامتحانات الشاملة التي تساعد الطالب على التدرب على شكل الأسئلة الحقيقية',
 			date: '2025-05-20',
@@ -22,7 +54,7 @@ export class NewsAppPageComponent implements OnInit {
 			important: false
 		},
 		{
-			id: 2,
+			id: 4,
 			title: 'جروب كلمات اللغة الإنجليزية',
 			excerpt: 'يضم مجموعة كبيرة من أهم الكلمات الشائعة فى الإمتحانات ويساعد الطالب على بناء حصيلة لغوية قوية',
 			date: '2025-06-22',
@@ -32,7 +64,7 @@ export class NewsAppPageComponent implements OnInit {
 			important: false
 		},
 		{
-			id: 3,
+			id: 5,
 			title: 'الكورس المكثف الجديد',
 			excerpt: 'يغطي شرحًا كاملًا للمنهج الدراسي ويركز على أهم النقاط الأساسية في المادة مع حل تدريبات متنوعة للتطبيق العملي',
 			date: '2025-06-22',
@@ -83,9 +115,24 @@ export class NewsAppPageComponent implements OnInit {
 		// }
 	];
 
-	constructor() { }
+	constructor(
+		private seo: SeoService,
+		private canonical: CanonicalService
+	) {}
 
 	ngOnInit(): void {
+		if (typeof window !== 'undefined') {
+			const siteUrl = (window as any)['NG_SITE_URL'] || 'https://appmo3adla.com';
+			const title = 'أخبار الأبلكيشن - ابلكيشن معادلة كلية هندسة';
+			const description = 'تابع آخر أخبار وتحديثات أبلكيشن معادلة كلية هندسة والعروض الخاصة والمنتجات الجديدة';
+			const url = `${siteUrl}/news-app`;
+			
+			this.seo.setTitle(title);
+			this.seo.setDescription(description);
+			this.seo.setOgTags({ title, description, url });
+			this.seo.setTwitterTags({ title, description });
+			this.canonical.setCanonical(url);
+		}
 	}
 
 	formatDate(dateString: string): string {

@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { SeoService } from '../../core/seo.service';
+import { CanonicalService } from '../../core/canonical.service';
 
 @Component({
 	selector: 'app-subscription-details',
@@ -10,8 +13,13 @@ import { CommonModule } from '@angular/common';
 })
 export class SubscriptionDetailsPageComponent implements OnInit {
 	currentMonth = '';
+	copiedNumber: string | null = null; // للتحكم في رسالة "تم النسخ"
+	isImageModalOpen = false; // للتحكم في فتح/إغلاق الصورة المكبرة
+	isEnrollmentClosed = true;
+	enrollmentReopenMessage = 'سيتم فتح الاشتراك للمشتركين الجدد مع بداية الشهر القادم بإذن الله.';
+	
 	subscriptionDetails = {
-		month: ' أكتوبر',
+		month: ' شهر نوفمبر 2026',
 		price: '700',
 		currency: 'ج',
 		features: [
@@ -20,10 +28,8 @@ export class SubscriptionDetailsPageComponent implements OnInit {
 			'فيديوهات حل بنوك المسائل',
 			'ملازم وملفات PDF للتحميل',
 			'امتحانات إلكترونية تفاعلية',
-			'مراجعة مستمرة مع المدرسين',
 			'دردشة مباشرة مع فريق الدعم',
 			'تتبع التقدم والدرجات',
-			'إشعارات للامتحانات والمواعيد',
 			'دعم فني على مدار الساعة'
 		],
 		offers: [
@@ -32,12 +38,12 @@ export class SubscriptionDetailsPageComponent implements OnInit {
 			'وصول مدى الحياة للمحتوى',
 			'شهادة إنجاز معتمدة'
 		],
-		googleFormLink: 'https://forms.gle/sQxtMjAikcMt7uSP6',
+		googleFormLink: 'https://forms.gle/Q5do5DHEMWC1WS7j7',
 		vodafoneNumbers: [
-			{ number: '01040490778', owner: 'احمد ع********* س***' },
 			{ number: '01040490779', owner: 'س ف** ص*** ا***' },
 			{ number: '01080681865', owner: 'ابرآم س*** م****' },
-			{ number: '01025326080', owner: 'احمد م**** ا***** ز***' }
+			{ number: '01025326080', owner: 'احمد م**** ا***** ز***' },
+			// { number: '01040490778', owner: 'احمد ع********* س***' } // مخفي مؤقتاً
 		],
 		requiredInfo: [
 			'رقم الموبايل اللي حولت منه 📲',
@@ -62,13 +68,50 @@ export class SubscriptionDetailsPageComponent implements OnInit {
 				]
 			}
 		},
-		subtitle: ' الشهر الأول لدفعة 2026 '
+		subtitle: ' الشهر الثاني لدفعة 2026 '
 	};
 
-	constructor() { }
+	constructor(
+		private seo: SeoService,
+		private canonical: CanonicalService,
+		private sanitizer: DomSanitizer
+	) {}
 
 	ngOnInit(): void {
+		if (typeof window !== 'undefined') {
+			const siteUrl = (window as any)['NG_SITE_URL'] || 'https://appmo3adla.com';
+			const title = 'تفاصيل الاشتراك - ابلكيشن معادلة كلية هندسة';
+			const description = 'تعرف على تفاصيل الاشتراك في أبلكيشن معادلة كلية هندسة والمميزات المتاحة';
+			const url = `${siteUrl}/subscription-details`;
+			
+			this.seo.setTitle(title);
+			this.seo.setDescription(description);
+			this.seo.setOgTags({ title, description, url });
+			this.seo.setTwitterTags({ title, description });
+			this.canonical.setCanonical(url);
+		}
+		
+		// ترتيب الأرقام عشوائياً في كل مرة يتم فتح الصفحة
+		this.shuffleVodafoneNumbers();
+		
 		// this.updateCurrentMonth(); // معطل لاستخدام الشهر المحدد يدوياً
+	}
+	
+	/**
+	 * ترتيب أرقام فودافون كاش بشكل عشوائي
+	 */
+	private shuffleVodafoneNumbers(): void {
+		// نسخ المصفوفة لتجنب تعديل الأصل مباشرة
+		const numbers = [...this.subscriptionDetails.vodafoneNumbers];
+		
+		// خوارزمية Fisher-Yates للترتيب العشوائي
+		for (let i = numbers.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+		}
+		
+		// تحديث المصفوفة بالترتيب الجديد
+		this.subscriptionDetails.vodafoneNumbers = numbers;
 	}
 
 	private updateCurrentMonth(): void {
@@ -83,7 +126,21 @@ export class SubscriptionDetailsPageComponent implements OnInit {
 	}
 
 	openGoogleForm(): void {
+		if (this.isEnrollmentClosed) {
+			console.warn('محاولة فتح الفورم أثناء إغلاق التسجيل');
+			return;
+		}
+
 		window.open(this.subscriptionDetails.googleFormLink, '_blank');
+	}
+
+	onNumberCardClick(number: string): void {
+		if (this.isEnrollmentClosed) {
+			console.warn('محاولة نسخ رقم أثناء إغلاق التسجيل');
+			return;
+		}
+
+		void this.copyToClipboard(number);
 	}
 
 	openWhatsApp(): void {
@@ -99,11 +156,20 @@ export class SubscriptionDetailsPageComponent implements OnInit {
 	async copyToClipboard(text: string): Promise<void> {
 		try {
 			await navigator.clipboard.writeText(text);
-			// يمكن إضافة إشعار هنا
+			this.copiedNumber = text; // حفظ الرقم المنسوخ
 			console.log('تم نسخ الرقم:', text);
+			
+			// إخفاء رسالة "تم النسخ" بعد ثانيتين
+			setTimeout(() => {
+				this.copiedNumber = null;
+			}, 2000);
 		} catch (err) {
 			// طريقة بديلة للنسخ
 			this.fallbackCopyTextToClipboard(text);
+			this.copiedNumber = text;
+			setTimeout(() => {
+				this.copiedNumber = null;
+			}, 2000);
 		}
 	}
 
@@ -125,5 +191,22 @@ export class SubscriptionDetailsPageComponent implements OnInit {
 		}
 		
 		document.body.removeChild(textArea);
+	}
+
+	openImageModal(): void {
+		this.isImageModalOpen = true;
+		document.body.style.overflow = 'hidden'; // منع التمرير عند فتح الـ modal
+	}
+
+	closeImageModal(): void {
+		this.isImageModalOpen = false;
+		document.body.style.overflow = ''; // استعادة التمرير
+	}
+
+	getVideoEmbedUrl(): SafeResourceUrl {
+		// Video ID من الرابط: https://youtu.be/LwGojmfuYis
+		const videoId = 'LwGojmfuYis';
+		const url = `https://www.youtube.com/embed/${videoId}`;
+		return this.sanitizer.bypassSecurityTrustResourceUrl(url);
 	}
 }

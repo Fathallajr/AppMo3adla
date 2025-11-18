@@ -1,3 +1,45 @@
-/* FAQ page styles if needed */
+/* تحسينات الأداء للـ animations */
+* {
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* تحسين الـ transitions */
+.faq-card, .faq-button, .faq-input {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+/* تأثيرات hover محسنة */
+.faq-card:hover {
+  transform: translateY(-2px) translateZ(0);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* تحسين الـ loading spinner */
+.loading-spinner {
+  animation: spin 1s linear infinite;
+  will-change: transform;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* تحسين الـ transitions للعناصر التفاعلية */
+.faq-button {
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.faq-input {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* تحسين الـ accordion animation */
+.accordion-content {
+  will-change: height, opacity;
+  transform: translateZ(0);
+}
 
 

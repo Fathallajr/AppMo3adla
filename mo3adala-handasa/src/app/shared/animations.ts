@@ -126,35 +126,55 @@ export const cascadeAnimation = trigger('cascadeAnimation', [
   ])
 ]);
 
-// انيميشن للعناصر الأساسية
+// انيميشن للعناصر الأساسية - محسن للأداء
 export const fadeInUp = trigger('fadeInUp', [
   transition(':enter', [
-    style({ opacity: 0, transform: 'translateY(20px)' }),
-    animate('500ms cubic-bezier(0.25, 0.8, 0.25, 1)', style({ 
+    style({ 
+      opacity: 0, 
+      transform: 'translateY(20px)',
+      ['will-change']: 'opacity, transform'
+    }),
+    animate('400ms cubic-bezier(0.25, 0.8, 0.25, 1)', style({ 
       opacity: 1, 
-      transform: 'translateY(0)' 
+      transform: 'translateY(0)',
+      ['will-change']: 'auto'
     })),
   ]),
 ]);
 
-// انيميشن للقوائم
+// انيميشن للقوائم - محسن للأداء مع تقليل التأخير
 export const staggerList = trigger('staggerList', [
   transition(':enter', [
     query(':enter', [
-      style({ opacity: 0, transform: 'translateY(15px)' }),
-      stagger(120, animate('400ms cubic-bezier(0.25, 0.8, 0.25, 1)', style({ 
+      style({ 
+        opacity: 0, 
+        transform: 'translateY(15px)',
+        ['will-change']: 'opacity, transform'
+      }),
+      stagger(80, animate('350ms cubic-bezier(0.25, 0.8, 0.25, 1)', style({ 
         opacity: 1, 
-        transform: 'translateY(0)' 
+        transform: 'translateY(0)',
+        ['will-change']: 'auto'
       }))),
     ], { optional: true })
   ])
 ]);
 
-// انيميشن للتوسع والانكماش
+// انيميشن للتوسع والانكماش - محسن للأداء
 export const expandCollapse = trigger('expandCollapse', [
-  state('void', style({ height: '0px', opacity: 0, overflow: 'hidden' })),
-  state('*', style({ height: '*', opacity: 1, overflow: 'hidden' })),
-  transition('void <=> *', animate('350ms cubic-bezier(0.25, 0.8, 0.25, 1)')),
+  state('void', style({ 
+    height: '0px', 
+    opacity: 0, 
+    overflow: 'hidden',
+    ['will-change']: 'height, opacity'
+  })),
+  state('*', style({ 
+    height: '*', 
+    opacity: 1, 
+    overflow: 'hidden',
+    ['will-change']: 'auto'
+  })),
+  transition('void <=> *', animate('300ms cubic-bezier(0.25, 0.8, 0.25, 1)')),
 ]);
 
 // انيميشن للأزرار - تأثير الضغط

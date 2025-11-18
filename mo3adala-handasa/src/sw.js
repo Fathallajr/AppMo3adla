@@ -1,12 +1,13 @@
 // Service Worker with network-first strategy for navigations to avoid blank screen on mobile
-const CACHE_VERSION = 'v3';
+const CACHE_VERSION = 'v4';
 const STATIC_CACHE = `mo3adala-static-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `mo3adala-runtime-${CACHE_VERSION}`;
 
 const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/assets/logo2.png',
+  '/manifest.json',
+  '/browserconfig.xml',
   '/assets/logo.png',
 ];
 

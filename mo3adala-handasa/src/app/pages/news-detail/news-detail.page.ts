@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { SeoService } from '../../core/seo.service';
+import { CanonicalService } from '../../core/canonical.service';
 
 @Component({
 	selector: 'app-news-detail',
@@ -14,8 +16,267 @@ export class NewsDetailPageComponent implements OnInit {
 	newsItem: any = null;
 	newsId: string = '';
 
+	constructor(
+		private route: ActivatedRoute,
+		private location: Location,
+		private seo: SeoService,
+		private canonical: CanonicalService
+	) { }
+
 	// Mock data - في التطبيق الحقيقي ستحصل على البيانات من API
 	newsData: { [key: string]: any } = {
+		'english-plan-dr-omar-2025': {
+			id: 'english-plan-dr-omar-2025',
+			title: 'تفاصيل خطة الإنجليزي مع دكتور عمر أحمد أسطورة اللغة الانجليزية وصلت 🔥',
+			content: `
+				<div class="bg-gradient-to-r from-blue-50 to-purple-50 border-l-4 border-blue-500 p-6 mb-6">
+					<h3 class="text-blue-800 font-bold mb-3 text-2xl"> تفاصيل خطة الإنجليزي مع دكتور عمر أحمد</h3>
+					<p class="text-blue-700 text-lg font-semibold mb-2">الإنجليزي من النهاردة اتحول من عقدة… إلى لعبة 💪</p>
+					<p class="text-blue-700 mb-2">جاهز تبدأ وتكسر خوفك؟ 🫣</p>
+				</div>
+				
+				<div class="mb-8 text-center">
+					<img src="/assets/خبر الإنجليزي.jpg" alt="خطة الإنجليزي مع دكتور عمر" class="mx-auto rounded-lg shadow-lg max-w-full" style="max-width: 800px;">
+				</div>
+				
+				<div class="bg-orange-50 border-l-4 border-orange-500 p-6 mb-6">
+					<h3 class="text-orange-800 font-bold mb-4 text-xl">📅 الخطة الزمنية:</h3>
+					<p class="text-orange-700 mb-4 font-semibold">البداية هتكون في شهر نوفمبر كالتالي:</p>
+					<ul class="list-disc list-inside space-y-3 text-orange-700">
+						<li class="text-lg"><strong>شهر 11:</strong> تأسيس + تراكمي</li>
+						<li class="text-lg"><strong>شهر 12:</strong> Unit (1,2)</li>
+						<li class="text-lg"><strong>شهر 1:</strong> Unit (3,4)</li>
+						<li class="text-lg"><strong>شهر 2:</strong> Unit (5,6)</li>
+						<li class="text-lg"><strong>شهر 3:</strong> Unit (7,8)</li>
+						<li class="text-lg"><strong>شهر 4:</strong> Unit (9,10)</li>
+						<li class="text-lg"><strong>شهر 5:</strong> Unit (11,12)</li>
+						<li class="text-lg"><strong>شهر 6&7&8:</strong> مراجعة + حل امتحانات سنوات سابقة</li>
+					</ul>
+				</div>
+				
+				<div class="bg-green-50 border-l-4 border-green-500 p-6 mb-6">
+					<h3 class="text-green-800 font-bold mb-4 text-xl">📚 النظام الدراسي:</h3>
+					<div class="space-y-4">
+						<div class="bg-white p-4 rounded-lg">
+							<p class="text-green-700 font-semibold mb-2 text-lg">1️⃣ محاضرة في الأسبوع</p>
+							<p class="text-green-700">شرح + حل</p>
+						</div>
+						<div class="bg-white p-4 rounded-lg">
+							<p class="text-green-700 font-semibold mb-2 text-lg">2️⃣ اليونيت على مرتين</p>
+							<p class="text-green-700">مرة جرامر ومرة كلمات + حل</p>
+						</div>
+						<div class="bg-white p-4 rounded-lg">
+							<p class="text-green-700 font-semibold mb-2 text-lg">3️⃣ كلمات من خارج المنهج</p>
+							<p class="text-green-700">هيتم حفظها مع الأسسيستانت المتخصص للغة الإنجليزية</p>
+						</div>
+						<div class="bg-white p-4 rounded-lg">
+							<p class="text-green-700 font-semibold mb-2 text-lg">4️⃣ يوم الأسئلة</p>
+							<p class="text-green-700">في جروب التيلجرام كما هو موضح في الجدول</p>
+						</div>
+					</div>
+				</div>
+				
+				<div class="bg-purple-50 border-l-4 border-purple-500 p-6 mb-6 text-center">
+					<h3 class="text-purple-800 font-bold mb-4 text-xl">🎥 فيديو التفاصيل:</h3>
+					<a href="https://www.facebook.com/share/v/1CCF29Rjxp/?mibextid=wwXIfr" target="_blank" 
+					   class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+							<path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+						</svg>
+						<span>شاهد الفيديو على فيسبوك</span>
+					</a>
+				</div>
+				
+				<div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 mb-6">
+					<h3 class="text-yellow-800 font-bold mb-2 text-xl">💪 لماذا هذه الخطة مختلفة؟</h3>
+					<ul class="list-disc list-inside space-y-2 text-yellow-700">
+						<li>شرح مبسط وسهل الفهم مع دكتور عمر أحمد</li>
+						<li>خطة متدرجة ومنظمة تغطي كل جوانب اللغة</li>
+						<li>متابعة مستمرة ودعم من الأسسيستانت</li>
+						<li>تدريبات عملية وحل أسئلة حقيقية</li>
+						<li>مراجعة شاملة وحل امتحانات سنوات سابقة</li>
+					</ul>
+				</div>
+			`,
+			date: '2025-11-03',
+			author: 'فريق المعادلة',
+			category: 'الكورسات والدورات',
+			important: true,
+			image: '/assets/خبر الإنجليزي.jpg',
+			images: [
+				'/assets/خبر الإنجليزي.jpg'
+			]
+		},
+		'monitoring-system-2025': {
+			id: 'monitoring-system-2025',
+			title: 'نظام المتابعة في الابلكيشن حاجة تانية 🧡🔥',
+			content: `
+				<div class="bg-orange-50 border-l-4 border-orange-500 p-4 mb-6">
+					<h3 class="text-orange-800 font-bold mb-2 text-xl">🧡🔥 المتابعة في الابلكيشن حاجة تانية</h3>
+					<p class="text-orange-700 text-lg">هتذاكر يعني هتذاكر - متابعة طلاب الابلكيشن</p>
+				</div>
+				
+				<div class="mb-8 text-center">
+					<img src="/assets/نظام المتابعة.jpg" alt="نظام المتابعة" class="mx-auto rounded-lg shadow-lg max-w-full" style="max-width: 800px;">
+				</div>
+				
+				<p class="text-lg leading-relaxed mb-6 text-gray-700 font-semibold text-center">
+					المتابعة في الابلكيشن حاجة تانية 🧡🔥
+				</p>
+				
+				<div class="bg-blue-50 border-l-4 border-blue-500 p-6 mb-6">
+					<h3 class="text-blue-800 font-bold mb-4 text-xl">📊 متابعة طلاب الابلكيشن</h3>
+					<div class="space-y-3">
+						<div class="bg-white p-4 rounded-lg">
+							<p class="text-blue-700 font-semibold mb-2">1️⃣ نظام تقييمات</p>
+						</div>
+						<div class="bg-white p-4 rounded-lg">
+							<p class="text-blue-700 font-semibold">2️⃣ ثواب وعقاب</p>
+						</div>
+					</div>
+				</div>
+				
+				<div class="bg-green-50 border-l-4 border-green-500 p-6 mb-6">
+					<h3 class="text-green-800 font-bold mb-4 text-xl">أولاً: نظام التقييم (المتابعة)</h3>
+					
+					<div class="mb-6">
+						<h4 class="text-green-700 font-bold mb-3 text-lg">1️⃣ علي المنصة</h4>
+						<ul class="list-disc list-inside space-y-2 text-green-700">
+							<li>يجري اختبار يومي للطالب علي الدرس السابق لقياس مدي استيعابه</li>
+							<li>يتم تقييم الطالب يوميا ( من ١ الي ١٠)</li>
+							<li>تسجل الدرجات النهائية اسبوعيا بشكل دوري</li>
+							<li>الطلاب الحاصلون علي درجات ضعيفة يتم التواصل معهم لمعرفة اسباب ذلك ومساعدتهم في تجاوز الصعوبات</li>
+							<li>اما الطلاب المتغيبون أو الغير ملتزمين بالاختبارات يتابع غيابهم ويُرسل لهم تنبيه في المرة الاولي ، مع التأكيد علي عدم لكرار ذلك</li>
+							<li>يتم اختبار الطلاب اختبار شامل بعد كل مراجعة حسب الخطة الزمنية</li>
+						</ul>
+					</div>
+					
+					<div class="mb-6">
+						<h4 class="text-green-700 font-bold mb-3 text-lg">2️⃣ بواسطة المشرفين</h4>
+						<ul class="list-disc list-inside space-y-2 text-green-700">
+							<li>يتم سؤال الطالب يوميآ عن حل الواجب يدويآ و ملخص للدرس وتسليمه للاسيستانت الخاص بالطالب</li>
+							<li>يتم تقييم الطالب ( من ١ الي ١٠) من قبل الاسيستانت</li>
+							<li>يتم تسميع كلمات للغة الانجليزية بشكل يومي من قبل الاسيستانت الخاص ب اللغة الانجليزية</li>
+						</ul>
+					</div>
+					
+					<div class="mb-4">
+						<h4 class="text-green-700 font-bold mb-3 text-lg">3️⃣ بواسطة المهندسين</h4>
+						<ul class="list-disc list-inside space-y-2 text-green-700">
+							<li>يتم فتح جروبات المناقشة مع المدرس يوميا للاستغسارات عن المادة العلمية</li>
+							<li>يتم الاتصال بالطالب من قبل المدرس يومياً بشكل عشواني (٥ طلاب يوميا ) لسؤالة سوال نظري في المنهج</li>
+							<li>يتم تقيم الطالب وتدوين ملاحظات من قبل المهندس المسئول حسب رؤيته ( من 1 الي 10 )</li>
+						</ul>
+					</div>
+				</div>
+				
+				<div class="bg-red-50 border-l-4 border-red-500 p-6 mb-6">
+					<h3 class="text-red-800 font-bold mb-4 text-xl">ثانياً: العقاب</h3>
+					<p class="text-red-700 mb-3">العقاب يتم تدريجياً من خلال:</p>
+					<ul class="list-disc list-inside space-y-2 text-red-700">
+						<li>اتصال او رسالة تنبيه</li>
+						<li>يتم وضع انزار في التقدير الشهري</li>
+						<li>يتم التواصل مع ولي الامر لتوضيح الرؤية</li>
+						<li>يتم فصل الطالب جزئياً لمدة ثلاث ايام</li>
+						<li>يتم فصل الطالب نهائيا من المنصة و حظره من الدخول مرة اخري</li>
+					</ul>
+				</div>
+				
+				<div class="bg-purple-50 border-l-4 border-purple-500 p-6 mb-6 text-center">
+					<h3 class="text-purple-800 font-bold mb-2 text-xl">💡 الخلاصة</h3>
+					<p class="text-purple-700 text-lg font-semibold">متابعة يعني ابلكيشن</p>
+				</div>
+			`,
+			date: '2025-11-01',
+			author: 'فريق المعادلة',
+			category: 'أنظمة الأبلكيشن',
+			important: true,
+			image: '/assets/نظام المتابعة.jpg',
+			images: [
+				'/assets/نظام المتابعة.jpg'
+			]
+		},
+		'free-week-codes-2025': {
+			id: 'free-week-codes-2025',
+			title: 'أسبوع مجاني لطلاب معادلة كلية الهندسة!',
+			content: `
+				<div class="bg-orange-50 border-l-4 border-orange-500 p-4 mb-6">
+					<h3 class="text-orange-800 font-bold mb-2">🔥 أسبوع مجاني لطلاب المعادلة</h3>
+					<p class="text-orange-700">احتفالًا بطلاب المعادلة، فريق أبلكيشن معادلة كلية هندسة بيفتح باب الأكواد المجانية لمدة أسبوع كامل!</p>
+				</div>
+				
+				<p class="text-lg leading-relaxed mb-6 text-gray-700">
+					احتفالًا بطلاب المعادلة، فريق أبلكيشن معادلة كلية هندسة بيفتح باب الأكواد المجانية لمدة أسبوع كامل! 🔥
+				</p>
+				
+				<div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6">
+					<h3 class="text-green-800 font-bold mb-2">📅 الفترة:</h3>
+					<p class="text-green-700 text-lg font-semibold">
+						من اليوم وحتى <strong>28 / 10 / 2025</strong>
+					</p>
+				</div>
+				
+				<div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+					<h3 class="text-blue-800 font-bold mb-2">✨ المميزات:</h3>
+					<ul class="list-disc list-inside text-blue-700 space-y-3">
+						<li><strong>سجل على المنصة واحصل على كود مجاني</strong></li>
+						<li><strong>استمتع بـ دخول مجاني كامل على المنصة خلال فترة العرض</strong></li>
+						<li><strong>جرب كل الخدمات بنفسك واستفاد بأقصى قدر ممكن ✨</strong></li>
+						<li><strong>هدفنا إن كل طالب يجرب المنصة، ويستفيد منها، ويبدأ طريقه نحو الهندسة بثقة 💪</strong></li>
+					</ul>
+				</div>
+				
+				<div class="bg-orange-50 border-l-4 border-orange-500 p-4 mb-6">
+					<h3 class="text-orange-800 font-bold mb-2">📝 كيفية الحصول على الكود:</h3>
+					<p class="text-orange-700 mb-3">
+						عشان تحصل على الكود المجاني، لازم تسجل في الفورم ده ونبعتلك الكود على الواتساب:
+					</p>
+					<a href="https://forms.gle/3UpbGVBHbbwAz6o97" target="_blank" 
+					   class="inline-flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+						</svg>
+						<span>سجل الآن للحصول على الكود المجاني</span>
+					</a>
+				</div>
+				
+				<div class="bg-purple-50 border-l-4 border-purple-500 p-4 mb-6">
+					<h3 class="text-purple-800 font-bold mb-2">📢 دعوة للمشاركة:</h3>
+					<p class="text-purple-700 text-lg">
+						لو عندك صاحب لسه مفعّلش التطبيق، ابعتهاله فورًا قبل ما العرض يخلص 😉
+					</p>
+				</div>
+				
+				<div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6">
+					<h3 class="text-yellow-800 font-bold mb-2">🎥 تفاصيل أكثر:</h3>
+					<p class="text-yellow-700 mb-3">
+						اتفرج على الفيديو ده عشان تفهم تفاصيل أكثر عن العرض والمميزات:
+					</p>
+					<a href="https://www.youtube.com/watch?v=UH-c-zb1ld8" target="_blank" 
+					   class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+							<path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+						</svg>
+						<span>شاهد الفيديو على يوتيوب</span>
+					</a>
+				</div>
+				
+				<div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+					<h3 class="text-red-800 font-bold mb-2">⏰ تنبيه مهم:</h3>
+					<p class="text-red-700">
+						العرض محدود بوقت معين، فلا تفوت الفرصة! سارع بالتسجيل والحصول على الكود المجاني قبل انتهاء العرض.
+					</p>
+				</div>
+			`,
+			date: '2025-10-21',
+			author: 'فريق المعادلة',
+			category: 'عروض خاصة',
+			important: true,
+			image: '/assets/news6.jpg',
+			images: [
+				'/assets/news6.jpg'
+			]
+		},
 		'App-Book-2025': {
 			id: 'App-Book-2025',
 			title: 'كتاب امتحانات الأبلكيشن',
@@ -263,7 +524,7 @@ export class NewsDetailPageComponent implements OnInit {
 				<p>ننصح جميع الطلاب الراغبين في الالتحاق بكليات الهندسة بمراجعة الشروط الجديدة والتأكد من استيفاء جميع المتطلبات قبل التقديم.</p>
 			`,
 			date: '2024-01-15',
-			image: '/assets/logo2.png',
+			image: '/assets/logo.png',
 			category: 'أخبار المعادلة',
 			author: 'فريق المعادلة'
 		},
@@ -294,7 +555,7 @@ export class NewsDetailPageComponent implements OnInit {
 				<p>هذا التوسع في قائمة المدارس المعتمدة سيساعد في توفير فرص أكثر للطلاب في مختلف المحافظات.</p>
 			`,
 			date: '2024-01-10',
-			image: '/assets/logo2.png',
+			image: '/assets/logo.png',
 			category: 'أخبار المعادلة',
 			author: 'فريق المعادلة'
 		},
@@ -332,7 +593,7 @@ export class NewsDetailPageComponent implements OnInit {
 				<p>ننصح جميع المستخدمين بتحديث التطبيق للاستفادة من الميزات الجديدة والتحسينات.</p>
 			`,
 			date: '2024-01-20',
-			image: '/assets/logo2.png',
+			image: '/assets/logo.png',
 			category: 'أخبار التطبيق',
 			author: 'فريق التطوير'
 		},
@@ -370,7 +631,7 @@ export class NewsDetailPageComponent implements OnInit {
 				<p>هذا النظام سيساعد الطلاب على تحقيق أفضل النتائج في دراستهم.</p>
 			`,
 			date: '2024-01-18',
-			image: '/assets/logo2.png',
+			image: '/assets/logo.png',
 			category: 'أخبار التطبيق',
 			author: 'فريق التطوير'
 		},
@@ -409,7 +670,7 @@ export class NewsDetailPageComponent implements OnInit {
 				<p>ننصح جميع الطلاب بالتسجيل مبكراً لتجنب الازدحام في الأيام الأخيرة.</p>
 			`,
 			date: '2024-01-05',
-			image: '/assets/logo2.png',
+			image: '/assets/logo.png',
 			category: 'أخبار المعادلة',
 			author: 'فريق المعادلة'
 		},
@@ -448,7 +709,7 @@ export class NewsDetailPageComponent implements OnInit {
 				<p>هذا التحديث سيساعد في تسهيل عملية التسجيل للطلاب.</p>
 			`,
 			date: '2024-01-01',
-			image: '/assets/logo2.png',
+			image: '/assets/logo.png',
 			category: 'أخبار المعادلة',
 			author: 'فريق المعادلة'
 		},
@@ -490,7 +751,7 @@ export class NewsDetailPageComponent implements OnInit {
 				<p>هذه الورش مجانية تماماً وتهدف لمساعدة الطلاب في تحقيق أفضل النتائج.</p>
 			`,
 			date: '2023-12-28',
-			image: '/assets/logo2.png',
+			image: '/assets/logo.png',
 			category: 'أخبار المعادلة',
 			author: 'فريق المعادلة'
 		},
@@ -533,16 +794,11 @@ export class NewsDetailPageComponent implements OnInit {
 				<p>نهنئ جميع الطلاب الناجحين ونتمنى لهم التوفيق في المرحلة القادمة.</p>
 			`,
 			date: '2023-12-20',
-			image: '/assets/logo2.png',
+			image: '/assets/logo.png',
 			category: 'أخبار المعادلة',
 			author: 'فريق المعادلة'
 		}
 	};
-
-	constructor(
-		private route: ActivatedRoute,
-		private location: Location
-	) { }
 
 	ngOnInit(): void {
 		this.route.params.subscribe(params => {
@@ -554,7 +810,40 @@ export class NewsDetailPageComponent implements OnInit {
 				const all = Object.values(this.newsData);
 				this.newsItem = all.find((n: any) => n.id === this.newsId) as any;
 			}
+			
+			// Update page title and SEO when news item is loaded
+			if (this.newsItem) {
+				this.updatePageTitle();
+			}
 		});
+	}
+
+	private updatePageTitle(): void {
+		if (this.newsItem && typeof window !== 'undefined') {
+			const siteUrl = (window as any)['NG_SITE_URL'] || 'https://appmo3adla.com';
+			const title = `${this.newsItem.title} - ابلكيشن معادلة كلية هندسة`;
+			const description = this.extractDescription(this.newsItem.content);
+			const url = `${siteUrl}/news-detail/${this.newsItem.id}`;
+			
+			// Update page title
+			this.seo.setTitle(title);
+			this.seo.setDescription(description);
+			this.seo.setOgTags({ title, description, url });
+			this.seo.setTwitterTags({ title, description });
+			this.canonical.setCanonical(url);
+		}
+	}
+
+	private extractDescription(content: string): string {
+		// Extract first paragraph or first 150 characters as description
+		const tempDiv = document.createElement('div');
+		tempDiv.innerHTML = content;
+		const firstParagraph = tempDiv.querySelector('p');
+		if (firstParagraph) {
+			const text = firstParagraph.textContent || firstParagraph.innerText || '';
+			return text.length > 150 ? text.substring(0, 150) + '...' : text;
+		}
+		return 'أحدث أخبار معادلة كلية الهندسة - ابلكيشن معادلة كلية هندسة';
 	}
 
 	formatDate(dateString: string): string {

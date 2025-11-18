@@ -17,8 +17,91 @@ import { WhatIsEquationComponent } from '../../shared/components/what-is-equatio
 })
 export class HomePageComponent implements OnInit {
 	@ViewChild('reviewsTrack', { static: false }) reviewsTrack!: ElementRef<HTMLDivElement>;
+	@ViewChild('photosTrack', { static: false }) photosTrack!: ElementRef<HTMLDivElement>;
+	@ViewChild('heroVideo', { static: false }) heroVideo!: ElementRef<HTMLVideoElement>;
 	
 	features = ['مناهج بسيطة مُحدّثة 2026 ', 'شرح + أمثلة + امتحانات إلكترونية', 'خطط مذاكرة تناسب وقتك', 'دعم ومتابعة علي مدار 24 ساعة'];
+	
+	// Lightbox state
+	selectedPhoto: string | null = null;
+	
+	// Photos of successful students 2025
+	studentPhotos2025 = [
+		'طلاب 2025/WhatsApp Image 2025-10-28 at 16.40.57_bf8b0500.jpg',
+		'طلاب 2025/WhatsApp Image 2025-10-28 at 18.22.25_1031edee.jpg',
+		'طلاب 2025/WhatsApp Image 2025-10-28 at 18.52.05_6cf2a0b2.jpg',
+		'طلاب 2025/IMG-20251027-WA0015.jpg',
+		'طلاب 2025/IMG-20251027-WA0016.jpg',
+		'طلاب 2025/IMG-20251027-WA0017.jpg',
+		'طلاب 2025/IMG-20251027-WA0018.jpg',
+		'طلاب 2025/IMG-20251027-WA0019.jpg',
+		'طلاب 2025/IMG-20251027-WA0020.jpg',
+		'طلاب 2025/IMG-20251027-WA0021.jpg',
+		'طلاب 2025/IMG-20251027-WA0022.jpg',
+		'طلاب 2025/IMG-20251027-WA0023.jpg',
+		'طلاب 2025/IMG-20251027-WA0086.jpg',
+		'طلاب 2025/IMG-20251027-WA0024.jpg',
+		'طلاب 2025/IMG-20251027-WA0025.jpg',
+		'طلاب 2025/IMG-20251027-WA0026.jpg',
+		'طلاب 2025/IMG-20251027-WA0027.jpg',
+		'طلاب 2025/IMG-20251027-WA0028.jpg',
+		'طلاب 2025/IMG-20251027-WA0029.jpg',
+		'طلاب 2025/IMG-20251027-WA0030.jpg',
+		'طلاب 2025/IMG-20251027-WA0031.jpg',
+		'طلاب 2025/IMG-20251027-WA0032.jpg',
+		'طلاب 2025/IMG-20251027-WA0033.jpg',
+		'طلاب 2025/IMG-20251027-WA0034.jpg',
+		'طلاب 2025/IMG-20251027-WA0035.jpg',
+		'طلاب 2025/IMG-20251027-WA0036.jpg',
+		'طلاب 2025/IMG-20251027-WA0037.jpg',
+		'طلاب 2025/IMG-20251027-WA0038.jpg',
+		'طلاب 2025/IMG-20251027-WA0039.jpg',
+		'طلاب 2025/IMG-20251027-WA0040.jpg',
+		'طلاب 2025/IMG-20251027-WA0041.jpg',
+		'طلاب 2025/IMG-20251027-WA0042.jpg',
+		'طلاب 2025/IMG-20251027-WA0043.jpg',
+		'طلاب 2025/IMG-20251027-WA0044.jpg',
+		'طلاب 2025/IMG-20251027-WA0045.jpg',
+		'طلاب 2025/IMG-20251027-WA0046.jpg',
+		'طلاب 2025/IMG-20251027-WA0047.jpg',
+		'طلاب 2025/IMG-20251027-WA0048.jpg',
+		'طلاب 2025/IMG-20251027-WA0049.jpg',
+		'طلاب 2025/IMG-20251027-WA0050.jpg',
+		'طلاب 2025/IMG-20251027-WA0051.jpg',
+		'طلاب 2025/IMG-20251027-WA0052.jpg',
+		'طلاب 2025/IMG-20251027-WA0053.jpg',
+		'طلاب 2025/IMG-20251027-WA0054.jpg',
+		'طلاب 2025/IMG-20251027-WA0055.jpg',
+		'طلاب 2025/IMG-20251027-WA0056.jpg',
+		'طلاب 2025/IMG-20251027-WA0057.jpg',
+		'طلاب 2025/IMG-20251027-WA0058.jpg',
+		'طلاب 2025/IMG-20251027-WA0059.jpg',
+		'طلاب 2025/IMG-20251027-WA0060.jpg',
+		'طلاب 2025/IMG-20251027-WA0061.jpg',
+		'طلاب 2025/IMG-20251027-WA0062.jpg',
+		'طلاب 2025/IMG-20251027-WA0063.jpg',
+		'طلاب 2025/IMG-20251027-WA0064.jpg',
+		'طلاب 2025/IMG-20251027-WA0065.jpg',
+		'طلاب 2025/IMG-20251027-WA0066.jpg',
+		'طلاب 2025/IMG-20251027-WA0067.jpg',
+		'طلاب 2025/IMG-20251027-WA0068.jpg',
+		'طلاب 2025/IMG-20251027-WA0069.jpg',
+		'طلاب 2025/IMG-20251027-WA0070.jpg',
+		'طلاب 2025/IMG-20251027-WA0071.jpg',
+		'طلاب 2025/IMG-20251027-WA0072.jpg',
+		'طلاب 2025/IMG-20251027-WA0073.jpg',
+		'طلاب 2025/IMG-20251027-WA0074.jpg',
+		'طلاب 2025/IMG-20251027-WA0076.jpg',
+		'طلاب 2025/IMG-20251027-WA0077.jpg',
+		'طلاب 2025/IMG-20251027-WA0078.jpg',
+		'طلاب 2025/IMG-20251027-WA0079.jpg',
+		'طلاب 2025/IMG-20251027-WA0080.jpg',
+		'طلاب 2025/IMG-20251027-WA0081.jpg',
+		'طلاب 2025/IMG-20251027-WA0082.jpg',
+		'طلاب 2025/IMG-20251027-WA0083.jpg',
+		'طلاب 2025/IMG-20251027-WA0084.jpg',
+		'طلاب 2025/IMG-20251027-WA0085.jpg'
+	];
 	
 	constructor(private seo: SeoService, private canonical: CanonicalService, private jsonld: JsonLdService) {
 		const siteUrl = (typeof window !== 'undefined' ? (window as any)['NG_SITE_URL'] : process.env['NG_SITE_URL']) || 'https://example.com';
@@ -56,6 +139,40 @@ export class HomePageComponent implements OnInit {
 		
 		// Preload critical images for faster loading
 		this.preloadImages();
+		
+		// Setup video autoplay
+		this.setupVideoAutoplay();
+	}
+	
+	private setupVideoAutoplay() {
+		if (typeof window !== 'undefined') {
+			// Try multiple times with different delays
+			const tryPlay = () => {
+				const video = this.heroVideo?.nativeElement;
+				if (video) {
+					console.log('Attempting to play video...');
+					video.muted = true;
+					video.play().then(() => {
+						console.log('Video started playing!');
+					}).catch(error => {
+						console.log('Video play failed:', error);
+						// Try again after user interaction
+						document.addEventListener('click', () => {
+							video.play().catch(() => {});
+						}, { once: true });
+					});
+				}
+			};
+
+			// Try immediately
+			setTimeout(tryPlay, 100);
+			
+			// Try after video loads
+			setTimeout(tryPlay, 1000);
+			
+			// Try after 3 seconds
+			setTimeout(tryPlay, 3000);
+		}
 	}
 	
 	private preloadImages() {
@@ -87,4 +204,59 @@ export class HomePageComponent implements OnInit {
 			track.scrollBy({ left: -(cardWidth + 16), behavior: 'smooth' });
 		}
 	}
+
+	scrollPhotosPrev() {
+		if (this.photosTrack) {
+			const track = this.photosTrack.nativeElement;
+			const cardWidth = track.querySelector('.photo-card')?.clientWidth || 200;
+			track.scrollBy({ left: cardWidth + 16, behavior: 'smooth' });
+		}
+	}
+
+	scrollPhotosNext() {
+		if (this.photosTrack) {
+			const track = this.photosTrack.nativeElement;
+			const cardWidth = track.querySelector('.photo-card')?.clientWidth || 200;
+			track.scrollBy({ left: -(cardWidth + 16), behavior: 'smooth' });
+		}
+	}
+
+	openPhoto(photo: string) {
+		this.selectedPhoto = photo;
+		// Prevent body scroll when modal is open
+		if (typeof document !== 'undefined') {
+			document.body.style.overflow = 'hidden';
+		}
+	}
+
+	closePhoto() {
+		this.selectedPhoto = null;
+		// Restore body scroll
+		if (typeof document !== 'undefined') {
+			document.body.style.overflow = 'auto';
+		}
+	}
+
+	onVideoReady() {
+		console.log('Video metadata loaded');
+		const video = this.heroVideo?.nativeElement;
+		if (video) {
+			video.muted = true;
+			video.play().catch(error => {
+				console.log('Video play failed on ready:', error);
+			});
+		}
+	}
+
+	onVideoCanPlay() {
+		console.log('Video can play');
+		const video = this.heroVideo?.nativeElement;
+		if (video) {
+			video.muted = true;
+			video.play().catch(error => {
+				console.log('Video play failed on canplay:', error);
+			});
+		}
+	}
+
 }

@@ -1,4 +1,4 @@
-import { trigger, transition, style, query, group, animate, animateChild } from '@angular/animations';
+import { trigger, transition, style, query, group, animate, animateChild, stagger } from '@angular/animations';
 
 // انيميشن التنقلات بين الصفحات
 export const pageTransition = trigger('pageTransition', [

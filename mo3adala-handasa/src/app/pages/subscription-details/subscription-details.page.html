@@ -1,267 +1,256 @@
-<div class="min-h-screen bg-gray-50" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-	<!-- Hero Section -->
-	<div class="bg-gradient-to-r from-green-600 to-green-700 text-white py-16">
-		<div class="max-w-6xl mx-auto px-4">
-			<div class="text-center">
-				<h1 class="text-4xl md:text-5xl font-bold mb-4" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-					 تفاصيل اشتراك شهر {{ subscriptionDetails.month }} 
-				</h1>
-				<p class="text-2xl font-bold text-green-100 mb-2" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-					{{ subscriptionDetails.subtitle }}
-				</p>
-				<div class="w-full h-1 bg-gradient-to-r from-orange-400 to-orange-600 rounded-full mb-8"></div>
-			</div>
+<div class="modern-subscription-page">
+	<!-- Modern Hero Section -->
+	<div class="hero-section">
+		<div class="hero-content">
+			<div class="month-badge">{{ subscriptionDetails.month }}</div>
+			<h1 class="hero-title">تفاصيل الاشتراك</h1>
+			<p class="hero-subtitle">{{ subscriptionDetails.subtitle }}</p>
 		</div>
+		<div class="hero-decoration"></div>
 	</div>
 
-	<!-- Main Content -->
-	<div class="py-16">
-		<div class="max-w-6xl mx-auto px-4">
-			<!-- Warning Section -->
-			<div class="bg-red-50 border-2 border-red-200 rounded-xl p-6 mb-8">
-				<div class="flex items-center justify-center mb-6">
-					<svg class="w-8 h-8 text-red-600 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+	<div *ngIf="isEnrollmentClosed" class="enrollment-closed-banner" role="status" aria-live="polite">
+		<br>
+		<h2 class="banner-title">تم غلق باب الاشتراك مؤقتًا</h2>
+		<p class="banner-description">
+			انتهى الحجز للمشتركين الجدد 11/10/2025 الساعة 10 مساءً. تابعنا على المنصة والسوشيال ميديا علشان تعرف معاد الفتح الجاي.
+		</p>
+		<p class="banner-reopen">{{ enrollmentReopenMessage }}</p>
+	</div>
+
+	<!-- Main Content Container -->
+	<div class="main-container">
+		<!-- Warning Section -->
+		<div class="warning-card">
+			<div class="warning-header">
+				<div class="warning-icon">
+					<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
 					</svg>
-					<h3 class="text-2xl font-bold text-red-800" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-						تنبيه قبل الاشتراك
-					</h3>
 				</div>
-
-				<!-- Subscription Validity Section -->
-				<div class="bg-white rounded-lg p-5 mb-4 border-r-4 border-orange-500">
-					<h4 class="text-xl font-bold text-orange-700 mb-3 text-center" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-						{{ subscriptionDetails.subscriptionWarnings.validity.title }}
-					</h4>
-					<div class="space-y-2">
-						<div *ngFor="let point of subscriptionDetails.subscriptionWarnings.validity.points" 
-							 class="flex items-start">
-							<span class="text-orange-600 ml-2 mt-1">•</span>
-							<span class="text-gray-700 font-medium" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-								{{ point }}
-							</span>
-						</div>
-					</div>
-				</div>
-
-				<!-- Refund Policy Section -->
-				<div class="bg-white rounded-lg p-5 mb-4 border-r-4 border-red-500">
-					<h4 class="text-xl font-bold text-red-700 mb-3 text-center" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-						{{ subscriptionDetails.subscriptionWarnings.refund.title }}
-					</h4>
-					<div class="space-y-2">
-						<div *ngFor="let point of subscriptionDetails.subscriptionWarnings.refund.points" 
-							 class="flex items-start">
-							<span class="text-red-600 ml-2 mt-1">•</span>
-							<span class="text-gray-700 font-medium" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-								{{ point }}
-							</span>
-						</div>
-					</div>
-				</div>
-
-				<p class="text-lg text-red-600 text-center mt-4 font-semibold" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-					( برجاء الجدية قبل الإشتراك )
-				</p>
+				<h3 class="warning-title">تنبيه مهم قبل الاشتراك</h3>
 			</div>
 
+			<div class="warning-items">
+				<div class="warning-item orange-border">
+					<h4 class="warning-item-title">{{ subscriptionDetails.subscriptionWarnings.validity.title }}</h4>
+					<ul class="warning-list">
+						<li *ngFor="let point of subscriptionDetails.subscriptionWarnings.validity.points">
+							{{ point }}
+						</li>
+					</ul>
+				</div>
+
+				<div class="warning-item red-border">
+					<h4 class="warning-item-title">{{ subscriptionDetails.subscriptionWarnings.refund.title }}</h4>
+					<ul class="warning-list">
+						<li *ngFor="let point of subscriptionDetails.subscriptionWarnings.refund.points">
+							{{ point }}
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<!-- Combined Price & Payment Section -->
+		<div class="combined-price-payment-section">
 			<!-- Price Section -->
-			<div class="bg-white rounded-xl shadow-lg p-8 mb-8">
-				<h3 class="text-2xl font-bold text-gray-900 mb-6 text-center" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-					 سعر الاشتراك :
-				</h3>
-				<div class="text-center">
-					<span class="text-4xl font-bold text-orange-600" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-						• شهرياً {{ formatPrice(subscriptionDetails.price) }}
-					</span>
+			<div class="price-section">
+				<div class="price-header">
+					<svg class="price-icon-svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+					</svg>
+					<h3 class="price-title">سعر الاشتراك</h3>
 				</div>
+				<div class="price-value">{{ formatPrice(subscriptionDetails.price) }} <span class="price-period">/شهر</span></div>
 			</div>
 
-			<!-- Payment Methods Section -->
-			<div class="bg-white rounded-xl shadow-lg p-8 mb-8">
-				<h3 class="text-2xl font-bold text-gray-900 mb-6 text-center" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-					📌 طريقة الاشتراك :
-				</h3>
-				
-				<div class="bg-green-50 rounded-lg p-6 mb-6">
-					<div class="flex items-center justify-center mb-4">
-						<!-- Vodafone Cash Image -->
-						<img src="assets/vodafone.png" 
-							 alt="Vodafone Cash" 
-							 class="w-16 h-16 ml-3 shadow-lg rounded-lg">
-						<div class="text-center">
-							<h4 class="text-xl font-bold text-green-800 mb-1" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-								التحويل على محفظة فودافون كاش
-							</h4>
-							<p class="text-sm text-green-600" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-								التحويل علي اي رقم من دول
-							</p>
-						</div>
-					</div>
-					<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-						<div *ngFor="let wallet of subscriptionDetails.vodafoneNumbers" 
-							 class="bg-white rounded-lg p-4 text-center shadow-sm hover:shadow-lg transition-all cursor-pointer"
-							 (click)="copyToClipboard(wallet.number)">
-							<p class="text-2xl font-bold text-green-600" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-								{{ wallet.number }}
-							</p>
-							<p class="text-sm text-gray-600 mt-1" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-								{{ wallet.owner }}
-							</p>
-						</div>
+			<!-- Vodafone Payment Section -->
+			<div class="vodafone-payment-section">
+				<div class="vodafone-header">
+					<img src="assets/vodafone.png" alt="Vodafone Cash" class="vodafone-logo">
+					<div>
+						<h4 class="vodafone-title">فودافون كاش</h4>
+						<p class="vodafone-subtitle">تحويل آمن وسريع</p>
 					</div>
 				</div>
 
-				<!-- Registration Form -->
-				<div class="bg-blue-50 rounded-lg p-6 mb-6">
-				</div>
+				<!-- Combined Section: Numbers + Info -->
+				<div class="combined-payment-section">
+					<div class="numbers-grid">
+						<ng-container *ngFor="let wallet of subscriptionDetails.vodafoneNumbers">
+							<div *ngIf="wallet.number !== '01080681865'" 
+								 class="number-card"
+								 (click)="onNumberCardClick(wallet.number)"
+								 [class.number-card--disabled]="isEnrollmentClosed"
+								 [attr.aria-disabled]="isEnrollmentClosed ? 'true' : null">
+								<!-- Copy Success Overlay -->
+								<div *ngIf="copiedNumber === wallet.number" class="copy-overlay">
+									<div class="copy-message">
+										<svg class="check-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+										</svg>
+										<div>تم النسخ</div>
+									</div>
+								</div>
 
-				<!-- Required Information -->
-				<div class="bg-yellow-50 rounded-lg p-6">
-					<h4 class="text-xl font-bold text-yellow-800 mb-4 text-center" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-						📌 المعلومات المطلوبة:
-					</h4>
-					<div class="space-y-3">
-						<div *ngFor="let info of subscriptionDetails.requiredInfo" 
-							 class="flex items-center bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-all">
-							<span class="text-2xl ml-3">👈🏻</span>
-							<span class="text-lg font-semibold text-gray-700" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
+								<div *ngIf="isEnrollmentClosed" class="number-card-overlay">
+									<div class="number-card-overlay-content">
+										<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.657 0 3-1.567 3-3.5S13.657 4 12 4 9 5.567 9 7.5 10.343 11 12 11zM12 13c-2.33 0-7 1.17-7 3.5V19a1 1 0 001 1h12a1 1 0 001-1v-2.5c0-2.33-4.67-3.5-7-3.5z"></path>
+										</svg>
+										<span>سيتم إظهار الأرقام عند فتح الاشتراك</span>
+									</div>
+								</div>
+
+								<div class="number-content" [class.number-content--hidden]="isEnrollmentClosed">
+									<div class="number-text">{{ wallet.number }}</div>
+									<div class="owner-text">{{ wallet.owner }}</div>
+									<div class="copy-hint">
+										{{ isEnrollmentClosed ? 'الأرقام متاحة عند إعادة فتح الحجز' : '👆 اضغط للنسخ' }}
+									</div>
+								</div>
+
+								<div class="copy-icon">
+									<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+									</svg>
+								</div>
+							</div>
+						</ng-container>
+					</div>
+
+					<!-- Required Info - Inline with numbers -->
+					<div class="required-info-inline">
+						<h4 class="info-title-inline">📌 المعلومات المطلوبة بعد التحويل:</h4>
+						<div class="info-items-inline">
+							<div *ngFor="let info of subscriptionDetails.requiredInfo" class="info-badge">
 								{{ info }}
-							</span>
+							</div>
 						</div>
 					</div>
 				</div>
 
+				<!-- Google Form Button -->
+				<div class="form-submit-section">
+					<button
+						(click)="openGoogleForm()"
+						class="form-submit-button"
+						[class.form-submit-button--disabled]="isEnrollmentClosed"
+						[attr.disabled]="isEnrollmentClosed ? '' : null">
+						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+						</svg>
+						<span>{{ isEnrollmentClosed ? 'التسجيل مغلق حالياً' : 'املي فورم الاشتراك' }}</span>
+					</button>
+				</div>
 			</div>
+		</div>
 
-			<!-- Final Step -->
-			<div class="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl p-8 text-center mb-8">
-				<h3 class="text-2xl font-bold mb-4" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-					 بعد ما تسجل بياناتك
-				</h3>
-				<p class="text-xl" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-					هنبعتلك الكود على واتساب وبعدها تقدر تبدأ على المنصة 🧡
-				</p>
+		<!-- After Submit Card -->
+		<div class="after-submit-card">
+			<div class="after-submit-icon">📲</div>
+			<h3 class="after-submit-title">بعد إتمام تسجيل الفورم</h3>
+			<p class="after-submit-text">
+				ستتلقى كود الاشتراك على واتساب وستتمكن من البدء فوراً 🧡
+			</p>
+		</div>
+
+		<!-- Video Section -->
+		<div class="subscription-video-section">
+			<div class="section-header">
+				<h3 class="section-title">شاهد فيديو تفاصيل الاشتراك لشهر نوفمبر</h3>
 			</div>
+			<div class="subscription-video-container">
+				<div class="subscription-video-wrapper">
+					<iframe 
+						class="subscription-video-iframe"
+						[src]="getVideoEmbedUrl()" 
+						title="فيديو توضيحي - أبلكيشن معادلة كلية هندسة"
+						frameborder="0"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+						allowfullscreen>
+					</iframe>
+				</div>
+			</div>
+		</div>
 
-			<!-- Features Section -->
-			<div class="bg-white rounded-xl shadow-lg p-8 mb-8">
-				<h3 class="text-2xl font-bold text-gray-900 mb-6 text-center" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-					ما ستحصل عليه في الاشتراك
-				</h3>
-				
-				<div class="grid gap-4 md:grid-cols-2">
-					<div *ngFor="let feature of subscriptionDetails.features" 
-						 class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-orange-50 transition-colors">
-						<svg class="w-6 h-6 text-green-600 ml-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+		<!-- Features Section -->
+		<div class="features-section">
+			<div class="section-header">
+				<h3 class="section-title">ما ستحصل عليه في ابلكيشن معادلة هندسة</h3>
+				<p class="section-subtitle">مميزات الاشتراك الكامل</p>
+			</div>
+			<div class="features-grid">
+				<div *ngFor="let feature of subscriptionDetails.features" class="feature-item">
+					<div class="feature-icon">
+						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
 						</svg>
-						<span class="text-gray-700 font-medium" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-							{{ feature }}
-						</span>
 					</div>
+					<div class="feature-text">{{ feature }}</div>
 				</div>
 			</div>
+		</div>
 
-			<!-- Offers Section -->
-			
+		<!-- Content Schedule Table Section -->
+		<div class="schedule-table-section">
+			<div class="section-header">
+				<h3 class="section-title">جدول محتوى الشهر</h3>
+				<p class="section-subtitle">خطة المحتوى لشهر نوفمبر علي المنصة</p>
+			</div>
+			<div class="schedule-image-container">
+				<img src="assets/الجدول.jpg" alt="جدول محتوى الشهر" class="schedule-image" loading="lazy" (click)="openImageModal()" style="cursor: pointer;">
+				<p class="image-hint">👆 اضغط على الصورة للتكبير</p>
+			</div>
+		</div>
 
-			<!-- Support WhatsApp Card -->
-			
-			<!-- CTA Section -->
-			<div class="bg-gray-900 text-white rounded-xl p-8 text-center">
-				<h3 class="text-2xl font-bold mb-4" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-					ابدأ رحلتك التعليمية الآن
-				</h3>
-				<p class="text-gray-300 mb-8 text-lg" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-					انضم إلى مئات الطلاب الذين حققوا أحلامهم في الالتحاق بكليات الهندسة
-				</p>
-				
-				<button (click)="openGoogleForm()" 
-						class="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-8 rounded-lg text-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
-						style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-					📝 املي فورم الاشتراك
+		<!-- Image Modal -->
+		<div class="image-modal" *ngIf="isImageModalOpen" (click)="closeImageModal()">
+			<div class="image-modal-content" (click)="$event.stopPropagation()">
+				<button class="modal-close-btn" (click)="closeImageModal()" aria-label="إغلاق">
+					<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+					</svg>
 				</button>
-				
-				<p class="text-sm text-gray-400 mt-4" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-					سيتم توجيهك إلى نموذج التسجيل الرسمي
-				</p>
+				<img src="assets/الجدول.jpg" alt="جدول محتوى الشهر - مكبر" class="modal-image">
 			</div>
-			<br>
-			
-			<!-- Student Account Section -->
-			<div class="bg-gradient-to-r from-orange-50 to-indigo-50 border-2 border-orange-200 rounded-xl p-8 mb-8">
-				<div class="text-center">
-					<div class="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
-						<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-						</svg>
-					</div>
-					<h3 class="text-2xl font-bold text-orange-700 mb-3" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-						هل لديك حساب في المنصة التعليمية؟
-					</h3>
-					<p class="text-lg text-orange-600 mb-6" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-						اختر الخيار المناسب لك للوصول إلى المحتوى التعليمي
-					</p>
-					
-					<!-- Buttons Container -->
-					<div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-						<!-- تسجيل دخول -->
-						<a href="https://app-mo3adlet-handsa.com/student/index.php" 
-						   target="_blank"
-						   class="inline-flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-xl text-lg transition-all duration-300 transform hover:scale-105 shadow-lg w-full sm:w-auto"
-						   style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-							<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
-							</svg>
-							تسجيل دخول
-						</a>
-						
-						<!-- إنشاء حساب جديد -->
-						<a href="https://app-mo3adlet-handsa.com/register.php" 
-						   target="_blank"
-						   class="inline-flex items-center justify-center gap-3 bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-xl text-lg transition-all duration-300 transform hover:scale-105 shadow-lg w-full sm:w-auto"
-						   style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-							<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
-							</svg>
-							إنشاء حساب جديد
-						</a>
-					</div>
-					
-					<p class="text-sm text-gray-600 mt-4" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-						الطلاب الجدد: أنشئ حساب جديد | الطلاب الحاليون: سجل دخولك
-					</p>
-				</div>
+		</div>
+
+		<!-- Student Account Section -->
+		<div class="account-section">
+			<div class="account-icon">👤</div>
+			<h3 class="account-title">لديك حساب في المنصة؟</h3>
+			<p class="account-subtitle">اختر الخيار المناسب للوصول إلى المحتوى</p>
+			<div class="account-buttons">
+				<a href="https://app-mo3adlet-handsa.com/student/index.php" target="_blank" class="account-btn login-btn">
+					<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+					</svg>
+					تسجيل دخول
+				</a>
+				<a href="https://app-mo3adlet-handsa.com/register.php" target="_blank" class="account-btn register-btn">
+					<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+					</svg>
+					إنشاء حساب جديد
+				</a>
 			</div>
-			
-			<div class="bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-300 rounded-xl p-8 mb-8">
-				<div class="text-center">
-					<div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
-						<svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-							<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-						</svg>
-					</div>
-					<h3 class="text-2xl font-bold text-red-700 mb-3" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-						هل تواجه مشكلة في التسجيل أو التحويل؟
-					</h3>
-					<p class="text-lg text-red-600 mb-6" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-						تواصل معنا مباشرة للحصول على المساعدة الفورية في حل أي مشكلة
-					</p>
-					<a href="https://api.whatsapp.com/send/?phone=201554843745&text=السلام عليكم، أواجه مشكلة في تسجيل الفورم أو تحويل الاشتراك وأحتاج مساعدة&type=phone_number&app_absent=0" 
-					   target="_blank"
-					   class="inline-flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-xl text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
-					   style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-						<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-							<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.106"/>
-						</svg>
-						تواصل للمساعدة الفورية
-					</a>
-					<p class="text-sm text-gray-600 mt-3" style="font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;">
-						متاح لحل جميع مشاكل التسجيل والدفع والأكواد
-					</p>
-				</div>
-			</div>
+		</div>
+
+		<!-- Support Section -->
+		<div class="support-section">
+			<h3 class="support-title">تحتاج مساعدة؟</h3>
+			<p class="support-subtitle">تواصل معنا مباشرة لحل أي مشكلة</p>
+			<a href="https://api.whatsapp.com/send/?phone=201554843745&text=السلام عليكم، أواجه مشكلة في تسجيل الفورم أو تحويل الاشتراك وأحتاج مساعدة&type=phone_number&app_absent=0" 
+			   target="_blank" 
+			   class="support-button">
+				<svg fill="currentColor" viewBox="0 0 24 24">
+					<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.106"/>
+				</svg>
+				تواصل معنا الآن
+			</a>
+			<p class="support-note">متاح لحل جميع المشاكل</p>
 		</div>
 	</div>
 </div>

@@ -33,6 +33,16 @@
                 "glob": "sw.js",
                 "input": "src",
                 "output": "/"
+              },
+              {
+                "glob": "manifest.json",
+                "input": "public",
+                "output": "/"
+              },
+              {
+                "glob": "browserconfig.xml",
+                "input": "public",
+                "output": "/"
               }
             ],
             "styles": [

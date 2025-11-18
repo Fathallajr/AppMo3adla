@@ -46,6 +46,8 @@ export class NavbarComponent implements OnInit {
 			.pipe(filter(event => event instanceof NavigationEnd))
 			.subscribe((event: NavigationEnd) => {
 				this.currentRoute = event.url;
+				// إغلاق جميع القوائم المنسدلة عند الانتقال لصفحة جديدة
+				this.closeAllDropdowns();
 			});
 	}
 
@@ -141,5 +143,21 @@ export class NavbarComponent implements OnInit {
 		this.isMobilePlatformDropdownOpen = false;
 		// التمرير إلى الأعلى عند إغلاق القائمة المنسدلة المحمولة
 		this.scrollToTop();
+	}
+
+	// دالة لإغلاق جميع القوائم المنسدلة
+	closeAllDropdowns() {
+		// إغلاق القوائم المنسدلة للديسكتوب
+		this.isRequirementsDropdownOpen = false;
+		this.isNewsDropdownOpen = false;
+		this.isPlatformDropdownOpen = false;
+		
+		// إغلاق القوائم المنسدلة للموبايل
+		this.isMobileNewsDropdownOpen = false;
+		this.isMobileRequirementsDropdownOpen = false;
+		this.isMobilePlatformDropdownOpen = false;
+		
+		// إغلاق القائمة المحمولة الرئيسية
+		this.isMobileMenuOpen = false;
 	}
 }

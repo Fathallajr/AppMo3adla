@@ -23,16 +23,12 @@
 			     }" 
 			     *ngFor="let news of newsItems">
 			     
-				<!-- Important Badge -->
-				<div class="mb-2" *ngIf="news.important">
-					<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+				<!-- Important Badge and Category Badge -->
+				<div class="mb-3 flex flex-wrap gap-2">
+					<span *ngIf="news.important" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
 						🔴 خبر مهم
 					</span>
-				</div>
-				
-				<!-- Category Badge -->
-				<div class="mb-3" *ngIf="news.category">
-					<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+					<span *ngIf="news.category" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
 						{{ news.category }}
 					</span>
 				</div>
@@ -43,7 +39,7 @@
 					     [alt]="news.title" 
 					     class="w-full h-48 object-cover rounded-lg"
 					     loading="lazy"
-					     onerror="this.src='/assets/logo2.png'">
+					     onerror="this.src='/assets/logo.png'">
 				</div>
 				
 				<div class="flex items-start gap-3 mb-3">

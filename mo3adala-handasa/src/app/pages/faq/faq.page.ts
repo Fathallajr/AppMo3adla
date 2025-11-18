@@ -1,19 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { expandCollapse } from '../../shared/animations';
+import { FormsModule } from '@angular/forms';
+import { expandCollapse, fadeInUp, staggerList } from '../../shared/animations';
 import { SeoService } from '../../core/seo.service';
 import { CanonicalService } from '../../core/canonical.service';
 
 @Component({
 	selector: 'app-faq-page',
 	standalone: true,
-	imports: [CommonModule],
-	animations: [expandCollapse],
+  imports: [CommonModule, FormsModule],
+	animations: [expandCollapse, fadeInUp, staggerList],
 	templateUrl: './faq.page.html',
 	styleUrls: ['./faq.page.css'],
 })
-export class FaqPageComponent {
+export class FaqPageComponent implements OnInit {
 	openIndex: number | null = null;
+  query: string = '';
+  isLoading: boolean = true;
 	faqs = [
 		{ q: 'يعنى ايه معادلة كلية هندسة؟', a: 'هى مسابقة بينظمها المجلس الاعلي للجامعات لطلاب التعليم الفني الصناعي ( الدبلومات و المعاهد الفنية الصناعية ) للالتحاق باحدي كليات الهندسة الحكومية.' },
 		{ q: 'مين الطلاب المسموح ليهم التقديم على المعادلة؟', a: 'طلاب التعليم الفني الصناعي الدبلومات و المعاهد الفنية الصناعية.' },
@@ -32,6 +35,7 @@ export class FaqPageComponent {
 		{ q: 'هل بدخل كلية الهندسة اللي في محافظتي ولا أي كلية؟', a: 'بتدخل حسب التوزيع الجغرافي لمدرستك لو دبلوم 3 سنوات فحسب المدرسة، ولو معهد فحسب البطاقة.' },
 		{ q: 'بعد التخرج من الهندسة، بتفرق معادلة عن ثانوي عام في الشغل؟', a: 'لا مفيش فرق، أنت خريج هندسة زيك زي أي طالب.' },
 		{ q: 'هل ليّا الحق في الالتحاق بالنقابة زي خريج الثانوية العامة؟', a: 'آه طبعًا، ليك الحق كامل في نقابة المهندسين.' },
+		{ q: 'مين اللي بيدرسولنا في الابلكيشن؟', a: 'بيشرحلكم نخبة من المدرسين: م/ أحمد فتح الله، م/ أحمد أبو زيد، د/ سعد العميري، م/ أحمد الشامي، د/ عمر أحمد عبد الفتاح.' },
 	];
 	constructor(private seo: SeoService, private canonical: CanonicalService) {
 		const siteUrl = (typeof window !== 'undefined' ? (window as any)['NG_SITE_URL'] : process.env['NG_SITE_URL']) || 'https://example.com';
@@ -43,5 +47,20 @@ export class FaqPageComponent {
 		this.seo.setTwitterTags({ title, description });
 		this.canonical.setCanonical();
 	}
+
+	ngOnInit() {
+		// محاكاة تحميل البيانات لإظهار الـ animations بشكل صحيح
+		setTimeout(() => {
+			this.isLoading = false;
+		}, 300);
+	}
 	toggle(i: number) { this.openIndex = this.openIndex === i ? null : i; }
+  filteredFaqs() {
+    const q = this.query.trim();
+    if (!q) return this.faqs;
+    const lower = q.toLowerCase();
+    return this.faqs.filter(item =>
+      (item.q + ' ' + item.a).toLowerCase().includes(lower)
+    );
+  }
 }
