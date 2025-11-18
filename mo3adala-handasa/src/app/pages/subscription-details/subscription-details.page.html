@@ -60,9 +60,18 @@
 					<svg class="price-icon-svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
 					</svg>
-					<h3 class="price-title">سعر الاشتراك</h3>
+					<h3 class="price-title">أسعار الاشتراك</h3>
 				</div>
-				<div class="price-value">{{ formatPrice(subscriptionDetails.price) }} <span class="price-period">/شهر</span></div>
+				<div class="prices-container">
+					<div class="price-group">
+						<div class="price-group-label">{{ subscriptionDetails.groupA.name }}</div>
+						<div class="price-value">{{ formatPrice(subscriptionDetails.groupA.price) }} <span class="price-period">/شهر</span></div>
+					</div>
+					<div class="price-group">
+						<div class="price-group-label">{{ subscriptionDetails.groupB.name }}</div>
+						<div class="price-value">{{ formatPrice(subscriptionDetails.groupB.price) }} <span class="price-period">/شهر</span></div>
+					</div>
+				</div>
 			</div>
 
 			<!-- Vodafone Payment Section -->
@@ -78,9 +87,8 @@
 				<!-- Combined Section: Numbers + Info -->
 				<div class="combined-payment-section">
 					<div class="numbers-grid">
-						<ng-container *ngFor="let wallet of subscriptionDetails.vodafoneNumbers">
-							<div *ngIf="wallet.number !== '01080681865'" 
-								 class="number-card"
+						<ng-container *ngFor="let wallet of getFilteredVodafoneNumbers()">
+							<div class="number-card"
 								 (click)="onNumberCardClick(wallet.number)"
 								 [class.number-card--disabled]="isEnrollmentClosed"
 								 [attr.aria-disabled]="isEnrollmentClosed ? 'true' : null">

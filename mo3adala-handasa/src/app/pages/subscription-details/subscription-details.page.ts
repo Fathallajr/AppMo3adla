@@ -15,12 +15,19 @@ export class SubscriptionDetailsPageComponent implements OnInit {
 	currentMonth = '';
 	copiedNumber: string | null = null; // للتحكم في رسالة "تم النسخ"
 	isImageModalOpen = false; // للتحكم في فتح/إغلاق الصورة المكبرة
-	isEnrollmentClosed = true;
+	isEnrollmentClosed = false;
 	enrollmentReopenMessage = 'سيتم فتح الاشتراك للمشتركين الجدد مع بداية الشهر القادم بإذن الله.';
 	
 	subscriptionDetails = {
-		month: ' شهر نوفمبر 2026',
-		price: '700',
+		month: ' شهر ديسمبر 2026',
+		groupA: {
+			name: 'جروب A',
+			price: '700',
+		},
+		groupB: {
+			name: 'جروب B',
+			price: '800',
+		},
 		currency: 'ج',
 		features: [
 			'فيديوهات تأسيسية في جميع المواد',
@@ -38,12 +45,12 @@ export class SubscriptionDetailsPageComponent implements OnInit {
 			'وصول مدى الحياة للمحتوى',
 			'شهادة إنجاز معتمدة'
 		],
-		googleFormLink: 'https://forms.gle/Q5do5DHEMWC1WS7j7',
+		googleFormLink: 'https://forms.gle/uUdutAVFLNumbrbh9',
 		vodafoneNumbers: [
+			{ number: '01040490778', owner: 'احمد ع********* س***' },
 			{ number: '01040490779', owner: 'س ف** ص*** ا***' },
-			{ number: '01080681865', owner: 'ابرآم س*** م****' },
 			{ number: '01025326080', owner: 'احمد م**** ا***** ز***' },
-			// { number: '01040490778', owner: 'احمد ع********* س***' } // مخفي مؤقتاً
+			// { number: '01080681865', owner: 'ابرآم س*** م****' } // مخفي - رقم ابرام
 		],
 		requiredInfo: [
 			'رقم الموبايل اللي حولت منه 📲',
@@ -68,7 +75,7 @@ export class SubscriptionDetailsPageComponent implements OnInit {
 				]
 			}
 		},
-		subtitle: ' الشهر الثاني لدفعة 2026 '
+		subtitle: ' الشهر الثالث لدفعة 2026 '
 	};
 
 	constructor(
@@ -151,6 +158,22 @@ export class SubscriptionDetailsPageComponent implements OnInit {
 
 	formatPrice(price: string): string {
 		return `${price} ${this.subscriptionDetails.currency}`;
+	}
+
+	getFilteredVodafoneNumbers() {
+		// إرجاع جميع الأرقام ماعدا رقم ابرام (01080681865) بترتيب عشوائي
+		const filtered = this.subscriptionDetails.vodafoneNumbers.filter(
+			wallet => wallet.number !== '01080681865'
+		);
+		
+		// تطبيق ترتيب عشوائي على الأرقام المفلترة
+		const shuffled = [...filtered];
+		for (let i = shuffled.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+		}
+		
+		return shuffled;
 	}
 
 	async copyToClipboard(text: string): Promise<void> {
