@@ -15,7 +15,7 @@ export class SubscriptionDetailsPageComponent implements OnInit {
 	currentMonth = '';
 	copiedNumber: string | null = null; // للتحكم في رسالة "تم النسخ"
 	isImageModalOpen = false; // للتحكم في فتح/إغلاق الصورة المكبرة
-	isEnrollmentClosed = false;
+	isEnrollmentClosed = true;
 	enrollmentReopenMessage = 'سيتم فتح الاشتراك للمشتركين الجدد مع بداية الشهر القادم بإذن الله.';
 	
 	subscriptionDetails = {

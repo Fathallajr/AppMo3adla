@@ -198,21 +198,21 @@ export class NewsDetailPageComponent implements OnInit {
 		},
 		'free-week-codes-2025': {
 			id: 'free-week-codes-2025',
-			title: 'أسبوع مجاني لطلاب معادلة كلية الهندسة!',
+			title: '3 ايام مجاناً لطلاب معادلة كلية الهندسة!',
 			content: `
 				<div class="bg-orange-50 border-l-4 border-orange-500 p-4 mb-6">
-					<h3 class="text-orange-800 font-bold mb-2">🔥 أسبوع مجاني لطلاب المعادلة</h3>
-					<p class="text-orange-700">احتفالًا بطلاب المعادلة، فريق أبلكيشن معادلة كلية هندسة بيفتح باب الأكواد المجانية لمدة أسبوع كامل!</p>
+					<h3 class="text-orange-800 font-bold mb-2">🔥 تجربة مجانية لطلاب المعادلة</h3>
+					<p class="text-orange-700">فريق أبلكيشن معادلة كلية هندسة بيفتح باب الأكواد المجانية لمدة 3 ايام</p>
 				</div>
 				
 				<p class="text-lg leading-relaxed mb-6 text-gray-700">
-					احتفالًا بطلاب المعادلة، فريق أبلكيشن معادلة كلية هندسة بيفتح باب الأكواد المجانية لمدة أسبوع كامل! 🔥
+					تجربة مجانية لطلاب المعادلة
 				</p>
 				
 				<div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6">
 					<h3 class="text-green-800 font-bold mb-2">📅 الفترة:</h3>
 					<p class="text-green-700 text-lg font-semibold">
-						من اليوم وحتى <strong>28 / 10 / 2025</strong>
+						من يوم <strong>24</strong> حتى <strong>27</strong>
 					</p>
 				</div>
 				
@@ -231,7 +231,7 @@ export class NewsDetailPageComponent implements OnInit {
 					<p class="text-orange-700 mb-3">
 						عشان تحصل على الكود المجاني، لازم تسجل في الفورم ده ونبعتلك الكود على الواتساب:
 					</p>
-					<a href="https://forms.gle/3UpbGVBHbbwAz6o97" target="_blank" 
+					<a href="https://forms.gle/xUHctxA7HZRgXr6z5" target="_blank" 
 					   class="inline-flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
 						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -247,20 +247,6 @@ export class NewsDetailPageComponent implements OnInit {
 					</p>
 				</div>
 				
-				<div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6">
-					<h3 class="text-yellow-800 font-bold mb-2">🎥 تفاصيل أكثر:</h3>
-					<p class="text-yellow-700 mb-3">
-						اتفرج على الفيديو ده عشان تفهم تفاصيل أكثر عن العرض والمميزات:
-					</p>
-					<a href="https://www.youtube.com/watch?v=UH-c-zb1ld8" target="_blank" 
-					   class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors">
-						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-							<path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-						</svg>
-						<span>شاهد الفيديو على يوتيوب</span>
-					</a>
-				</div>
-				
 				<div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
 					<h3 class="text-red-800 font-bold mb-2">⏰ تنبيه مهم:</h3>
 					<p class="text-red-700">
@@ -268,13 +254,13 @@ export class NewsDetailPageComponent implements OnInit {
 					</p>
 				</div>
 			`,
-			date: '2025-10-21',
+			date: '2025-11-24',
 			author: 'فريق المعادلة',
 			category: 'عروض خاصة',
 			important: true,
-			image: '/assets/news6.jpg',
+			image: '/assets/news8.jpg',
 			images: [
-				'/assets/news6.jpg'
+				'/assets/news8.jpg'
 			]
 		},
 		'App-Book-2025': {
