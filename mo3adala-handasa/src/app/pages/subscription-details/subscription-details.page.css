@@ -620,6 +620,78 @@
 	color: rgba(255, 255, 255, 0.95);
 }
 
+.form-section-title {
+	text-align: center;
+	color: #1f2937;
+	font-weight: 700;
+	font-size: 1.125rem;
+	margin-bottom: 1.5rem;
+}
+
+.form-buttons-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 1.25rem;
+}
+
+.form-option-card {
+	background: white;
+	border-radius: 16px;
+	padding: 1.5rem;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+	border: 1px solid #f3f4f6;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.form-option-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.form-option-label {
+	font-weight: 800;
+	color: #0f172a;
+	font-size: 1.1rem;
+}
+
+.form-option-status {
+	font-size: 0.85rem;
+	font-weight: 700;
+	color: #10b981;
+	background: rgba(16, 185, 129, 0.15);
+	padding: 0.25rem 0.75rem;
+	border-radius: 999px;
+}
+
+.form-option-status--closed {
+	color: #b91c1c;
+	background: rgba(248, 113, 113, 0.2);
+}
+
+.form-option-description {
+	color: #4b5563;
+	font-weight: 500;
+	line-height: 1.5;
+}
+
+.form-option-note {
+	color: #b45309;
+	background: #fef3c7;
+	border-radius: 0.75rem;
+	padding: 0.75rem 1rem;
+	font-size: 0.9rem;
+}
+
+.form-global-note {
+	text-align: center;
+	color: #b91c1c;
+	font-weight: 600;
+	margin-top: 1.25rem;
+}
+
 /* Required Info Card */
 .required-info-card {
 	background: white;
@@ -795,36 +867,58 @@
 	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-.schedule-image-container {
-	width: 100%;
-	max-width: 100%;
-	margin: 0 auto;
-	text-align: center;
-	overflow: hidden;
-	border-radius: 12px;
+.schedule-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: 1.5rem;
+}
+
+.schedule-image-card {
 	background: #f9fafb;
-	padding: 1rem;
+	border-radius: 16px;
+	padding: 1.25rem;
+	box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.schedule-card-header {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	margin-bottom: 0.5rem;
+}
+
+.schedule-card-title {
+	font-weight: 800;
+	color: #0f172a;
+	font-size: 1.1rem;
+}
+
+.schedule-image-wrapper {
+	border-radius: 12px;
+	overflow: hidden;
+	cursor: pointer;
+	background: white;
 }
 
 .schedule-image {
 	width: 100%;
 	height: auto;
-	max-width: 100%;
-	border-radius: 8px;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	display: block;
 	transition: transform 0.3s ease, opacity 0.3s ease;
-	object-fit: contain;
 }
 
 .schedule-image:hover {
 	transform: scale(1.02);
-	opacity: 0.9;
+	opacity: 0.95;
 }
 
 .image-hint {
 	color: #6b7280;
 	font-size: 0.875rem;
-	margin-top: 0.75rem;
+	margin-top: 0.25rem;
 	font-weight: 500;
 	text-align: center;
 }

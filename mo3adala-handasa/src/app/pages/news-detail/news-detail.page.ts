@@ -226,13 +226,38 @@ export class NewsDetailPageComponent implements OnInit {
 					</ul>
 				</div>
 				
+				<div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 mb-6 text-center shadow-sm">
+					<h3 class="text-slate-900 font-bold mb-2 text-xl">لسه معندكش حساب؟</h3>
+					<p class="text-slate-600 mb-4 text-lg">
+						سجل الآن أو ادخل بحسابك عشان تستفيد من أيام التجربة المجانية على طول.
+					</p>
+					<div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+						<a href="https://app-mo3adlet-handsa.com/register.php"
+						   target="_blank"
+						   class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors shadow no-underline hover:no-underline">
+							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+							</svg>
+							<span>إنشاء حساب جديد</span>
+						</a>
+						<a href="https://app-mo3adlet-handsa.com/student/index.php"
+						   target="_blank"
+						   class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-green-700 border border-green-600 hover:bg-green-50 px-6 py-3 rounded-xl font-semibold transition-colors shadow no-underline hover:no-underline">
+							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+							</svg>
+							<span>تسجيل دخول</span>
+						</a>
+					</div>
+				</div>
+				
 				<div class="bg-orange-50 border-l-4 border-orange-500 p-4 mb-6">
 					<h3 class="text-orange-800 font-bold mb-2">📝 كيفية الحصول على الكود:</h3>
 					<p class="text-orange-700 mb-3">
 						عشان تحصل على الكود المجاني، لازم تسجل في الفورم ده ونبعتلك الكود على الواتساب:
 					</p>
-					<a href="https://forms.gle/xUHctxA7HZRgXr6z5" target="_blank" 
-					   class="inline-flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+					<a href="https://forms.gle/3UpbGVBHbbwAz6o97" target="_blank" 
+					   class="inline-flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors no-underline hover:no-underline">
 						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
 						</svg>
@@ -258,9 +283,9 @@ export class NewsDetailPageComponent implements OnInit {
 			author: 'فريق المعادلة',
 			category: 'عروض خاصة',
 			important: true,
-			image: '/assets/news8.jpg',
+			image: '/assets/اكواد مجانية.jpg',
 			images: [
-				'/assets/news8.jpg'
+				'/assets/اكواد مجانية.jpg'
 			]
 		},
 		'App-Book-2025': {
@@ -311,9 +336,9 @@ export class NewsDetailPageComponent implements OnInit {
 			author: 'فريق المعادلة',
 			category: 'الكتب والمراجع',
 			important: false,
-			image: '/assets/news1.png',
+			image: '/assets/كتاب.jpg',
 			images: [
-				'/assets/news1.png'
+				'/assets/كتاب.jpg'
 			]
 		},
 		'one-chance-only-2025': {
@@ -434,9 +459,9 @@ export class NewsDetailPageComponent implements OnInit {
 			author: 'فريق المعادلة',
 			category: 'أخبار التطبيق',
 			important: false,
-			image: '/assets/news2.png',
+			image: '/assets/مكثف.jpg',
 			images: [
-				'/assets/news2.png'
+				'/assets/مكثف.jpg'
 			]
 		},
 		'intensive-course-2025': {

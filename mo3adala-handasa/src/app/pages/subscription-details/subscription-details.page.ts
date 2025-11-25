@@ -1,8 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SeoService } from '../../core/seo.service';
 import { CanonicalService } from '../../core/canonical.service';
+
+type GroupKey = 'groupA' | 'groupB';
+
+interface ScheduleImage {
+	group: string;
+	src: string;
+	alt: string;
+	note?: string;
+}
+
+interface GroupFormConfig {
+	key: GroupKey;
+	label: string;
+	description: string;
+	buttonText: string;
+	link: string;
+	isClosed: boolean;
+	statusNote?: string;
+	allowOpenWhenClosed?: boolean;
+}
 
 @Component({
 	selector: 'app-subscription-details',
@@ -11,12 +31,28 @@ import { CanonicalService } from '../../core/canonical.service';
 	templateUrl: './subscription-details.page.html',
 	styleUrls: ['./subscription-details.page.css']
 })
-export class SubscriptionDetailsPageComponent implements OnInit {
+export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 	currentMonth = '';
 	copiedNumber: string | null = null; // للتحكم في رسالة "تم النسخ"
 	isImageModalOpen = false; // للتحكم في فتح/إغلاق الصورة المكبرة
-	isEnrollmentClosed = true;
+	activeScheduleImage: ScheduleImage | null = null; // الصورة النشطة في الـ modal
+	isEnrollmentClosed = false;
 	enrollmentReopenMessage = 'سيتم فتح الاشتراك للمشتركين الجدد مع بداية الشهر القادم بإذن الله.';
+	shuffledVodafoneNumbers: { number: string; owner: string }[] = [];
+	
+	private handleVisibilityChange = () => {
+		if (typeof document === 'undefined') {
+			return;
+		}
+		
+		if (document.visibilityState === 'visible') {
+			this.shuffleVodafoneNumbers();
+		}
+	};
+	
+	private handleWindowFocus = () => {
+		this.shuffleVodafoneNumbers();
+	};
 	
 	subscriptionDetails = {
 		month: ' شهر ديسمبر 2026',
@@ -45,12 +81,43 @@ export class SubscriptionDetailsPageComponent implements OnInit {
 			'وصول مدى الحياة للمحتوى',
 			'شهادة إنجاز معتمدة'
 		],
-		googleFormLink: 'https://forms.gle/uUdutAVFLNumbrbh9',
+		googleForms: {
+			groupA: {
+				key: 'groupA',
+				label: 'جروب A',
+				description: 'للمشتركين الأساسيين',
+				buttonText: 'سجل فورم جروب A',
+				link: 'https://forms.gle/uUdutAVFLNumbrbh9',
+				isClosed: false
+			},
+			groupB: {
+				key: 'groupB',
+				label: 'جروب B',
+				description: 'للمشتركين الجدد جروب B',
+				buttonText: 'سجل فورم جروب B',
+				link: 'https://forms.gle/WFDqbK37YkGpRsE3A',
+				isClosed: false
+			}
+		},
 		vodafoneNumbers: [
 			{ number: '01040490778', owner: 'احمد ع********* س***' },
 			{ number: '01040490779', owner: 'س ف** ص*** ا***' },
 			{ number: '01025326080', owner: 'احمد م**** ا***** ز***' },
 			// { number: '01080681865', owner: 'ابرآم س*** م****' } // مخفي - رقم ابرام
+		],
+		scheduleImages: [
+			{
+				group: 'جدول جروب A',
+				src: '/assets/جدول A.png',
+				alt: 'جدول محتوى شهر نوفمبر - جروب A',
+				note: '👆 اضغط على الصورة للتكبير'
+			},
+			{
+				group: 'جدول جروب B',
+				src: '/assets/جدول B.png',
+				alt: 'جدول محتوى شهر نوفمبر - جروب B',
+				note: '👆 اضغط على الصورة للتكبير'
+			}
 		],
 		requiredInfo: [
 			'رقم الموبايل اللي حولت منه 📲',
@@ -100,25 +167,46 @@ export class SubscriptionDetailsPageComponent implements OnInit {
 		
 		// ترتيب الأرقام عشوائياً في كل مرة يتم فتح الصفحة
 		this.shuffleVodafoneNumbers();
+		this.listenForVisibilityChange();
 		
 		// this.updateCurrentMonth(); // معطل لاستخدام الشهر المحدد يدوياً
+	}
+	
+	ngOnDestroy(): void {
+		if (typeof window === 'undefined' || typeof document === 'undefined') {
+			return;
+		}
+		
+		document.removeEventListener('visibilitychange', this.handleVisibilityChange);
+		window.removeEventListener('focus', this.handleWindowFocus);
+		window.removeEventListener('pageshow', this.handleWindowFocus);
 	}
 	
 	/**
 	 * ترتيب أرقام فودافون كاش بشكل عشوائي
 	 */
 	private shuffleVodafoneNumbers(): void {
-		// نسخ المصفوفة لتجنب تعديل الأصل مباشرة
-		const numbers = [...this.subscriptionDetails.vodafoneNumbers];
+		const filtered = this.subscriptionDetails.vodafoneNumbers.filter(
+			wallet => wallet.number !== '01080681865'
+		);
 		
-		// خوارزمية Fisher-Yates للترتيب العشوائي
-		for (let i = numbers.length - 1; i > 0; i--) {
+		const shuffled = [...filtered];
+		for (let i = shuffled.length - 1; i > 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1));
-			[numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+			[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
 		}
 		
-		// تحديث المصفوفة بالترتيب الجديد
-		this.subscriptionDetails.vodafoneNumbers = numbers;
+		this.shuffledVodafoneNumbers = shuffled;
+	}
+	
+	private listenForVisibilityChange(): void {
+		if (typeof window === 'undefined' || typeof document === 'undefined') {
+			return;
+		}
+		
+		document.addEventListener('visibilitychange', this.handleVisibilityChange);
+		window.addEventListener('focus', this.handleWindowFocus);
+		window.addEventListener('pageshow', this.handleWindowFocus);
 	}
 
 	private updateCurrentMonth(): void {
@@ -132,13 +220,28 @@ export class SubscriptionDetailsPageComponent implements OnInit {
 		this.subscriptionDetails.month = this.currentMonth;
 	}
 
-	openGoogleForm(): void {
-		if (this.isEnrollmentClosed) {
-			console.warn('محاولة فتح الفورم أثناء إغلاق التسجيل');
+	openGoogleForm(groupKey: GroupKey): void {
+		const formConfig = this.subscriptionDetails.googleForms[groupKey] as GroupFormConfig;
+		if (!formConfig) {
+			console.warn('Form configuration not found for', groupKey);
 			return;
 		}
 
-		window.open(this.subscriptionDetails.googleFormLink, '_blank');
+		const isFormDisabled = this.isEnrollmentClosed || (formConfig.isClosed && !formConfig.allowOpenWhenClosed);
+		if (isFormDisabled) {
+			console.warn(`محاولة فتح فورم ${formConfig.label} أثناء الإغلاق`);
+			return;
+		}
+
+		window.open(formConfig.link, '_blank');
+	}
+
+	getGroupForms() {
+		return Object.values(this.subscriptionDetails.googleForms) as GroupFormConfig[];
+	}
+
+	hasClosedForms(): boolean {
+		return this.getGroupForms().some(form => form.isClosed);
 	}
 
 	onNumberCardClick(number: string): void {
@@ -161,19 +264,7 @@ export class SubscriptionDetailsPageComponent implements OnInit {
 	}
 
 	getFilteredVodafoneNumbers() {
-		// إرجاع جميع الأرقام ماعدا رقم ابرام (01080681865) بترتيب عشوائي
-		const filtered = this.subscriptionDetails.vodafoneNumbers.filter(
-			wallet => wallet.number !== '01080681865'
-		);
-		
-		// تطبيق ترتيب عشوائي على الأرقام المفلترة
-		const shuffled = [...filtered];
-		for (let i = shuffled.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1));
-			[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-		}
-		
-		return shuffled;
+		return this.shuffledVodafoneNumbers;
 	}
 
 	async copyToClipboard(text: string): Promise<void> {
@@ -216,13 +307,15 @@ export class SubscriptionDetailsPageComponent implements OnInit {
 		document.body.removeChild(textArea);
 	}
 
-	openImageModal(): void {
+	openImageModal(image: ScheduleImage): void {
+		this.activeScheduleImage = image;
 		this.isImageModalOpen = true;
 		document.body.style.overflow = 'hidden'; // منع التمرير عند فتح الـ modal
 	}
 
 	closeImageModal(): void {
 		this.isImageModalOpen = false;
+		this.activeScheduleImage = null;
 		document.body.style.overflow = ''; // استعادة التمرير
 	}
 

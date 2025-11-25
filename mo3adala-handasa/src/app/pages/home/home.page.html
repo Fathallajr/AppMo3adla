@@ -1,12 +1,13 @@
 <!-- Hero Section with Background Image -->
 <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
     <!-- Background Video with Overlay -->
-    <div class="absolute inset-0 z-0" style="background: url('/assets/success.png') center/cover;">
-        <div class="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/70 z-10"></div>
+    <div class="absolute inset-0 z-0">
+        <!-- Background Image Fallback -->
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('/assets/success.png'); z-index: 1;"></div>
         <!-- Background Video -->
         <video 
             #heroVideo
-            class="w-full h-full object-cover" 
+            class="absolute inset-0 w-full h-full object-cover" 
             autoplay
             muted 
             loop 
@@ -14,12 +15,15 @@
             preload="auto"
             webkit-playsinline
             x5-playsinline
-            style="pointer-events: none;"
+            style="pointer-events: none; z-index: 2;"
             (loadedmetadata)="onVideoReady()"
-            (canplay)="onVideoCanPlay()">
+            (canplay)="onVideoCanPlay()"
+            (error)="onVideoError()">
             <source src="assets/background-video.mp4" type="video/mp4">
             <source src="assets/background video.mp4" type="video/mp4">
         </video>
+        <!-- Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/70 z-10"></div>
     </div>
 
 	<!-- Floating Success Students Animation -->

@@ -139,18 +139,32 @@
 					</div>
 				</div>
 
-				<!-- Google Form Button -->
+				<!-- Google Form Buttons -->
 				<div class="form-submit-section">
-					<button
-						(click)="openGoogleForm()"
-						class="form-submit-button"
-						[class.form-submit-button--disabled]="isEnrollmentClosed"
-						[attr.disabled]="isEnrollmentClosed ? '' : null">
-						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-						</svg>
-						<span>{{ isEnrollmentClosed ? 'التسجيل مغلق حالياً' : 'املي فورم الاشتراك' }}</span>
-					</button>
+					<h4 class="form-section-title">اختار الفورم المناسب للجروب بتاعك</h4>
+					<div class="form-buttons-grid">
+						<div class="form-option-card" *ngFor="let form of getGroupForms()">
+							<div class="form-option-header">
+								<span class="form-option-label">{{ form.label }}</span>
+								<span class="form-option-status" [class.form-option-status--closed]="form.isClosed || isEnrollmentClosed">
+									{{ (form.isClosed || isEnrollmentClosed) ? 'مغلق مؤقتاً' : 'متاح الآن' }}
+								</span>
+							</div>
+							<p class="form-option-description">{{ form.description }}</p>
+							<p class="form-option-note" *ngIf="form.statusNote">{{ form.statusNote }}</p>
+							<button
+								(click)="openGoogleForm(form.key)"
+								class="form-submit-button"
+								[class.form-submit-button--disabled]="isEnrollmentClosed || (form.isClosed && !form.allowOpenWhenClosed)"
+								[attr.disabled]="(isEnrollmentClosed || (form.isClosed && !form.allowOpenWhenClosed)) ? '' : null">
+								<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+								</svg>
+								<span>{{ form.buttonText }}</span>
+							</button>
+						</div>
+					</div>
+					
 				</div>
 			</div>
 		</div>
@@ -204,24 +218,37 @@
 		<!-- Content Schedule Table Section -->
 		<div class="schedule-table-section">
 			<div class="section-header">
-				<h3 class="section-title">جدول محتوى الشهر</h3>
-				<p class="section-subtitle">خطة المحتوى لشهر نوفمبر علي المنصة</p>
+				<h3 class="section-title">جداول محتوى الشهر</h3>
+				<p class="section-subtitle">خطة المحتوى التفصيلية لجروب A وجروب B</p>
 			</div>
-			<div class="schedule-image-container">
-				<img src="assets/الجدول.jpg" alt="جدول محتوى الشهر" class="schedule-image" loading="lazy" (click)="openImageModal()" style="cursor: pointer;">
-				<p class="image-hint">👆 اضغط على الصورة للتكبير</p>
+			<div class="schedule-grid">
+				<div class="schedule-image-card" *ngFor="let schedule of subscriptionDetails.scheduleImages">
+					<div class="schedule-card-header">
+						<span class="schedule-card-title">{{ schedule.group }}</span>
+					</div>
+					<div class="schedule-image-wrapper">
+						<img [src]="schedule.src"
+							 [alt]="schedule.alt"
+							 class="schedule-image"
+							 loading="lazy"
+							 (click)="openImageModal(schedule)">
+					</div>
+					<p class="image-hint">{{ schedule.note || '👆 اضغط على الصورة للتكبير' }}</p>
+				</div>
 			</div>
 		</div>
 
 		<!-- Image Modal -->
-		<div class="image-modal" *ngIf="isImageModalOpen" (click)="closeImageModal()">
+		<div class="image-modal" *ngIf="isImageModalOpen && activeScheduleImage as modalImage" (click)="closeImageModal()">
 			<div class="image-modal-content" (click)="$event.stopPropagation()">
 				<button class="modal-close-btn" (click)="closeImageModal()" aria-label="إغلاق">
 					<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
 					</svg>
 				</button>
-				<img src="assets/الجدول.jpg" alt="جدول محتوى الشهر - مكبر" class="modal-image">
+				<img [src]="modalImage.src"
+					 [alt]="modalImage.alt || 'جدول محتوى الشهر - مكبر'"
+					 class="modal-image">
 			</div>
 		</div>
 
