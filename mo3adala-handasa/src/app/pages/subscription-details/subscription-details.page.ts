@@ -4,6 +4,26 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SeoService } from '../../core/seo.service';
 import { CanonicalService } from '../../core/canonical.service';
 
+type GroupKey = 'groupA' | 'groupB';
+
+interface ScheduleImage {
+	group: string;
+	src: string;
+	alt: string;
+	note?: string;
+}
+
+interface GroupFormConfig {
+	key: GroupKey;
+	label: string;
+	description: string;
+	buttonText: string;
+	link: string;
+	isClosed: boolean;
+	statusNote?: string;
+	allowOpenWhenClosed?: boolean;
+}
+
 @Component({
 	selector: 'app-subscription-details',
 	standalone: true,
@@ -15,7 +35,8 @@ export class SubscriptionDetailsPageComponent implements OnInit {
 	currentMonth = '';
 	copiedNumber: string | null = null; // للتحكم في رسالة "تم النسخ"
 	isImageModalOpen = false; // للتحكم في فتح/إغلاق الصورة المكبرة
-	isEnrollmentClosed = true;
+	activeScheduleImage: ScheduleImage | null = null;
+	isEnrollmentClosed = false;
 	enrollmentReopenMessage = 'سيتم فتح الاشتراك للمشتركين الجدد مع بداية الشهر القادم بإذن الله.';
 	
 	subscriptionDetails = {
@@ -45,12 +66,43 @@ export class SubscriptionDetailsPageComponent implements OnInit {
 			'وصول مدى الحياة للمحتوى',
 			'شهادة إنجاز معتمدة'
 		],
-		googleFormLink: 'https://forms.gle/uUdutAVFLNumbrbh9',
+		googleForms: {
+			groupA: {
+				key: 'groupA',
+				label: 'جروب A',
+				description: 'للمشتركين الأساسيين',
+				buttonText: 'سجل فورم جروب A',
+				link: 'https://forms.gle/uUdutAVFLNumbrbh9',
+				isClosed: false
+			},
+			groupB: {
+				key: 'groupB',
+				label: 'جروب B',
+				description: 'للمشتركين الجدد جروب B',
+				buttonText: 'سجل فورم جروب B',
+				link: 'https://forms.gle/WFDqbK37YkGpRsE3A',
+				isClosed: false
+			}
+		},
 		vodafoneNumbers: [
 			{ number: '01040490778', owner: 'احمد ع********* س***' },
 			{ number: '01040490779', owner: 'س ف** ص*** ا***' },
 			{ number: '01025326080', owner: 'احمد م**** ا***** ز***' },
 			// { number: '01080681865', owner: 'ابرآم س*** م****' } // مخفي - رقم ابرام
+		],
+		scheduleImages: [
+			{
+				group: 'جدول جروب A',
+				src: 'assets/جدول A.png',
+				alt: 'جدول محتوى شهر نوفمبر - جروب A',
+				note: '👆 اضغط على الصورة للتكبير'
+			},
+			{
+				group: 'جدول جروب B',
+				src: 'assets/جدول B.png',
+				alt: 'جدول محتوى شهر نوفمبر - جروب B',
+				note: '👆 اضغط على الصورة للتكبير'
+			}
 		],
 		requiredInfo: [
 			'رقم الموبايل اللي حولت منه 📲',
@@ -132,13 +184,28 @@ export class SubscriptionDetailsPageComponent implements OnInit {
 		this.subscriptionDetails.month = this.currentMonth;
 	}
 
-	openGoogleForm(): void {
-		if (this.isEnrollmentClosed) {
-			console.warn('محاولة فتح الفورم أثناء إغلاق التسجيل');
+	openGoogleForm(groupKey: GroupKey): void {
+		const formConfig = this.subscriptionDetails.googleForms[groupKey] as GroupFormConfig;
+		if (!formConfig) {
+			console.warn('Form configuration not found for', groupKey);
 			return;
 		}
 
-		window.open(this.subscriptionDetails.googleFormLink, '_blank');
+		const isFormDisabled = this.isEnrollmentClosed || (formConfig.isClosed && !formConfig.allowOpenWhenClosed);
+		if (isFormDisabled) {
+			console.warn(`محاولة فتح فورم ${formConfig.label} أثناء الإغلاق`);
+			return;
+		}
+
+		window.open(formConfig.link, '_blank');
+	}
+
+	getGroupForms() {
+		return Object.values(this.subscriptionDetails.googleForms) as GroupFormConfig[];
+	}
+
+	hasClosedForms(): boolean {
+		return this.getGroupForms().some(form => form.isClosed);
 	}
 
 	onNumberCardClick(number: string): void {
@@ -216,13 +283,15 @@ export class SubscriptionDetailsPageComponent implements OnInit {
 		document.body.removeChild(textArea);
 	}
 
-	openImageModal(): void {
+	openImageModal(image: ScheduleImage): void {
+		this.activeScheduleImage = image;
 		this.isImageModalOpen = true;
 		document.body.style.overflow = 'hidden'; // منع التمرير عند فتح الـ modal
 	}
 
 	closeImageModal(): void {
 		this.isImageModalOpen = false;
+		this.activeScheduleImage = null;
 		document.body.style.overflow = ''; // استعادة التمرير
 	}
 

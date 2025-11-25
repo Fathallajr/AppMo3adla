@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { fadeInUp, staggerList, homePageTransition, cardAnimation } from '../../shared/animations';
@@ -15,7 +15,7 @@ import { WhatIsEquationComponent } from '../../shared/components/what-is-equatio
 	templateUrl: './home.page.html',
 	styleUrls: ['./home.page.css'],
 })
-export class HomePageComponent implements OnInit {
+export class HomePageComponent implements OnInit, AfterViewInit {
 	@ViewChild('reviewsTrack', { static: false }) reviewsTrack!: ElementRef<HTMLDivElement>;
 	@ViewChild('photosTrack', { static: false }) photosTrack!: ElementRef<HTMLDivElement>;
 	@ViewChild('heroVideo', { static: false }) heroVideo!: ElementRef<HTMLVideoElement>;
@@ -139,8 +139,10 @@ export class HomePageComponent implements OnInit {
 		
 		// Preload critical images for faster loading
 		this.preloadImages();
-		
-		// Setup video autoplay
+	}
+
+	ngAfterViewInit() {
+		// Setup video autoplay after view is initialized
 		this.setupVideoAutoplay();
 	}
 	
@@ -151,16 +153,38 @@ export class HomePageComponent implements OnInit {
 				const video = this.heroVideo?.nativeElement;
 				if (video) {
 					console.log('Attempting to play video...');
+					// Ensure video is muted for autoplay
 					video.muted = true;
-					video.play().then(() => {
-						console.log('Video started playing!');
-					}).catch(error => {
-						console.log('Video play failed:', error);
-						// Try again after user interaction
-						document.addEventListener('click', () => {
-							video.play().catch(() => {});
-						}, { once: true });
-					});
+					video.setAttribute('muted', 'true');
+					video.volume = 0;
+					
+					// Force video to be visible
+					video.style.display = 'block';
+					video.style.opacity = '1';
+					video.style.zIndex = '2';
+					
+					const playPromise = video.play();
+					if (playPromise !== undefined) {
+						playPromise.then(() => {
+							console.log('Video started playing!');
+							// Ensure video stays playing
+							video.currentTime = 0;
+						}).catch(error => {
+							console.log('Video play failed:', error);
+							// Try again after user interaction
+							const playOnInteraction = () => {
+								video.play().then(() => {
+									console.log('Video started after user interaction!');
+									document.removeEventListener('click', playOnInteraction);
+									document.removeEventListener('touchstart', playOnInteraction);
+								}).catch(() => {});
+							};
+							document.addEventListener('click', playOnInteraction, { once: true });
+							document.addEventListener('touchstart', playOnInteraction, { once: true });
+						});
+					}
+				} else {
+					console.log('Video element not found');
 				}
 			};
 
@@ -168,10 +192,13 @@ export class HomePageComponent implements OnInit {
 			setTimeout(tryPlay, 100);
 			
 			// Try after video loads
+			setTimeout(tryPlay, 500);
+			
+			// Try after 1 second
 			setTimeout(tryPlay, 1000);
 			
-			// Try after 3 seconds
-			setTimeout(tryPlay, 3000);
+			// Try after 2 seconds
+			setTimeout(tryPlay, 2000);
 		}
 	}
 	
@@ -256,6 +283,24 @@ export class HomePageComponent implements OnInit {
 			video.play().catch(error => {
 				console.log('Video play failed on canplay:', error);
 			});
+		}
+	}
+
+	onVideoError() {
+		console.log('Video error occurred');
+		const video = this.heroVideo?.nativeElement;
+		if (video) {
+			// Try to reload the video
+			video.load();
+			// Try to play again after a short delay
+			setTimeout(() => {
+				if (video) {
+					video.muted = true;
+					video.play().catch(error => {
+						console.log('Video play failed after error:', error);
+					});
+				}
+			}, 500);
 		}
 	}
 
