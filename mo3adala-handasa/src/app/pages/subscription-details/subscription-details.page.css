@@ -624,8 +624,9 @@
 	text-align: center;
 	color: #1f2937;
 	font-weight: 700;
-	font-size: 1.125rem;
+	font-size: 0.95rem;
 	margin-bottom: 1.5rem;
+	white-space: nowrap;
 }
 
 .form-buttons-grid {
@@ -867,6 +868,54 @@
 	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
+.schedule-table-section .section-title {
+	color: #f97316;
+}
+
+@media (max-width: 480px) {
+	.form-submit-button {
+		font-size: 0.95rem;
+		padding: 0.85rem 1.25rem;
+		white-space: nowrap;
+	}
+	
+	.form-submit-button svg {
+		width: 20px;
+		height: 20px;
+	}
+	
+	.after-submit-card {
+		padding: 1.5rem;
+	}
+	
+	.after-submit-title,
+	.after-submit-text {
+		font-size: 0.95rem;
+		white-space: nowrap;
+		margin-bottom: 0.5rem;
+	}
+	
+	.after-submit-text {
+		font-size: 0.85rem;
+		margin-bottom: 0;
+	}
+	
+	.warning-title {
+		font-size: 1.05rem;
+		white-space: nowrap;
+	}
+	
+	.features-section .section-title {
+		font-size: 1.3rem;
+		white-space: nowrap;
+	}
+	
+	.features-section .section-subtitle {
+		font-size: 0.95rem;
+		white-space: nowrap;
+	}
+}
+
 .schedule-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -892,7 +941,7 @@
 
 .schedule-card-title {
 	font-weight: 800;
-	color: #0f172a;
+	color: #f97316;
 	font-size: 1.1rem;
 }
 
