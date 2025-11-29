@@ -169,6 +169,9 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 	
 	private typeText() {
+		// Use requestAnimationFrame for better performance
+		if (typeof window === 'undefined') return;
+		
 		const currentDesc = this.descriptions[this.currentDescriptionIndex];
 		this.fullText = currentDesc.text;
 		
@@ -176,7 +179,9 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 			// Typing
 			this.isTyping = true;
 			this.typedText = this.fullText.substring(0, this.typedText.length + 1);
-			setTimeout(() => this.typeText(), this.typingSpeed);
+			requestAnimationFrame(() => {
+				setTimeout(() => this.typeText(), this.typingSpeed);
+			});
 		} else if (!this.isDeleting && this.typedText.length === this.fullText.length) {
 			// Pause after typing complete
 			this.isTyping = false;
@@ -187,7 +192,9 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 		} else if (this.isDeleting && this.typedText.length > 0) {
 			// Deleting
 			this.typedText = this.fullText.substring(0, this.typedText.length - 1);
-			setTimeout(() => this.typeText(), this.deletingSpeed);
+			requestAnimationFrame(() => {
+				setTimeout(() => this.typeText(), this.deletingSpeed);
+			});
 		} else if (this.isDeleting && this.typedText.length === 0) {
 			// Move to next description
 			this.isDeleting = false;

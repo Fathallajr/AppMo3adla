@@ -55,6 +55,19 @@
   transform: translateZ(0);
   backface-visibility: hidden;
   perspective: 1000px;
+  contain: layout style paint;
+}
+
+/* Optimize video loading */
+video {
+  will-change: auto;
+  contain: layout style paint;
+}
+
+/* Reduce layout shifts - ensure images have dimensions */
+img[width][height] {
+  height: auto;
+  max-width: 100%;
 }
 
 /* Optimize floating animations for performance */
