@@ -64,11 +64,11 @@ export class TeacherDetailsPageComponent implements OnInit {
         youtube: 'https://youtube.com/@mr-ahmed-fathallah?si=QVMnPGojPl1KKAkm'
       },
       demoVideo: {
-        youtubeId: 'djoD3N7lbfk',
-        duration: '15 دقيقة',
-        level: 'مبتدئ',
-        topic: 'مقدمة في التفاضل والتكامل',
-        description: 'شرح مبسط لمفاهيم التفاضل والتكامل الأساسية'
+        youtubeId: 'KSlSrJtky3Y',
+        duration: '',
+        level:'',
+        topic: '',
+        description: ''
       }
     },
     {
@@ -90,11 +90,11 @@ export class TeacherDetailsPageComponent implements OnInit {
         youtube: 'https://youtube.com/@ahmed_abozeed?si=mfu1-CgVSm1LsMUQ'
       },
       demoVideo: {
-        youtubeId: 'KjYtUgx7Txk',
-        duration: '12 دقيقة',
-        level: 'متوسط',
-        topic: 'مقدمة في الميكانيكا',
-        description: 'شرح أساسيات الميكانيكا والهندسة الميكانيكية'
+        youtubeId: '74MvjbCVob4',
+        duration: '',
+        level:'',
+        topic: '',
+        description: ''
       }
     },
     {
@@ -116,11 +116,11 @@ export class TeacherDetailsPageComponent implements OnInit {
         youtube: 'https://youtube.com/@saadalaamairy6005?si=euH312iqEJN4ehb4'
       },
       demoVideo: {
-        youtubeId: '91tK2WkVK5U',
-        duration: '18 دقيقة',
-        level: 'متقدم',
-        topic: 'الكيمياء التحليلية',
-        description: 'شرح مفاهيم الكيمياء التحليلية والتطبيقات العملية'
+        youtubeId: 'NCezzQ1Nupo',
+        duration: '',
+        level:'',
+        topic: '',
+        description: ''
       }
     },
     {
@@ -142,11 +142,11 @@ export class TeacherDetailsPageComponent implements OnInit {
         youtube: 'https://youtube.com/@pi-in-physics?si=cwgjm8J4_Bdu-6cI'
       },
       demoVideo: {
-        youtubeId: 'qDbUWRfLieI',
-        duration: '20 دقيقة',
-        level: 'متوسط',
-        topic: 'الفيزياء العامة',
-        description: 'شرح أساسيات الفيزياء والميكانيكا'
+        youtubeId: 'jPdkXXWy_D4?',
+        duration: '',
+        level:'',
+        topic: '',
+        description: ''
       }
     },
     {
@@ -168,10 +168,10 @@ export class TeacherDetailsPageComponent implements OnInit {
         youtube: 'https://www.youtube.com/@dr_omar'
       },
       demoVideo: {
-        youtubeId: 'GxL4Fnd_YMk',
-        duration: '10 دقيقة',
-        topic: 'شرح الاستنتاج والنصح deduction must can\'t could should',
-        description: 'شرح الاستنتاج والنصح باستخدام must, can\'t, could, should'
+        youtubeId: 'J9n2T9-MgxM',
+        duration: '',
+        topic: '',
+        description: ''
       }
     }
   ];

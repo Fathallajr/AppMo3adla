@@ -250,7 +250,11 @@ export class SchoolsPageComponent {
       { name: 'محمد حسين هلال' },
       { name: 'حجازة الصناعية' },
       { name: 'تفتيش كفر سعد الثانوية الصناعية العسكرية بنين' },
-      { name: 'سرسو البرامون الثانوية الصناعية العسكرية' }
+      { name: 'سرسو البرامون الثانوية الصناعية العسكرية' },
+      { name: 'نجع حمادى الصناعية الميكانيكية ', logo: '/assets/schools/نجع حمادى.jpg' },
+      { name: 'القبابات الثانوية الصناعية المشتركة '},
+      { name: 'ههيا الثانوية الصناعيه العسكريه بنين', logo: '/assets/schools/ههيا الثانوية الصناعية.jpg' },
+      { name: 'الهيئة العربية لتصنيع للتكنولوجيا التطبيقية في مجال صناعه الطائرات', logo: '/assets/schools/الهيئة العربية لتصنيع للتكنولوجيا التطبيقية في مجال صناعه الطائرات.jpg' }
     ];
     additionalIndustrial3.forEach(s => {
       if (!this.allSchools.some(x => x.name === s.name)) {
@@ -285,7 +289,8 @@ export class SchoolsPageComponent {
       { name: 'دار السلام الفنية المتقدمة بنين' },
       { name: 'النقل النهري الفنية بنين' },
       { name: 'الفنية المتقدمة الصناعية بالمنصورة' },
-      { name: 'الزقازيق الفنية المتقدمة الصناعية العسكرية' }
+      { name: 'الزقازيق الفنية المتقدمة الصناعية العسكرية' },
+      { name: 'ناصر الثانوية الصناعية العسكرية بنين بسنورس ', logo: '/assets/schools/ناصر الثانوية الصناعية.jpg' }
     ];
 
     newIndustrial5YearSchools.forEach(s => this.addSchool(s.name, category5, s.logo));
@@ -329,7 +334,8 @@ export class SchoolsPageComponent {
       { name: 'تكنولوجيا تطبيقية للميكاترونكس' },
       { name: 'فريش الدولية للتكنولوجيا التطبيقية' },
       { name: 'الأكاديمية الحديثة للطباعة' },
-      { name: 'معهد هليوبوليس للتكنولوجيا' }
+      { name: 'معهد هليوبوليس للتكنولوجيا' },
+     
     ];
     tech3Schools.forEach(s => this.addSchool(s.name, tech3Category, s.logo));
 

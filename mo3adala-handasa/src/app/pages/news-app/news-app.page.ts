@@ -21,7 +21,7 @@ export class NewsAppPageComponent implements OnInit {
 			image: '/assets/اكواد مجانية.jpg',
 			slug: 'free-week-codes-2025',
 			category: 'عروض خاصة',
-			important: true
+			important: false
 		},
 		{
 			id: 1,
@@ -31,7 +31,7 @@ export class NewsAppPageComponent implements OnInit {
 			image: '/assets/خبر الإنجليزي.jpg',
 			slug: 'english-plan-dr-omar-2025',
 			category: 'الكورسات والدورات',
-			important: true
+			important: false
 		},
 		{
 			id: 2,
@@ -41,7 +41,7 @@ export class NewsAppPageComponent implements OnInit {
 			image: '/assets/نظام المتابعة.jpg',
 			slug: 'monitoring-system-2025',
 			category: 'أنظمة الأبلكيشن',
-			important: true
+			important: false
 		},
 		{
 			id: 3,
