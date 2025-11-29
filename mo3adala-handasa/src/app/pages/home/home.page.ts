@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { fadeInUp, staggerList, homePageTransition, cardAnimation } from '../../shared/animations';
@@ -15,12 +15,32 @@ import { WhatIsEquationComponent } from '../../shared/components/what-is-equatio
 	templateUrl: './home.page.html',
 	styleUrls: ['./home.page.css'],
 })
-export class HomePageComponent implements OnInit, AfterViewInit {
+export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild('reviewsTrack', { static: false }) reviewsTrack!: ElementRef<HTMLDivElement>;
 	@ViewChild('photosTrack', { static: false }) photosTrack!: ElementRef<HTMLDivElement>;
 	@ViewChild('heroVideo', { static: false }) heroVideo!: ElementRef<HTMLVideoElement>;
 	
 	features = ['مناهج بسيطة مُحدّثة 2026 ', 'شرح + أمثلة + امتحانات إلكترونية', 'خطط مذاكرة تناسب وقتك', 'دعم ومتابعة علي مدار 24 ساعة'];
+	
+	// Animated descriptions with highlighted words
+	descriptions = [
+		{ text: 'أعلي نسبة نجاح في مصر', highlight: ['أعلي نسبة نجاح', 'مصر'] },
+		{ text: 'قوانين اللعبة اتغيــرت', highlight: [' اللعبة', ' اتغيــرت'] },
+		{ text: 'أكبر فريق مساعدين في مصر لطلاب المعادلة', highlight: ['أكبر فريق مساعدين', 'مصر', 'طلاب المعادلة'] },
+		{ text: 'بنجهزك لإجتياز معادلة هندسة بسهولة', highlight: ['بنجهزك', 'معادلة هندسة', 'بسهولة'] },
+		{ text: 'دعم ومتابعة علي مدار اليوم', highlight: ['دعم ومتابعة', 'مدار اليوم'] },
+		{ text: 'طاقم هندسي علي أعلي مستوي', highlight: ['طاقم هندسي', 'أعلي مستوي'] }
+	];
+	currentDescriptionIndex = 0;
+	currentDescription = this.descriptions[0];
+	private descriptionInterval: any;
+	private isTyping = false;
+	private isDeleting = false;
+	private typedText = '';
+	private fullText = '';
+	private typingSpeed = 50;
+	private deletingSpeed = 30;
+	private pauseTime = 2000;
 	
 	// Lightbox state
 	selectedPhoto: string | null = null;
@@ -139,6 +159,76 @@ export class HomePageComponent implements OnInit, AfterViewInit {
 		
 		// Preload critical images for faster loading
 		this.preloadImages();
+		
+		// Start animated descriptions
+		this.startDescriptionAnimation();
+	}
+	
+	private startDescriptionAnimation() {
+		this.typeText();
+	}
+	
+	private typeText() {
+		const currentDesc = this.descriptions[this.currentDescriptionIndex];
+		this.fullText = currentDesc.text;
+		
+		if (!this.isDeleting && this.typedText.length < this.fullText.length) {
+			// Typing
+			this.isTyping = true;
+			this.typedText = this.fullText.substring(0, this.typedText.length + 1);
+			setTimeout(() => this.typeText(), this.typingSpeed);
+		} else if (!this.isDeleting && this.typedText.length === this.fullText.length) {
+			// Pause after typing complete
+			this.isTyping = false;
+			setTimeout(() => {
+				this.isDeleting = true;
+				this.typeText();
+			}, this.pauseTime);
+		} else if (this.isDeleting && this.typedText.length > 0) {
+			// Deleting
+			this.typedText = this.fullText.substring(0, this.typedText.length - 1);
+			setTimeout(() => this.typeText(), this.deletingSpeed);
+		} else if (this.isDeleting && this.typedText.length === 0) {
+			// Move to next description
+			this.isDeleting = false;
+			this.currentDescriptionIndex = (this.currentDescriptionIndex + 1) % this.descriptions.length;
+			setTimeout(() => this.typeText(), 500);
+		}
+	}
+	
+	getDisplayText(): string {
+		return this.typedText;
+	}
+	
+	isHighlighted(word: string): boolean {
+		const currentDesc = this.descriptions[this.currentDescriptionIndex];
+		// Check if word matches any highlight phrase
+		for (const highlight of currentDesc.highlight) {
+			// Direct match
+			if (word.trim() === highlight.trim()) {
+				return true;
+			}
+			// Check if word contains highlight or vice versa
+			if (word.includes(highlight) || highlight.includes(word)) {
+				return true;
+			}
+			// Check if word is part of a multi-word highlight
+			const highlightWords = highlight.split(' ');
+			if (highlightWords.some(hw => word.includes(hw) || hw.includes(word))) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	getWords(): string[] {
+		return this.typedText.split(' ').filter(w => w.length > 0);
+	}
+	
+	ngOnDestroy() {
+		if (this.descriptionInterval) {
+			clearInterval(this.descriptionInterval);
+		}
 	}
 
 	ngAfterViewInit() {
