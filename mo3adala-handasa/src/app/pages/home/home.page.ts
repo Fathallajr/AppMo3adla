@@ -19,6 +19,9 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild('reviewsTrack', { static: false }) reviewsTrack!: ElementRef<HTMLDivElement>;
 	@ViewChild('photosTrack', { static: false }) photosTrack!: ElementRef<HTMLDivElement>;
 	@ViewChild('heroVideo', { static: false }) heroVideo!: ElementRef<HTMLVideoElement>;
+	@ViewChild('backgroundImage', { static: false }) backgroundImage!: ElementRef<HTMLDivElement>;
+	
+	videoPlaying = false;
 	
 	features = ['مناهج بسيطة مُحدّثة 2026 ', 'شرح + أمثلة + امتحانات إلكترونية', 'خطط مذاكرة تناسب وقتك', 'دعم ومتابعة علي مدار 24 ساعة'];
 	
@@ -249,7 +252,6 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 			const tryPlay = () => {
 				const video = this.heroVideo?.nativeElement;
 				if (video) {
-					console.log('Attempting to play video...');
 					// Ensure video is muted for autoplay
 					video.muted = true;
 					video.setAttribute('muted', 'true');
@@ -260,28 +262,37 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 					video.style.opacity = '1';
 					video.style.zIndex = '2';
 					
+					// Set playsinline attributes
+					video.setAttribute('playsinline', 'true');
+					video.setAttribute('webkit-playsinline', 'true');
+					video.setAttribute('x5-playsinline', 'true');
+					
+					// Load the video first
+					video.load();
+					
 					const playPromise = video.play();
 					if (playPromise !== undefined) {
 						playPromise.then(() => {
-							console.log('Video started playing!');
+							this.videoPlaying = true;
 							// Ensure video stays playing
-							video.currentTime = 0;
+							if (video.paused) {
+								video.play();
+							}
 						}).catch(error => {
-							console.log('Video play failed:', error);
 							// Try again after user interaction
 							const playOnInteraction = () => {
 								video.play().then(() => {
-									console.log('Video started after user interaction!');
+									this.videoPlaying = true;
 									document.removeEventListener('click', playOnInteraction);
 									document.removeEventListener('touchstart', playOnInteraction);
+									document.removeEventListener('scroll', playOnInteraction);
 								}).catch(() => {});
 							};
 							document.addEventListener('click', playOnInteraction, { once: true });
 							document.addEventListener('touchstart', playOnInteraction, { once: true });
+							document.addEventListener('scroll', playOnInteraction, { once: true });
 						});
 					}
-				} else {
-					console.log('Video element not found');
 				}
 			};
 
@@ -289,13 +300,13 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 			setTimeout(tryPlay, 100);
 			
 			// Try after video loads
+			setTimeout(tryPlay, 300);
+			
+			// Try after 500ms
 			setTimeout(tryPlay, 500);
 			
 			// Try after 1 second
 			setTimeout(tryPlay, 1000);
-			
-			// Try after 2 seconds
-			setTimeout(tryPlay, 2000);
 		}
 	}
 	
@@ -362,29 +373,38 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	onVideoReady() {
-		console.log('Video metadata loaded');
 		const video = this.heroVideo?.nativeElement;
 		if (video) {
 			video.muted = true;
-			video.play().catch(error => {
-				console.log('Video play failed on ready:', error);
+			video.setAttribute('muted', 'true');
+			video.volume = 0;
+			video.play().then(() => {
+				this.videoPlaying = true;
+			}).catch(error => {
+				// Will retry in setupVideoAutoplay
 			});
 		}
 	}
 
 	onVideoCanPlay() {
-		console.log('Video can play');
 		const video = this.heroVideo?.nativeElement;
 		if (video) {
 			video.muted = true;
-			video.play().catch(error => {
-				console.log('Video play failed on canplay:', error);
+			video.setAttribute('muted', 'true');
+			video.volume = 0;
+			video.play().then(() => {
+				this.videoPlaying = true;
+			}).catch(error => {
+				// Will retry in setupVideoAutoplay
 			});
 		}
 	}
 
+	onVideoPlaying() {
+		this.videoPlaying = true;
+	}
+
 	onVideoError() {
-		console.log('Video error occurred');
 		const video = this.heroVideo?.nativeElement;
 		if (video) {
 			// Try to reload the video
@@ -393,8 +413,13 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 			setTimeout(() => {
 				if (video) {
 					video.muted = true;
-					video.play().catch(error => {
-						console.log('Video play failed after error:', error);
+					video.setAttribute('muted', 'true');
+					video.volume = 0;
+					video.play().then(() => {
+						this.videoPlaying = true;
+					}).catch(() => {
+						// Keep background image visible if video fails
+						this.videoPlaying = false;
 					});
 				}
 			}, 500);
