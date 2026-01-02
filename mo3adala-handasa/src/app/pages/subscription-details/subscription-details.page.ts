@@ -55,7 +55,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 	};
 	
 	subscriptionDetails = {
-		month: ' شهر ديسمبر 2026',
+		month: ' شهر يناير 2026',
 		groupA: {
 			name: 'جروب A',
 			price: '700',
@@ -87,7 +87,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 				label: 'جروب A',
 				description: 'للمشتركين الأساسيين',
 				buttonText: 'سجل فورم جروب A',
-				link: 'https://forms.gle/uUdutAVFLNumbrbh9',
+				link: 'https://forms.gle/3h3AXiVeEsxcaKXu7',
 				isClosed: false
 			},
 			groupB: {
@@ -95,26 +95,26 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 				label: 'جروب B',
 				description: 'للمشتركين الجدد جروب B',
 				buttonText: 'سجل فورم جروب B',
-				link: 'https://forms.gle/WFDqbK37YkGpRsE3A',
+				link: 'https://forms.gle/DS6cQkFXrvx1c9Nw7',
 				isClosed: false
 			}
 		},
 		vodafoneNumbers: [
 			{ number: '01040490778', owner: 'احمد ع********* س***' },
-			{ number: '01040490779', owner: 'س ف** ص*** ا***' },
+			{ number: '01040490779', owner: 'سعد ف** ص*** ا***' },
 			{ number: '01025326080', owner: 'احمد م**** ا***** ز***' },
-			// { number: '01080681865', owner: 'ابرآم س*** م****' } // مخفي - رقم ابرام
+			{ number: '01080681865', owner: 'مني خ**** ع**' },
 		],
 		scheduleImages: [
 			{
 				group: 'جدول جروب A',
-				src: '/assets/جدول A.png',
+				src: 'assets/جدول  A.jpg',
 				alt: 'جدول محتوى شهر نوفمبر - جروب A',
 				note: '👆 اضغط على الصورة للتكبير'
 			},
 			{
 				group: 'جدول جروب B',
-				src: '/assets/جدول B.png',
+				src: '/assets/جدول B.jpg',
 				alt: 'جدول محتوى شهر نوفمبر - جروب B',
 				note: '👆 اضغط على الصورة للتكبير'
 			}
@@ -142,7 +142,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 				]
 			}
 		},
-		subtitle: ' الشهر الثالث لدفعة 2026 '
+		subtitle: ' الشهر الرابع لدفعة 2026 '
 	};
 
 	constructor(
@@ -186,11 +186,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 	 * ترتيب أرقام فودافون كاش بشكل عشوائي
 	 */
 	private shuffleVodafoneNumbers(): void {
-		const filtered = this.subscriptionDetails.vodafoneNumbers.filter(
-			wallet => wallet.number !== '01080681865'
-		);
-		
-		const shuffled = [...filtered];
+		const shuffled = [...this.subscriptionDetails.vodafoneNumbers];
 		for (let i = shuffled.length - 1; i > 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1));
 			[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
@@ -321,7 +317,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 
 	getVideoEmbedUrl(): SafeResourceUrl {
 		// Video ID من الرابط: https://youtu.be/4AE400Mm9DU
-		const videoId = '4AE400Mm9DU';
+		const videoId = '7j0Xk8iZlzU?si';
 		const url = `https://www.youtube.com/embed/${videoId}`;
 		return this.sanitizer.bypassSecurityTrustResourceUrl(url);
 	}
