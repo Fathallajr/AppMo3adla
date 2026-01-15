@@ -1,5 +1,5 @@
 <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200 transition-shadow" [class.shadow-sm]="scrolled" style="font-family: 'Cairo', sans-serif !important; --font-family: 'Cairo', sans-serif !important;">
-		<div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between" style="font-family: 'Cairo', sans-serif !important;">
+		<div class="mx-auto max-w-7xl px-3 xl:px-4 py-3 flex items-center justify-between gap-2" style="font-family: 'Cairo', sans-serif !important;">
 		<!-- Logo -->
 		<a routerLink="/" (click)="scrollToTop()" class="flex items-center gap-2 font-extrabold text-lg text-slate-900 btn-hover ripple" style="font-family: 'Cairo', sans-serif !important;">
 			<img src="assets/logo.png" 
@@ -26,10 +26,10 @@
 		</button>
 
 		<!-- Desktop Menu -->
-		<ul *ngIf="!isMobile" class="flex gap-2 xl:gap-3 text-sm items-center" style="font-family: 'Cairo', sans-serif !important;">
+		<ul *ngIf="!isMobile" class="flex gap-1.5 xl:gap-2 text-sm items-center flex-nowrap" style="font-family: 'Cairo', sans-serif !important;">
 			<li class="relative group flex items-center">
 				<button 
-					class="relative px-2 py-1 text-gray-700 flex items-center gap-1 btn-hover ripple"
+					class="relative px-1.5 xl:px-2 py-1 text-gray-700 flex items-center gap-1 btn-hover ripple whitespace-nowrap"
 					(click)="toggleNewsDropdown()"
 					[class.text-orange-600]="isNewsDropdownOpen"
 					style="font-family: 'Cairo', sans-serif !important;">
@@ -83,7 +83,7 @@
 			</li>
 			<li class="relative group flex items-center">
 				<button 
-					class="relative px-2 py-1 text-gray-700 flex items-center gap-1"
+					class="relative px-1.5 xl:px-2 py-1 text-gray-700 flex items-center gap-1 whitespace-nowrap"
 					(click)="toggleRequirementsDropdown()"
 					[class.text-orange-600]="isRequirementsDropdownOpen"
 					style="font-family: 'Cairo', sans-serif !important;">
@@ -137,7 +137,7 @@
 			</li>
 			<li class="relative group flex items-center">
 				<button 
-					class="relative px-2 py-1 text-gray-700 flex items-center gap-1"
+					class="relative px-1.5 xl:px-2 py-1 text-gray-700 flex items-center gap-1 whitespace-nowrap"
 					(click)="togglePlatformDropdown()"
 					[class.text-orange-600]="isPlatformDropdownOpen"
 					style="font-family: 'Cairo', sans-serif !important;">
@@ -195,7 +195,7 @@
 			<a routerLink="/faq" 
 			   (click)="scrollToTop()"
 			   [class]="isActiveRoute('/faq') ? 'nav-link active' : 'nav-link'"
-			   class="relative px-2 py-1 text-gray-700 link-hover" style="font-family: 'Cairo', sans-serif !important;">
+			   class="relative px-1.5 xl:px-2 py-1 text-gray-700 link-hover whitespace-nowrap" style="font-family: 'Cairo', sans-serif !important;">
 					<span style="font-family: 'Cairo', sans-serif !important;">الأسئلة الشائعة</span>
 				</a>
 			</li>
@@ -203,7 +203,7 @@
 			<a routerLink="/engineers" 
 			   (click)="scrollToTop()"
 			   [class]="isActiveRoute('/engineers') ? 'nav-link active' : 'nav-link'"
-			   class="relative px-2 py-1 text-gray-700 link-hover" style="font-family: 'Cairo', sans-serif !important;">
+			   class="relative px-1.5 xl:px-2 py-1 text-gray-700 link-hover whitespace-nowrap" style="font-family: 'Cairo', sans-serif !important;">
 					<span style="font-family: 'Cairo', sans-serif !important;">المهندسين</span>
 				</a>
 			</li>
@@ -211,14 +211,25 @@
 			<a routerLink="/social" 
 			   (click)="scrollToTop()"
 			   [class]="isActiveRoute('/social') ? 'nav-link active' : 'nav-link'"
-			   class="relative px-2 py-1 text-gray-700 link-hover" style="font-family: 'Cairo', sans-serif !important;">
+			   class="relative px-1.5 xl:px-2 py-1 text-gray-700 link-hover whitespace-nowrap" style="font-family: 'Cairo', sans-serif !important;">
 					<span style="font-family: 'Cairo', sans-serif !important;">تابعنا</span>
+				</a>
+			</li>
+			<li>
+			<a href="https://www.appmo3adla-follow-up.com/" 
+			   target="_blank"
+			   class="bg-blue-600 text-white px-1.5 xl:px-2.5 py-1 rounded-md font-semibold hover:bg-blue-700 transition-all duration-300 text-xs xl:text-sm btn-hover ripple glow flex items-center gap-1 whitespace-nowrap" style="font-family: 'Cairo', sans-serif !important;">
+					<svg class="w-3.5 h-3.5 xl:w-4 xl:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+					</svg>
+					<span class="hidden xl:inline" style="font-family: 'Cairo', sans-serif !important;">سيستم المتابعة</span>
+					<span class="xl:hidden" style="font-family: 'Cairo', sans-serif !important;">المتابعة</span>
 				</a>
 			</li>
 			<li>
 			<a routerLink="/subscription-details" 
 			   (click)="scrollToTop()"
-			   class="bg-green-600 text-white px-2 xl:px-3 py-1 rounded-md font-semibold hover:bg-green-700 transition-all duration-300 text-xs xl:text-sm btn-hover ripple glow" style="font-family: 'Cairo', sans-serif !important;">
+			   class="bg-green-600 text-white px-1.5 xl:px-2.5 py-1 rounded-md font-semibold hover:bg-green-700 transition-all duration-300 text-xs xl:text-sm btn-hover ripple glow whitespace-nowrap" style="font-family: 'Cairo', sans-serif !important;">
 					<span class="hidden xl:inline" style="font-family: 'Cairo', sans-serif !important;">تفاصيل الإشتراك</span>
 					<span class="xl:hidden" style="font-family: 'Cairo', sans-serif !important;">الإشتراك</span>
 				</a>
@@ -226,7 +237,7 @@
 			<li>
 			<a routerLink="/contact" 
 			   (click)="scrollToTop()"
-			   class="bg-orange-600 text-white px-2 xl:px-3 py-1 rounded-md font-semibold hover:bg-orange-700 transition-all duration-300 text-xs xl:text-sm btn-hover ripple glow" style="font-family: 'Cairo', sans-serif !important;">
+			   class="bg-orange-600 text-white px-1.5 xl:px-2.5 py-1 rounded-md font-semibold hover:bg-orange-700 transition-all duration-300 text-xs xl:text-sm btn-hover ripple glow whitespace-nowrap" style="font-family: 'Cairo', sans-serif !important;">
 					<span style="font-family: 'Cairo', sans-serif !important;">تواصل معنا</span>
 				</a>
 			</li>
@@ -348,6 +359,15 @@
 			   [class]="isActiveRoute('/social') ? 'mobile-nav-link active' : 'mobile-nav-link'"
 			   class="block px-4 py-3 rounded-lg text-base font-medium hover:bg-gray-50 transition-all duration-300 link-hover" style="font-family: 'Cairo', sans-serif !important;">
 				تابعنا
+			</a>
+			<a href="https://www.appmo3adla-follow-up.com/" 
+			   target="_blank"
+			   (click)="closeMobileMenu()"
+			   class="bg-blue-600 text-white block px-4 py-3 rounded-lg text-base font-medium text-center mx-4 mt-2 hover:bg-blue-700 btn-hover ripple glow flex items-center justify-center gap-2" style="font-family: 'Cairo', sans-serif !important;">
+				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+				</svg>
+				سيستم المتابعة
 			</a>
 			<a routerLink="/subscription-details" 
 			   (click)="closeMobileMenu()"

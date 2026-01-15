@@ -36,7 +36,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 	copiedNumber: string | null = null; // للتحكم في رسالة "تم النسخ"
 	isImageModalOpen = false; // للتحكم في فتح/إغلاق الصورة المكبرة
 	activeScheduleImage: ScheduleImage | null = null; // الصورة النشطة في الـ modal
-	isEnrollmentClosed = false;
+	isEnrollmentClosed = true;
 	enrollmentReopenMessage = 'سيتم فتح الاشتراك للمشتركين الجدد مع بداية الشهر القادم بإذن الله.';
 	shuffledVodafoneNumbers: { number: string; owner: string }[] = [];
 	
@@ -103,7 +103,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 			{ number: '01040490778', owner: 'احمد ع********* س***' },
 			{ number: '01040490779', owner: 'سعد ف** ص*** ا***' },
 			{ number: '01025326080', owner: 'احمد م**** ا***** ز***' },
-			{ number: '01080681865', owner: 'مني خ**** ع**' },
+			// { number: '01080681865', owner: 'Mona k***** A**' },
 		],
 		scheduleImages: [
 			{
