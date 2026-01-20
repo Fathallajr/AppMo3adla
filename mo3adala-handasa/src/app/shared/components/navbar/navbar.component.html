@@ -215,16 +215,16 @@
 					<span style="font-family: 'Cairo', sans-serif !important;">تابعنا</span>
 				</a>
 			</li>
-			<li>
-			<a href="https://www.appmo3adla-follow-up.com/" 
-			   target="_blank"
-			   class="bg-blue-600 text-white px-1.5 xl:px-2.5 py-1 rounded-md font-semibold hover:bg-blue-700 transition-all duration-300 text-xs xl:text-sm btn-hover ripple glow flex items-center gap-1 whitespace-nowrap" style="font-family: 'Cairo', sans-serif !important;">
-					<svg class="w-3.5 h-3.5 xl:w-4 xl:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-					</svg>
-					<span class="hidden xl:inline" style="font-family: 'Cairo', sans-serif !important;">سيستم المتابعة</span>
-					<span class="xl:hidden" style="font-family: 'Cairo', sans-serif !important;">المتابعة</span>
-				</a>
+			<li *ngIf="showFollowUpButton">
+				<a href="https://www.appmo3adla-follow-up.com/" 
+				   target="_blank"
+				   class="bg-blue-600 text-white px-1.5 xl:px-2.5 py-1 rounded-md font-semibold hover:bg-blue-700 transition-all duration-300 text-xs xl:text-sm btn-hover ripple glow flex items-center gap-1 whitespace-nowrap" style="font-family: 'Cairo', sans-serif !important;">
+						<svg class="w-3.5 h-3.5 xl:w-4 xl:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+						</svg>
+						<span class="hidden xl:inline" style="font-family: 'Cairo', sans-serif !important;">سيستم المتابعة</span>
+						<span class="xl:hidden" style="font-family: 'Cairo', sans-serif !important;">المتابعة</span>
+					</a>
 			</li>
 			<li>
 			<a routerLink="/subscription-details" 
@@ -360,7 +360,8 @@
 			   class="block px-4 py-3 rounded-lg text-base font-medium hover:bg-gray-50 transition-all duration-300 link-hover" style="font-family: 'Cairo', sans-serif !important;">
 				تابعنا
 			</a>
-			<a href="https://www.appmo3adla-follow-up.com/" 
+			<a *ngIf="showFollowUpButton"
+			   href="https://www.appmo3adla-follow-up.com/" 
 			   target="_blank"
 			   (click)="closeMobileMenu()"
 			   class="bg-blue-600 text-white block px-4 py-3 rounded-lg text-base font-medium text-center mx-4 mt-2 hover:bg-blue-700 btn-hover ripple glow flex items-center justify-center gap-2" style="font-family: 'Cairo', sans-serif !important;">

@@ -10,6 +10,7 @@ import { ViewportScroller } from '@angular/common';
 })
 export class FooterComponent { 
 	year = new Date().getFullYear();
+	showFollowUpLinks = false;
 
 	constructor(private viewportScroller: ViewportScroller) {}
 

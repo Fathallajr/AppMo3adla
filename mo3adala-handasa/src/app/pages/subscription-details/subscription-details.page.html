@@ -71,6 +71,10 @@
 						<div class="price-group-label">{{ subscriptionDetails.groupB.name }}</div>
 						<div class="price-value">{{ formatPrice(subscriptionDetails.groupB.price) }} <span class="price-period">/شهر</span></div>
 					</div>
+					<div class="price-group">
+						<div class="price-group-label">{{ subscriptionDetails.groupC.name }}</div>
+						<div class="price-value">{{ formatPrice(subscriptionDetails.groupC.price) }} <span class="price-period">/شهر</span></div>
+					</div>
 				</div>
 			</div>
 
@@ -219,7 +223,7 @@
 		<div class="schedule-table-section">
 			<div class="section-header">
 				<h3 class="section-title">جداول محتوى الشهر</h3>
-				<p class="section-subtitle">خطة المحتوى التفصيلية لجروب A وجروب B</p>
+				<p class="section-subtitle">خطة المحتوى التفصيلية لجروب A وجروب B وجروب C</p>
 			</div>
 			<div class="schedule-grid">
 				<div class="schedule-image-card" *ngFor="let schedule of subscriptionDetails.scheduleImages">

@@ -4,7 +4,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SeoService } from '../../core/seo.service';
 import { CanonicalService } from '../../core/canonical.service';
 
-type GroupKey = 'groupA' | 'groupB';
+type GroupKey = 'groupA' | 'groupB' | 'groupC';
 
 interface ScheduleImage {
 	group: string;
@@ -64,6 +64,10 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 			name: 'جروب B',
 			price: '800',
 		},
+		groupC: {
+			name: 'جروب C',
+			price: '800',
+		},
 		currency: 'ج',
 		features: [
 			'فيديوهات تأسيسية في جميع المواد',
@@ -71,7 +75,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 			'فيديوهات حل بنوك المسائل',
 			'ملازم وملفات PDF للتحميل',
 			'امتحانات إلكترونية تفاعلية',
-			'دردشة مباشرة مع فريق الدعم',
+			'سيستم متابعة كامل',
 			'تتبع التقدم والدرجات',
 			'دعم فني على مدار الساعة'
 		],
@@ -87,7 +91,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 				label: 'جروب A',
 				description: 'للمشتركين الأساسيين',
 				buttonText: 'سجل فورم جروب A',
-				link: 'https://forms.gle/3h3AXiVeEsxcaKXu7',
+				link: 'https://forms.gle/4WfmFVQNwfCkuKNQ7',
 				isClosed: false
 			},
 			groupB: {
@@ -95,7 +99,15 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 				label: 'جروب B',
 				description: 'للمشتركين الجدد جروب B',
 				buttonText: 'سجل فورم جروب B',
-				link: 'https://forms.gle/DS6cQkFXrvx1c9Nw7',
+				link: 'https://forms.gle/aKiXq7etHGEnqQwH9',
+				isClosed: false
+			},
+			groupC: {
+				key: 'groupC',
+				label: 'جروب C',
+				description: 'للمشتركين الجدد جروب C',
+				buttonText: 'سجل فورم جروب C',
+				link: 'https://forms.gle/9yPDmmQJ4uBr1pW99',
 				isClosed: false
 			}
 		},
@@ -116,6 +128,12 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 				group: 'جدول جروب B',
 				src: '/assets/جدول B.jpg',
 				alt: 'جدول محتوى شهر نوفمبر - جروب B',
+				note: '👆 اضغط على الصورة للتكبير'
+			},
+			{
+				group: 'جدول جروب C',
+				src: 'assets/الجدول.jpg',
+				alt: 'جدول محتوى الشهر - جروب C',
 				note: '👆 اضغط على الصورة للتكبير'
 			}
 		],

@@ -14,6 +14,7 @@ export class NavbarComponent implements OnInit {
 	scrolled = false;
 	showSocial = false;
 	currentRoute = '';
+	showFollowUpButton = false;
 	isMobileMenuOpen = false;
 	isRequirementsDropdownOpen = false;
 	isNewsDropdownOpen = false;
