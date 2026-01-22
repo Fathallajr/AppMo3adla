@@ -15,13 +15,13 @@ export class NewsAppPageComponent implements OnInit {
 	newsItems = [
 		{
 			id: 0,
-			title: '3 أيام تجريبية مجاناً لطلاب المعادلة',
-			excerpt: 'جرب الابلكيشن بالكامل واحصل على كود مجاني لمدة 3 أيام – العرض ساري لفترة محدودة',
-			date: '2025-11-24',
+			title: '7 أيام تجريبية مجاناً لطلاب المعادلة',
+			excerpt: 'جرب الابلكيشن بالكامل واحصل على كود مجاني لمدة 7 أيام – العرض ساري لفترة محدودة',
+			date: '2026-01-21',
 			image: '/assets/اكواد مجانية.jpg',
 			slug: 'free-week-codes-2025',
 			category: 'عروض خاصة',
-			important: false
+			important: true
 		},
 		{
 			id: 1,

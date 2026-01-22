@@ -187,7 +187,7 @@ export class NewsDetailPageComponent implements OnInit {
 					<p class="text-purple-700 text-lg font-semibold">متابعة يعني ابلكيشن</p>
 				</div>
 			`,
-			date: '2025-11-01',
+			date: '2026-01-21',
 			author: 'فريق المعادلة',
 			category: 'أنظمة الأبلكيشن',
 			important: true,
@@ -198,11 +198,11 @@ export class NewsDetailPageComponent implements OnInit {
 		},
 		'free-week-codes-2025': {
 			id: 'free-week-codes-2025',
-			title: '3 ايام مجاناً لطلاب معادلة كلية الهندسة!',
+			title: '7 ايام تجريبية مجاناً لطلاب المعادلة',
 			content: `
 				<div class="bg-orange-50 border-l-4 border-orange-500 p-4 mb-6">
 					<h3 class="text-orange-800 font-bold mb-2">🔥 تجربة مجانية لطلاب المعادلة</h3>
-					<p class="text-orange-700">فريق أبلكيشن معادلة كلية هندسة بيفتح باب الأكواد المجانية لمدة 3 ايام</p>
+					<p class="text-orange-700">فريق أبلكيشن معادلة كلية هندسة بيفتح باب الأكواد المجانية لمدة 7 ايام</p>
 				</div>
 				
 				<p class="text-lg leading-relaxed mb-6 text-gray-700">
@@ -212,7 +212,7 @@ export class NewsDetailPageComponent implements OnInit {
 				<div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6">
 					<h3 class="text-green-800 font-bold mb-2">📅 الفترة:</h3>
 					<p class="text-green-700 text-lg font-semibold">
-						من يوم <strong>24</strong> حتى <strong>27</strong>
+						من يوم <strong>21</strong> حتى <strong>27</strong>
 					</p>
 				</div>
 				
@@ -256,7 +256,7 @@ export class NewsDetailPageComponent implements OnInit {
 					<p class="text-orange-700 mb-3">
 						عشان تحصل على الكود المجاني، لازم تسجل في الفورم ده ونبعتلك الكود على الواتساب:
 					</p>
-					<a href="https://forms.gle/3UpbGVBHbbwAz6o97" target="_blank" 
+					<a href="https://forms.gle/T2nPzcmRJksP4PLg7" target="_blank" 
 					   class="inline-flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors no-underline hover:no-underline">
 						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -279,13 +279,13 @@ export class NewsDetailPageComponent implements OnInit {
 					</p>
 				</div>
 			`,
-			date: '2025-11-24',
+			date: '2026-01-21',
 			author: 'فريق المعادلة',
 			category: 'عروض خاصة',
 			important: true,
-			image: '/assets/اكواد مجانية.jpg',
+			image: '/assets/news8.jpg',
 			images: [
-				'/assets/اكواد مجانية.jpg'
+				'/assets/news8.jpg'
 			]
 		},
 		'App-Book-2025': {
