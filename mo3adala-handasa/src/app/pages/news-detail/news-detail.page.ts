@@ -25,6 +25,63 @@ export class NewsDetailPageComponent implements OnInit {
 
 	// Mock data - في التطبيق الحقيقي ستحصل على البيانات من API
 	newsData: { [key: string]: any } = {
+		'group-c-launch-2026': {
+			id: 'group-c-launch-2026',
+			title: 'انطلاق جروب C رسميًا على ابلكيشن معادلة كلية الهندسة',
+			content: `
+				<div class="bg-gradient-to-r from-orange-50 to-red-50 border-l-4 border-orange-500 p-6 mb-6">
+					<h3 class="text-orange-800 font-bold mb-3 text-2xl">🔥 انطلاق جروب C رسميًا على ابلكيشن معادلة كلية الهندسة 🔥</h3>
+					<p class="text-orange-700 text-lg font-semibold mb-2">لو بتدور على بداية قوية وطريق واضح الي كلية الهندسة؟</p>
+					<p class="text-orange-700 text-lg font-semibold mb-2">لو لسه مبدأتش وخايف من الوقت؟</p>
+				</div>
+				
+				<div class="mb-8 text-center">
+					<img src="/assets/جروب جديد.jpg.jpeg" alt="انطلاق جروب C" class="mx-auto rounded-lg shadow-lg max-w-full" style="max-width: 800px;">
+				</div>
+				
+				<div class="bg-blue-50 border-l-4 border-blue-500 p-6 mb-6">
+					<h3 class="text-blue-800 font-bold mb-4 text-xl">🎯 ليه لازم تشترك في جروب C؟</h3>
+					<ul class="list-disc list-inside space-y-3 text-blue-700">
+						<li class="text-lg"> بداية المنهج من الصفر مع وجود جداول مذاكرة</li>
+						<li class="text-lg">متابعة شخصية بواسطة الاسيستانت المتخصصين في المادة</li>
+						<li class="text-lg">شرح مبسّط يخليك تفهم مادة علمية بطريقة كويسة</li>
+						<li class="text-lg">تركيز على أهم الأفكار والأسئلة المتوقعة</li>
+					</ul>
+				</div>
+				
+				<div class="bg-green-50 border-l-4 border-green-500 p-6 mb-6">
+					<h3 class="text-green-800 font-bold mb-4 text-xl">🎯 الجروب معمول مخصوص لطلبة معادلة كلية الهندسة اللي عايزين:</h3>
+					<ul class="list-disc list-inside space-y-3 text-green-700">
+						<li class="text-lg">✔️ بداية صح</li>
+						<li class="text-lg">✔️ تنظيم</li>
+					</ul>
+				</div>
+				
+				<div class="bg-purple-50 border-l-4 border-purple-500 p-6 mb-6 text-center">
+					<h3 class="text-purple-800 font-bold mb-4 text-xl">📢 تشترك في جروب C ازاي؟</h3>
+					<a href="https://www.appmo3adla.com/subscription-details" target="_blank" 
+					   class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors no-underline hover:no-underline">
+						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+						</svg>
+						<span>لتفاصيل الاشتراك</span>
+					</a>
+				</div>
+				
+				<div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 mb-6 text-center">
+					<h3 class="text-yellow-800 font-bold mb-2 text-xl">🚀 خطوتك الأولى لكلية الهندسة تبدأ من هنا</h3>
+					<p class="text-yellow-700 text-lg font-semibold">ابدأ رحلتك مع جروب C اليوم!</p>
+				</div>
+			`,
+			date: '2026-01-24',
+			author: 'فريق المعادلة',
+			category: 'الكورسات والدورات',
+			important: true,
+			image: '/assets/جروب جديد.jpg.jpeg',
+			images: [
+				'/assets/جروب جديد.jpg.jpeg'
+			]
+		},
 		'english-plan-dr-omar-2025': {
 			id: 'english-plan-dr-omar-2025',
 			title: 'تفاصيل خطة الإنجليزي مع دكتور عمر أحمد أسطورة اللغة الانجليزية وصلت 🔥',

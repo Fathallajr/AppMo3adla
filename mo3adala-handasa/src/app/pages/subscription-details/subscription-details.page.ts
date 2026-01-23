@@ -36,7 +36,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 	copiedNumber: string | null = null; // للتحكم في رسالة "تم النسخ"
 	isImageModalOpen = false; // للتحكم في فتح/إغلاق الصورة المكبرة
 	activeScheduleImage: ScheduleImage | null = null; // الصورة النشطة في الـ modal
-	isEnrollmentClosed = true;
+	isEnrollmentClosed = false;
 	enrollmentReopenMessage = 'سيتم فتح الاشتراك للمشتركين الجدد مع بداية الشهر القادم بإذن الله.';
 	shuffledVodafoneNumbers: { number: string; owner: string }[] = [];
 	
@@ -55,7 +55,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 	};
 	
 	subscriptionDetails = {
-		month: ' شهر يناير 2026',
+		month: ' شهر فبراير 2026',
 		groupA: {
 			name: 'جروب A',
 			price: '700',
@@ -160,7 +160,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 				]
 			}
 		},
-		subtitle: ' الشهر الرابع لدفعة 2026 '
+		subtitle: ' الشهر الخامس لدفعة 2026 '
 	};
 
 	constructor(
@@ -334,8 +334,8 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 	}
 
 	getVideoEmbedUrl(): SafeResourceUrl {
-		// Video ID من الرابط: https://youtu.be/4AE400Mm9DU
-		const videoId = '7j0Xk8iZlzU?si';
+		// Video ID من الرابط: https://www.youtube.com/embed/CG-OR6ANPGg?si=vPbRP62Rthl5yTaS
+		const videoId = 'CG-OR6ANPGg?si=vPbRP62Rthl5yTaS';
 		const url = `https://www.youtube.com/embed/${videoId}`;
 		return this.sanitizer.bypassSecurityTrustResourceUrl(url);
 	}
