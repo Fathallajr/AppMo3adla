@@ -36,7 +36,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 	copiedNumber: string | null = null; // للتحكم في رسالة "تم النسخ"
 	isImageModalOpen = false; // للتحكم في فتح/إغلاق الصورة المكبرة
 	activeScheduleImage: ScheduleImage | null = null; // الصورة النشطة في الـ modal
-	isEnrollmentClosed = false;
+	isEnrollmentClosed = true;
 	enrollmentReopenMessage = 'سيتم فتح الاشتراك للمشتركين الجدد مع بداية الشهر القادم بإذن الله.';
 	shuffledVodafoneNumbers: { number: string; owner: string }[] = [];
 	
