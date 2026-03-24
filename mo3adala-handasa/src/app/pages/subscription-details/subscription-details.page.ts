@@ -36,7 +36,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 	copiedNumber: string | null = null; // للتحكم في رسالة "تم النسخ"
 	isImageModalOpen = false; // للتحكم في فتح/إغلاق الصورة المكبرة
 	activeScheduleImage: ScheduleImage | null = null; // الصورة النشطة في الـ modal
-	isEnrollmentClosed = true;
+	isEnrollmentClosed = false;
 	enrollmentReopenMessage = 'سيتم فتح الاشتراك للمشتركين الجدد مع بداية الشهر القادم بإذن الله.';
 	shuffledVodafoneNumbers: { number: string; owner: string }[] = [];
 	
@@ -55,7 +55,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 	};
 	
 	subscriptionDetails = {
-		month: ' شهر مارس 2026',
+		month: ' شهر أبريل 2026',
 		groupA: {
 			name: 'جروب A',
 			price: '700',
@@ -91,7 +91,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 				label: 'جروب A',
 				description: 'للمشتركين الأساسيين',
 				buttonText: 'سجل فورم جروب A',
-				link: 'https://forms.gle/xKbF8fXxdMyjkFu86',
+				link: 'https://forms.gle/uekJXzUCrUx8P3gA8',
 				isClosed: false
 			},
 			groupB: {
@@ -99,7 +99,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 				label: 'جروب B',
 				description: 'للمشتركين الجدد جروب B',
 				buttonText: 'سجل فورم جروب B',
-				link: 'https://forms.gle/DA99m1VadAgNCvvh6',
+				link: 'https://forms.gle/KLuuqT8mKD9e2MFD9',
 				isClosed: false
 			},
 			groupC: {
@@ -107,7 +107,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 				label: 'جروب C',
 				description: 'للمشتركين الجدد جروب C',
 				buttonText: 'سجل فورم جروب C',
-				link: 'https://forms.gle/vuwTLzsAFNwzPDYC7',
+				link: 'https://forms.gle/rrGRbC8vJBzW52vq5',
 				isClosed: false
 			}
 		},
@@ -115,25 +115,25 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 			{ number: '01040490778', owner: 'احمد ع********* س***' },
 			 { number: '01040490779', owner: 'سعد ف** ص*** ا***' },
 			 { number: '01025326080', owner: 'احمد م**** ا***** ز***' },
-			 { number: '01080681865', owner: 'Mona k***** A**' },
+			//  { number: '01080681865', owner: 'Mona k***** A**' },
 		],
 		scheduleImages: [
 			{
 				group: 'جدول جروب A',
-				src: '/assets/جروب A.png',
-				alt: 'جدول محتوى شهر مارس - جروب A',
+				src: '/assets/جروب A.jpeg',
+				alt: 'جدول محتوى شهر أبريل - جروب A',
 				note: '👆 اضغط على الصورة للتكبير'
 			},
 			{
 				group: 'جدول جروب B',
-				src: '/assets/جروب B.png',
-				alt: 'جدول محتوى شهر مارس - جروب B',
+				src: '/assets/جروب B.jpeg',
+				alt: 'جدول محتوى شهر أبريل - جروب B',
 				note: '👆 اضغط على الصورة للتكبير'
 			},
 			{
 				group: 'جدول جروب C',
-				src: '/assets/جروب C.png',
-				alt: 'جدول محتوى شهر مارس - جروب C',
+				src: '/assets/جروب C.jpeg',
+				alt: 'جدول محتوى شهر أبريل - جروب C',
 				note: '👆 اضغط على الصورة للتكبير'
 			}
 		],
@@ -334,8 +334,8 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 	}
 
 	getVideoEmbedUrl(): SafeResourceUrl {
-		// Video ID من الرابط الجديد: https://youtu.be/6HTlQaeUE_w
-		const videoId = '6HTlQaeUE_w';
+		// https://youtu.be/ZlfNJRv2LJc
+		const videoId = 'ZlfNJRv2LJc';
 		const url = `https://www.youtube.com/embed/${videoId}`;
 		return this.sanitizer.bypassSecurityTrustResourceUrl(url);
 	}
