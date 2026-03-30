@@ -114,8 +114,8 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 		vodafoneNumbers: [
 			{ number: '01040490778', owner: 'احمد ع********* س***' },
 			 { number: '01040490779', owner: 'سعد ف** ص*** ا***' },
-			 { number: '01025326080', owner: 'احمد م**** ا***** ز***' },
-			//  { number: '01080681865', owner: 'Mona k***** A**' },
+			//  { number: '01025326080', owner: 'احمد م**** ا***** ز***' },
+			{ number: '01080681865', owner: 'Mona k***** A**' },
 		],
 		scheduleImages: [
 			{
@@ -160,7 +160,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 				]
 			}
 		},
-		subtitle: ' الشهر السادس لدفعة 2026 '
+		subtitle: ' الشهر السابع لدفعة 2026 '
 	};
 
 	constructor(
