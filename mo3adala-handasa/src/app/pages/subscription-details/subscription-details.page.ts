@@ -334,8 +334,8 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 	}
 
 	getVideoEmbedUrl(): SafeResourceUrl {
-		// https://youtu.be/ZlfNJRv2LJc
-		const videoId = 'ZlfNJRv2LJc';
+		// https://youtu.be/ZaYxQo0bOqo
+		const videoId = 'ZaYxQo0bOqo';
 		const url = `https://www.youtube.com/embed/${videoId}`;
 		return this.sanitizer.bypassSecurityTrustResourceUrl(url);
 	}
