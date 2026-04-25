@@ -55,7 +55,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 	};
 	
 	subscriptionDetails = {
-		month: ' شهر أبريل 2026',
+		month: ' شهر مايو 2026',
 		groupA: {
 			name: 'جروب A',
 			price: '700',
@@ -91,7 +91,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 				label: 'جروب A',
 				description: 'للمشتركين الأساسيين',
 				buttonText: 'سجل فورم جروب A',
-				link: 'https://forms.gle/uekJXzUCrUx8P3gA8',
+				link: 'https://forms.gle/DXsVyF3kPvWXwkHG8',
 				isClosed: false
 			},
 			groupB: {
@@ -99,7 +99,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 				label: 'جروب B',
 				description: 'للمشتركين الجدد جروب B',
 				buttonText: 'سجل فورم جروب B',
-				link: 'https://forms.gle/KLuuqT8mKD9e2MFD9',
+				link: 'https://forms.gle/NDYjPGQug76Damm6A',
 				isClosed: false
 			},
 			groupC: {
@@ -107,33 +107,33 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 				label: 'جروب C',
 				description: 'للمشتركين الجدد جروب C',
 				buttonText: 'سجل فورم جروب C',
-				link: 'https://forms.gle/rrGRbC8vJBzW52vq5',
+				link: 'https://forms.gle/YjNPWmYYvA1MipRf7',
 				isClosed: false
 			}
 		},
 		vodafoneNumbers: [
 			//{ number: '01040490778', owner: 'احمد ع********* س***' },
-			{ number: '01040490779', owner: 'سعد ف** ص*** ا***' },
+			//{ number: '01040490779', owner: 'سعد ف** ص*** ا***' },
 			{ number: '01025326080', owner: 'احمد م**** ا***** ز***' },
 			{ number: '01080681865', owner: 'Mona k***** A**' },
 		],
 		scheduleImages: [
 			{
 				group: 'جدول جروب A',
-				src: '/assets/جروب A.jpeg',
-				alt: 'جدول محتوى شهر أبريل - جروب A',
+				src: '/assets/جروب A.png',
+				alt: 'جدول محتوى شهر مايو - جروب A',
 				note: '👆 اضغط على الصورة للتكبير'
 			},
 			{
 				group: 'جدول جروب B',
-				src: '/assets/جروب B.jpeg',
-				alt: 'جدول محتوى شهر أبريل - جروب B',
+				src: '/assets/جروب B.png',
+				alt: 'جدول محتوى شهر مايو - جروب B',
 				note: '👆 اضغط على الصورة للتكبير'
 			},
 			{
 				group: 'جدول جروب C',
-				src: '/assets/جروب C.jpeg',
-				alt: 'جدول محتوى شهر أبريل - جروب C',
+				src: '/assets/جروب C.png',
+				alt: 'جدول محتوى شهر مايو - جروب C',
 				note: '👆 اضغط على الصورة للتكبير'
 			}
 		],
@@ -160,7 +160,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 				]
 			}
 		},
-		subtitle: ' الشهر السابع لدفعة 2026 '
+		subtitle: ' الشهر الثامن لدفعة 2026 '
 	};
 
 	constructor(
