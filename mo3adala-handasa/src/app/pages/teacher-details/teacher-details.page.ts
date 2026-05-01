@@ -18,6 +18,7 @@ interface Teacher {
   phone: string;
   office: string;
   officeHours: string;
+  color: string;
   socialLinks: {
     facebook?: string;
     whatsapp?: string;
@@ -43,6 +44,7 @@ interface Teacher {
 export class TeacherDetailsPageComponent implements OnInit {
   teacher: Teacher | null = null;
   teacherId: number = 0;
+  isVideoLoaded = false;
 
   teachers: Teacher[] = [
     {
@@ -58,6 +60,7 @@ export class TeacherDetailsPageComponent implements OnInit {
       phone: '+201554843745',
       office: 'مبنى الرياضيات - الطابق الثالث - مكتب 301',
       officeHours: 'الأحد - الخميس: 10:00 ص - 10:00 م',
+      color: 'blue',
       socialLinks: {
         facebook: 'https://www.facebook.com/share/1D7WGR9Ccz/',
         whatsapp: 'https://api.whatsapp.com/send/?phone=201064746369&text&type=phone_number&app_absent=0',
@@ -84,6 +87,7 @@ export class TeacherDetailsPageComponent implements OnInit {
       phone: '+201151016262',
       office: 'مبنى الميكانيكا - الطابق الثاني - مكتب 205',
       officeHours: 'الأحد - الأربعاء: 10:00 ص - 10:00 م',
+      color: 'green',
       socialLinks: {
         facebook: 'https://www.facebook.com/share/1EbNiiV1X2/',
         whatsapp: 'https://wa.me/201151016262',
@@ -110,6 +114,7 @@ export class TeacherDetailsPageComponent implements OnInit {
       phone: '+201148068718',
       office: 'مبنى الكيمياء - الطابق الأول - مكتب 101',
       officeHours: 'السبت - الأربعاء: 10:00 ص - 10:00 م',
+      color: 'orange',
       socialLinks: {
         facebook: 'https://www.facebook.com/share/1BBUji24Kc/',
         whatsapp: 'https://wa.me/201148068718',
@@ -136,6 +141,7 @@ export class TeacherDetailsPageComponent implements OnInit {
       phone: '+201000278286',
       office: 'مبنى الفيزياء - الطابق الثاني - مكتب 202',
       officeHours: 'الأحد - الخميس: 10:00 ص - 10:00 م',
+      color: 'purple',
       socialLinks: {
         facebook: 'https://www.facebook.com/share/1B4CMMLdP7/',
         whatsapp: 'https://wa.me/201000278286',
@@ -162,6 +168,7 @@ export class TeacherDetailsPageComponent implements OnInit {
       phone: '+201020107762',
       office: '',
       officeHours: '',
+      color: 'red',
       socialLinks: {
         facebook: 'https://www.facebook.com/profile.php?id=61563784603700&rdid=6uU0ecDTzK2l1m02&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F17HrGLn8RK%2F#',
         whatsapp: 'https://wa.me/201020107762',
@@ -213,12 +220,21 @@ export class TeacherDetailsPageComponent implements OnInit {
     this.router.navigate(['/engineers']);
   }
 
+  loadVideo(): void {
+    this.isVideoLoaded = true;
+  }
+
+  getVideoThumbnail(): string {
+    const id = this.teacher?.demoVideo?.youtubeId?.replace('?', '') || '';
+    return `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
+  }
+
   getVideoEmbedUrl(): SafeResourceUrl {
     if (!this.teacher?.demoVideo?.youtubeId) {
       return this.sanitizer.bypassSecurityTrustResourceUrl('');
     }
-    
-    const url = `https://www.youtube.com/embed/${this.teacher.demoVideo.youtubeId}`;
+    const cleanId = this.teacher.demoVideo.youtubeId.replace('?', '');
+    const url = `https://www.youtube.com/embed/${cleanId}?autoplay=1&rel=0`;
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 

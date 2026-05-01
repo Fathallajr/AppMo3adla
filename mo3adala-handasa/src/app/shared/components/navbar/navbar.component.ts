@@ -22,6 +22,8 @@ export class NavbarComponent implements OnInit {
 	isMobileRequirementsDropdownOpen = false;
 	isPlatformDropdownOpen = false;
 	isMobilePlatformDropdownOpen = false;
+	isSubscriptionDropdownOpen = false;
+	isMobileSubscriptionDropdownOpen = false;
 	isMobile = false;
 
 	constructor(private router: Router, private viewportScroller: ViewportScroller) {
@@ -146,17 +148,37 @@ export class NavbarComponent implements OnInit {
 		this.scrollToTop();
 	}
 
+	toggleSubscriptionDropdown() {
+		this.isSubscriptionDropdownOpen = !this.isSubscriptionDropdownOpen;
+	}
+
+	closeSubscriptionDropdown() {
+		this.isSubscriptionDropdownOpen = false;
+		this.scrollToTop();
+	}
+
+	toggleMobileSubscriptionDropdown() {
+		this.isMobileSubscriptionDropdownOpen = !this.isMobileSubscriptionDropdownOpen;
+	}
+
+	closeMobileSubscriptionDropdown() {
+		this.isMobileSubscriptionDropdownOpen = false;
+		this.scrollToTop();
+	}
+
 	// دالة لإغلاق جميع القوائم المنسدلة
 	closeAllDropdowns() {
 		// إغلاق القوائم المنسدلة للديسكتوب
 		this.isRequirementsDropdownOpen = false;
 		this.isNewsDropdownOpen = false;
 		this.isPlatformDropdownOpen = false;
+		this.isSubscriptionDropdownOpen = false;
 		
 		// إغلاق القوائم المنسدلة للموبايل
 		this.isMobileNewsDropdownOpen = false;
 		this.isMobileRequirementsDropdownOpen = false;
 		this.isMobilePlatformDropdownOpen = false;
+		this.isMobileSubscriptionDropdownOpen = false;
 		
 		// إغلاق القائمة المحمولة الرئيسية
 		this.isMobileMenuOpen = false;

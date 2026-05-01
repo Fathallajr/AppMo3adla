@@ -226,14 +226,61 @@
 					<span class="xl:hidden" style="font-family: 'Cairo', sans-serif !important;">المتابعة</span>
 				</a>
 			</li>
-			<li>
-			<a routerLink="/subscription-details" 
-			   (click)="scrollToTop()"
-			   class="bg-green-600 text-white px-1.5 xl:px-2.5 py-1 rounded-md font-semibold hover:bg-green-700 transition-all duration-300 text-xs xl:text-sm btn-hover ripple glow whitespace-nowrap" style="font-family: 'Cairo', sans-serif !important;">
-					<span class="hidden xl:inline" style="font-family: 'Cairo', sans-serif !important;">تفاصيل الإشتراك</span>
-					<span class="xl:hidden" style="font-family: 'Cairo', sans-serif !important;">الإشتراك</span>
-				</a>
-			</li>
+		<li class="relative group flex items-center">
+			<button
+				class="bg-green-600 text-white px-1.5 xl:px-2.5 py-1 rounded-md font-semibold hover:bg-green-700 transition-all duration-300 text-xs xl:text-sm btn-hover ripple glow whitespace-nowrap flex items-center gap-1"
+				(click)="toggleSubscriptionDropdown()"
+				[class.bg-green-700]="isSubscriptionDropdownOpen"
+				style="font-family: 'Cairo', sans-serif !important;">
+				<span class="hidden xl:inline" style="font-family: 'Cairo', sans-serif !important;">تفاصيل الإشتراك</span>
+				<span class="xl:hidden" style="font-family: 'Cairo', sans-serif !important;">الإشتراك</span>
+				<svg class="w-3 h-3 transition-transform duration-200" [class.rotate-180]="isSubscriptionDropdownOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+				</svg>
+			</button>
+
+			<!-- Subscription Dropdown Menu -->
+			<div class="absolute top-full left-0 mt-1 w-56 bg-white rounded-lg shadow-lg border border-gray-200 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200"
+				 [class.opacity-100]="isSubscriptionDropdownOpen"
+				 [class.visible]="isSubscriptionDropdownOpen"
+				 style="font-family: 'Cairo', sans-serif !important;">
+				<div class="py-2">
+					<!-- A-B-C -->
+					<a routerLink="/subscription-details"
+					   (click)="closeSubscriptionDropdown()"
+					   class="block px-4 py-3 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors" style="font-family: 'Cairo', sans-serif !important;">
+						<div class="flex items-center gap-3">
+							<div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+								<svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+								</svg>
+							</div>
+							<div>
+								<div class="font-semibold">A-B-C</div>
+								<div class="text-xs text-gray-500">الجروبات الأساسية</div>
+							</div>
+						</div>
+					</a>
+
+					<!-- مكثف -->
+					<a routerLink="/subscription-intensive"
+					   (click)="closeSubscriptionDropdown()"
+					   class="block px-4 py-3 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors border-t border-gray-100" style="font-family: 'Cairo', sans-serif !important;">
+						<div class="flex items-center gap-3">
+							<div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+								<svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+								</svg>
+							</div>
+							<div>
+								<div class="font-semibold">مكثف</div>
+								<div class="text-xs text-gray-500">الاشتراك المكثف</div>
+							</div>
+						</div>
+					</a>
+				</div>
+			</div>
+		</li>
 			<li>
 			<a routerLink="/contact" 
 			   (click)="scrollToTop()"
@@ -369,11 +416,31 @@
 				</svg>
 				سيستم المتابعة
 			</a>
-			<a routerLink="/subscription-details" 
-			   (click)="closeMobileMenu()"
-			   class="mobile-registration-btn block px-4 py-3 rounded-lg text-base font-medium text-center mx-4 mt-2 btn-hover ripple glow" style="font-family: 'Cairo', sans-serif !important;">
+		<div class="px-4 py-2">
+			<button
+				(click)="toggleMobileSubscriptionDropdown()"
+				class="mobile-registration-btn flex items-center justify-between w-full px-4 py-3 rounded-lg text-base font-medium mx-0 mt-0 btn-hover ripple glow"
+				style="font-family: 'Cairo', sans-serif !important;">
 				تفاصيل الإشتراك
-			</a>
+				<svg class="w-4 h-4 transition-transform duration-200" [class.rotate-180]="isMobileSubscriptionDropdownOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+				</svg>
+			</button>
+			<div class="mt-2 space-y-1" [class.hidden]="!isMobileSubscriptionDropdownOpen">
+				<a routerLink="/subscription-details"
+				   (click)="closeMobileSubscriptionDropdown(); closeMobileMenu()"
+				   [class]="isActiveRoute('/subscription-details') ? 'mobile-nav-link active' : 'mobile-nav-link'"
+				   class="block px-8 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all duration-300 link-hover" style="font-family: 'Cairo', sans-serif !important;">
+					A-B-C
+				</a>
+				<a routerLink="/subscription-intensive"
+				   (click)="closeMobileSubscriptionDropdown(); closeMobileMenu()"
+				   [class]="isActiveRoute('/subscription-intensive') ? 'mobile-nav-link active' : 'mobile-nav-link'"
+				   class="block px-8 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all duration-300 link-hover" style="font-family: 'Cairo', sans-serif !important;">
+					مكثف
+				</a>
+			</div>
+		</div>
 			<a routerLink="/contact" 
 			   (click)="closeMobileMenu()"
 			   [class]="isActiveRoute('/contact') ? 'mobile-contact-btn active' : 'mobile-contact-btn'"

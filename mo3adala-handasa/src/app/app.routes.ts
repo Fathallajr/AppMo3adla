@@ -9,6 +9,7 @@ export const routes: Routes = [
 	{ path: 'news/app', loadComponent: () => import('./pages/news-app/news-app.page').then(m => m.NewsAppPageComponent) },
 	{ path: 'news/detail/:id', loadComponent: () => import('./pages/news-detail/news-detail.page').then(m => m.NewsDetailPageComponent) },
 	{ path: 'subscription-details', loadComponent: () => import('./pages/subscription-details/subscription-details.page').then(m => m.SubscriptionDetailsPageComponent) },
+	{ path: 'subscription-intensive', loadComponent: () => import('./pages/subscription-intensive/subscription-intensive.page').then(m => m.SubscriptionIntensivePageComponent) },
 	{ path: 'social', loadComponent: () => import('./pages/social/social.page').then(m => m.SocialPageComponent) },
 	{ path: 'engineers', loadComponent: () => import('./pages/engineers/engineers.page').then(m => m.EngineersPageComponent) },
 	{ path: 'teacher/:id', loadComponent: () => import('./pages/teacher-details/teacher-details.page').then(m => m.TeacherDetailsPageComponent) },

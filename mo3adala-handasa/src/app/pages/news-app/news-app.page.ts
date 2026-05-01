@@ -14,6 +14,16 @@ import { CanonicalService } from '../../core/canonical.service';
 export class NewsAppPageComponent implements OnInit {
 	newsItems = [
 		{
+			id: -2,
+			title: 'جروب إنجليزي جديد لطلاب المكثف — من الصفر خطوة بخطوة 🔥',
+			excerpt: 'لو الإنجليزي عندك صفر… فتحنا جروب مجاني لطلاب المكثف هنبدأ فيه من الصفر حرفيًا مع التركيز على الكلمات والنطق والتأسيس',
+			date: '2026-05-01',
+			image: '/assets/خبر جروب الانجليزي.jpeg',
+			slug: 'english-group-intensive-2026',
+			category: 'الكورسات والدورات',
+			important: true
+		},
+		{
 			id: -1,
 			title: 'انطلاق جروب C رسميًا على ابلكيشن معادلة كلية الهندسة',
 			excerpt: 'لو بتدور على بداية قوية وطريق واضح الي كلية الهندسة؟ لو لسه مبدأتش وخايف من الوقت؟ 🔥 جروب C بدأ رسميًا',

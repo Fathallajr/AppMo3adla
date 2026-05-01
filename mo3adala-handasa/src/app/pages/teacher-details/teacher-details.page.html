@@ -1,242 +1,159 @@
-<div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50" *ngIf="teacher">
-  <div class="container mx-auto px-4 py-8">
-    <!-- Back Button -->
-    <button (click)="goBack()" 
-            class="mb-6 flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-      </svg>
-      العودة للمدرسين
-    </button>
+<div class="td-page" *ngIf="teacher">
 
-    <!-- Coming Soon Section -->
-    <div *ngIf="teacher.isComingSoon" class="mb-8">
-      <!-- Main Hero Card -->
-      <div class="bg-gradient-to-br from-orange-500 via-orange-600 to-[#ED5E0E] rounded-3xl shadow-2xl overflow-hidden relative">
-        <!-- Background Pattern -->
-        <div class="absolute inset-0 opacity-10">
-          <div class="absolute top-10 right-10 w-32 h-32 bg-yellow-300 rounded-full animate-pulse blur-xl"></div>
-          <div class="absolute bottom-10 left-10 w-24 h-24 bg-yellow-300 rounded-full animate-pulse blur-xl" style="animation-delay: 0.5s;"></div>
-        </div>
-        
-        <!-- Content -->
-        <div class="relative z-10 p-6 md:p-10">
-          <!-- Header -->
-          <div class="text-center mb-8">
-            <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-4">
-              <svg class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-              </svg>
-              <span class="text-white text-sm sm:text-base font-semibold">قريباً جداً</span>
-              <svg class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-              </svg>
-            </div>
-            
-            <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-3">
-              نجم ساطع جديد في سماء الابلكيشن
-            </h1>
-            <div class="inline-flex items-center gap-2 bg-yellow-300/20 backdrop-blur-sm px-6 py-2 rounded-full mb-4 border border-yellow-300/30">
-              <svg class="w-6 h-6 text-yellow-300" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-              </svg>
-              <span class="text-white font-bold text-sm sm:text-base md:text-lg">من أقوى مدرسين الإنجليزي في مصر</span>
-              <svg class="w-6 h-6 text-yellow-300" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-              </svg>
-            </div>
-            <p class="text-base sm:text-lg text-white/80">
-              مدرس TOP TIER في اللغة الإنجليزية
-            </p>
-          </div>
-          
-          <!-- Features Grid -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div class="bg-white/20 backdrop-blur-md rounded-2xl p-4 border border-white/30">
-              <div class="text-4xl mb-2">🎯</div>
-              <h3 class="text-white font-bold mb-1 text-sm md:text-base">خبرة استثنائية</h3>
-              <p class="text-white/80 text-xs">سنوات طويلة في التدريس</p>
-            </div>
-            
-            <div class="bg-white/20 backdrop-blur-md rounded-2xl p-4 border border-white/30">
-              <div class="text-4xl mb-2">💎</div>
-              <h3 class="text-white font-bold mb-1 text-sm md:text-base">مستوى عالمي</h3>
-              <p class="text-white/80 text-xs">أعلى معايير الجودة</p>
-            </div>
-            
-            <div class="bg-white/20 backdrop-blur-md rounded-2xl p-4 border border-white/30">
-              <div class="text-4xl mb-2">🚀</div>
-              <h3 class="text-white font-bold mb-1 text-sm md:text-base">نتائج مضمونة</h3>
-              <p class="text-white/80 text-xs">طلاب ناجحون</p>
-            </div>
-          </div>
-          
-          <!-- CTA Button -->
-          <div class="text-center">
-            <div class="inline-flex items-center gap-2 bg-yellow-300 px-6 py-3 rounded-full text-orange-900 font-bold shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
-              <span>جاهز للانضمام</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Announcement Card -->
-      <div class="mt-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-2xl p-6 text-center shadow-xl">
-        <div class="inline-flex items-center gap-2 text-3xl mb-2">
-          <span>🎉</span>
-        </div>
-        <h3 class="text-slate-900 font-bold text-lg mb-1">هنتعرف عليه خلال يومين</h3>
-        <p class="text-slate-700 font-medium">كُن أول من يعرف النجم الجديد</p>
-      </div>
-      
-      <!-- Tagline -->
-      <div class="mt-6 text-center">
-        <div class="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-yellow-500 px-8 py-4 rounded-2xl shadow-xl">
-          <svg class="w-6 h-6 text-orange-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
-          </svg>
-          <span class="text-orange-900 font-extrabold text-base sm:text-lg">ابلكيشن معادلة كلية هندسة دايماً في ضهرك</span>
-          <svg class="w-6 h-6 text-orange-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
-          </svg>
-        </div>
-      </div>
-    </div>
+	<!-- Hero -->
+	<div class="td-hero" [class]="'td-hero--' + teacher.color">
+		<div class="td-hero-orb td-hero-orb--1"></div>
+		<div class="td-hero-orb td-hero-orb--2"></div>
 
-    <!-- Teacher Header -->
-    <div class="bg-white rounded-2xl shadow-lg p-8 mb-8" *ngIf="!teacher.isComingSoon">
-      <div class="flex flex-col lg:flex-row gap-8">
-        <!-- Teacher Image -->
-        <div class="flex-shrink-0">
-          <div class="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 mx-auto lg:mx-0 rounded-full overflow-hidden border-4 border-blue-200">
-            <img [src]="teacher.image" 
-                 [alt]="teacher.name" 
-                 class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                 loading="lazy"
-                 decoding="async"
-                 style="max-width: 100%; height: auto;"
-                 onerror="this.src='/assets/logo.png'">
-          </div>
-        </div>
+		<!-- Back button -->
+		<button class="td-back-btn" (click)="goBack()">
+			<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+			</svg>
+			المهندسين
+		</button>
 
-        <!-- Teacher Info -->
-        <div class="flex-1 text-center lg:text-right">
-          <h1 class="text-4xl font-bold text-slate-900 mb-4">{{ teacher.name }}</h1>
-          <h2 class="text-2xl text-blue-600 font-semibold mb-4">{{ teacher.subject }}</h2>
-          <p class="text-lg text-slate-600 mb-6">{{ teacher.degree }}</p>
-          <p class="text-slate-700 leading-relaxed mb-6">{{ teacher.bio }}</p>
-          
-          <!-- Quick Info -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div class="bg-blue-50 rounded-lg p-4">
-              <div class="text-2xl font-bold text-blue-600">{{ teacher.experience }}</div>
-              <div class="text-sm text-slate-600">سنة خبرة</div>
-            </div>
-            <div class="bg-green-50 rounded-lg p-4">
-              <div class="text-2xl font-bold text-green-600">{{ teacher.specialization }}</div>
-              <div class="text-sm text-slate-600">التخصص</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+		<div class="td-hero-content">
+			<!-- Avatar -->
+			<div class="td-avatar-wrap">
+				<img [src]="teacher.image" [alt]="teacher.name"
+					 class="td-avatar"
+					 loading="lazy" decoding="async"
+					 onerror="this.src='/assets/logo.png'">
+			</div>
 
-    <!-- Social Media Platforms -->
-    <div class="bg-white rounded-xl shadow-lg p-6 mb-8" *ngIf="!teacher.isComingSoon">
-      <h3 class="text-2xl font-bold text-slate-900 mb-6">منصات التواصل الاجتماعي</h3>
-      <p class="text-gray-600 mb-8">اختر المنصة المفضلة لديك وتابعنا للحصول على آخر الأخبار والتحديثات</p>
-      
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- WhatsApp -->
-        <div class="bg-green-500 rounded-xl p-6 text-white relative overflow-hidden group hover:scale-105 transition-transform duration-300">
-          <div class="absolute top-0 right-0 w-20 h-20 bg-green-600 rounded-full -translate-y-10 translate-x-10 opacity-20"></div>
-          <div class="relative z-10">
-            <h4 class="text-xl font-bold mb-2">واتساب</h4>
-            <p class="text-green-100 text-sm mb-4">تواصل معنا مباشرة عبر الواتساب</p>
-            <a *ngIf="teacher.socialLinks.whatsapp" [href]="teacher.socialLinks.whatsapp" target="_blank" 
-               class="inline-flex items-center gap-2 bg-white text-green-500 px-4 py-2 rounded-lg font-medium hover:bg-green-50 transition-colors">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
-              </svg>
-              تواصل معنا
-            </a>
-          </div>
-        </div>
+			<!-- Info -->
+			<div class="td-hero-info">
+				<div class="td-subject-badge">{{ teacher.specialization }}</div>
+				<h1 class="td-name">{{ teacher.name }}</h1>
+				<div class="td-exp-badge">
+					<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+					</svg>
+					{{ teacher.experience }}+ سنة خبرة
+				</div>
+			</div>
+		</div>
+	</div>
 
-        <!-- Facebook -->
-        <div class="bg-blue-600 rounded-xl p-6 text-white relative overflow-hidden group hover:scale-105 transition-transform duration-300">
-          <div class="absolute top-0 right-0 w-20 h-20 bg-blue-700 rounded-full -translate-y-10 translate-x-10 opacity-20"></div>
-          <div class="relative z-10">
-            <h4 class="text-xl font-bold mb-2">فيسبوك</h4>
-            <p class="text-blue-100 text-sm mb-4">تابع صفحتنا الرسمية على فيسبوك</p>
-            <a *ngIf="teacher.socialLinks.facebook" [href]="teacher.socialLinks.facebook" target="_blank" 
-               class="inline-flex items-center gap-2 bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-50 transition-colors">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-              </svg>
-              تابعنا
-            </a>
-          </div>
-        </div>
+	<!-- Coming Soon block -->
+	<div class="td-container" *ngIf="teacher.isComingSoon">
+		<div class="td-coming-soon">
+			<div class="td-cs-icon">⭐</div>
+			<h2 class="td-cs-title">نجم ساطع جديد في سماء الابلكيشن</h2>
+			<p class="td-cs-sub">من أقوى مدرسين الإنجليزي في مصر</p>
+			<div class="td-cs-features">
+				<div class="td-cs-feat"><span>🎯</span><strong>خبرة استثنائية</strong></div>
+				<div class="td-cs-feat"><span>💎</span><strong>مستوى عالمي</strong></div>
+				<div class="td-cs-feat"><span>🚀</span><strong>نتائج مضمونة</strong></div>
+			</div>
+			<div class="td-cs-tag">🎉 هنتعرف عليه خلال يومين</div>
+			<p class="td-cs-hint">ابلكيشن معادلة كلية هندسة دايماً في ضهرك ✅</p>
+		</div>
+	</div>
 
-        <!-- YouTube -->
-        <div class="bg-red-500 rounded-xl p-6 text-white relative overflow-hidden group hover:scale-105 transition-transform duration-300">
-          <div class="absolute top-0 right-0 w-20 h-20 bg-red-600 rounded-full -translate-y-10 translate-x-10 opacity-20"></div>
-          <div class="relative z-10">
-            <h4 class="text-xl font-bold mb-2">يوتيوب</h4>
-            <p class="text-red-100 text-sm mb-4">شاهد الفيديوهات التعليمية والشروحات</p>
-            <a *ngIf="teacher.socialLinks.youtube" [href]="teacher.socialLinks.youtube" target="_blank" 
-               class="inline-flex items-center gap-2 bg-white text-red-500 px-4 py-2 rounded-lg font-medium hover:bg-red-50 transition-colors">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-              </svg>
-              اشترك الآن
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
+	<!-- Main Content -->
+	<div class="td-container" *ngIf="!teacher.isComingSoon">
 
-    <!-- Demo Video Section -->
-    <div class="mb-8" *ngIf="!teacher.isComingSoon">
-      <!-- Video Header -->
-      <div class="text-center mb-6">
-        <h3 class="text-2xl font-bold text-slate-900 mb-2">
-          <span class="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">فيديو مجاني</span>
-          - جرب أسلوب {{ teacher.name }}
-        </h3>
-        <p class="text-lg text-slate-600 mb-2">{{ teacher.demoVideo?.topic || 'مقدمة في ' + teacher.specialization }}</p>
-        <div class="flex items-center justify-center gap-4 text-sm text-slate-500">
-          <span class="inline-flex items-center gap-1">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            {{ teacher.demoVideo?.duration || '15 دقيقة' }}
-          </span>
-          <span>•</span>
-          <span class="inline-flex items-center gap-1">
-            <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-            </svg>
-            مجاني بالكامل
-          </span>
-        </div>
-      </div>
-      
-      <!-- Video Player -->
-      <div class="demo-video-container">
-        <div class="demo-video-wrapper">
-          <iframe 
-            class="demo-video-iframe"
-            [src]="getVideoEmbedUrl()" 
-            title="YouTube video player"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen>
-          </iframe>
-        </div>
-      </div>
-    </div>
+		<!-- Social Links -->
+		<div class="td-section">
+			<h2 class="td-section-title">
+				<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+				</svg>
+				تواصل مع الأستاذ
+			</h2>
 
-  </div>
+			<div class="td-social-grid">
+				<!-- WhatsApp -->
+				<a *ngIf="teacher.socialLinks.whatsapp"
+				   [href]="teacher.socialLinks.whatsapp" target="_blank"
+				   class="td-social-card td-social-card--wa">
+					<div class="td-social-icon">
+						<svg fill="currentColor" viewBox="0 0 24 24">
+							<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.106"/>
+						</svg>
+					</div>
+					<div class="td-social-info">
+						<div class="td-social-name">واتساب</div>
+						<div class="td-social-desc">تواصل مباشرة</div>
+					</div>
+					<svg class="td-social-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+					</svg>
+				</a>
+
+				<!-- Facebook -->
+				<a *ngIf="teacher.socialLinks.facebook"
+				   [href]="teacher.socialLinks.facebook" target="_blank"
+				   class="td-social-card td-social-card--fb">
+					<div class="td-social-icon">
+						<svg fill="currentColor" viewBox="0 0 24 24">
+							<path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+						</svg>
+					</div>
+					<div class="td-social-info">
+						<div class="td-social-name">فيسبوك</div>
+						<div class="td-social-desc">تابع الصفحة الرسمية</div>
+					</div>
+					<svg class="td-social-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+					</svg>
+				</a>
+
+				<!-- YouTube -->
+				<a *ngIf="teacher.socialLinks.youtube"
+				   [href]="teacher.socialLinks.youtube" target="_blank"
+				   class="td-social-card td-social-card--yt">
+					<div class="td-social-icon">
+						<svg fill="currentColor" viewBox="0 0 24 24">
+							<path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+						</svg>
+					</div>
+					<div class="td-social-info">
+						<div class="td-social-name">يوتيوب</div>
+						<div class="td-social-desc">شاهد الفيديوهات التعليمية</div>
+					</div>
+					<svg class="td-social-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+					</svg>
+				</a>
+			</div>
+		</div>
+
+		<!-- Demo Video -->
+		<div class="td-section" *ngIf="teacher.demoVideo?.youtubeId">
+			<h2 class="td-section-title">
+				<svg fill="currentColor" viewBox="0 0 24 24">
+					<path d="M8 5v14l11-7z"/>
+				</svg>
+				فيديو مجاني — جرب أسلوب {{ teacher.name }}
+			</h2>
+
+			<div class="td-video-wrap">
+				<!-- Thumbnail -->
+				<div class="td-video-thumb" *ngIf="!isVideoLoaded" (click)="loadVideo()">
+					<img [src]="getVideoThumbnail()" alt="فيديو مجاني"
+						 class="td-thumb-img" loading="lazy">
+					<div class="td-play-btn">
+						<svg fill="currentColor" viewBox="0 0 24 24">
+							<path d="M8 5v14l11-7z"/>
+						</svg>
+					</div>
+					<div class="td-free-badge">مجاني بالكامل 🎁</div>
+				</div>
+
+				<!-- Iframe -->
+				<iframe *ngIf="isVideoLoaded"
+					class="td-video-iframe"
+					[src]="getVideoEmbedUrl()"
+					title="فيديو تعليمي"
+					frameborder="0"
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+					allowfullscreen>
+				</iframe>
+			</div>
+		</div>
+
+	</div>
 </div>

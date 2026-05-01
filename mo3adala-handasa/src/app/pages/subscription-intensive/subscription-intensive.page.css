@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+
+.intensive-page {
+	min-height: 100vh;
+	background: linear-gradient(145deg, #fff7ed 0%, #ffedd5 40%, #fed7aa 100%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 3rem 1rem;
+	position: relative;
+	overflow: hidden;
+	font-family: 'Cairo', sans-serif;
+}
+
+/* Background decorative orbs */
+.intensive-bg-orb {
+	position: absolute;
+	border-radius: 50%;
+	filter: blur(80px);
+	pointer-events: none;
+}
+
+.intensive-bg-orb--1 {
+	width: 500px;
+	height: 500px;
+	background: rgba(251, 146, 60, 0.2);
+	top: -150px;
+	right: -150px;
+}
+
+.intensive-bg-orb--2 {
+	width: 400px;
+	height: 400px;
+	background: rgba(237, 94, 14, 0.15);
+	bottom: -100px;
+	left: -100px;
+}
+
+/* Main container */
+.intensive-container {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: 1.5rem;
+	max-width: 480px;
+	width: 100%;
+}
+
+/* Icon */
+.intensive-icon-wrap {
+	position: relative;
+	width: 110px;
+	height: 110px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.intensive-icon-ring {
+	position: absolute;
+	inset: 0;
+	border-radius: 50%;
+	background: linear-gradient(135deg, #fb923c, #ED5E0E);
+	opacity: 0.15;
+	animation: pulse-ring 2s ease-in-out infinite;
+}
+
+@keyframes pulse-ring {
+	0%, 100% { transform: scale(1); opacity: 0.15; }
+	50%       { transform: scale(1.12); opacity: 0.08; }
+}
+
+.intensive-icon {
+	width: 88px;
+	height: 88px;
+	background: linear-gradient(135deg, #fb923c, #ED5E0E);
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 2.5rem;
+	box-shadow: 0 12px 40px rgba(237, 94, 14, 0.35);
+	position: relative;
+	z-index: 1;
+}
+
+/* Badge */
+.intensive-badge {
+	background: linear-gradient(135deg, #fb923c, #ED5E0E);
+	color: #fff;
+	font-size: 0.8rem;
+	font-weight: 700;
+	padding: 0.35rem 1.1rem;
+	border-radius: 50px;
+	letter-spacing: 0.5px;
+	font-family: 'Cairo', sans-serif;
+	box-shadow: 0 4px 14px rgba(237, 94, 14, 0.3);
+}
+
+/* Title */
+.intensive-title {
+	font-size: 3rem;
+	font-weight: 900;
+	color: #1e293b;
+	margin: 0;
+	font-family: 'Cairo', sans-serif;
+	line-height: 1.1;
+}
+
+/* Subtitle */
+.intensive-subtitle {
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: #64748b;
+	margin: -0.5rem 0 0;
+	font-family: 'Cairo', sans-serif;
+}
+
+/* Date card */
+.intensive-date-card {
+	background: #fff;
+	border-radius: 20px;
+	padding: 1.5rem 2.5rem;
+	box-shadow: 0 8px 32px rgba(237, 94, 14, 0.12), 0 2px 8px rgba(0,0,0,0.06);
+	border: 1px solid #fed7aa;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.6rem;
+	width: 100%;
+}
+
+.intensive-date-label {
+	font-size: 0.8rem;
+	font-weight: 700;
+	color: #fb923c;
+	text-transform: uppercase;
+	letter-spacing: 1.5px;
+	font-family: 'Cairo', sans-serif;
+}
+
+.intensive-date-value {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	direction: ltr;
+}
+
+.intensive-date-num {
+	font-size: 2rem;
+	font-weight: 900;
+	color: #1e293b;
+	font-family: 'Cairo', sans-serif;
+	line-height: 1;
+}
+
+.intensive-date-sep {
+	font-size: 1.8rem;
+	font-weight: 300;
+	color: #fb923c;
+	line-height: 1;
+}
+
+/* Message */
+.intensive-message {
+	font-size: 1.05rem;
+	font-weight: 700;
+	color: #475569;
+	margin: 0;
+	line-height: 1.7;
+	font-family: 'Cairo', sans-serif;
+}
+
+/* Divider */
+.intensive-divider {
+	width: 60px;
+	height: 3px;
+	background: linear-gradient(90deg, #fb923c, #ED5E0E);
+	border-radius: 4px;
+}
+
+/* Social hint */
+.intensive-social-hint {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	font-size: 0.88rem;
+	color: #94a3b8;
+	font-family: 'Cairo', sans-serif;
+	font-weight: 600;
+}
+
+.intensive-social-hint svg {
+	width: 18px;
+	height: 18px;
+	flex-shrink: 0;
+	color: #fb923c;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+	.intensive-title {
+		font-size: 2.3rem;
+	}
+
+	.intensive-date-card {
+		padding: 1.25rem 1.5rem;
+	}
+
+	.intensive-date-num {
+		font-size: 1.6rem;
+	}
+
+	.intensive-date-sep {
+		font-size: 1.4rem;
+	}
+}
