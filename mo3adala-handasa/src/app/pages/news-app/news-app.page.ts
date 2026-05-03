@@ -14,6 +14,16 @@ import { CanonicalService } from '../../core/canonical.service';
 export class NewsAppPageComponent implements OnInit {
 	newsItems = [
 		{
+			id: -3,
+			title: 'فرصة التأسيس المبكر لدفعة 2027 🚀🔥',
+			excerpt: 'لو الإنجليزي عندك عائق أو مستواك "صفر".. هنبدأ معاك من البداية خالص خطوة بخطوة عشان تدخل المعادلة وأنت جاهز 🎓',
+			date: '2026-05-03',
+			image: '/assets/جروب السنة الجديدة 2027.png',
+			slug: 'group-2027-foundation',
+			category: 'الكورسات والدورات',
+			important: true
+		},
+		{
 			id: -2,
 			title: 'جروب إنجليزي جديد لطلاب المكثف — من الصفر خطوة بخطوة 🔥',
 			excerpt: 'لو الإنجليزي عندك صفر… فتحنا جروب مجاني لطلاب المكثف هنبدأ فيه من الصفر حرفيًا مع التركيز على الكلمات والنطق والتأسيس',
