@@ -1,52 +1,437 @@
-<div class="intensive-page">
+<div class="modern-subscription-page">
 
-	<!-- Background decoration -->
-	<div class="intensive-bg-orb intensive-bg-orb--1"></div>
-	<div class="intensive-bg-orb intensive-bg-orb--2"></div>
-
-	<div class="intensive-container">
-
-		<!-- Lock Icon -->
-		<div class="intensive-icon-wrap">
-			<div class="intensive-icon-ring"></div>
-			<div class="intensive-icon">🔥</div>
+	<!-- Hero Section -->
+	<div class="hero-section">
+		<div class="hero-content">
+			<div class="month-badge">🔥 الكورس المكثف</div>
+			<h1 class="hero-title">تفاصيل الاشتراك المكثف</h1>
+			<p class="hero-subtitle">{{ subscriptionDetails.subtitle }}</p>
 		</div>
+		<div class="hero-decoration"></div>
+	</div>
 
-		<!-- Badge -->
-		<div class="intensive-badge">اشتراك مكثف جديد</div>
+	<!-- Enrollment Closed Banner -->
+	<div *ngIf="isEnrollmentClosed" class="enrollment-closed-banner" role="status" aria-live="polite">
+		<h2 class="banner-title">تم غلق باب الاشتراك مؤقتًا</h2>
+		<p class="banner-description">انتظروا التفاصيل قريباً بإذن الله 🔥</p>
+	</div>
 
-		<!-- Title -->
-		<h1 class="intensive-title">قريباً جداً</h1>
+	<!-- Step Indicator -->
+	<div class="step-indicator-wrapper">
+		<div class="step-indicator">
+			<div class="step-item" [class.step-item--active]="true">
+				<div class="step-circle">1</div>
+				<span class="step-label">اختار خطة الدفع</span>
+			</div>
+			<div class="step-line" [class.step-line--done]="selectedPlan !== null"></div>
+			<div class="step-item" [class.step-item--active]="selectedPlan !== null">
+				<div class="step-circle">2</div>
+				<span class="step-label">حول المبلغ</span>
+			</div>
+			<div class="step-line" [class.step-line--done]="selectedPlan !== null"></div>
+			<div class="step-item" [class.step-item--active]="selectedPlan !== null">
+				<div class="step-circle">3</div>
+				<span class="step-label">سجل الفورم</span>
+			</div>
+			<div class="step-line"></div>
+			<div class="step-item">
+				<div class="step-circle">4</div>
+				<span class="step-label">استلم الكود</span>
+			</div>
+		</div>
+	</div>
 
-		<!-- Subtitle -->
-		<p class="intensive-subtitle">لسه مفتحناش الاشتراك المكثف</p>
+	<div class="main-container">
 
-		<!-- Date card -->
-		<div class="intensive-date-card">
-			<div class="intensive-date-label">تاريخ الانطلاق</div>
-			<div class="intensive-date-value">
-				<span class="intensive-date-num">13</span>
-				<span class="intensive-date-sep">/</span>
-				<span class="intensive-date-num">6</span>
-				<span class="intensive-date-sep">/</span>
-				<span class="intensive-date-num">2026</span>
+		<!-- ═══ STEP 1: اختار خطة الدفع ═══ -->
+		<div class="step-section">
+			<div class="step-section-header">
+				<div class="step-number-badge">1</div>
+				<div>
+					<h2 class="step-section-title">اختار خطة الدفع</h2>
+					<p class="step-section-subtitle">اختار طريقة الدفع المناسبة ليك</p>
+				</div>
+			</div>
+
+			<div class="pricing-cards-grid">
+
+				<!-- ══ كارت الدفع الكامل (الأوفر) ══ -->
+				<div class="pcard pcard--featured"
+					 [class.pcard--chosen]="selectedPlan === 'full'"
+					 [class.pcard--dim]="isEnrollmentClosed"
+					 (click)="!isEnrollmentClosed && selectPlan('full')">
+
+					<!-- ribbon الأوفر -->
+					<div class="pcard__ribbon">🔥 الأوفر</div>
+
+					<!-- header -->
+					<div class="pcard__header pcard__header--orange">
+						<h3 class="pcard__name">الدفع الكامل</h3>
+					</div>
+
+					<!-- price -->
+					<div class="pcard__price-section">
+						<div class="pcard__amount">
+							<span class="pcard__num">3,500</span>
+							<span class="pcard__cur">ج</span>
+						</div>
+						<div class="pcard__original">بدلًا من <s>3,800 ج</s></div>
+					</div>
+
+					<!-- divider -->
+					<div class="pcard__divider"></div>
+
+					<!-- features -->
+					<ul class="pcard__features">
+						<li class="pcard__feat pcard__feat--yes">
+							<span class="pcard__icon pcard__icon--yes">✓</span>
+							دفعة واحدة فورية
+						</li>
+						<li class="pcard__feat pcard__feat--yes">
+							<span class="pcard__icon pcard__icon--yes">✓</span>
+							توفير 300 ج فورًا
+						</li>
+						<li class="pcard__feat pcard__feat--yes">
+							<span class="pcard__icon pcard__icon--yes">✓</span>
+							لا التزامات إضافية
+						</li>
+						<li class="pcard__feat pcard__feat--yes">
+							<span class="pcard__icon pcard__icon--yes">✓</span>
+							شغّالة لحد ليالي الامتحان 
+						</li>
+						<li class="pcard__feat pcard__feat--highlight">
+							<span class="pcard__icon pcard__icon--key">🔑</span>
+							كود واحد — وصول كامل فوري
+						</li>
+					</ul>
+
+					<!-- cta -->
+					<button class="pcard__cta pcard__cta--orange" [class.pcard__cta--active]="selectedPlan === 'full'">
+						{{ selectedPlan === 'full' ? '✓ تم الاختيار' : 'اختار هذه الخطة' }}
+					</button>
+
+				</div>
+
+				<!-- ══ كارت القسطين ══ -->
+				<div class="pcard"
+					 [class.pcard--chosen]="selectedPlan === 'installments'"
+					 [class.pcard--dim]="isEnrollmentClosed"
+					 (click)="!isEnrollmentClosed && selectPlan('installments')">
+
+					<!-- header -->
+					<div class="pcard__header pcard__header--slate">
+						<h3 class="pcard__name">الدفع على قسطين</h3>
+					</div>
+
+					<!-- price -->
+					<div class="pcard__price-section">
+						<div class="pcard__amount">
+							<span class="pcard__num">2,200</span>
+							<span class="pcard__cur">ج</span>
+						</div>
+						<div class="pcard__price-label">للبداية فقط</div>
+					</div>
+
+					<!-- divider -->
+					<div class="pcard__divider"></div>
+
+					<!-- installment rows -->
+					<ul class="pcard__features">
+						<li class="pcard__feat pcard__feat--yes">
+							<span class="pcard__icon pcard__icon--yes">✓</span>
+							<span>
+								<strong>القسط الأول: 2,200 ج</strong>
+								<em> — وقت الاشتراك</em>
+							</span>
+						</li>
+						<li class="pcard__feat pcard__feat--yes">
+							<span class="pcard__icon pcard__icon--yes">✓</span>
+							<span>
+								<strong>القسط الثاني: 1,600 ج</strong>
+								<em> — ابتداءً من 7 أغسطس</em>
+							</span>
+						</li>
+						<li class="pcard__feat pcard__feat--neutral">
+							<span class="pcard__icon pcard__icon--neutral">—</span>
+							الإجمالي: 3,800 ج
+						</li>
+						<li class="pcard__feat pcard__feat--neutral">
+							<span class="pcard__icon pcard__icon--neutral">—</span>
+							المنصة شغالة لغاية آخر القسط الأول فقط ويتم فتحها مره اخري بعد القسط التاني
+						</li>
+						<li class="pcard__feat pcard__feat--highlight">
+							<span class="pcard__icon pcard__icon--key">🔑</span>
+							كود مع كل دفعة — كودين إجمالًا
+						</li>
+					</ul>
+
+					<!-- cta -->
+					<button class="pcard__cta pcard__cta--slate" [class.pcard__cta--active]="selectedPlan === 'installments'">
+						{{ selectedPlan === 'installments' ? '✓ تم الاختيار' : 'اختار هذه الخطة' }}
+					</button>
+
+				</div>
+
 			</div>
 		</div>
 
-		<!-- Message -->
-		<p class="intensive-message">
-			انتظروا التفاصيل قريباً بإذن الله
-		</p>
+		<!-- ═══ STEP 2: حول المبلغ ═══ -->
+		<div class="step-section" id="step-payment">
+			<div class="step-section-header">
+				<div class="step-number-badge" [class.step-number-badge--muted]="!selectedPlan">2</div>
+				<div>
+					<h2 class="step-section-title">حول المبلغ</h2>
+					<p class="step-section-subtitle">حول عن طريق فودافون كاش لأي رقم من الأرقام دي</p>
+				</div>
+			</div>
 
-		<!-- Divider -->
-		<div class="intensive-divider"></div>
+			<!-- Selected plan banner -->
+			<div class="selected-group-banner" *ngIf="selectedPlan">
+				<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+				</svg>
+				<span>
+					{{ getSelectedPlanLabel() }} —
+					<ng-container *ngIf="selectedPlan === 'installments'">
+						القسط الأول: <strong>{{ getSelectedAmount() }} ج</strong>
+					</ng-container>
+					<ng-container *ngIf="selectedPlan === 'full'">
+						المبلغ الكامل: <strong>{{ getSelectedAmount() }} ج</strong>
+					</ng-container>
+				</span>
+			</div>
 
-		<!-- Social hint -->
-		<div class="intensive-social-hint">
-			<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
-			</svg>
-			تابعونا على السوشيال ميديا لمعرفة كل جديد
+			<div class="no-group-hint" *ngIf="!selectedPlan">
+				<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+				</svg>
+				اختار خطة الدفع في الخطوة الأولى علشان تعرف المبلغ
+			</div>
+
+			<div class="vodafone-payment-section">
+				<div class="vodafone-header">
+					<img src="assets/vodafone.png" alt="Vodafone Cash" class="vodafone-logo">
+					<div>
+						<h4 class="vodafone-title">فودافون كاش</h4>
+						<p class="vodafone-subtitle">تحويل آمن وسريع</p>
+					</div>
+				</div>
+
+				<div class="numbers-grid">
+					<ng-container *ngFor="let wallet of getFilteredVodafoneNumbers()">
+						<div class="number-card"
+							 (click)="onNumberCardClick(wallet.number)"
+							 [class.number-card--disabled]="isEnrollmentClosed"
+							 [attr.aria-disabled]="isEnrollmentClosed ? 'true' : null">
+
+							<div *ngIf="copiedNumber === wallet.number" class="copy-overlay">
+								<div class="copy-message">
+									<svg class="check-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+									</svg>
+									<div>تم النسخ</div>
+								</div>
+							</div>
+
+							<div *ngIf="isEnrollmentClosed" class="number-card-overlay">
+								<div class="number-card-overlay-content">
+									<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.657 0 3-1.567 3-3.5S13.657 4 12 4 9 5.567 9 7.5 10.343 11 12 11zM12 13c-2.33 0-7 1.17-7 3.5V19a1 1 0 001 1h12a1 1 0 001-1v-2.5c0-2.33-4.67-3.5-7-3.5z"></path>
+									</svg>
+									<span>سيتم إظهار الأرقام عند فتح الاشتراك</span>
+								</div>
+							</div>
+
+						<div class="number-content" [class.number-content--hidden]="isEnrollmentClosed">
+							<div class="number-text">{{ wallet.number }}</div>
+							<div class="owner-text">{{ wallet.owner }}</div>
+							<div class="copy-hint">👆 اضغط للنسخ</div>
+						</div>
+
+							<div class="copy-icon">
+								<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+								</svg>
+							</div>
+						</div>
+					</ng-container>
+				</div>
+
+				<!-- Required Info -->
+				<div class="required-info-inline">
+					<h4 class="info-title-inline">📌 المعلومات المطلوبة بعد التحويل:</h4>
+					<div class="info-items-inline">
+						<div *ngFor="let info of subscriptionDetails.requiredInfo" class="info-badge">
+							{{ info }}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ═══ STEP 3: سجل الفورم ═══ -->
+		<div class="step-section">
+			<div class="step-section-header">
+				<div class="step-number-badge" [class.step-number-badge--muted]="!selectedPlan">3</div>
+				<div>
+					<h2 class="step-section-title">سجل الفورم</h2>
+					<p class="step-section-subtitle">بعد التحويل، سجل بياناتك في الفورم</p>
+				</div>
+			</div>
+
+			<div class="single-form-card">
+				<div class="single-form-header">
+					<div class="single-form-icon">
+						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+						</svg>
+					</div>
+					<div>
+						<div class="single-form-title">فورم الاشتراك المكثف</div>
+						<div class="single-form-desc">سجل بياناتك بعد إتمام التحويل</div>
+					</div>
+					<span class="form-option-status" [class.form-option-status--closed]="isEnrollmentClosed">
+						{{ isEnrollmentClosed ? 'مغلق مؤقتاً' : 'متاح الآن' }}
+					</span>
+				</div>
+				<button
+					(click)="openGoogleForm()"
+					class="form-submit-button form-submit-button--large"
+					[class.form-submit-button--disabled]="isEnrollmentClosed"
+					[attr.disabled]="isEnrollmentClosed ? '' : null">
+					<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+					</svg>
+					<span>سجل فورم الاشتراك المكثف</span>
+				</button>
+			</div>
+		</div>
+
+		<!-- ═══ STEP 4: استلم الكود ═══ -->
+		<div class="step-section">
+			<div class="step-section-header">
+				<div class="step-number-badge step-number-badge--muted">4</div>
+				<div>
+					<h2 class="step-section-title">استلم الكود</h2>
+					<p class="step-section-subtitle">بعد تسجيل الفورم هتوصلك الكود على الواتساب</p>
+				</div>
+			</div>
+
+			<div class="after-submit-card">
+				<div class="after-submit-icon">📲</div>
+				<h3 class="after-submit-title">بعد إتمام تسجيل الفورم</h3>
+				<p class="after-submit-text">
+					ستتلقى كود الاشتراك على واتساب وستتمكن من البدء فوراً
+				</p>
+			</div>
+		</div>
+
+		<!-- ═══ Warnings Accordion ═══ -->
+		<div class="accordion-card">
+			<button class="accordion-header" (click)="toggleWarning()" [attr.aria-expanded]="isWarningExpanded">
+				<div class="accordion-header-right">
+					<div class="accordion-icon">
+						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+						</svg>
+					</div>
+					<span class="accordion-title">⚠️ تنبيهات مهمة قبل الاشتراك</span>
+				</div>
+				<svg class="accordion-chevron" [class.accordion-chevron--open]="isWarningExpanded" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+				</svg>
+			</button>
+
+			<div class="accordion-body" [class.accordion-body--open]="isWarningExpanded">
+				<div class="warning-items">
+					<div class="warning-item red-border">
+						<h4 class="warning-item-title">{{ subscriptionDetails.subscriptionWarnings.refund.title }}</h4>
+						<ul class="warning-list">
+							<li *ngFor="let point of subscriptionDetails.subscriptionWarnings.refund.points">
+								{{ point }}
+							</li>
+						</ul>
+					</div>
+					<div class="warning-item orange-border">
+						<h4 class="warning-item-title">{{ subscriptionDetails.subscriptionWarnings.validity.title }}</h4>
+						<ul class="warning-list">
+							<li *ngFor="let point of subscriptionDetails.subscriptionWarnings.validity.points">
+								{{ point }}
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ═══ جداول المكثف ═══ -->
+		<div class="step-section">
+			<div class="step-section-header">
+				<div class="step-number-badge" style="background: linear-gradient(135deg, #f97316, #ea580c);">📋</div>
+				<div>
+					<h2 class="step-section-title">جداول المكثف</h2>
+					<p class="step-section-subtitle">اطّلع على جداول الكورس المكثف قبل الاشتراك</p>
+				</div>
+			</div>
+
+			<div class="tables-gallery">
+				<div class="table-img-card">
+					<img src="assets/جداول المكثف/1.jpeg" alt="جدول المكثف 1" class="table-img" loading="lazy"
+						(click)="openImageModal({group: '1', src: 'assets/جداول المكثف/1.jpeg', alt: 'جدول المكثف 1'})">
+				</div>
+				<div class="table-img-card">
+					<img src="assets/جداول المكثف/2.jpeg" alt="جدول المكثف 2" class="table-img" loading="lazy"
+						(click)="openImageModal({group: '2', src: 'assets/جداول المكثف/2.jpeg', alt: 'جدول المكثف 2'})">
+				</div>
+				<div class="table-img-card">
+					<img src="assets/جداول المكثف/3.jpeg" alt="جدول المكثف 3" class="table-img" loading="lazy"
+						(click)="openImageModal({group: '3', src: 'assets/جداول المكثف/3.jpeg', alt: 'جدول المكثف 3'})">
+				</div>
+			</div>
+		</div>
+
+		<!-- Image Modal -->
+		<div class="img-modal-overlay" *ngIf="isImageModalOpen" (click)="closeImageModal()">
+			<div class="img-modal-content" (click)="$event.stopPropagation()">
+				<button class="img-modal-close" (click)="closeImageModal()">✕</button>
+				<img [src]="activeScheduleImage?.src" [alt]="activeScheduleImage?.alt" class="img-modal-img">
+			</div>
+		</div>
+
+		<!-- Student Account Section -->
+		<div class="account-section">
+			<div class="account-icon">👤</div>
+			<h3 class="account-title">لديك حساب في المنصة؟</h3>
+			<p class="account-subtitle">اختر الخيار المناسب للوصول إلى المحتوى</p>
+			<div class="account-buttons">
+				<a href="https://app-mo3adlet-handsa.com/student/index.php" target="_blank" class="account-btn login-btn">
+					<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+					</svg>
+					تسجيل دخول
+				</a>
+				<a href="https://app-mo3adlet-handsa.com/register.php" target="_blank" class="account-btn register-btn">
+					<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+					</svg>
+					إنشاء حساب جديد
+				</a>
+			</div>
+		</div>
+
+		<!-- Support Section -->
+		<div class="support-section">
+			<h3 class="support-title">تحتاج مساعدة؟</h3>
+			<p class="support-subtitle">تواصل معنا مباشرة لحل أي مشكلة</p>
+			<a href="https://api.whatsapp.com/send/?phone=201554843745&text=السلام عليكم، أواجه مشكلة في تسجيل فورم الاشتراك المكثف وأحتاج مساعدة&type=phone_number&app_absent=0"
+			   target="_blank"
+			   class="support-button">
+				<svg fill="currentColor" viewBox="0 0 24 24">
+					<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.106"/>
+				</svg>
+				تواصل معنا الآن
+			</a>
+			<p class="support-note">متاح لحل جميع المشاكل</p>
 		</div>
 
 	</div>

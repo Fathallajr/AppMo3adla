@@ -14,6 +14,16 @@ import { CanonicalService } from '../../core/canonical.service';
 export class NewsAppPageComponent implements OnInit {
 	newsItems = [
 		{
+			id: -4,
+			title: 'كتاب أبلكيشن معادلة كلية الهندسة 📘💪',
+			excerpt: 'بتعمل معادلة ومش لاقي مصدر موثوق تحل منه؟ 🤔 أقوى تجميعة أسئلة – تمارين – امتحانات مهمة مصممة علشان توصّلك للنجاح بثقة 🎯',
+			date: '2026-05-07',
+			image: '/assets/خبر الكتاب.png',
+			slug: 'app-book-order-2026',
+			category: 'الكتب والمراجع',
+			important: true
+		},
+		{
 			id: -3,
 			title: 'فرصة التأسيس المبكر لدفعة 2027 🚀🔥',
 			excerpt: 'لو الإنجليزي عندك عائق أو مستواك "صفر".. هنبدأ معاك من البداية خالص خطوة بخطوة عشان تدخل المعادلة وأنت جاهز 🎓',

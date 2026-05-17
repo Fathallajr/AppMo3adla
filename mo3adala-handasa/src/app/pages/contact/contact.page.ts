@@ -1,7 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SeoService } from '../../core/seo.service';
 import { CanonicalService } from '../../core/canonical.service';
+import { cmsPageDefaults } from '../../core/cms-page.registry';
+import { MonthlyContentService } from '../../core/services/monthly-content.service';
 
 @Component({
 	selector: 'app-contact-page',
@@ -10,9 +12,10 @@ import { CanonicalService } from '../../core/canonical.service';
 	templateUrl: './contact.page.html',
 	styleUrls: ['./contact.page.css'],
 })
-export class ContactPageComponent {
+export class ContactPageComponent implements OnInit {
 	private readonly seo = inject(SeoService);
 	private readonly canonical = inject(CanonicalService);
+	private readonly contentService = inject(MonthlyContentService);
 	studentWhatsapp = (typeof window !== 'undefined' ? (window as any)['NG_STUDENT_WHATSAPP'] : process.env['NG_STUDENT_WHATSAPP']) || '201554843745';
 	parentWhatsapp = (typeof window !== 'undefined' ? (window as any)['NG_PARENT_WHATSAPP'] : process.env['NG_PARENT_WHATSAPP']) || '201554843745';
 	phoneNumber = (typeof window !== 'undefined' ? (window as any)['NG_PHONE_NUMBER'] : process.env['NG_PHONE_NUMBER']) || '+201554843745';
@@ -27,6 +30,15 @@ export class ContactPageComponent {
 			this.seo.setTwitterTags({ title, description });
 			this.canonical.setCanonical();
 		}
+	}
+
+	ngOnInit(): void {
+		this.contentService.loadPageState('contact', cmsPageDefaults.contact).subscribe(content => {
+			const state = content as { studentWhatsapp?: string; parentWhatsapp?: string; phoneNumber?: string };
+			this.studentWhatsapp = state.studentWhatsapp || this.studentWhatsapp;
+			this.parentWhatsapp = state.parentWhatsapp || this.parentWhatsapp;
+			this.phoneNumber = state.phoneNumber || this.phoneNumber;
+		});
 	}
 }
 

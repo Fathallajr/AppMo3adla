@@ -25,6 +25,89 @@ export class NewsDetailPageComponent implements OnInit {
 
 	// Mock data - في التطبيق الحقيقي ستحصل على البيانات من API
 	newsData: { [key: string]: any } = {
+		'app-book-order-2026': {
+			id: 'app-book-order-2026',
+			title: 'كتاب أبلكيشن معادلة كلية الهندسة 📘💪',
+			content: `
+				<div class="mb-8 text-center">
+					<img src="/assets/خبر الكتاب.png" alt="كتاب أبلكيشن معادلة كلية الهندسة" class="mx-auto rounded-lg shadow-lg max-w-full" style="max-width: 800px;">
+				</div>
+
+				<div class="bg-gradient-to-r from-orange-50 to-yellow-50 border-l-4 border-orange-500 p-6 mb-6 text-center">
+					<h3 class="text-orange-800 font-bold mb-3 text-2xl">🤔 بتعمل معادلة ومش لاقي مصدر موثوق تحل منه؟</h3>
+					<p class="text-orange-700 text-lg font-semibold mb-2">بتجهز نفسك للأمتحان.. يبقي لازم يكون معاك كتاب الابلكيشن 🔥📚</p>
+				</div>
+
+				<div class="bg-blue-50 border-l-4 border-blue-500 p-6 mb-6">
+					<h3 class="text-blue-800 font-bold mb-3 text-xl">📘💪 كتاب أبلكيشن معادلة كلية الهندسة</h3>
+					<p class="text-blue-700 text-lg">أقوى تجميعة أسئلة – تمارين – امتحانات مهمة مصممة علشان توصّلك للنجاح بثقة 🎯</p>
+				</div>
+
+				<hr class="my-6 border-gray-300">
+
+				<div class="bg-green-50 border-l-4 border-green-500 p-6 mb-6">
+					<h3 class="text-green-800 font-bold mb-4 text-xl">📌 طريقة حجز الباكدج:</h3>
+					<ol class="space-y-3 text-green-700 text-lg list-none">
+						<li>1️⃣ <strong>السعر:</strong> 500 جنيه + مصاريف الشحن</li>
+						<li>2️⃣ ادخل على اللينك 👇
+							<div class="mt-2">
+								<a href="https://booxtore.net/product/333" target="_blank"
+								   class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg font-semibold transition-colors no-underline hover:no-underline">
+									🛒 رابط الشراء
+								</a>
+							</div>
+						</li>
+						<li>3️⃣ املى بياناتك بالكامل واضغط شراء</li>
+					</ol>
+					<p class="text-green-700 mt-4 font-semibold">🚛 الشحن خلال أسبوع بعد توافر الكتاب في المتجر</p>
+				</div>
+
+				<div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 mb-6">
+					<h3 class="text-yellow-800 font-bold mb-3 text-xl">⚠️ الدفع عن طريق فوري</h3>
+					<p class="text-yellow-700 text-lg">(هيظهرلك كود الدفع بعد تسجيل البيانات مباشرة)</p>
+				</div>
+
+				<hr class="my-6 border-gray-300">
+
+				<div class="bg-purple-50 border-l-4 border-purple-500 p-6 mb-6">
+					<h3 class="text-purple-800 font-bold mb-4 text-xl">📌 ملحوظة مهمة:</h3>
+					<ul class="space-y-2 text-purple-700 text-lg list-none">
+						<li>▪️ لازم تعمل أكونت على موقع الكُتب لو مش عامل</li>
+						<li>▪️ بعد كده تسجل دخول</li>
+						<li>▪️ تختار المرحلة تالتة ثانوي</li>
+						<li>▪️ وفي خطوة الشراء تختار كتب الأبلكيشن</li>
+					</ul>
+				</div>
+
+				<div class="bg-blue-50 border-l-4 border-blue-500 p-6 mb-6">
+					<h3 class="text-blue-800 font-bold mb-3 text-xl">🎥 فيديو سريع يوضح خطوات الشراء 👇</h3>
+					<a href="https://www.facebook.com/share/v/1JNXm7apAp/" target="_blank"
+					   class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-semibold transition-colors no-underline hover:no-underline">
+						▶️ شاهد الفيديو
+					</a>
+				</div>
+
+				<hr class="my-6 border-gray-300">
+
+				<div class="bg-red-50 border-l-4 border-red-500 p-6 mb-6">
+					<h3 class="text-red-800 font-bold mb-4 text-xl">⚠️ تنبيهات هامة:</h3>
+					<ul class="space-y-2 text-red-700 text-lg list-none">
+						<li>▪️ ادفع فورًا بعد ظهور كود فوري قبل انتهاء صلاحيته</li>
+						<li>▪️ مدة صلاحية الكود هتوصلك في رسالة مع الكود</li>
+					</ul>
+				</div>
+
+				<div class="bg-gradient-to-r from-orange-500 to-red-500 p-6 rounded-xl text-white text-center">
+					<p class="text-xl font-bold">🔥 ابدأ من دلوقتي… وخلي النجاح قرارك مش صدف</p>
+				</div>
+			`,
+			date: '2026-05-07',
+			author: 'فريق الابلكيشن',
+			category: 'الكتب والمراجع',
+			important: true,
+			image: '/assets/خبر الكتاب.png',
+			images: ['/assets/خبر الكتاب.png']
+		},
 		'group-2027-foundation': {
 			id: 'group-2027-foundation',
 			title: 'فرصة التأسيس المبكر لدفعة 2027 🚀🔥',

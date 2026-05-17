@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { expandCollapse, fadeInUp, staggerList } from '../../shared/animations';
 import { SeoService } from '../../core/seo.service';
 import { CanonicalService } from '../../core/canonical.service';
+import { cmsPageDefaults } from '../../core/cms-page.registry';
+import { MonthlyContentService } from '../../core/services/monthly-content.service';
 
 @Component({
 	selector: 'app-faq-page',
@@ -37,7 +39,7 @@ export class FaqPageComponent implements OnInit {
 		{ q: 'هل ليّا الحق في الالتحاق بالنقابة زي خريج الثانوية العامة؟', a: 'آه طبعًا، ليك الحق كامل في نقابة المهندسين.' },
 		{ q: 'مين اللي بيدرسولنا في الابلكيشن؟', a: 'بيشرحلكم نخبة من المدرسين: م/ أحمد فتح الله، م/ أحمد أبو زيد، د/ سعد العميري، م/ أحمد الشامي، د/ عمر أحمد عبد الفتاح.' },
 	];
-	constructor(private seo: SeoService, private canonical: CanonicalService) {
+	constructor(private seo: SeoService, private canonical: CanonicalService, private contentService: MonthlyContentService) {
 		const siteUrl = (typeof window !== 'undefined' ? (window as any)['NG_SITE_URL'] : process.env['NG_SITE_URL']) || 'https://example.com';
 		const title = 'الأسئلة الشائعة - معادلة كلية هندسة';
 		const description = 'إجابات لأكثر الأسئلة شيوعًا حول المعادلة والمحتوى وخطط الدراسة.';
@@ -49,6 +51,13 @@ export class FaqPageComponent implements OnInit {
 	}
 
 	ngOnInit() {
+		this.contentService.loadPageState('faq', { ...(cmsPageDefaults.faq as object), faqs: this.faqs }).subscribe(content => {
+			const state = content as { faqs?: Array<{ q: string; a: string }> };
+			if (Array.isArray(state.faqs)) {
+				this.faqs = state.faqs;
+			}
+		});
+
 		// محاكاة تحميل البيانات لإظهار الـ animations بشكل صحيح
 		setTimeout(() => {
 			this.isLoading = false;

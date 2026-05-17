@@ -3,25 +3,13 @@ import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SeoService } from '../../core/seo.service';
 import { CanonicalService } from '../../core/canonical.service';
-
-type GroupKey = 'groupA' | 'groupB' | 'groupC';
+import { MonthlyContentService } from '../../core/services/monthly-content.service';
 
 interface ScheduleImage {
 	group: string;
 	src: string;
 	alt: string;
 	note?: string;
-}
-
-interface GroupFormConfig {
-	key: GroupKey;
-	label: string;
-	description: string;
-	buttonText: string;
-	link: string;
-	isClosed: boolean;
-	statusNote?: string;
-	allowOpenWhenClosed?: boolean;
 }
 
 @Component({
@@ -32,110 +20,57 @@ interface GroupFormConfig {
 	styleUrls: ['./subscription-intensive.page.css']
 })
 export class SubscriptionIntensivePageComponent implements OnInit, OnDestroy {
-	currentMonth = '';
 	copiedNumber: string | null = null;
 	isImageModalOpen = false;
 	activeScheduleImage: ScheduleImage | null = null;
-	isEnrollmentClosed = true;
-	enrollmentReopenMessage = 'انتظروا التفاصيل قريباً بإذن الله 🔥';
+	isEnrollmentClosed = false;
+	isWarningExpanded = false;
+	selectedPlan: 'installments' | 'full' | null = null;
 	shuffledVodafoneNumbers: { number: string; owner: string }[] = [];
 
 	private handleVisibilityChange = () => {
-		if (typeof document === 'undefined') {
-			return;
-		}
-
-		if (document.visibilityState === 'visible') {
-			this.shuffleVodafoneNumbers();
-		}
+		if (typeof document === 'undefined') return;
+		if (document.visibilityState === 'visible') this.shuffleVodafoneNumbers();
 	};
 
 	private handleWindowFocus = () => {
 		this.shuffleVodafoneNumbers();
 	};
 
+	private applyLoadedState(state: any): void {
+		if (!state) {
+			return;
+		}
+
+		this.isEnrollmentClosed = state.isEnrollmentClosed ?? this.isEnrollmentClosed;
+		this.subscriptionDetails = state.subscriptionDetails ?? this.subscriptionDetails;
+		this.shuffleVodafoneNumbers();
+	}
+
 	subscriptionDetails = {
-		month: ' شهر مايو 2026',
-		groupA: {
-			name: 'جروب A',
-			price: '700',
-		},
-		groupB: {
-			name: 'جروب B',
-			price: '800',
-		},
-		groupC: {
-			name: 'جروب C',
-			price: '800',
+		title: 'الاشتراك المكثف',
+		subtitle: 'كورس مكثف لكلية الهندسة - دفعة 2026',
+		googleFormLink: 'https://forms.gle/CA4CshRiJgR6zUgH9',
+		paymentPlans: {
+			installments: {
+				label: 'الدفع على قسطين',
+				installment1: { amount: '2200', label: 'القسط الأول', note: 'وقت الاشتراك' },
+				installment2: { amount: '1600', label: 'القسط الثاني', note: 'ابتداءً من 7 أغسطس' },
+				total: '3800'
+			},
+			full: {
+				label: 'الدفع كاملًا',
+				amount: '3500',
+				originalAmount: '3800',
+				saving: '300'
+			}
 		},
 		currency: 'ج',
-		features: [
-			'فيديوهات تأسيسية في جميع المواد',
-			'فيديوهات شرح تفصيلية للمناهج',
-			'فيديوهات حل بنوك المسائل',
-			'ملازم وملفات PDF للتحميل',
-			'امتحانات إلكترونية تفاعلية',
-			'تتبع التقدم والدرجات',
-			'دعم فني على مدار الساعة',
-			'سيستم متابعة كامل (جديد)'
-		],
-		offers: [
-			'خصم 20% للطلاب الجدد',
-			'ضمان استرداد المبلغ خلال 7 أيام',
-			'وصول مدى الحياة للمحتوى',
-			'شهادة إنجاز معتمدة'
-		],
-		googleForms: {
-			groupA: {
-				key: 'groupA',
-				label: 'جروب A',
-				description: 'للمشتركين الأساسيين',
-				buttonText: 'سجل فورم جروب A',
-				link: 'https://forms.gle/DXsVyF3kPvWXwkHG8',
-				isClosed: false
-			},
-			groupB: {
-				key: 'groupB',
-				label: 'جروب B',
-				description: 'للمشتركين الجدد جروب B',
-				buttonText: 'سجل فورم جروب B',
-				link: 'https://forms.gle/NDYjPGQug76Damm6A',
-				isClosed: false
-			},
-			groupC: {
-				key: 'groupC',
-				label: 'جروب C',
-				description: 'للمشتركين الجدد جروب C',
-				buttonText: 'سجل فورم جروب C',
-				link: 'https://forms.gle/YjNPWmYYvA1MipRf7',
-				isClosed: false
-			}
-		},
 		vodafoneNumbers: [
-			{ number: '01040490778', owner: 'احمد ع********* س***' },
-			{ number: '01040490779', owner: 'سعد ف** ص*** ا***' },
-			{ number: '01025326080', owner: 'احمد م**** ا***** ز***' },
-			{ number: '01080681865', owner: 'Mona k***** A**' },
-		],
-		scheduleImages: [
-			{
-				group: 'جدول جروب A',
-				src: '/assets/جروب A.png',
-				alt: 'جدول محتوى شهر مايو - جروب A',
-				note: '👆 اضغط على الصورة للتكبير'
-			},
-			{
-				group: 'جدول جروب B',
-				src: '/assets/جروب B.png',
-				alt: 'جدول محتوى شهر مايو - جروب B',
-				note: '👆 اضغط على الصورة للتكبير'
-			},
-			{
-				group: 'جدول جروب C',
-				src: '/assets/جروب C.png',
-				alt: 'جدول محتوى شهر مايو - جروب C',
-				note: '👆 اضغط على الصورة للتكبير'
-			}
+			{ number: '01080594862', owner: 'Ahmed A*****' },
+			{ number: '01001793817', owner: 'Saad F** S*' },
+			{ number: '01021069340', owner: 'Mona k***** A**' },
+			{ number: '01021201970', owner: 'Mona k***** A**' },
 		],
 		requiredInfo: [
 			'رقم الموبايل اللي حولت منه 📲',
@@ -144,29 +79,29 @@ export class SubscriptionIntensivePageComponent implements OnInit, OnDestroy {
 		],
 		whatsappNumber: '201554843745',
 		subscriptionWarnings: {
-			validity: {
-				title: 'مدة صلاحية الاشتراك:',
-				points: [
-					'الكود شغال لغاية آخر الشهر فقط',
-					'مع انتهاء الشهر بيقفل المحتوى تلقائياً',
-					'عند تجديد الاشتراك الكود الجديد بيفتحلك كل المحتوى من الأول'
-				]
-			},
 			refund: {
 				title: 'سياسة الاسترداد:',
 				points: [
-					'السحب متاح خلال أسبوع من الاشتراك مع استرداد نصف المبلغ فقط',
-					'بعد الأسبوع، لا يُمكن استرداد أي مبلغ'
+					'لا يوجد استرداد أو سحب للاشتراك نهائيًا لأي سبب من الأسباب'
+				]
+			},
+			validity: {
+				title: 'مدة صلاحية الاشتراك:',
+				points: [
+					'المنصة شغالة لغاية اخر القسط الاول فقط',
+					'مع إنتهاء القسط الاول المحتوى بيقفل تلقائي',
+					'عند التجديد بيتفتح لك كل المحتوى من الأول',
+					'في خطة الدفع الكامل المنصة بتفضل شغالة لحد ليالي الامتحان'
 				]
 			}
-		},
-		subtitle: ' الشهر الثامن لدفعة 2026 '
+		}
 	};
 
 	constructor(
 		private seo: SeoService,
 		private canonical: CanonicalService,
-		private sanitizer: DomSanitizer
+		private sanitizer: DomSanitizer,
+		private monthlyContent: MonthlyContentService
 	) {}
 
 	ngOnInit(): void {
@@ -185,13 +120,17 @@ export class SubscriptionIntensivePageComponent implements OnInit, OnDestroy {
 
 		this.shuffleVodafoneNumbers();
 		this.listenForVisibilityChange();
+
+		this.monthlyContent
+			.loadPageState('subscription-intensive', {
+				isEnrollmentClosed: this.isEnrollmentClosed,
+				subscriptionDetails: this.subscriptionDetails
+			})
+			.subscribe(state => this.applyLoadedState(state));
 	}
 
 	ngOnDestroy(): void {
-		if (typeof window === 'undefined' || typeof document === 'undefined') {
-			return;
-		}
-
+		if (typeof window === 'undefined' || typeof document === 'undefined') return;
 		document.removeEventListener('visibilitychange', this.handleVisibilityChange);
 		window.removeEventListener('focus', this.handleWindowFocus);
 		window.removeEventListener('pageshow', this.handleWindowFocus);
@@ -203,61 +142,59 @@ export class SubscriptionIntensivePageComponent implements OnInit, OnDestroy {
 			const j = Math.floor(Math.random() * (i + 1));
 			[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
 		}
-
 		this.shuffledVodafoneNumbers = shuffled;
 	}
 
 	private listenForVisibilityChange(): void {
-		if (typeof window === 'undefined' || typeof document === 'undefined') {
-			return;
-		}
-
+		if (typeof window === 'undefined' || typeof document === 'undefined') return;
 		document.addEventListener('visibilitychange', this.handleVisibilityChange);
 		window.addEventListener('focus', this.handleWindowFocus);
 		window.addEventListener('pageshow', this.handleWindowFocus);
 	}
 
-	openGoogleForm(groupKey: GroupKey): void {
-		const formConfig = this.subscriptionDetails.googleForms[groupKey] as GroupFormConfig;
-		if (!formConfig) {
-			console.warn('Form configuration not found for', groupKey);
-			return;
+	selectPlan(plan: 'installments' | 'full'): void {
+		this.selectedPlan = plan;
+		if (typeof document !== 'undefined') {
+			setTimeout(() => {
+				const el = document.getElementById('step-payment');
+				if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			}, 100);
 		}
-
-		const isFormDisabled = this.isEnrollmentClosed || (formConfig.isClosed && !formConfig.allowOpenWhenClosed);
-		if (isFormDisabled) {
-			console.warn(`محاولة فتح فورم ${formConfig.label} أثناء الإغلاق`);
-			return;
-		}
-
-		window.open(formConfig.link, '_blank');
 	}
 
-	getGroupForms() {
-		return Object.values(this.subscriptionDetails.googleForms) as GroupFormConfig[];
+	getSelectedAmount(): string | null {
+		if (!this.selectedPlan) return null;
+		if (this.selectedPlan === 'full') {
+			return this.subscriptionDetails.paymentPlans.full.amount;
+		}
+		return this.subscriptionDetails.paymentPlans.installments.installment1.amount;
 	}
 
-	hasClosedForms(): boolean {
-		return this.getGroupForms().some(form => form.isClosed);
+	getSelectedPlanLabel(): string | null {
+		if (!this.selectedPlan) return null;
+		return this.selectedPlan === 'full'
+			? this.subscriptionDetails.paymentPlans.full.label
+			: this.subscriptionDetails.paymentPlans.installments.label;
+	}
+
+	toggleWarning(): void {
+		this.isWarningExpanded = !this.isWarningExpanded;
+	}
+
+	openGoogleForm(): void {
+		if (this.isEnrollmentClosed) return;
+		window.open(this.subscriptionDetails.googleFormLink, '_blank');
 	}
 
 	onNumberCardClick(number: string): void {
-		if (this.isEnrollmentClosed) {
-			console.warn('محاولة نسخ رقم أثناء إغلاق التسجيل');
-			return;
-		}
-
+		if (this.isEnrollmentClosed) return;
 		void this.copyToClipboard(number);
 	}
 
 	openWhatsApp(): void {
-		const message = encodeURIComponent('السلام عليكم، أريد إرسال سكرين شوت التحويل للاشتراك في المنصة');
+		const message = encodeURIComponent('السلام عليكم، أريد إرسال سكرين شوت التحويل للاشتراك في الكورس المكثف');
 		const whatsappUrl = `https://wa.me/${this.subscriptionDetails.whatsappNumber}?text=${message}`;
 		window.open(whatsappUrl, '_blank');
-	}
-
-	formatPrice(price: string): string {
-		return `${price} ${this.subscriptionDetails.currency}`;
 	}
 
 	getFilteredVodafoneNumbers() {
@@ -268,15 +205,11 @@ export class SubscriptionIntensivePageComponent implements OnInit, OnDestroy {
 		try {
 			await navigator.clipboard.writeText(text);
 			this.copiedNumber = text;
-			setTimeout(() => {
-				this.copiedNumber = null;
-			}, 2000);
+			setTimeout(() => { this.copiedNumber = null; }, 2000);
 		} catch (err) {
 			this.fallbackCopyTextToClipboard(text);
 			this.copiedNumber = text;
-			setTimeout(() => {
-				this.copiedNumber = null;
-			}, 2000);
+			setTimeout(() => { this.copiedNumber = null; }, 2000);
 		}
 	}
 
@@ -289,13 +222,11 @@ export class SubscriptionIntensivePageComponent implements OnInit, OnDestroy {
 		document.body.appendChild(textArea);
 		textArea.focus();
 		textArea.select();
-
 		try {
 			document.execCommand('copy');
 		} catch (err) {
 			console.error('فشل في نسخ الرقم:', err);
 		}
-
 		document.body.removeChild(textArea);
 	}
 

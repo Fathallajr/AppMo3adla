@@ -1,5 +1,5 @@
 // Service Worker with network-first strategy for navigations to avoid blank screen on mobile
-const CACHE_VERSION = 'v4';
+const CACHE_VERSION = 'v6';
 const STATIC_CACHE = `mo3adala-static-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `mo3adala-runtime-${CACHE_VERSION}`;
 
@@ -41,6 +41,15 @@ function isNavigationRequest(request) {
 self.addEventListener('fetch', (event) => {
   const { request } = event;
 
+  // Never cache API, admin, or upload calls — always go to network
+  if (
+    request.url.includes('/api/') ||
+    request.url.includes('/uploads/') ||
+    request.url.includes('/admin')
+  ) {
+    return;
+  }
+
   if (isNavigationRequest(request)) {
     event.respondWith(
       (async () => {
@@ -62,14 +71,16 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       (async () => {
         const cache = await caches.open(STATIC_CACHE);
-        const cached = await cache.match(request);
         const networkPromise = fetch(request)
           .then((response) => {
             cache.put(request, response.clone()).catch(() => undefined);
             return response;
           })
-          .catch(() => undefined);
-        return cached || networkPromise || fetch(request);
+          .catch(async () => {
+            const cached = await cache.match(request);
+            return cached || Response.error();
+          });
+        return networkPromise;
       })()
     );
     return;

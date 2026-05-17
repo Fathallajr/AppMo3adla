@@ -1662,6 +1662,26 @@
 	font-family: 'Cairo', sans-serif !important;
 }
 
+.pricing-cards-grid--single {
+	grid-template-columns: minmax(0, 320px);
+	justify-content: center;
+}
+
+.pricing-cards-grid--two {
+	grid-template-columns: repeat(2, 1fr);
+	max-width: 720px;
+	margin: 0 auto;
+}
+
+.schedule-grid--single {
+	grid-template-columns: minmax(0, 560px);
+	justify-content: center;
+}
+
+.hero-section--reviews {
+	background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+}
+
 .pricing-card {
 	border: 2px solid #e2e8f0;
 	border-radius: 16px;

@@ -6,6 +6,8 @@ import { SeoService } from '../../core/seo.service';
 import { CanonicalService } from '../../core/canonical.service';
 import { JsonLdService } from '../../core/jsonld.service';
 import { WhatIsEquationComponent } from '../../shared/components/what-is-equation/what-is-equation.component';
+import { cmsPageDefaults } from '../../core/cms-page.registry';
+import { MonthlyContentService } from '../../core/services/monthly-content.service';
 
 @Component({
 	selector: 'app-home-page',
@@ -126,7 +128,7 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 		'طلاب 2025/IMG-20251027-WA0085.jpg'
 	];
 	
-	constructor(private seo: SeoService, private canonical: CanonicalService, private jsonld: JsonLdService) {
+	constructor(private seo: SeoService, private canonical: CanonicalService, private jsonld: JsonLdService, private contentService: MonthlyContentService) {
 		const siteUrl = (typeof window !== 'undefined' ? (window as any)['NG_SITE_URL'] : process.env['NG_SITE_URL']) || 'https://example.com';
 		const title = 'ابلكيشن معادلة كلية هندسة';
 		const description = 'بنجهّزك لاجتياز معادلة كلية الهندسة بخطوات واضحة ومحتوى مُبسّط وتمارين عملية.';
@@ -163,8 +165,38 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 		// Preload critical images for faster loading
 		this.preloadImages();
 		
-		// Start animated descriptions
-		this.startDescriptionAnimation();
+		this.contentService.loadPageState('home', cmsPageDefaults.home).subscribe(content => {
+			this.applyCmsState(content);
+			this.startDescriptionAnimation();
+		});
+	}
+
+	private applyCmsState(content: unknown): void {
+		const state = content as {
+			hero?: {
+				features?: string[];
+				descriptions?: Array<{ text: string; highlight: string[] }>;
+			};
+			photos?: {
+				items?: string[];
+			};
+		};
+
+		if (Array.isArray(state.hero?.features)) {
+			this.features = state.hero.features;
+		}
+
+		if (Array.isArray(state.hero?.descriptions) && state.hero.descriptions.length) {
+			this.descriptions = state.hero.descriptions;
+			this.currentDescriptionIndex = 0;
+			this.currentDescription = this.descriptions[0];
+			this.typedText = '';
+			this.isDeleting = false;
+		}
+
+		if (Array.isArray(state.photos?.items) && state.photos.items.length) {
+			this.studentPhotos2025 = state.photos.items;
+		}
 	}
 	
 	private startDescriptionAnimation() {

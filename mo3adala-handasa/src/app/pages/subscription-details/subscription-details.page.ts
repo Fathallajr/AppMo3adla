@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SeoService } from '../../core/seo.service';
 import { CanonicalService } from '../../core/canonical.service';
+import { MonthlyContentService } from '../../core/services/monthly-content.service';
 
-type GroupKey = 'groupA' | 'groupB' | 'groupC';
+type GroupKey = 'groupC';
 
 interface ScheduleImage {
 	group: string;
@@ -36,37 +37,40 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 	copiedNumber: string | null = null;
 	isImageModalOpen = false;
 	activeScheduleImage: ScheduleImage | null = null;
-	isEnrollmentClosed = false;
+	isEnrollmentClosed = true;
 	enrollmentReopenMessage = 'سيتم فتح الاشتراك للمشتركين الجدد مع بداية الشهر القادم بإذن الله.';
 	shuffledVodafoneNumbers: { number: string; owner: string }[] = [];
-	selectedGroup: GroupKey | null = null;
+	readonly selectedGroup: GroupKey = 'groupC';
 	isWarningExpanded = false;
 	isVideoLoaded = false;
-	
+
 	private handleVisibilityChange = () => {
 		if (typeof document === 'undefined') {
 			return;
 		}
-		
+
 		if (document.visibilityState === 'visible') {
 			this.shuffleVodafoneNumbers();
 		}
 	};
-	
+
 	private handleWindowFocus = () => {
 		this.shuffleVodafoneNumbers();
 	};
-	
+
+	private applyLoadedState(state: any): void {
+		if (!state) {
+			return;
+		}
+
+		this.isEnrollmentClosed = state.isEnrollmentClosed ?? this.isEnrollmentClosed;
+		this.enrollmentReopenMessage = state.enrollmentReopenMessage ?? this.enrollmentReopenMessage;
+		this.subscriptionDetails = state.subscriptionDetails ?? this.subscriptionDetails;
+		this.shuffleVodafoneNumbers();
+	}
+
 	subscriptionDetails = {
 		month: ' شهر مايو 2026',
-		groupA: {
-			name: 'جروب A',
-			price: '700',
-		},
-		groupB: {
-			name: 'جروب B',
-			price: '800',
-		},
 		groupC: {
 			name: 'جروب C',
 			price: '800',
@@ -89,22 +93,6 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 			'شهادة إنجاز معتمدة'
 		],
 		googleForms: {
-			groupA: {
-				key: 'groupA',
-				label: 'جروب A',
-				description: 'للمشتركين الأساسيين',
-				buttonText: 'سجل فورم جروب A',
-				link: 'https://forms.gle/DXsVyF3kPvWXwkHG8',
-				isClosed: false
-			},
-			groupB: {
-				key: 'groupB',
-				label: 'جروب B',
-				description: 'للمشتركين الجدد جروب B',
-				buttonText: 'سجل فورم جروب B',
-				link: 'https://forms.gle/NDYjPGQug76Damm6A',
-				isClosed: false
-			},
 			groupC: {
 				key: 'groupC',
 				label: 'جروب C',
@@ -118,21 +106,9 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 			{ number: '01040490778', owner: 'احمد ع********* س***' },
 			{ number: '01040490779', owner: 'سعد ف** ص*** ا***' },
 			{ number: '01025326080', owner: 'احمد م**** ا***** ز***' },
-			{ number: '01080681865', owner: 'Mona k***** A**' },
+			{ number: '01080681865', owner: 'Mona k***** A**' },
 		],
 		scheduleImages: [
-			{
-				group: 'جدول جروب A',
-				src: '/assets/جروب A.png',
-				alt: 'جدول محتوى شهر مايو - جروب A',
-				note: '👆 اضغط على الصورة للتكبير'
-			},
-			{
-				group: 'جدول جروب B',
-				src: '/assets/جروب B.png',
-				alt: 'جدول محتوى شهر مايو - جروب B',
-				note: '👆 اضغط على الصورة للتكبير'
-			},
 			{
 				group: 'جدول جروب C',
 				src: '/assets/جروب C.png',
@@ -163,136 +139,104 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 				]
 			}
 		},
-		subtitle: ' الشهر الثامن لدفعة 2026 '
+		subtitle: ' الشهر الثامن لدفعة 2026 — جروب C '
 	};
 
 	constructor(
 		private seo: SeoService,
 		private canonical: CanonicalService,
-		private sanitizer: DomSanitizer
+		private sanitizer: DomSanitizer,
+		private monthlyContent: MonthlyContentService
 	) {}
 
 	ngOnInit(): void {
 		if (typeof window !== 'undefined') {
 			const siteUrl = (window as any)['NG_SITE_URL'] || 'https://appmo3adla.com';
-			const title = 'تفاصيل الاشتراك - ابلكيشن معادلة كلية هندسة';
-			const description = 'تعرف على تفاصيل الاشتراك في أبلكيشن معادلة كلية هندسة والمميزات المتاحة';
+			const title = 'تفاصيل اشتراك جروب C - ابلكيشن معادلة كلية هندسة';
+			const description = 'تعرف على تفاصيل اشتراك جروب C في أبلكيشن معادلة كلية هندسة والمميزات والجدول والفورم';
 			const url = `${siteUrl}/subscription-details`;
-			
+
 			this.seo.setTitle(title);
 			this.seo.setDescription(description);
 			this.seo.setOgTags({ title, description, url });
 			this.seo.setTwitterTags({ title, description });
 			this.canonical.setCanonical(url);
 		}
-		
-		// ترتيب الأرقام عشوائياً في كل مرة يتم فتح الصفحة
+
 		this.shuffleVodafoneNumbers();
 		this.listenForVisibilityChange();
-		
-		// this.updateCurrentMonth(); // معطل لاستخدام الشهر المحدد يدوياً
+
+		this.monthlyContent
+			.loadPageState('subscription-details', {
+				isEnrollmentClosed: this.isEnrollmentClosed,
+				enrollmentReopenMessage: this.enrollmentReopenMessage,
+				subscriptionDetails: this.subscriptionDetails
+			})
+			.subscribe(state => this.applyLoadedState(state));
 	}
-	
+
 	ngOnDestroy(): void {
 		if (typeof window === 'undefined' || typeof document === 'undefined') {
 			return;
 		}
-		
+
 		document.removeEventListener('visibilitychange', this.handleVisibilityChange);
 		window.removeEventListener('focus', this.handleWindowFocus);
 		window.removeEventListener('pageshow', this.handleWindowFocus);
 	}
-	
-	/**
-	 * ترتيب أرقام فودافون كاش بشكل عشوائي
-	 */
+
 	private shuffleVodafoneNumbers(): void {
 		const shuffled = [...this.subscriptionDetails.vodafoneNumbers];
 		for (let i = shuffled.length - 1; i > 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1));
 			[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
 		}
-		
+
 		this.shuffledVodafoneNumbers = shuffled;
 	}
-	
+
 	private listenForVisibilityChange(): void {
 		if (typeof window === 'undefined' || typeof document === 'undefined') {
 			return;
 		}
-		
+
 		document.addEventListener('visibilitychange', this.handleVisibilityChange);
 		window.addEventListener('focus', this.handleWindowFocus);
 		window.addEventListener('pageshow', this.handleWindowFocus);
 	}
 
-	private updateCurrentMonth(): void {
-		const now = new Date();
-		const months = [
-			'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
-			'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
-		];
-		
-		this.currentMonth = `${months[now.getMonth()]} ${now.getFullYear()}`;
-		this.subscriptionDetails.month = this.currentMonth;
-	}
-
-	openGoogleForm(groupKey: GroupKey): void {
-		const formConfig = this.subscriptionDetails.googleForms[groupKey] as GroupFormConfig;
+	openGoogleForm(): void {
+		const formConfig = this.subscriptionDetails.googleForms.groupC as GroupFormConfig;
 		if (!formConfig) {
-			console.warn('Form configuration not found for', groupKey);
 			return;
 		}
 
 		const isFormDisabled = this.isEnrollmentClosed || (formConfig.isClosed && !formConfig.allowOpenWhenClosed);
 		if (isFormDisabled) {
-			console.warn(`محاولة فتح فورم ${formConfig.label} أثناء الإغلاق`);
 			return;
 		}
 
 		window.open(formConfig.link, '_blank');
 	}
 
-	getGroupForms() {
-		return Object.values(this.subscriptionDetails.googleForms) as GroupFormConfig[];
+	getSelectedForm(): GroupFormConfig {
+		return this.subscriptionDetails.googleForms.groupC as GroupFormConfig;
 	}
 
-	hasClosedForms(): boolean {
-		return this.getGroupForms().some(form => form.isClosed);
+	getSelectedPrice(): string {
+		return this.subscriptionDetails.groupC.price;
 	}
 
-	selectGroup(key: GroupKey): void {
-		this.selectedGroup = key;
-		if (typeof document !== 'undefined') {
-			setTimeout(() => {
-				const el = document.getElementById('step-payment');
-				if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-			}, 100);
-		}
+	getSelectedGroupName(): string {
+		return this.subscriptionDetails.groupC.name;
 	}
 
 	toggleWarning(): void {
 		this.isWarningExpanded = !this.isWarningExpanded;
 	}
 
-	getSelectedForm(): GroupFormConfig | null {
-		if (!this.selectedGroup) return null;
-		return this.subscriptionDetails.googleForms[this.selectedGroup] as GroupFormConfig;
-	}
-
-	getSelectedPrice(): string | null {
-		if (!this.selectedGroup) return null;
-		return this.subscriptionDetails[this.selectedGroup].price;
-	}
-
-	getSelectedGroupName(): string | null {
-		if (!this.selectedGroup) return null;
-		return this.subscriptionDetails[this.selectedGroup].name;
-	}
-
 	onNumberCardClick(number: string): void {
 		if (this.isEnrollmentClosed) {
-			console.warn('محاولة نسخ رقم أثناء إغلاق التسجيل');
 			return;
 		}
 
@@ -300,7 +244,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 	}
 
 	openWhatsApp(): void {
-		const message = encodeURIComponent('السلام عليكم، أريد إرسال سكرين شوت التحويل للاشتراك في المنصة');
+		const message = encodeURIComponent('السلام عليكم، أريد إرسال سكرين شوت التحويل للاشتراك في جروب C');
 		const whatsappUrl = `https://wa.me/${this.subscriptionDetails.whatsappNumber}?text=${message}`;
 		window.open(whatsappUrl, '_blank');
 	}
@@ -316,15 +260,11 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 	async copyToClipboard(text: string): Promise<void> {
 		try {
 			await navigator.clipboard.writeText(text);
-			this.copiedNumber = text; // حفظ الرقم المنسوخ
-			console.log('تم نسخ الرقم:', text);
-			
-			// إخفاء رسالة "تم النسخ" بعد ثانيتين
+			this.copiedNumber = text;
 			setTimeout(() => {
 				this.copiedNumber = null;
 			}, 2000);
-		} catch (err) {
-			// طريقة بديلة للنسخ
+		} catch {
 			this.fallbackCopyTextToClipboard(text);
 			this.copiedNumber = text;
 			setTimeout(() => {
@@ -342,27 +282,26 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 		document.body.appendChild(textArea);
 		textArea.focus();
 		textArea.select();
-		
+
 		try {
 			document.execCommand('copy');
-			console.log('تم نسخ الرقم:', text);
-		} catch (err) {
-			console.error('فشل في نسخ الرقم:', err);
+		} catch {
+			// ignore
 		}
-		
+
 		document.body.removeChild(textArea);
 	}
 
 	openImageModal(image: ScheduleImage): void {
 		this.activeScheduleImage = image;
 		this.isImageModalOpen = true;
-		document.body.style.overflow = 'hidden'; // منع التمرير عند فتح الـ modal
+		document.body.style.overflow = 'hidden';
 	}
 
 	closeImageModal(): void {
 		this.isImageModalOpen = false;
 		this.activeScheduleImage = null;
-		document.body.style.overflow = ''; // استعادة التمرير
+		document.body.style.overflow = '';
 	}
 
 	loadVideo(): void {

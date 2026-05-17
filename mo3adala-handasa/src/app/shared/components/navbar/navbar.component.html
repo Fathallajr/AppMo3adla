@@ -245,7 +245,7 @@
 				 [class.visible]="isSubscriptionDropdownOpen"
 				 style="font-family: 'Cairo', sans-serif !important;">
 				<div class="py-2">
-					<!-- A-B-C -->
+					<!-- جروب C -->
 					<a routerLink="/subscription-details"
 					   (click)="closeSubscriptionDropdown()"
 					   class="block px-4 py-3 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors" style="font-family: 'Cairo', sans-serif !important;">
@@ -256,12 +256,29 @@
 								</svg>
 							</div>
 							<div>
-								<div class="font-semibold">A-B-C</div>
-								<div class="text-xs text-gray-500">الجروبات الأساسية</div>
+								<div class="font-semibold">C</div>
+								<div class="text-xs text-gray-500">اشتراك جروب C</div>
 							</div>
 						</div>
 					</a>
 
+
+					<!-- مراجعات A-B -->
+					<a routerLink="/subscription-ab-reviews"
+					   (click)="closeSubscriptionDropdown()"
+					   class="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors border-t border-gray-100" style="font-family: 'Cairo', sans-serif !important;">
+						<div class="flex items-center gap-3">
+							<div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+								<svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+								</svg>
+							</div>
+							<div>
+								<div class="font-semibold">مراجعات A-B</div>
+								<div class="text-xs text-gray-500">الفورمات والجداول</div>
+							</div>
+						</div>
+					</a>
 					<!-- مكثف -->
 					<a routerLink="/subscription-intensive"
 					   (click)="closeSubscriptionDropdown()"
@@ -436,8 +453,22 @@
 					</svg>
 				</div>
 				<div>
-					<div class="font-bold text-green-800 text-base" style="font-family: 'Cairo', sans-serif !important;">A-B-C</div>
-					<div class="text-xs text-green-600" style="font-family: 'Cairo', sans-serif !important;">الجروبات الأساسية</div>
+					<div class="font-bold text-green-800 text-base" style="font-family: 'Cairo', sans-serif !important;">C</div>
+					<div class="text-xs text-green-600" style="font-family: 'Cairo', sans-serif !important;">اشتراك جروب C</div>
+				</div>
+			</a>
+
+			<a routerLink="/subscription-ab-reviews"
+			   (click)="closeMobileSubscriptionDropdown(); closeMobileMenu()"
+			   class="flex items-center gap-3 px-4 py-3 rounded-xl border border-blue-100 bg-blue-50 hover:bg-blue-100 transition-all duration-300" style="font-family: 'Cairo', sans-serif !important;">
+				<div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+					<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+					</svg>
+				</div>
+				<div>
+					<div class="font-bold text-blue-800 text-base" style="font-family: 'Cairo', sans-serif !important;">مراجعات A-B</div>
+					<div class="text-xs text-blue-600" style="font-family: 'Cairo', sans-serif !important;">الفورمات والجداول</div>
 				</div>
 			</a>
 			<a routerLink="/subscription-intensive"
