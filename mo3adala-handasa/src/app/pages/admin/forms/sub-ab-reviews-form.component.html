@@ -20,7 +20,7 @@
 		<div class="cms-row">
 			<div class="cms-field">
 				<label class="cms-label">العنوان / الشهر</label>
-				<input class="cms-input" [(ngModel)]="data.subscriptionDetails.month" placeholder="مراجعات شهر مايو 2026" />
+				<input class="cms-input" [(ngModel)]="data.subscriptionDetails.month" placeholder="مراجعات شهر يونيو 2026" />
 			</div>
 			<div class="cms-field">
 				<label class="cms-label">العملة</label>
@@ -29,12 +29,12 @@
 		</div>
 		<div class="cms-row">
 			<div class="cms-field">
-				<label class="cms-label">سعر جروب A</label>
-				<input class="cms-input" [(ngModel)]="data.subscriptionDetails.groupA.price" placeholder="700" dir="ltr" />
+				<label class="cms-label">اسم المراجعة</label>
+				<input class="cms-input" [(ngModel)]="data.subscriptionDetails.review.name" placeholder="مراجعات A-B" />
 			</div>
 			<div class="cms-field">
-				<label class="cms-label">سعر جروب B</label>
-				<input class="cms-input" [(ngModel)]="data.subscriptionDetails.groupB.price" placeholder="800" dir="ltr" />
+				<label class="cms-label">سعر الاشتراك الموحد</label>
+				<input class="cms-input" [(ngModel)]="data.subscriptionDetails.review.price" placeholder="800" dir="ltr" />
 			</div>
 		</div>
 		<div class="cms-field" style="margin-bottom:0">
@@ -44,33 +44,32 @@
 	</div>
 
 	<div class="cms-section">
-		<div class="cms-section-title">روابط فورم المراجعة</div>
-		<div *ngFor="let gKey of ['groupA','groupB']" class="cms-subsection">
-			<div class="cms-subsection-title">{{ gKey === 'groupA' ? 'جروب A' : 'جروب B' }}</div>
+		<div class="cms-section-title">فورم المراجعة الموحد</div>
+		<div class="cms-subsection">
 			<div class="cms-row">
 				<div class="cms-field">
 					<label class="cms-label">رابط الفورم</label>
-					<input class="cms-input" [(ngModel)]="data.subscriptionDetails.googleForms[gKey].link" placeholder="https://forms.gle/..." dir="ltr" />
+					<input class="cms-input" [(ngModel)]="data.subscriptionDetails.googleForm.link" placeholder="https://forms.gle/..." dir="ltr" />
 				</div>
 				<div class="cms-field" style="justify-content:flex-end">
 					<label class="cms-label">حالة التسجيل</label>
 					<div class="cms-toggle-wrap">
 						<label class="cms-switch">
-							<input type="checkbox" [(ngModel)]="data.subscriptionDetails.googleForms[gKey].isClosed" />
+							<input type="checkbox" [(ngModel)]="data.subscriptionDetails.googleForm.isClosed" />
 							<span class="cms-slider"></span>
 						</label>
-						<span class="cms-toggle-label">{{ data.subscriptionDetails.googleForms[gKey].isClosed ? 'مغلق' : 'مفتوح' }}</span>
+						<span class="cms-toggle-label">{{ data.subscriptionDetails.googleForm.isClosed ? 'مغلق' : 'مفتوح' }}</span>
 					</div>
 				</div>
 			</div>
 			<div class="cms-row">
 				<div class="cms-field" style="margin-bottom:0">
 					<label class="cms-label">نص الزر</label>
-					<input class="cms-input" [(ngModel)]="data.subscriptionDetails.googleForms[gKey].buttonText" placeholder="سجل فورم جروب A" />
+					<input class="cms-input" [(ngModel)]="data.subscriptionDetails.googleForm.buttonText" placeholder="سجل فورم المراجعة" />
 				</div>
 				<div class="cms-field" style="margin-bottom:0">
 					<label class="cms-label">الوصف</label>
-					<input class="cms-input" [(ngModel)]="data.subscriptionDetails.googleForms[gKey].description" placeholder="وصف الجروب" />
+					<input class="cms-input" [(ngModel)]="data.subscriptionDetails.googleForm.description" placeholder="وصف الفورم" />
 				</div>
 			</div>
 		</div>
@@ -100,14 +99,14 @@
 	</div>
 
 	<div class="cms-section">
-		<div class="cms-section-title">جداول المراجعة (صور الجروبات)</div>
+		<div class="cms-section-title">جدول المراجعة</div>
 		<div class="cms-array-list">
 			<div class="cms-array-item" *ngFor="let img of data.subscriptionDetails.scheduleImages; let i = index">
 				<div style="flex:1">
 					<div class="cms-array-item__num">جدول {{ i + 1 }}</div>
 					<div class="cms-field">
-						<label class="cms-label">اسم الجروب</label>
-						<input class="cms-input" [(ngModel)]="img.group" placeholder="جدول جروب A" />
+						<label class="cms-label">اسم الجدول</label>
+						<input class="cms-input" [(ngModel)]="img.group" placeholder="جدول مراجعات A-B" />
 					</div>
 					<div class="cms-field">
 						<label class="cms-label">صورة الجدول</label>
@@ -165,7 +164,7 @@
 	<div class="cms-section">
 		<div class="cms-section-title">التحذيرات والتنبيهات</div>
 		<div class="cms-subsection">
-			<div class="cms-subsection-title">صلاحية المراجعة</div>
+			<div class="cms-subsection-title">مدة صلاحية الاشتراك</div>
 			<div class="cms-field">
 				<label class="cms-label">عنوان القسم</label>
 				<input class="cms-input" [(ngModel)]="data.subscriptionDetails.subscriptionWarnings.validity.title" />

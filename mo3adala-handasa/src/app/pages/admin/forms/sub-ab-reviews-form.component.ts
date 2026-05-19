@@ -26,13 +26,13 @@ export class SubAbReviewsFormComponent implements OnChanges {
 		sd.scheduleImages ??= [];
 		sd.features ??= [];
 		sd.requiredInfo ??= [];
-		sd.groupA ??= { name: 'جروب A', price: '700' };
-		sd.groupB ??= { name: 'جروب B', price: '800' };
-		sd.googleForms ??= { groupA: {}, groupB: {} };
-		sd.googleForms.groupA ??= {};
-		sd.googleForms.groupB ??= {};
+		sd.review ??= { name: 'مراجعات A-B', price: '800' };
+		sd.googleForm ??= {};
+		if (!sd.googleForm.link && sd.googleForms) {
+			sd.googleForm = { ...sd.googleForm, ...(sd.googleForms.groupA ?? sd.googleForms.groupB ?? {}) };
+		}
 		sd.subscriptionWarnings ??= {};
-		sd.subscriptionWarnings.validity ??= { title: 'مدة صلاحية المراجعة:', points: [] };
+		sd.subscriptionWarnings.validity ??= { title: 'مدة صلاحية الاشتراك:', points: [] };
 		sd.subscriptionWarnings.refund ??= { title: 'سياسة الاسترداد:', points: [] };
 
 		if (!Array.isArray(sd.subscriptionWarnings.validity.points)) sd.subscriptionWarnings.validity.points = [];

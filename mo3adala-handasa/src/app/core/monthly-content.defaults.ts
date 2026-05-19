@@ -81,14 +81,10 @@ export const monthlyContentDefaults = {
 		isEnrollmentClosed: true,
 		enrollmentReopenMessage: 'سيتم فتح المراجعات مع بداية الشهر القادم بإذن الله.',
 		subscriptionDetails: {
-			month: 'مراجعات شهر مايو 2026',
-			groupA: {
-				name: 'جروب A',
-				price: '700',
-			},
-			groupB: {
-				name: 'جروب B',
-				price: '800',
+			month: 'مراجعات شهر يونيو 2026',
+			review: {
+				name: 'مراجعات A-B',
+				price: '800'
 			},
 			currency: 'ج',
 			features: [
@@ -98,41 +94,24 @@ export const monthlyContentDefaults = {
 				'امتحانات إلكترونية تفاعلية',
 				'دعم فني على مدار الساعة'
 			],
-			googleForms: {
-				groupA: {
-					key: 'groupA',
-					label: 'جروب A',
-					description: 'فورم مراجعة جروب A',
-					buttonText: 'سجل فورم جروب A',
-					link: 'https://forms.gle/DXsVyF3kPvWXwkHG8',
-					isClosed: false
-				},
-				groupB: {
-					key: 'groupB',
-					label: 'جروب B',
-					description: 'فورم مراجعة جروب B',
-					buttonText: 'سجل فورم جروب B',
-					link: 'https://forms.gle/NDYjPGQug76Damm6A',
-					isClosed: false
-				}
+			googleForm: {
+				label: 'مراجعات A-B',
+				description: 'فورم اشتراك مراجعات يونيو',
+				buttonText: 'سجل فورم المراجعة',
+				link: 'https://forms.gle/qjpyARRjxGTUKRY26',
+				isClosed: false
 			},
 			vodafoneNumbers: [
-				{ number: '01040490778', owner: 'احمد ع********* س***' },
-				{ number: '01040490779', owner: 'سعد ف** ص*** ا***' },
 				{ number: '01025326080', owner: 'احمد م**** ا***** ز***' },
-				{ number: '01080681865', owner: 'Mona k***** A**' },
+				{ number: '01040490779', owner: 'سعد ف** ص*** ا***' },
+				{ number: '01040490778', owner: 'احمد ع********* س***' },
+				{ number: '01080681865', owner: 'Mona k***** A**' }
 			],
 			scheduleImages: [
 				{
-					group: 'جدول جروب A',
-					src: '/assets/جروب A.png',
-					alt: 'جدول مراجعة شهر مايو - جروب A',
-					note: '👆 اضغط على الصورة للتكبير'
-				},
-				{
-					group: 'جدول جروب B',
-					src: '/assets/جروب B.png',
-					alt: 'جدول مراجعة شهر مايو - جروب B',
+					group: 'جدول مراجعات A-B',
+					src: '/assets/جدول مراجعات  A-B.jpeg',
+					alt: 'جدول مراجعات شهر يونيو - جروب A و B',
 					note: '👆 اضغط على الصورة للتكبير'
 				}
 			],
@@ -144,17 +123,18 @@ export const monthlyContentDefaults = {
 			whatsappNumber: '201554843745',
 			subscriptionWarnings: {
 				validity: {
-					title: 'مدة صلاحية المراجعة:',
+					title: 'مدة صلاحية الاشتراك:',
 					points: [
 						'الكود شغال لغاية آخر الشهر فقط',
-						'مع انتهاء الشهر بيقفل المحتوى تلقائياً'
+						'مع انتهاء الشهر بيقفل المحتوى تلقائياً',
+						'عند تجديد الاشتراك الكود الجديد بيفتحلك كل المحتوى من الأول'
 					]
 				},
 				refund: {
 					title: 'سياسة الاسترداد:',
 					points: [
-						'السحب متاح خلال أسبوع من الاشتراك مع استرداد نصف المبلغ فقط',
-						'بعد الأسبوع، لا يُمكن استرداد أي مبلغ'
+						'لا يوجد استرداد أو سحب للاشتراك نهائيًا لأي سبب من الأسباب',
+						'متاح التحويل للمكثف فقط خلال 3 أيام من تاريخ الاشتراك'
 					]
 				}
 			},

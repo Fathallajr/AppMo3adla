@@ -19,17 +19,17 @@
 
 	<div class="step-indicator-wrapper">
 		<div class="step-indicator">
-			<div class="step-item" [class.step-item--active]="true">
+			<div class="step-item step-item--active">
 				<div class="step-circle">1</div>
-				<span class="step-label">اختار جروبك</span>
+				<span class="step-label">سعر المراجعة</span>
 			</div>
-			<div class="step-line" [class.step-line--done]="selectedGroup !== null"></div>
-			<div class="step-item" [class.step-item--active]="selectedGroup !== null">
+			<div class="step-line step-line--done"></div>
+			<div class="step-item step-item--active">
 				<div class="step-circle">2</div>
 				<span class="step-label">حول المبلغ</span>
 			</div>
-			<div class="step-line" [class.step-line--done]="selectedGroup !== null"></div>
-			<div class="step-item" [class.step-item--active]="selectedGroup !== null">
+			<div class="step-line step-line--done"></div>
+			<div class="step-item step-item--active">
 				<div class="step-circle">3</div>
 				<span class="step-label">سجل الفورم</span>
 			</div>
@@ -47,75 +47,42 @@
 			<div class="step-section-header">
 				<div class="step-number-badge">1</div>
 				<div>
-					<h2 class="step-section-title">اختار جروب المراجعة</h2>
-					<p class="step-section-subtitle">اختار جروب A أو جروب B وشوف السعر</p>
+					<h2 class="step-section-title">اشتراك مراجعات A-B</h2>
+					<p class="step-section-subtitle">سعر موحد لمراجعات جروب A و B</p>
 				</div>
 			</div>
 
-			<div class="pricing-cards-grid pricing-cards-grid--two">
-				<div class="pricing-card"
-					 [class.pricing-card--selected]="selectedGroup === 'groupA'"
-					 [class.pricing-card--disabled]="isEnrollmentClosed"
-					 (click)="!isEnrollmentClosed && selectGroup('groupA')">
-					<div class="pricing-card-check" *ngIf="selectedGroup === 'groupA'">
+			<div class="pricing-cards-grid pricing-cards-grid--single">
+				<div class="pricing-card pricing-card--selected pricing-card--disabled">
+					<div class="pricing-card-check">
 						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
 						</svg>
 					</div>
-					<div class="pricing-card-label">{{ subscriptionDetails.groupA.name }}</div>
+					<div class="pricing-card-label">{{ getReviewName() }}</div>
 					<div class="pricing-card-price">
-						{{ subscriptionDetails.groupA.price }}
+						{{ getPrice() }}
 						<span class="pricing-card-currency">ج</span>
 					</div>
 					<div class="pricing-card-period">/شهر</div>
-					<button class="pricing-card-btn" [class.pricing-card-btn--selected]="selectedGroup === 'groupA'">
-						{{ selectedGroup === 'groupA' ? '✓ تم الاختيار' : 'اختار جروب A' }}
-					</button>
-				</div>
-
-				<div class="pricing-card"
-					 [class.pricing-card--selected]="selectedGroup === 'groupB'"
-					 [class.pricing-card--disabled]="isEnrollmentClosed"
-					 (click)="!isEnrollmentClosed && selectGroup('groupB')">
-					<div class="pricing-card-check" *ngIf="selectedGroup === 'groupB'">
-						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-						</svg>
-					</div>
-					<div class="pricing-card-label">{{ subscriptionDetails.groupB.name }}</div>
-					<div class="pricing-card-price">
-						{{ subscriptionDetails.groupB.price }}
-						<span class="pricing-card-currency">ج</span>
-					</div>
-					<div class="pricing-card-period">/شهر</div>
-					<button class="pricing-card-btn" [class.pricing-card-btn--selected]="selectedGroup === 'groupB'">
-						{{ selectedGroup === 'groupB' ? '✓ تم الاختيار' : 'اختار جروب B' }}
-					</button>
 				</div>
 			</div>
 		</div>
 
 		<div class="step-section" id="step-payment">
 			<div class="step-section-header">
-				<div class="step-number-badge" [class.step-number-badge--muted]="!selectedGroup">2</div>
+				<div class="step-number-badge">2</div>
 				<div>
 					<h2 class="step-section-title">حول المبلغ</h2>
 					<p class="step-section-subtitle">حول عن طريق فودافون كاش لأي رقم من الأرقام دي</p>
 				</div>
 			</div>
 
-			<div class="selected-group-banner" *ngIf="selectedGroup">
+			<div class="selected-group-banner">
 				<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
 				</svg>
-				<span>{{ getSelectedGroupName() }} — المبلغ المطلوب: <strong>{{ getSelectedPrice() }} ج</strong></span>
-			</div>
-
-			<div class="no-group-hint" *ngIf="!selectedGroup">
-				<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-				</svg>
-				اختار جروبك في الخطوة الأولى علشان تعرف المبلغ
+				<span>{{ getReviewName() }} — المبلغ المطلوب: <strong>{{ getPrice() }} ج</strong></span>
 			</div>
 
 			<div class="vodafone-payment-section">
@@ -180,48 +147,39 @@
 
 		<div class="step-section">
 			<div class="step-section-header">
-				<div class="step-number-badge" [class.step-number-badge--muted]="!selectedGroup">3</div>
+				<div class="step-number-badge">3</div>
 				<div>
 					<h2 class="step-section-title">سجل الفورم</h2>
-					<p class="step-section-subtitle">بعد التحويل، سجل بياناتك في الفورم المناسب لجروبك</p>
+					<p class="step-section-subtitle">بعد التحويل، سجل بياناتك في فورم المراجعة</p>
 				</div>
 			</div>
 
-			<ng-container *ngIf="getSelectedForm() as form; else noGroupSelected">
-				<div class="single-form-card">
-					<div class="single-form-header">
-						<div class="single-form-icon">
-							<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-							</svg>
-						</div>
-						<div>
-							<div class="single-form-title">فورم {{ form.label }}</div>
-							<div class="single-form-desc">{{ form.description }}</div>
-						</div>
-						<span class="form-option-status" [class.form-option-status--closed]="form.isClosed || isEnrollmentClosed">
-							{{ (form.isClosed || isEnrollmentClosed) ? 'مغلق مؤقتاً' : 'متاح الآن' }}
-						</span>
-					</div>
-					<button
-						(click)="openGoogleForm(form.key)"
-						class="form-submit-button form-submit-button--large"
-						[class.form-submit-button--disabled]="isEnrollmentClosed || (form.isClosed && !form.allowOpenWhenClosed)"
-						[attr.disabled]="(isEnrollmentClosed || (form.isClosed && !form.allowOpenWhenClosed)) ? '' : null">
+			<div class="single-form-card" *ngIf="getForm() as form">
+				<div class="single-form-header">
+					<div class="single-form-icon">
 						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
 						</svg>
-						<span>{{ form.buttonText }}</span>
-					</button>
+					</div>
+					<div>
+						<div class="single-form-title">فورم {{ form.label }}</div>
+						<div class="single-form-desc">{{ form.description }}</div>
+					</div>
+					<span class="form-option-status" [class.form-option-status--closed]="form.isClosed || isEnrollmentClosed">
+						{{ (form.isClosed || isEnrollmentClosed) ? 'مغلق مؤقتاً' : 'متاح الآن' }}
+					</span>
 				</div>
-			</ng-container>
-
-			<ng-template #noGroupSelected>
-				<div class="no-group-card">
-					<div class="no-group-icon">👆</div>
-					<p class="no-group-text">اختار جروبك في الخطوة الأولى علشان يظهرلك الفورم المناسب</p>
-				</div>
-			</ng-template>
+				<button
+					(click)="openGoogleForm()"
+					class="form-submit-button form-submit-button--large"
+					[class.form-submit-button--disabled]="isEnrollmentClosed || (form.isClosed && !form.allowOpenWhenClosed)"
+					[attr.disabled]="(isEnrollmentClosed || (form.isClosed && !form.allowOpenWhenClosed)) ? '' : null">
+					<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+					</svg>
+					<span>{{ form.buttonText }}</span>
+				</button>
+			</div>
 		</div>
 
 		<div class="step-section">
@@ -298,10 +256,10 @@
 
 		<div class="schedule-table-section">
 			<div class="section-header">
-				<h3 class="section-title">جداول مراجعة الشهر</h3>
-				<p class="section-subtitle">خطة المراجعة التفصيلية لجروب A وجروب B</p>
+				<h3 class="section-title">جدول مراجعات الشهر</h3>
+				<p class="section-subtitle">خطة المراجعة الموحدة لجروب A و B</p>
 			</div>
-			<div class="schedule-grid">
+			<div class="schedule-grid schedule-grid--single">
 				<div class="schedule-image-card" *ngFor="let schedule of subscriptionDetails.scheduleImages">
 					<div class="schedule-card-header">
 						<span class="schedule-card-title">{{ schedule.group }}</span>

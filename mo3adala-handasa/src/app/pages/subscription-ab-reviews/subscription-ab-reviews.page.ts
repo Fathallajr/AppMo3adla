@@ -4,8 +4,6 @@ import { SeoService } from '../../core/seo.service';
 import { CanonicalService } from '../../core/canonical.service';
 import { MonthlyContentService } from '../../core/services/monthly-content.service';
 
-type GroupKey = 'groupA' | 'groupB';
-
 interface ScheduleImage {
 	group: string;
 	src: string;
@@ -13,14 +11,12 @@ interface ScheduleImage {
 	note?: string;
 }
 
-interface GroupFormConfig {
-	key: GroupKey;
+interface ReviewFormConfig {
 	label: string;
 	description: string;
 	buttonText: string;
 	link: string;
 	isClosed: boolean;
-	statusNote?: string;
 	allowOpenWhenClosed?: boolean;
 }
 
@@ -35,10 +31,9 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	copiedNumber: string | null = null;
 	isImageModalOpen = false;
 	activeScheduleImage: ScheduleImage | null = null;
-	isEnrollmentClosed = true;
+	isEnrollmentClosed = false;
 	enrollmentReopenMessage = 'سيتم فتح المراجعات مع بداية الشهر القادم بإذن الله.';
 	shuffledVodafoneNumbers: { number: string; owner: string }[] = [];
-	selectedGroup: GroupKey | null = null;
 	isWarningExpanded = false;
 
 	private handleVisibilityChange = () => {
@@ -62,19 +57,50 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 
 		this.isEnrollmentClosed = state.isEnrollmentClosed ?? this.isEnrollmentClosed;
 		this.enrollmentReopenMessage = state.enrollmentReopenMessage ?? this.enrollmentReopenMessage;
-		this.subscriptionDetails = state.subscriptionDetails ?? this.subscriptionDetails;
+
+		const loaded = state.subscriptionDetails;
+		if (loaded) {
+			const legacyForm = loaded.googleForm ?? loaded.googleForms?.groupA ?? loaded.googleForms?.groupB;
+			this.subscriptionDetails = {
+				...this.subscriptionDetails,
+				...loaded,
+				review: {
+					...this.subscriptionDetails.review,
+					...(loaded.review ?? {}),
+					name: loaded.review?.name ?? this.subscriptionDetails.review.name,
+					price: loaded.review?.price ?? loaded.groupB?.price ?? loaded.groupA?.price ?? '800'
+				},
+				googleForm: {
+					...this.subscriptionDetails.googleForm,
+					...(legacyForm ?? {})
+				},
+				vodafoneNumbers: loaded.vodafoneNumbers?.length
+					? loaded.vodafoneNumbers
+					: this.subscriptionDetails.vodafoneNumbers,
+				scheduleImages: loaded.scheduleImages?.length
+					? loaded.scheduleImages
+					: this.subscriptionDetails.scheduleImages,
+				subscriptionWarnings: {
+					validity: {
+						...this.subscriptionDetails.subscriptionWarnings.validity,
+						...(loaded.subscriptionWarnings?.validity ?? {})
+					},
+					refund: {
+						...this.subscriptionDetails.subscriptionWarnings.refund,
+						...(loaded.subscriptionWarnings?.refund ?? {})
+					}
+				}
+			};
+		}
+
 		this.shuffleVodafoneNumbers();
 	}
 
 	subscriptionDetails = {
-		month: 'مراجعات شهر مايو 2026',
-		groupA: {
-			name: 'جروب A',
-			price: '700',
-		},
-		groupB: {
-			name: 'جروب B',
-			price: '800',
+		month: 'مراجعات شهر يونيو 2026',
+		review: {
+			name: 'مراجعات A-B',
+			price: '800'
 		},
 		currency: 'ج',
 		features: [
@@ -84,41 +110,24 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 			'امتحانات إلكترونية تفاعلية',
 			'دعم فني على مدار الساعة'
 		],
-		googleForms: {
-			groupA: {
-				key: 'groupA',
-				label: 'جروب A',
-				description: 'فورم مراجعة جروب A',
-				buttonText: 'سجل فورم جروب A',
-				link: 'https://forms.gle/DXsVyF3kPvWXwkHG8',
-				isClosed: false
-			},
-			groupB: {
-				key: 'groupB',
-				label: 'جروب B',
-				description: 'فورم مراجعة جروب B',
-				buttonText: 'سجل فورم جروب B',
-				link: 'https://forms.gle/NDYjPGQug76Damm6A',
-				isClosed: false
-			}
+		googleForm: {
+			label: 'مراجعات A-B',
+			description: 'فورم اشتراك مراجعات يونيو',
+			buttonText: 'سجل فورم المراجعة',
+			link: 'https://forms.gle/qjpyARRjxGTUKRY26',
+			isClosed: false
 		},
 		vodafoneNumbers: [
-			{ number: '01040490778', owner: 'احمد ع********* س***' },
-			{ number: '01040490779', owner: 'سعد ف** ص*** ا***' },
 			{ number: '01025326080', owner: 'احمد م**** ا***** ز***' },
-			{ number: '01080681865', owner: 'Mona k***** A**' },
+			{ number: '01040490779', owner: 'سعد ف** ص*** ا***' },
+			{ number: '01040490778', owner: 'احمد ع********* س***' },
+			{ number: '01080681865', owner: 'Mona k***** A**' }
 		],
 		scheduleImages: [
 			{
-				group: 'جدول جروب A',
-				src: '/assets/جروب A.png',
-				alt: 'جدول مراجعة شهر مايو - جروب A',
-				note: '👆 اضغط على الصورة للتكبير'
-			},
-			{
-				group: 'جدول جروب B',
-				src: '/assets/جروب B.png',
-				alt: 'جدول مراجعة شهر مايو - جروب B',
+				group: 'جدول مراجعات A-B',
+				src: '/assets/جدول مراجعات  A-B.jpeg',
+				alt: 'جدول مراجعات شهر يونيو - جروب A و B',
 				note: '👆 اضغط على الصورة للتكبير'
 			}
 		],
@@ -130,17 +139,18 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 		whatsappNumber: '201554843745',
 		subscriptionWarnings: {
 			validity: {
-				title: 'مدة صلاحية المراجعة:',
+				title: 'مدة صلاحية الاشتراك:',
 				points: [
 					'الكود شغال لغاية آخر الشهر فقط',
-					'مع انتهاء الشهر بيقفل المحتوى تلقائياً'
+					'مع انتهاء الشهر بيقفل المحتوى تلقائياً',
+					'عند تجديد الاشتراك الكود الجديد بيفتحلك كل المحتوى من الأول'
 				]
 			},
 			refund: {
 				title: 'سياسة الاسترداد:',
 				points: [
-					'السحب متاح خلال أسبوع من الاشتراك مع استرداد نصف المبلغ فقط',
-					'بعد الأسبوع، لا يُمكن استرداد أي مبلغ'
+					'لا يوجد استرداد أو سحب للاشتراك نهائيًا لأي سبب من الأسباب',
+					'متاح التحويل للمكثف فقط خلال 3 أيام من تاريخ الاشتراك'
 				]
 			}
 		},
@@ -157,7 +167,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 		if (typeof window !== 'undefined') {
 			const siteUrl = (window as any)['NG_SITE_URL'] || 'https://appmo3adla.com';
 			const title = 'مراجعات A-B - ابلكيشن معادلة كلية هندسة';
-			const description = 'تفاصيل مراجعات جروب A و B والفورمات والجداول والدفع';
+			const description = 'تفاصيل مراجعات جروب A و B — سعر موحد 800ج، الفورم، الجدول، والدفع';
 			const url = `${siteUrl}/subscription-ab-reviews`;
 
 			this.seo.setTitle(title);
@@ -209,47 +219,30 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 		window.addEventListener('pageshow', this.handleWindowFocus);
 	}
 
-	openGoogleForm(groupKey: GroupKey): void {
-		const formConfig = this.subscriptionDetails.googleForms[groupKey] as GroupFormConfig;
-		if (!formConfig) {
-			return;
-		}
-
-		const isFormDisabled = this.isEnrollmentClosed || (formConfig.isClosed && !formConfig.allowOpenWhenClosed);
+	openGoogleForm(): void {
+		const form = this.subscriptionDetails.googleForm as ReviewFormConfig;
+		const isFormDisabled = this.isEnrollmentClosed || (form.isClosed && !form.allowOpenWhenClosed);
 		if (isFormDisabled) {
 			return;
 		}
 
-		window.open(formConfig.link, '_blank');
+		window.open(form.link, '_blank');
 	}
 
-	selectGroup(key: GroupKey): void {
-		this.selectedGroup = key;
-		if (typeof document !== 'undefined') {
-			setTimeout(() => {
-				const el = document.getElementById('step-payment');
-				if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-			}, 100);
-		}
+	getForm(): ReviewFormConfig {
+		return this.subscriptionDetails.googleForm as ReviewFormConfig;
+	}
+
+	getPrice(): string {
+		return this.subscriptionDetails.review.price;
+	}
+
+	getReviewName(): string {
+		return this.subscriptionDetails.review.name;
 	}
 
 	toggleWarning(): void {
 		this.isWarningExpanded = !this.isWarningExpanded;
-	}
-
-	getSelectedForm(): GroupFormConfig | null {
-		if (!this.selectedGroup) return null;
-		return this.subscriptionDetails.googleForms[this.selectedGroup] as GroupFormConfig;
-	}
-
-	getSelectedPrice(): string | null {
-		if (!this.selectedGroup) return null;
-		return this.subscriptionDetails[this.selectedGroup].price;
-	}
-
-	getSelectedGroupName(): string | null {
-		if (!this.selectedGroup) return null;
-		return this.subscriptionDetails[this.selectedGroup].name;
 	}
 
 	onNumberCardClick(number: string): void {
