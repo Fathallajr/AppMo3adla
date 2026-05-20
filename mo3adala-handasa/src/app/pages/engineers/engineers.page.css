@@ -1,0 +1,506 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+
+/* ═══════════════════════════════════════════════
+   PAGE WRAPPER
+═══════════════════════════════════════════════ */
+.engineers-page {
+	font-family: 'Cairo', sans-serif;
+	background: linear-gradient(135deg, #f8fafc 0%, #fff7ed 50%, #f0f9ff 100%);
+	min-height: 100vh;
+}
+
+.engineers-page * {
+	font-family: 'Cairo', sans-serif;
+}
+
+/* ═══════════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════════ */
+.eng-hero {
+	position: relative;
+	background: linear-gradient(135deg, #fb923c 0%, #ED5E0E 60%, #ea580c 100%);
+	padding: 4rem 1.5rem 5rem;
+	overflow: hidden;
+	text-align: center;
+}
+
+.eng-hero-orb {
+	position: absolute;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.1);
+	filter: blur(50px);
+	pointer-events: none;
+}
+
+.eng-hero-orb--1 {
+	width: 400px;
+	height: 400px;
+	top: -150px;
+	right: -100px;
+}
+
+.eng-hero-orb--2 {
+	width: 300px;
+	height: 300px;
+	bottom: -100px;
+	left: -80px;
+}
+
+.eng-hero-content {
+	position: relative;
+	z-index: 1;
+}
+
+.eng-hero-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	background: rgba(255, 255, 255, 0.2);
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	color: #fff;
+	font-size: 0.85rem;
+	font-weight: 700;
+	padding: 0.4rem 1.1rem;
+	border-radius: 50px;
+	margin-bottom: 1.25rem;
+	backdrop-filter: blur(8px);
+}
+
+.eng-hero-badge svg {
+	width: 16px;
+	height: 16px;
+}
+
+.eng-hero-title {
+	font-size: 3.5rem;
+	font-weight: 900;
+	color: #fff;
+	margin: 0 0 1rem;
+	line-height: 1.1;
+	text-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+
+.eng-hero-subtitle {
+	font-size: 1.1rem;
+	color: rgba(255,255,255,0.9);
+	font-weight: 600;
+	margin: 0;
+	max-width: 480px;
+	margin: 0 auto;
+}
+
+/* ═══════════════════════════════════════════════
+   CONTAINER
+═══════════════════════════════════════════════ */
+.eng-container {
+	max-width: 1100px;
+	margin: 0 auto;
+	padding: 2.5rem 1.25rem 3rem;
+}
+
+/* ═══════════════════════════════════════════════
+   TEACHERS GRID
+═══════════════════════════════════════════════ */
+.teachers-grid {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	gap: 1.25rem;
+	margin-bottom: 2.5rem;
+}
+
+/* ═══════════════════════════════════════════════
+   TEACHER CARD
+═══════════════════════════════════════════════ */
+.teacher-card {
+	background: #fff;
+	border-radius: 18px;
+	overflow: hidden;
+	box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+	border: 1.5px solid #f1f5f9;
+	cursor: pointer;
+	transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+	display: flex;
+	flex-direction: column;
+}
+
+.teacher-card:hover {
+	transform: translateY(-6px);
+	box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+}
+
+/* Color variants - top strip */
+.teacher-card-top {
+	position: relative;
+	padding: 1.75rem 1rem 1rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.teacher-card--blue .teacher-card-top  { background: linear-gradient(135deg, #eff6ff, #dbeafe); }
+.teacher-card--green .teacher-card-top { background: linear-gradient(135deg, #f0fdf4, #dcfce7); }
+.teacher-card--purple .teacher-card-top{ background: linear-gradient(135deg, #faf5ff, #ede9fe); }
+.teacher-card--orange .teacher-card-top{ background: linear-gradient(135deg, #fff7ed, #fed7aa); }
+.teacher-card--red .teacher-card-top   { background: linear-gradient(135deg, #fff1f2, #fecdd3); }
+
+.teacher-card--blue:hover   { border-color: #93c5fd; }
+.teacher-card--green:hover  { border-color: #86efac; }
+.teacher-card--purple:hover { border-color: #c4b5fd; }
+.teacher-card--orange:hover { border-color: #fdba74; }
+.teacher-card--red:hover    { border-color: #fca5a5; }
+
+/* Avatar */
+.teacher-avatar {
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	overflow: hidden;
+	border: 3px solid #fff;
+	box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+	margin-bottom: 0.5rem;
+	flex-shrink: 0;
+}
+
+.teacher-avatar img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.4s ease;
+}
+
+.teacher-card:hover .teacher-avatar img {
+	transform: scale(1.08);
+}
+
+/* Subject badge on avatar */
+.teacher-subject-badge {
+	font-size: 0.72rem;
+	font-weight: 800;
+	padding: 0.2rem 0.75rem;
+	border-radius: 50px;
+	margin-top: 0.25rem;
+}
+
+.teacher-subject-badge--blue   { background: #dbeafe; color: #1d4ed8; }
+.teacher-subject-badge--green  { background: #dcfce7; color: #15803d; }
+.teacher-subject-badge--purple { background: #ede9fe; color: #7c3aed; }
+.teacher-subject-badge--orange { background: #fed7aa; color: #c2410c; }
+.teacher-subject-badge--red    { background: #fecdd3; color: #be123c; }
+
+/* Card body */
+.teacher-card-body {
+	padding: 1rem 1rem 0;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	text-align: center;
+}
+
+.teacher-name {
+	font-size: 0.9rem;
+	font-weight: 800;
+	color: #1e293b;
+	margin: 0 0 0.3rem;
+	line-height: 1.3;
+}
+
+.teacher-subject {
+	font-size: 0.78rem;
+	color: #64748b;
+	font-weight: 600;
+	margin: 0;
+	line-height: 1.4;
+}
+
+/* Card footer */
+.teacher-card-footer {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.4rem;
+	padding: 0.9rem 1rem;
+	font-size: 0.78rem;
+	font-weight: 700;
+	margin-top: auto;
+	border-top: 1px solid #f1f5f9;
+	transition: gap 0.2s ease;
+}
+
+.teacher-card:hover .teacher-card-footer {
+	gap: 0.6rem;
+}
+
+.teacher-card-footer svg {
+	width: 14px;
+	height: 14px;
+	flex-shrink: 0;
+	transition: transform 0.2s ease;
+}
+
+.teacher-card:hover .teacher-card-footer svg {
+	transform: translateX(-3px);
+}
+
+.teacher-footer--blue   { color: #2563eb; }
+.teacher-footer--green  { color: #16a34a; }
+.teacher-footer--purple { color: #7c3aed; }
+.teacher-footer--orange { color: #ea580c; }
+.teacher-footer--red    { color: #dc2626; }
+
+/* ═══════════════════════════════════════════════
+   MOTIVATIONAL SECTION
+═══════════════════════════════════════════════ */
+.eng-motiv-section {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0;
+	background: #fff;
+	border-radius: 24px;
+	overflow: hidden;
+	box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+	border: 1px solid #f1f5f9;
+	margin-bottom: 2rem;
+}
+
+.eng-motiv-image-wrap {
+	overflow: hidden;
+	min-height: 340px;
+}
+
+.eng-motiv-image-wrap img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	transition: transform 0.5s ease;
+}
+
+.eng-motiv-image-wrap:hover img {
+	transform: scale(1.04);
+}
+
+.eng-motiv-content {
+	padding: 2.5rem 2rem;
+	background: linear-gradient(135deg, #fff7ed, #ffedd5);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.eng-motiv-title {
+	font-size: 1.8rem;
+	font-weight: 900;
+	color: #1e293b;
+	margin: 0 0 0.75rem;
+	line-height: 1.2;
+}
+
+.eng-motiv-text {
+	font-size: 0.95rem;
+	color: #475569;
+	font-weight: 600;
+	line-height: 1.7;
+	margin: 0 0 1.25rem;
+}
+
+.eng-motiv-list {
+	list-style: none;
+	padding: 0;
+	margin: 0 0 1.75rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.eng-motiv-list li {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	font-size: 0.9rem;
+	font-weight: 700;
+	color: #334155;
+}
+
+.eng-motiv-check {
+	width: 32px;
+	height: 32px;
+	background: linear-gradient(135deg, #fb923c, #EA580C);
+	border-radius: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #fff;
+	flex-shrink: 0;
+}
+
+.eng-motiv-check svg {
+	width: 16px;
+	height: 16px;
+}
+
+.eng-motiv-actions {
+	display: flex;
+	gap: 0.75rem;
+}
+
+.eng-btn-primary {
+	flex: 1;
+	background: linear-gradient(135deg, #fb923c, #EA580C);
+	color: #fff;
+	padding: 0.85rem 1.25rem;
+	border-radius: 12px;
+	font-weight: 800;
+	font-size: 0.95rem;
+	text-align: center;
+	text-decoration: none;
+	transition: all 0.25s ease;
+	box-shadow: 0 4px 16px rgba(234, 88, 12, 0.3);
+}
+
+.eng-btn-primary:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 24px rgba(234, 88, 12, 0.4);
+}
+
+.eng-btn-outline {
+	flex: 1;
+	border: 2px solid #fb923c;
+	color: #EA580C;
+	padding: 0.85rem 1.25rem;
+	border-radius: 12px;
+	font-weight: 800;
+	font-size: 0.95rem;
+	text-align: center;
+	text-decoration: none;
+	transition: all 0.25s ease;
+	background: #fff;
+}
+
+.eng-btn-outline:hover {
+	background: #fff7ed;
+	transform: translateY(-2px);
+}
+
+/* ═══════════════════════════════════════════════
+   CTA SECTION
+═══════════════════════════════════════════════ */
+.eng-cta {
+	position: relative;
+	background: linear-gradient(135deg, #fb923c, #EA580C);
+	border-radius: 24px;
+	padding: 3.5rem 2rem;
+	text-align: center;
+	overflow: hidden;
+	box-shadow: 0 12px 40px rgba(234, 88, 12, 0.25);
+}
+
+.eng-cta-orb {
+	position: absolute;
+	border-radius: 50%;
+	background: rgba(255,255,255,0.1);
+	filter: blur(40px);
+}
+
+.eng-cta-orb--1 { width: 300px; height: 300px; top: -100px; right: -80px; }
+.eng-cta-orb--2 { width: 250px; height: 250px; bottom: -80px; left: -60px; }
+
+.eng-cta-title {
+	position: relative;
+	font-size: 2.5rem;
+	font-weight: 900;
+	color: #fff;
+	margin: 0 0 0.75rem;
+	z-index: 1;
+}
+
+.eng-cta-subtitle {
+	position: relative;
+	font-size: 1.05rem;
+	color: rgba(255,255,255,0.9);
+	font-weight: 600;
+	margin: 0 0 2rem;
+	z-index: 1;
+}
+
+.eng-cta-btn {
+	position: relative;
+	z-index: 1;
+	display: inline-block;
+	background: #fff;
+	color: #EA580C;
+	font-weight: 800;
+	font-size: 1rem;
+	padding: 0.9rem 3rem;
+	border-radius: 14px;
+	text-decoration: none;
+	box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+	transition: all 0.25s ease;
+}
+
+.eng-cta-btn:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 14px 32px rgba(0,0,0,0.2);
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+	.teachers-grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+@media (max-width: 768px) {
+	.eng-hero-title {
+		font-size: 2.5rem;
+	}
+
+	.teachers-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.eng-motiv-section {
+		grid-template-columns: 1fr;
+	}
+
+	.eng-motiv-image-wrap {
+		min-height: 220px;
+	}
+
+	.eng-motiv-content {
+		padding: 1.75rem 1.25rem;
+	}
+
+	.eng-motiv-title {
+		font-size: 1.4rem;
+	}
+
+	.eng-motiv-actions {
+		flex-direction: column;
+	}
+
+	.eng-cta-title {
+		font-size: 1.8rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.teachers-grid {
+		grid-template-columns: 1fr 1fr;
+		gap: 0.85rem;
+	}
+
+	.eng-hero-title {
+		font-size: 2rem;
+	}
+
+	.teacher-avatar {
+		width: 68px;
+		height: 68px;
+	}
+
+	.teacher-name {
+		font-size: 0.82rem;
+	}
+}

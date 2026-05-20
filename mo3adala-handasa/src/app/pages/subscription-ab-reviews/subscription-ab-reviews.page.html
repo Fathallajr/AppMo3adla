@@ -1,0 +1,332 @@
+<div class="modern-subscription-page">
+
+	<div class="hero-section hero-section--reviews">
+		<div class="hero-content">
+			<div class="month-badge">{{ subscriptionDetails.month }}</div>
+			<h1 class="hero-title">مراجعات A-B</h1>
+			<p class="hero-subtitle">{{ subscriptionDetails.subtitle }}</p>
+		</div>
+		<div class="hero-decoration"></div>
+	</div>
+
+	<div *ngIf="isEnrollmentClosed" class="enrollment-closed-banner" role="status" aria-live="polite">
+		<h2 class="banner-title">تم غلق باب المراجعات مؤقتًا</h2>
+		<p class="banner-description">
+			تابعنا على المنصة والسوشيال ميديا علشان تعرف معاد فتح المراجعات.
+		</p>
+		<p class="banner-reopen">{{ enrollmentReopenMessage }}</p>
+	</div>
+
+	<div class="step-indicator-wrapper">
+		<div class="step-indicator">
+			<div class="step-item step-item--active">
+				<div class="step-circle">1</div>
+				<span class="step-label">سعر المراجعة</span>
+			</div>
+			<div class="step-line step-line--done"></div>
+			<div class="step-item step-item--active">
+				<div class="step-circle">2</div>
+				<span class="step-label">حول المبلغ</span>
+			</div>
+			<div class="step-line step-line--done"></div>
+			<div class="step-item step-item--active">
+				<div class="step-circle">3</div>
+				<span class="step-label">سجل الفورم</span>
+			</div>
+			<div class="step-line"></div>
+			<div class="step-item">
+				<div class="step-circle">4</div>
+				<span class="step-label">استلم الكود</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="main-container">
+
+		<div class="step-section">
+			<div class="step-section-header">
+				<div class="step-number-badge">1</div>
+				<div>
+					<h2 class="step-section-title">اشتراك مراجعات A-B</h2>
+					<p class="step-section-subtitle">سعر موحد لمراجعات جروب A و B</p>
+				</div>
+			</div>
+
+			<div class="pricing-cards-grid pricing-cards-grid--single">
+				<div class="pricing-card pricing-card--selected pricing-card--disabled">
+					<div class="pricing-card-check">
+						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+						</svg>
+					</div>
+					<div class="pricing-card-label">{{ getReviewName() }}</div>
+					<div class="pricing-card-price">
+						{{ getPrice() }}
+						<span class="pricing-card-currency">ج</span>
+					</div>
+					<div class="pricing-card-period">/شهر</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="step-section" id="step-payment">
+			<div class="step-section-header">
+				<div class="step-number-badge">2</div>
+				<div>
+					<h2 class="step-section-title">حول المبلغ</h2>
+					<p class="step-section-subtitle">حول عن طريق فودافون كاش لأي رقم من الأرقام دي</p>
+				</div>
+			</div>
+
+			<div class="selected-group-banner">
+				<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+				</svg>
+				<span>{{ getReviewName() }} — المبلغ المطلوب: <strong>{{ getPrice() }} ج</strong></span>
+			</div>
+
+			<div class="vodafone-payment-section">
+				<div class="vodafone-header">
+					<img src="assets/vodafone.png" alt="Vodafone Cash" class="vodafone-logo">
+					<div>
+						<h4 class="vodafone-title">فودافون كاش</h4>
+						<p class="vodafone-subtitle">تحويل آمن وسريع</p>
+					</div>
+				</div>
+
+				<div class="numbers-grid">
+					<ng-container *ngFor="let wallet of getFilteredVodafoneNumbers()">
+						<div class="number-card"
+							 (click)="onNumberCardClick(wallet.number)"
+							 [class.number-card--disabled]="isEnrollmentClosed"
+							 [attr.aria-disabled]="isEnrollmentClosed ? 'true' : null">
+
+							<div *ngIf="copiedNumber === wallet.number" class="copy-overlay">
+								<div class="copy-message">
+									<svg class="check-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+									</svg>
+									<div>تم النسخ</div>
+								</div>
+							</div>
+
+							<div *ngIf="isEnrollmentClosed" class="number-card-overlay">
+								<div class="number-card-overlay-content">
+									<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.657 0 3-1.567 3-3.5S13.657 4 12 4 9 5.567 9 7.5 10.343 11 12 11zM12 13c-2.33 0-7 1.17-7 3.5V19a1 1 0 001 1h12a1 1 0 001-1v-2.5c0-2.33-4.67-3.5-7-3.5z"></path>
+									</svg>
+									<span>سيتم إظهار الأرقام عند فتح المراجعات</span>
+								</div>
+							</div>
+
+							<div class="number-content" [class.number-content--hidden]="isEnrollmentClosed">
+								<div class="number-text">{{ wallet.number }}</div>
+								<div class="owner-text">{{ wallet.owner }}</div>
+								<div class="copy-hint">👆 اضغط للنسخ</div>
+							</div>
+
+							<div class="copy-icon">
+								<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+								</svg>
+							</div>
+						</div>
+					</ng-container>
+				</div>
+
+				<div class="required-info-inline">
+					<h4 class="info-title-inline">📌 المعلومات المطلوبة بعد التحويل:</h4>
+					<div class="info-items-inline">
+						<div *ngFor="let info of subscriptionDetails.requiredInfo" class="info-badge">
+							{{ info }}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="step-section">
+			<div class="step-section-header">
+				<div class="step-number-badge">3</div>
+				<div>
+					<h2 class="step-section-title">سجل الفورم</h2>
+					<p class="step-section-subtitle">بعد التحويل، سجل بياناتك في فورم المراجعة</p>
+				</div>
+			</div>
+
+			<div class="single-form-card" *ngIf="getForm() as form">
+				<div class="single-form-header">
+					<div class="single-form-icon">
+						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+						</svg>
+					</div>
+					<div>
+						<div class="single-form-title">فورم {{ form.label }}</div>
+						<div class="single-form-desc">{{ form.description }}</div>
+					</div>
+					<span class="form-option-status" [class.form-option-status--closed]="form.isClosed || isEnrollmentClosed">
+						{{ (form.isClosed || isEnrollmentClosed) ? 'مغلق مؤقتاً' : 'متاح الآن' }}
+					</span>
+				</div>
+				<button
+					(click)="openGoogleForm()"
+					class="form-submit-button form-submit-button--large"
+					[class.form-submit-button--disabled]="isEnrollmentClosed || (form.isClosed && !form.allowOpenWhenClosed)"
+					[attr.disabled]="(isEnrollmentClosed || (form.isClosed && !form.allowOpenWhenClosed)) ? '' : null">
+					<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+					</svg>
+					<span>{{ form.buttonText }}</span>
+				</button>
+			</div>
+		</div>
+
+		<div class="step-section">
+			<div class="step-section-header">
+				<div class="step-number-badge step-number-badge--muted">4</div>
+				<div>
+					<h2 class="step-section-title">استلم الكود</h2>
+					<p class="step-section-subtitle">بعد تسجيل الفورم هتوصلك الكود على الواتساب</p>
+				</div>
+			</div>
+
+			<div class="after-submit-card">
+				<div class="after-submit-icon">📲</div>
+				<h3 class="after-submit-title">بعد إتمام تسجيل الفورم</h3>
+				<p class="after-submit-text">
+					ستتلقى كود المراجعة على واتساب وستتمكن من البدء فوراً
+				</p>
+			</div>
+		</div>
+
+		<div class="accordion-card">
+			<button class="accordion-header" (click)="toggleWarning()" [attr.aria-expanded]="isWarningExpanded">
+				<div class="accordion-header-right">
+					<div class="accordion-icon">
+						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+						</svg>
+					</div>
+					<span class="accordion-title">تنبيهات مهمة قبل المراجعة</span>
+				</div>
+				<svg class="accordion-chevron" [class.accordion-chevron--open]="isWarningExpanded" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+				</svg>
+			</button>
+
+			<div class="accordion-body" [class.accordion-body--open]="isWarningExpanded">
+				<div class="warning-items">
+					<div class="warning-item orange-border">
+						<h4 class="warning-item-title">{{ subscriptionDetails.subscriptionWarnings.validity.title }}</h4>
+						<ul class="warning-list">
+							<li *ngFor="let point of subscriptionDetails.subscriptionWarnings.validity.points">
+								{{ point }}
+							</li>
+						</ul>
+					</div>
+					<div class="warning-item red-border">
+						<h4 class="warning-item-title">{{ subscriptionDetails.subscriptionWarnings.refund.title }}</h4>
+						<ul class="warning-list">
+							<li *ngFor="let point of subscriptionDetails.subscriptionWarnings.refund.points">
+								{{ point }}
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="features-section">
+			<div class="section-header">
+				<h3 class="section-title">ما ستحصل عليه في المراجعة</h3>
+				<p class="section-subtitle">مميزات مراجعات A و B</p>
+			</div>
+			<div class="features-grid">
+				<div *ngFor="let feature of subscriptionDetails.features" class="feature-item">
+					<div class="feature-icon">
+						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+						</svg>
+					</div>
+					<div class="feature-text">{{ feature }}</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="schedule-table-section">
+			<div class="section-header">
+				<h3 class="section-title">جدول مراجعات الشهر</h3>
+				<p class="section-subtitle">خطة المراجعة الموحدة لجروب A و B</p>
+			</div>
+			<div class="schedule-grid schedule-grid--single">
+				<div class="schedule-image-card" *ngFor="let schedule of subscriptionDetails.scheduleImages">
+					<div class="schedule-card-header">
+						<span class="schedule-card-title">{{ schedule.group }}</span>
+					</div>
+					<div class="schedule-image-wrapper">
+						<img [src]="schedule.src"
+							 [alt]="schedule.alt"
+							 class="schedule-image"
+							 loading="lazy"
+							 (click)="openImageModal(schedule)">
+					</div>
+					<p class="image-hint">{{ schedule.note || '👆 اضغط على الصورة للتكبير' }}</p>
+					<div class="schedule-download-wrapper">
+						<a [href]="schedule.src" download class="schedule-download-button">
+							<span>تحميل الجدول</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="image-modal" *ngIf="isImageModalOpen && activeScheduleImage as modalImage" (click)="closeImageModal()">
+			<div class="image-modal-content" (click)="$event.stopPropagation()">
+				<button class="modal-close-btn" (click)="closeImageModal()" aria-label="إغلاق">
+					<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+					</svg>
+				</button>
+				<img [src]="modalImage.src"
+					 [alt]="modalImage.alt || 'جدول المراجعة - مكبر'"
+					 class="modal-image">
+			</div>
+		</div>
+
+		<div class="account-section">
+			<div class="account-icon">👤</div>
+			<h3 class="account-title">لديك حساب في المنصة؟</h3>
+			<p class="account-subtitle">اختر الخيار المناسب للوصول إلى المحتوى</p>
+			<div class="account-buttons">
+				<a href="https://app-mo3adlet-handsa.com/student/index.php" target="_blank" class="account-btn login-btn">
+					<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+					</svg>
+					تسجيل دخول
+				</a>
+				<a href="https://app-mo3adlet-handsa.com/register.php" target="_blank" class="account-btn register-btn">
+					<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+					</svg>
+					إنشاء حساب جديد
+				</a>
+			</div>
+		</div>
+
+		<div class="support-section">
+			<h3 class="support-title">تحتاج مساعدة؟</h3>
+			<p class="support-subtitle">تواصل معنا مباشرة لحل أي مشكلة</p>
+			<a href="https://api.whatsapp.com/send/?phone=201554843745&text=السلام عليكم، أواجه مشكلة في تسجيل فورم مراجعة A-B أو التحويل وأحتاج مساعدة&type=phone_number&app_absent=0"
+			   target="_blank"
+			   class="support-button">
+				<svg fill="currentColor" viewBox="0 0 24 24">
+					<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.106"/>
+				</svg>
+				تواصل معنا الآن
+			</a>
+			<p class="support-note">متاح لحل جميع المشاكل</p>
+		</div>
+
+	</div>
+</div>

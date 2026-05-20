@@ -1,0 +1,45 @@
+import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { SeoService } from '../../core/seo.service';
+import { CanonicalService } from '../../core/canonical.service';
+import { cmsPageDefaults } from '../../core/cms-page.registry';
+import { MonthlyContentService } from '../../core/services/monthly-content.service';
+
+@Component({
+	selector: 'app-contact-page',
+	standalone: true,
+	imports: [CommonModule],
+	templateUrl: './contact.page.html',
+	styleUrls: ['./contact.page.css'],
+})
+export class ContactPageComponent implements OnInit {
+	private readonly seo = inject(SeoService);
+	private readonly canonical = inject(CanonicalService);
+	private readonly contentService = inject(MonthlyContentService);
+	studentWhatsapp = (typeof window !== 'undefined' ? (window as any)['NG_STUDENT_WHATSAPP'] : process.env['NG_STUDENT_WHATSAPP']) || '201554843745';
+	parentWhatsapp = (typeof window !== 'undefined' ? (window as any)['NG_PARENT_WHATSAPP'] : process.env['NG_PARENT_WHATSAPP']) || '201554843745';
+	phoneNumber = (typeof window !== 'undefined' ? (window as any)['NG_PHONE_NUMBER'] : process.env['NG_PHONE_NUMBER']) || '+201554843745';
+
+	constructor() {
+		if (typeof window !== 'undefined') {
+			const title = 'تواصل معنا - ابلكيشن معادلة كلية هندسة';
+			const description = 'تواصل معنا عبر واتساب للطلاب وأولياء الأمور أو اتصل بنا مباشرة. نحن هنا لمساعدتك في رحلتك التعليمية';
+			this.seo.setTitle(title);
+			this.seo.setDescription(description);
+			this.seo.setOgTags({ title, description, url: (window as any)['NG_SITE_URL'] + '/contact' });
+			this.seo.setTwitterTags({ title, description });
+			this.canonical.setCanonical();
+		}
+	}
+
+	ngOnInit(): void {
+		this.contentService.loadPageState('contact', cmsPageDefaults.contact).subscribe(content => {
+			const state = content as { studentWhatsapp?: string; parentWhatsapp?: string; phoneNumber?: string };
+			this.studentWhatsapp = state.studentWhatsapp || this.studentWhatsapp;
+			this.parentWhatsapp = state.parentWhatsapp || this.parentWhatsapp;
+			this.phoneNumber = state.phoneNumber || this.phoneNumber;
+		});
+	}
+}
+
+
