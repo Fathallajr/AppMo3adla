@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SeoService } from '../../core/seo.service';
 import { CanonicalService } from '../../core/canonical.service';
 import { MonthlyContentService } from '../../core/services/monthly-content.service';
@@ -35,6 +36,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	enrollmentReopenMessage = 'سيتم فتح المراجعات مع بداية الشهر القادم بإذن الله.';
 	shuffledVodafoneNumbers: { number: string; owner: string }[] = [];
 	isWarningExpanded = false;
+	isVideoLoaded = false;
 
 	private handleVisibilityChange = () => {
 		if (typeof document === 'undefined') {
@@ -160,7 +162,8 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	constructor(
 		private seo: SeoService,
 		private canonical: CanonicalService,
-		private monthlyContent: MonthlyContentService
+		private monthlyContent: MonthlyContentService,
+		private sanitizer: DomSanitizer
 	) {}
 
 	ngOnInit(): void {
@@ -302,5 +305,20 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 		this.isImageModalOpen = false;
 		this.activeScheduleImage = null;
 		document.body.style.overflow = '';
+	}
+
+	loadVideo(): void {
+		this.isVideoLoaded = true;
+	}
+
+	getVideoEmbedUrl(): SafeResourceUrl {
+		const videoId = 'TZwvwaAYk04';
+		const url = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+		return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+	}
+
+	getVideoThumbnail(): string {
+		const videoId = 'TZwvwaAYk04';
+		return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 	}
 }

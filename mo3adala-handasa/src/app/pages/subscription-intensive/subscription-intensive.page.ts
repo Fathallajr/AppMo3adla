@@ -25,6 +25,7 @@ export class SubscriptionIntensivePageComponent implements OnInit, OnDestroy {
 	activeScheduleImage: ScheduleImage | null = null;
 	isEnrollmentClosed = false;
 	isWarningExpanded = false;
+	isVideoLoaded = false;
 	selectedPlan: 'installments' | 'full' | null = null;
 	shuffledVodafoneNumbers: { number: string; owner: string }[] = [];
 
@@ -242,9 +243,18 @@ export class SubscriptionIntensivePageComponent implements OnInit, OnDestroy {
 		document.body.style.overflow = '';
 	}
 
+	loadVideo(): void {
+		this.isVideoLoaded = true;
+	}
+
 	getVideoEmbedUrl(): SafeResourceUrl {
-		const videoId = 'ZaYxQo0bOqo';
-		const url = `https://www.youtube.com/embed/${videoId}`;
+		const videoId = 'Viy_dZ-Fn8w';
+		const url = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
 		return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+	}
+
+	getVideoThumbnail(): string {
+		const videoId = 'Viy_dZ-Fn8w';
+		return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 	}
 }

@@ -364,6 +364,46 @@
 			</div>
 		</div>
 
+		<!-- ═══ Video Section ═══ -->
+		<div class="video-section-new">
+			<div class="video-section-header">
+				<div class="video-section-icon">
+					<svg fill="currentColor" viewBox="0 0 24 24">
+						<path d="M8 5v14l11-7z"/>
+					</svg>
+				</div>
+				<div>
+					<h3 class="video-section-title">فيديو تفاصيل الاشتراك</h3>
+					<p class="video-section-subtitle">شاهد الشرح الكامل لتفاصيل الكورس المكثف</p>
+				</div>
+			</div>
+
+			<div class="video-player-wrapper">
+				<div class="video-thumbnail-overlay" *ngIf="!isVideoLoaded" (click)="loadVideo()">
+					<img [src]="getVideoThumbnail()"
+						 alt="شاهد فيديو تفاصيل الاشتراك المكثف"
+						 class="video-thumbnail-img"
+						 loading="lazy">
+					<div class="video-play-btn">
+						<svg fill="currentColor" viewBox="0 0 24 24">
+							<path d="M8 5v14l11-7z"/>
+						</svg>
+					</div>
+					<div class="video-thumbnail-label">اضغط لمشاهدة الفيديو</div>
+				</div>
+
+				<iframe
+					*ngIf="isVideoLoaded"
+					class="subscription-video-iframe"
+					[src]="getVideoEmbedUrl()"
+					title="فيديو توضيحي - الكورس المكثف"
+					frameborder="0"
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+					allowfullscreen>
+				</iframe>
+			</div>
+		</div>
+
 		<!-- ═══ جداول المكثف ═══ -->
 		<div class="step-section">
 			<div class="step-section-header">

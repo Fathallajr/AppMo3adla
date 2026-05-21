@@ -37,7 +37,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 	copiedNumber: string | null = null;
 	isImageModalOpen = false;
 	activeScheduleImage: ScheduleImage | null = null;
-	isEnrollmentClosed = true;
+	isEnrollmentClosed = false;
 	enrollmentReopenMessage = 'سيتم فتح الاشتراك للمشتركين الجدد مع بداية الشهر القادم بإذن الله.';
 	shuffledVodafoneNumbers: { number: string; owner: string }[] = [];
 	readonly selectedGroup: GroupKey = 'groupC';
@@ -98,7 +98,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 				label: 'جروب C',
 				description: 'للمشتركين الجدد جروب C',
 				buttonText: 'سجل فورم جروب C',
-				link: 'https://forms.gle/YjNPWmYYvA1MipRf7',
+				link: 'https://forms.gle/mXzLb7Bnff43GUxK8',
 				isClosed: false
 			}
 		},
@@ -111,7 +111,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 		scheduleImages: [
 			{
 				group: 'جدول جروب C',
-				src: '/assets/جروب C.png',
+				src: 'assets/جدول C.jpeg',
 				alt: 'جدول محتوى شهر مايو - جروب C',
 				note: '👆 اضغط على الصورة للتكبير'
 			}
@@ -309,13 +309,13 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 	}
 
 	getVideoEmbedUrl(): SafeResourceUrl {
-		const videoId = 'ZaYxQo0bOqo';
+		const videoId = 'kABsJAL3Si8';
 		const url = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
 		return this.sanitizer.bypassSecurityTrustResourceUrl(url);
 	}
 
 	getVideoThumbnail(): string {
-		const videoId = 'ZaYxQo0bOqo';
-		return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+		const videoId = 'kABsJAL3Si8';
+		return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 	}
 }

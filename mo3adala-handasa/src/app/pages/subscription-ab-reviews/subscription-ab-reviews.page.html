@@ -208,7 +208,7 @@
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
 						</svg>
 					</div>
-					<span class="accordion-title">تنبيهات مهمة قبل المراجعة</span>
+					<span class="accordion-title">تنبيهات مهمة قبل الاشتراك</span>
 				</div>
 				<svg class="accordion-chevron" [class.accordion-chevron--open]="isWarningExpanded" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -234,6 +234,45 @@
 						</ul>
 					</div>
 				</div>
+			</div>
+		</div>
+
+		<div class="video-section-new">
+			<div class="video-section-header">
+				<div class="video-section-icon">
+					<svg fill="currentColor" viewBox="0 0 24 24">
+						<path d="M8 5v14l11-7z"/>
+					</svg>
+				</div>
+				<div>
+					<h3 class="video-section-title">فيديو تفاصيل المراجعة</h3>
+					<p class="video-section-subtitle">شاهد الشرح الكامل لتفاصيل مراجعات A-B</p>
+				</div>
+			</div>
+
+			<div class="video-player-wrapper">
+				<div class="video-thumbnail-overlay" *ngIf="!isVideoLoaded" (click)="loadVideo()">
+					<img [src]="getVideoThumbnail()"
+						 alt="شاهد فيديو تفاصيل المراجعة"
+						 class="video-thumbnail-img"
+						 loading="lazy">
+					<div class="video-play-btn">
+						<svg fill="currentColor" viewBox="0 0 24 24">
+							<path d="M8 5v14l11-7z"/>
+						</svg>
+					</div>
+					<div class="video-thumbnail-label">اضغط لمشاهدة الفيديو</div>
+				</div>
+
+				<iframe
+					*ngIf="isVideoLoaded"
+					class="subscription-video-iframe"
+					[src]="getVideoEmbedUrl()"
+					title="فيديو توضيحي - مراجعات A-B"
+					frameborder="0"
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+					allowfullscreen>
+				</iframe>
 			</div>
 		</div>
 
