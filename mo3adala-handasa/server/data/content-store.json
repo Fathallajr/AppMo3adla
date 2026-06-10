@@ -42,7 +42,7 @@
               "description": "للمشتركين الأساسيين",
               "buttonText": "سجل فورم جروب A",
               "link": "https://forms.gle/DXsVyF3kPvWXwkHG8",
-              "isClosed": false
+              "isClosed": true
             },
             "groupB": {
               "key": "groupB",
@@ -50,7 +50,7 @@
               "description": "للمشتركين الجدد جروب B",
               "buttonText": "سجل فورم جروب B",
               "link": "https://forms.gle/NDYjPGQug76Damm6A",
-              "isClosed": false
+              "isClosed": true
             },
             "groupC": {
               "key": "groupC",
@@ -58,7 +58,7 @@
               "description": "للمشتركين الجدد جروب C",
               "buttonText": "سجل فورم جروب C",
               "link": "https://forms.gle/YjNPWmYYvA1MipRf7",
-              "isClosed": false
+              "isClosed": true
             }
           },
           "vodafoneNumbers": [

@@ -37,7 +37,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 	copiedNumber: string | null = null;
 	isImageModalOpen = false;
 	activeScheduleImage: ScheduleImage | null = null;
-	isEnrollmentClosed = false;
+	isEnrollmentClosed = true;
 	enrollmentReopenMessage = 'سيتم فتح الاشتراك للمشتركين الجدد مع بداية الشهر القادم بإذن الله.';
 	shuffledVodafoneNumbers: { number: string; owner: string }[] = [];
 	readonly selectedGroup: GroupKey = 'groupC';
@@ -99,7 +99,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 				description: 'للمشتركين الجدد جروب C',
 				buttonText: 'سجل فورم جروب C',
 				link: 'https://forms.gle/mXzLb7Bnff43GUxK8',
-				isClosed: false
+				isClosed: true
 			}
 		},
 		vodafoneNumbers: [

@@ -34,7 +34,7 @@ export const monthlyContentDefaults = {
 					description: 'للمشتركين الجدد جروب C',
 					buttonText: 'سجل فورم جروب C',
 					link: 'https://forms.gle/YjNPWmYYvA1MipRf7',
-					isClosed: false
+					isClosed: true
 				}
 			},
 			vodafoneNumbers: [
@@ -99,7 +99,7 @@ export const monthlyContentDefaults = {
 				description: 'فورم اشتراك مراجعات يونيو',
 				buttonText: 'سجل فورم المراجعة',
 				link: 'https://forms.gle/qjpyARRjxGTUKRY26',
-				isClosed: false
+				isClosed: true
 			},
 			vodafoneNumbers: [
 				{ number: '01025326080', owner: 'احمد م**** ا***** ز***' },
