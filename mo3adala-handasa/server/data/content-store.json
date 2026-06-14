@@ -42,7 +42,7 @@
               "description": "للمشتركين الأساسيين",
               "buttonText": "سجل فورم جروب A",
               "link": "https://forms.gle/DXsVyF3kPvWXwkHG8",
-              "isClosed": true
+              "isClosed": false
             },
             "groupB": {
               "key": "groupB",
@@ -50,7 +50,7 @@
               "description": "للمشتركين الجدد جروب B",
               "buttonText": "سجل فورم جروب B",
               "link": "https://forms.gle/NDYjPGQug76Damm6A",
-              "isClosed": true
+              "isClosed": false
             },
             "groupC": {
               "key": "groupC",
@@ -58,7 +58,7 @@
               "description": "للمشتركين الجدد جروب C",
               "buttonText": "سجل فورم جروب C",
               "link": "https://forms.gle/YjNPWmYYvA1MipRf7",
-              "isClosed": true
+              "isClosed": false
             }
           },
           "vodafoneNumbers": [
@@ -144,7 +144,7 @@
     },
     "subscription-intensive": {
       "data": {
-        "isEnrollmentClosed": true,
+        "isEnrollmentClosed": false,
         "enrollmentReopenMessage": "انتظروا التفاصيل قريباً بإذن الله 🔥",
         "subscriptionDetails": {
           "title": "الاشتراك المكثف",

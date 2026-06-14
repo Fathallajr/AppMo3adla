@@ -32,7 +32,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	copiedNumber: string | null = null;
 	isImageModalOpen = false;
 	activeScheduleImage: ScheduleImage | null = null;
-	isEnrollmentClosed = true;
+	isEnrollmentClosed = false;
 	enrollmentReopenMessage = 'سيتم فتح المراجعات مع بداية الشهر القادم بإذن الله.';
 	shuffledVodafoneNumbers: { number: string; owner: string }[] = [];
 	isWarningExpanded = false;
@@ -117,7 +117,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 			description: 'فورم اشتراك مراجعات يونيو',
 			buttonText: 'سجل فورم المراجعة',
 			link: 'https://forms.gle/qjpyARRjxGTUKRY26',
-			isClosed: true
+			isClosed: false
 		},
 		vodafoneNumbers: [
 			{ number: '01025326080', owner: 'احمد م**** ا***** ز***' },

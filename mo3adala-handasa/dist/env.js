@@ -1,5 +1,5 @@
 // Runtime environment variables (override in deploys)
-window.NG_SITE_URL = window.NG_SITE_URL || 'https://example.com';
+window.NG_SITE_URL = window.NG_SITE_URL || 'https://www.appmo3adla.com';
 window.NG_FORMSPREE_ENDPOINT = window.NG_FORMSPREE_ENDPOINT || 'https://formspree.io/f/XXXXXXX';
 window.NG_WHATSAPP = window.NG_WHATSAPP || '201554843745';
 window.NG_GISCUS_REPO = window.NG_GISCUS_REPO || '';
@@ -18,5 +18,4 @@ window.NG_PLATFORM = window.NG_PLATFORM || 'https://app-mo3adlet-handsa.com/inde
 
 // WhatsApp direct chat link (overrides NG_WHATSAPP)
 window.NG_WA = window.NG_WA || 'https://api.whatsapp.com/send?phone=201554843745';
-
 

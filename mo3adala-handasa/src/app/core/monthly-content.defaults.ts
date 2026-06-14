@@ -2,7 +2,7 @@ export type MonthlyContentPageKey = 'subscription-details' | 'subscription-ab-re
 
 export const monthlyContentDefaults = {
 	'subscription-details': {
-		isEnrollmentClosed: true,
+		isEnrollmentClosed: false,
 		enrollmentReopenMessage: 'سيتم فتح الاشتراك للمشتركين الجدد مع بداية الشهر القادم بإذن الله.',
 		subscriptionDetails: {
 			month: ' شهر مايو 2026',
@@ -34,7 +34,7 @@ export const monthlyContentDefaults = {
 					description: 'للمشتركين الجدد جروب C',
 					buttonText: 'سجل فورم جروب C',
 					link: 'https://forms.gle/YjNPWmYYvA1MipRf7',
-					isClosed: true
+					isClosed: false
 				}
 			},
 			vodafoneNumbers: [
@@ -78,7 +78,7 @@ export const monthlyContentDefaults = {
 		}
 	},
 	'subscription-ab-reviews': {
-		isEnrollmentClosed: true,
+		isEnrollmentClosed: false,
 		enrollmentReopenMessage: 'سيتم فتح المراجعات مع بداية الشهر القادم بإذن الله.',
 		subscriptionDetails: {
 			month: 'مراجعات شهر يونيو 2026',
@@ -99,7 +99,7 @@ export const monthlyContentDefaults = {
 				description: 'فورم اشتراك مراجعات يونيو',
 				buttonText: 'سجل فورم المراجعة',
 				link: 'https://forms.gle/qjpyARRjxGTUKRY26',
-				isClosed: true
+				isClosed: false
 			},
 			vodafoneNumbers: [
 				{ number: '01025326080', owner: 'احمد م**** ا***** ز***' },
