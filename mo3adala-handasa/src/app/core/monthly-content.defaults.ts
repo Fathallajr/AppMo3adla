@@ -34,7 +34,7 @@ export const monthlyContentDefaults = {
 					description: 'للمشتركين الجدد جروب C',
 					buttonText: 'سجل فورم جروب C',
 					link: 'https://forms.gle/YjNPWmYYvA1MipRf7',
-					isClosed: false
+					isClosed: true
 				}
 			},
 			vodafoneNumbers: [
@@ -99,7 +99,7 @@ export const monthlyContentDefaults = {
 				description: 'فورم اشتراك مراجعات يونيو',
 				buttonText: 'سجل فورم المراجعة',
 				link: 'https://forms.gle/qjpyARRjxGTUKRY26',
-				isClosed: false
+				isClosed: true
 			},
 			vodafoneNumbers: [
 				{ number: '01025326080', owner: 'احمد م**** ا***** ز***' },
@@ -122,19 +122,19 @@ export const monthlyContentDefaults = {
 			],
 			whatsappNumber: '201554843745',
 			subscriptionWarnings: {
-				validity: {
-					title: 'مدة صلاحية الاشتراك:',
-					points: [
-						'الكود شغال لغاية آخر الشهر فقط',
-						'مع انتهاء الشهر بيقفل المحتوى تلقائياً',
-						'عند تجديد الاشتراك الكود الجديد بيفتحلك كل المحتوى من الأول'
-					]
-				},
 				refund: {
 					title: 'سياسة الاسترداد:',
 					points: [
-						'لا يوجد استرداد أو سحب للاشتراك نهائيًا لأي سبب من الأسباب',
-						'متاح التحويل للمكثف فقط خلال 3 أيام من تاريخ الاشتراك'
+						'لا يوجد استرداد أو سحب للاشتراك نهائيًا لأي سبب من الأسباب'
+					]
+				},
+				validity: {
+					title: 'مدة صلاحية الاشتراك:',
+					points: [
+						'المنصة شغالة لغاية اخر القسط الاول فقط',
+						'مع إنتهاء القسط الاول المحتوى بيقفل تلقائي',
+						'عند التجديد بيتفتح لك كل المحتوى من الأول',
+						'في خطة الدفع الكامل المنصة بتفضل شغالة لحد ليالي الامتحان'
 					]
 				}
 			},
@@ -164,10 +164,10 @@ export const monthlyContentDefaults = {
 			},
 			currency: 'ج',
 			vodafoneNumbers: [
-				{ number: '01080594862', owner: 'Ahmed A*****' },
-				{ number: '01001793817', owner: 'Saad F** S*' },
-				{ number: '01021069340', owner: 'Mona k*** A**' },
-				{ number: '01021201970', owner: 'Mona k*** A**' },
+				{ number: '01025326080', owner: 'احمد م**** ا***** ز***' },
+				{ number: '01040490779', owner: 'سعد ف** ص*** ا***' },
+				{ number: '01040490778', owner: 'احمد ع********* س***' },
+				{ number: '01080681865', owner: 'Mona k***** A**' }
 			],
 			requiredInfo: [
 				'رقم الموبايل اللي حولت منه 📲',

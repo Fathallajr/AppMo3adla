@@ -1,0 +1,65 @@
+<main class="success-page" dir="rtl">
+	<section class="success-hero">
+		<div class="success-hero__content" @fadeInUp>
+			<a routerLink="/" class="success-hero__back">العودة للرئيسية</a>
+			<p class="success-hero__eyebrow">قصص نجاح الطلاب</p>
+			<h1 class="success-hero__title">قصص نجاح طلاب المراجعات والمكثف</h1>
+			<p class="success-hero__text">
+			</p>
+		</div>
+		<div class="success-hero__media" @fadeInUp>
+			<img src="assets/success.png" alt="طلاب ناجحين في معادلة كلية هندسة" loading="eager" decoding="async">
+			<div class="success-hero__media-caption">
+				<span>دفعات نجحت وكمّلت الطريق</span>
+				<strong>معادلة هندسة</strong>
+			</div>
+		</div>
+	</section>
+
+	<section class="success-filter-section" aria-label="تصنيف قصص النجاح">
+		<div class="success-filters">
+			<button
+				*ngFor="let category of categories"
+				type="button"
+				class="filter-chip"
+				[class.filter-chip--active]="activeCategory === category.key"
+				(click)="setCategory(category.key)">
+				<span>{{ category.label }}</span>
+			</button>
+		</div>
+	</section>
+
+	<section class="stories-wrap">
+		<div class="stories-heading" @fadeInUp>
+			<h2>كل نجاح له قصة </h2>
+		</div>
+
+		<div class="stories-grid" @staggerList>
+			<a *ngFor="let story of filteredStories" class="story-card" [routerLink]="['/success-stories', story.id]">
+				<div class="story-card__image">
+					<img [src]="story.image" [alt]="'قصة نجاح ' + story.name" loading="lazy" decoding="async" onerror="this.src='/assets/logo.png'">
+					<span class="story-card__badge" [class.story-card__badge--reviews]="story.category === 'reviews'">{{ story.badge }}</span>
+				</div>
+				<div class="story-card__body">
+					<div class="story-card__topline">{{ story.category === 'reviews' ? 'مسار المراجعات' : 'مسار المكثف' }}</div>
+					<h3>{{ story.name }}</h3>
+					<p class="story-card__result">{{ story.result }}</p>
+					<p class="story-card__quote">"{{ story.quote }}"</p>
+					<span class="story-card__button">عرض التفاصيل</span>
+				</div>
+			</a>
+		</div>
+	</section>
+
+	<section class="success-cta" @fadeInUp>
+		<div>
+			<h2>اختار المسار المناسب لك</h2>
+			<p>المراجعات مناسبة لو محتاج تلم وتراجع، والمكثف مناسب لو محتاج خطة أقوى من البداية للنهاية.</p>
+		</div>
+		<div class="success-cta__actions">
+			<a routerLink="/subscription-ab-reviews" class="success-link success-link--blue">تفاصيل المراجعات</a>
+			<a routerLink="/subscription-intensive" class="success-link success-link--orange">تفاصيل المكثف</a>
+		</div>
+	</section>
+
+</main>

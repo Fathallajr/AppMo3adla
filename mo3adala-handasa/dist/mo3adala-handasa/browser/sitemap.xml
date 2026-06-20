@@ -10,6 +10,33 @@
     <loc>https://example.com/contact</loc>
   </url>
   <url>
+    <loc>https://example.com/success-stories</loc>
+  </url>
+  <url>
+    <loc>https://example.com/success-stories/1</loc>
+  </url>
+  <url>
+    <loc>https://example.com/success-stories/2</loc>
+  </url>
+  <url>
+    <loc>https://example.com/success-stories/3</loc>
+  </url>
+  <url>
+    <loc>https://example.com/success-stories/4</loc>
+  </url>
+  <url>
+    <loc>https://example.com/success-stories/5</loc>
+  </url>
+  <url>
+    <loc>https://example.com/success-stories/6</loc>
+  </url>
+  <url>
+    <loc>https://example.com/subscription-ab-reviews</loc>
+  </url>
+  <url>
+    <loc>https://example.com/subscription-intensive</loc>
+  </url>
+  <url>
     <loc>https://example.com/blog</loc>
   </url>
   <url>

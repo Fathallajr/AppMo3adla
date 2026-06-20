@@ -1,0 +1,93 @@
+<main class="story-detail-page" dir="rtl">
+	<ng-container *ngIf="story; else notFound">
+		<section class="story-detail-hero" @fadeInUp>
+			<div class="story-detail-hero__content">
+				<a routerLink="/success-stories" class="story-detail-back">كل قصص النجاح</a>
+				<span class="story-detail-badge" [class.story-detail-badge--reviews]="story.category === 'reviews'">{{ story.badge }}</span>
+				<h1>قصة نجاح</h1>
+				<p class="story-detail-name">{{ story.name }}</p>
+				<p class="story-detail-result">{{ story.result }}</p>
+				<p class="story-detail-summary">{{ story.summary }}</p>
+
+				<div class="story-detail-actions">
+					<a
+						*ngIf="hasVideo(story)"
+						[href]="story.videoUrl"
+						target="_blank"
+						rel="noopener"
+						class="story-external-link">
+						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-5.197-3.03A1 1 0 008 9.002v5.996a1 1 0 001.555.832l5.197-2.966a1 1 0 000-1.696z"></path>
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+						</svg>
+						دوس هنا واتفرج!
+					</a>
+					<span *ngIf="!hasVideo(story)" class="story-link-placeholder">
+						دوس هنا واتفرج! <small>أضف اللينك داخل <code>videoUrl</code></small>
+					</span>
+				</div>
+			</div>
+
+			<figure class="story-detail-hero__media">
+				<img [src]="story.image" [alt]="'صورة ' + story.name" loading="eager" decoding="async" onerror="this.src='/assets/logo.png'">
+			</figure>
+		</section>
+
+		<section class="story-student-message" @fadeInUp>
+			<div>
+				<span>رسالة من الطالب</span>
+				<h2>{{ story.name }}</h2>
+			</div>
+			<p>"{{ story.message }}"</p>
+		</section>
+
+		<section class="story-journey" @fadeInUp>
+			<article>
+				<span>قبل</span>
+				<h2>قبل الاشتراك</h2>
+				<p>{{ story.before }}</p>
+			</article>
+
+			<article>
+				<span>بعد</span>
+				<h2>بعد الخطة والمتابعة</h2>
+				<p>{{ story.after }}</p>
+			</article>
+		</section>
+
+		<section class="story-detail-list" @fadeInUp>
+			<div class="section-heading">
+				<span>تفاصيل التجربة</span>
+				<h2>إيه اللي ساعده يوصل؟</h2>
+			</div>
+			<ul>
+				<li *ngFor="let detail of story.details">{{ detail }}</li>
+			</ul>
+		</section>
+
+		<section *ngIf="relatedStories.length" class="related-stories" @fadeInUp>
+			<div class="section-heading">
+				<span>قصص تانية</span>
+				<h2>قصص قريبة</h2>
+			</div>
+			<div class="related-stories__grid">
+				<a *ngFor="let related of relatedStories" [routerLink]="['/success-stories', related.id]" class="related-story-card">
+					<img [src]="related.image" [alt]="'صورة ' + related.name" loading="lazy" decoding="async" onerror="this.src='/assets/logo.png'">
+					<div>
+						<span>{{ related.badge }}</span>
+						<strong>{{ related.name }}</strong>
+						<small>{{ related.result }}</small>
+					</div>
+				</a>
+			</div>
+		</section>
+	</ng-container>
+
+	<ng-template #notFound>
+		<section class="story-not-found">
+			<h1>القصة غير موجودة</h1>
+			<p>ارجع لصفحة قصص النجاح واختار قصة تانية.</p>
+			<a routerLink="/success-stories" class="story-external-link">كل قصص النجاح</a>
+		</section>
+	</ng-template>
+</main>

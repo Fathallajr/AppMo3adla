@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { RouterLink } from '@angular/router';
 import { SeoService } from '../../core/seo.service';
 import { CanonicalService } from '../../core/canonical.service';
 import { MonthlyContentService } from '../../core/services/monthly-content.service';
@@ -24,7 +25,7 @@ interface ReviewFormConfig {
 @Component({
 	selector: 'app-subscription-ab-reviews',
 	standalone: true,
-	imports: [CommonModule],
+	imports: [CommonModule, RouterLink],
 	templateUrl: './subscription-ab-reviews.page.html',
 	styleUrls: ['../subscription-details/subscription-details.page.css']
 })
@@ -32,7 +33,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	copiedNumber: string | null = null;
 	isImageModalOpen = false;
 	activeScheduleImage: ScheduleImage | null = null;
-	isEnrollmentClosed = false;
+	isEnrollmentClosed = true;
 	enrollmentReopenMessage = 'سيتم فتح المراجعات مع بداية الشهر القادم بإذن الله.';
 	shuffledVodafoneNumbers: { number: string; owner: string }[] = [];
 	isWarningExpanded = false;
@@ -117,7 +118,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 			description: 'فورم اشتراك مراجعات يونيو',
 			buttonText: 'سجل فورم المراجعة',
 			link: 'https://forms.gle/qjpyARRjxGTUKRY26',
-			isClosed: false
+			isClosed: true
 		},
 		vodafoneNumbers: [
 			{ number: '01025326080', owner: 'احمد م**** ا***** ز***' },

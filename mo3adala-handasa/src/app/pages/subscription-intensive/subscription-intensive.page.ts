@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { RouterLink } from '@angular/router';
 import { SeoService } from '../../core/seo.service';
 import { CanonicalService } from '../../core/canonical.service';
 import { MonthlyContentService } from '../../core/services/monthly-content.service';
@@ -15,7 +16,7 @@ interface ScheduleImage {
 @Component({
 	selector: 'app-subscription-intensive',
 	standalone: true,
-	imports: [CommonModule],
+	imports: [CommonModule, RouterLink],
 	templateUrl: './subscription-intensive.page.html',
 	styleUrls: ['./subscription-intensive.page.css']
 })
@@ -67,11 +68,11 @@ export class SubscriptionIntensivePageComponent implements OnInit, OnDestroy {
 			}
 		},
 		currency: 'ج',
-		vodafoneNumbers: [
-			{ number: '01080594862', owner: 'Ahmed A*****' },
-			{ number: '01001793817', owner: 'Saad F** S*' },
-			{ number: '01021069340', owner: 'Mona k***** A**' },
-			{ number: '01021201970', owner: 'Mona k***** A**' },
+				vodafoneNumbers: [
+			{ number: '01025326080', owner: 'احمد م**** ا***** ز***' },
+			{ number: '01040490779', owner: 'سعد ف** ص*** ا***' },
+			{ number: '01040490778', owner: 'احمد ع********* س***' },
+			{ number: '01080681865', owner: 'Mona k***** A**' },
 		],
 		requiredInfo: [
 			'رقم الموبايل اللي حولت منه 📲',
