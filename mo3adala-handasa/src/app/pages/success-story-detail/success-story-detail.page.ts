@@ -16,7 +16,6 @@ import { SuccessStory, successStories } from '../success-stories/success-stories
 })
 export class SuccessStoryDetailPageComponent implements OnInit {
 	story: SuccessStory | undefined;
-	relatedStories: SuccessStory[] = [];
 
 	constructor(
 		private route: ActivatedRoute,
@@ -33,15 +32,11 @@ export class SuccessStoryDetailPageComponent implements OnInit {
 			return;
 		}
 
-		this.relatedStories = successStories
-			.filter(item => item.id !== this.story?.id && item.category === this.story?.category)
-			.slice(0, 3);
-
 		this.setStorySeo(this.story);
 	}
 
 	hasVideo(story: SuccessStory): boolean {
-		return Boolean(story.videoUrl?.trim());
+		return story.videoUrls.length > 0;
 	}
 
 	private setStorySeo(story: SuccessStory): void {

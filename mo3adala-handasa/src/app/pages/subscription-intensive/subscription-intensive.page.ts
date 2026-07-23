@@ -24,7 +24,7 @@ export class SubscriptionIntensivePageComponent implements OnInit, OnDestroy {
 	copiedNumber: string | null = null;
 	isImageModalOpen = false;
 	activeScheduleImage: ScheduleImage | null = null;
-	isEnrollmentClosed = false;
+	isEnrollmentClosed = true;
 	isWarningExpanded = false;
 	isVideoLoaded = false;
 	selectedPlan: 'installments' | 'full' | null = null;
@@ -68,11 +68,8 @@ export class SubscriptionIntensivePageComponent implements OnInit, OnDestroy {
 			}
 		},
 		currency: 'ج',
-				vodafoneNumbers: [
-			{ number: '01025326080', owner: 'احمد م**** ا***** ز***' },
-			{ number: '01040490779', owner: 'سعد ف** ص*** ا***' },
-			{ number: '01040490778', owner: 'احمد ع********* س***' },
-			{ number: '01080681865', owner: 'Mona k***** A**' },
+		vodafoneNumbers: [
+			{ number: '01036744561', owner: '***Omneya S** S' }
 		],
 		requiredInfo: [
 			'رقم الموبايل اللي حولت منه 📲',

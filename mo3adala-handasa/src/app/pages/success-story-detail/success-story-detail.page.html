@@ -3,16 +3,15 @@
 		<section class="story-detail-hero" @fadeInUp>
 			<div class="story-detail-hero__content">
 				<a routerLink="/success-stories" class="story-detail-back">كل قصص النجاح</a>
-				<span class="story-detail-badge" [class.story-detail-badge--reviews]="story.category === 'reviews'">{{ story.badge }}</span>
 				<h1>قصة نجاح</h1>
 				<p class="story-detail-name">{{ story.name }}</p>
-				<p class="story-detail-result">{{ story.result }}</p>
+				<p class="story-detail-result">&quot;{{ story.result }}&quot;</p>
 				<p class="story-detail-summary">{{ story.summary }}</p>
 
-				<div class="story-detail-actions">
+				<div *ngIf="hasVideo(story)" class="story-detail-actions">
 					<a
-						*ngIf="hasVideo(story)"
-						[href]="story.videoUrl"
+						*ngFor="let videoUrl of story.videoUrls; let videoIndex = index"
+						[href]="videoUrl"
 						target="_blank"
 						rel="noopener"
 						class="story-external-link">
@@ -20,11 +19,8 @@
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-5.197-3.03A1 1 0 008 9.002v5.996a1 1 0 001.555.832l5.197-2.966a1 1 0 000-1.696z"></path>
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
 						</svg>
-						دوس هنا واتفرج!
+						دوس هنا واتفرج{{ story.videoUrls.length > 1 ? ' ' + (videoIndex + 1) : '' }}!
 					</a>
-					<span *ngIf="!hasVideo(story)" class="story-link-placeholder">
-						دوس هنا واتفرج! <small>أضف اللينك داخل <code>videoUrl</code></small>
-					</span>
 				</div>
 			</div>
 
@@ -65,22 +61,6 @@
 			</ul>
 		</section>
 
-		<section *ngIf="relatedStories.length" class="related-stories" @fadeInUp>
-			<div class="section-heading">
-				<span>قصص تانية</span>
-				<h2>قصص قريبة</h2>
-			</div>
-			<div class="related-stories__grid">
-				<a *ngFor="let related of relatedStories" [routerLink]="['/success-stories', related.id]" class="related-story-card">
-					<img [src]="related.image" [alt]="'صورة ' + related.name" loading="lazy" decoding="async" onerror="this.src='/assets/logo.png'">
-					<div>
-						<span>{{ related.badge }}</span>
-						<strong>{{ related.name }}</strong>
-						<small>{{ related.result }}</small>
-					</div>
-				</a>
-			</div>
-		</section>
 	</ng-container>
 
 	<ng-template #notFound>

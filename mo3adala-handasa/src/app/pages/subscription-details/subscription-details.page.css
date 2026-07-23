@@ -1881,6 +1881,10 @@
 	height: 16px;
 }
 
+.pricing-card:not(.pricing-card--selected) .pricing-card-check {
+	display: none;
+}
+
 .pricing-card-label {
 	font-size: 1.1rem;
 	font-weight: 800;

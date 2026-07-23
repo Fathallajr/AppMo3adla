@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { CanonicalService } from '../../core/canonical.service';
 import { SeoService } from '../../core/seo.service';
 import { fadeInUp, staggerList } from '../../shared/animations';
-import { StoryCategory, SuccessStory, successStories } from './success-stories.data';
+import { SuccessStory, successStories } from './success-stories.data';
 
 @Component({
 	selector: 'app-success-stories',
@@ -15,14 +15,6 @@ import { StoryCategory, SuccessStory, successStories } from './success-stories.d
 	styleUrls: ['./success-stories.page.css']
 })
 export class SuccessStoriesPageComponent implements OnInit {
-	activeCategory: StoryCategory = 'all';
-
-	categories: { key: StoryCategory; label: string; hint: string }[] = [
-		{ key: 'all', label: 'كل القصص', hint: 'المراجعات والمكثف' },
-		{ key: 'reviews', label: 'طلاب المراجعات', hint: 'A-B' },
-		{ key: 'intensive', label: 'طلاب المكثف', hint: 'الكورس المكثف' }
-	];
-
 	stories: SuccessStory[] = successStories;
 
 	constructor(
@@ -47,15 +39,4 @@ export class SuccessStoriesPageComponent implements OnInit {
 		this.canonical.setCanonical(url);
 	}
 
-	get filteredStories(): SuccessStory[] {
-		if (this.activeCategory === 'all') {
-			return this.stories;
-		}
-
-		return this.stories.filter(story => story.category === this.activeCategory);
-	}
-
-	setCategory(category: StoryCategory): void {
-		this.activeCategory = category;
-	}
 }

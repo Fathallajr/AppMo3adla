@@ -37,7 +37,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 	copiedNumber: string | null = null;
 	isImageModalOpen = false;
 	activeScheduleImage: ScheduleImage | null = null;
-	isEnrollmentClosed = false;
+	isEnrollmentClosed = true;
 	enrollmentReopenMessage = 'سيتم فتح الاشتراك للمشتركين الجدد مع بداية الشهر القادم بإذن الله.';
 	shuffledVodafoneNumbers: { number: string; owner: string }[] = [];
 	readonly selectedGroup: GroupKey = 'groupC';
@@ -111,7 +111,7 @@ export class SubscriptionDetailsPageComponent implements OnInit, OnDestroy {
 		scheduleImages: [
 			{
 				group: 'جدول جروب C',
-				src: 'assets/جدول C.jpeg',
+				src: '/assets/جروب C.jpeg?v=20260621',
 				alt: 'جدول محتوى شهر مايو - جروب C',
 				note: '👆 اضغط على الصورة للتكبير'
 			}

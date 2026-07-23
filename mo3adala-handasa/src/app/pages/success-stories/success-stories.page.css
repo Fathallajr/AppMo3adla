@@ -54,6 +54,10 @@
 	letter-spacing: 0;
 }
 
+.success-hero__title span {
+	color: #ea580c;
+}
+
 .success-hero__text {
 	max-width: 620px;
 	color: #475569;
@@ -302,6 +306,22 @@
 	font-size: 1.12rem;
 	font-weight: 700;
 	color: #111827;
+}
+
+.story-card__title span,
+.story-card__title strong {
+	display: block;
+}
+
+.story-card__title span {
+	margin-bottom: 0.25rem;
+}
+
+.story-card__title strong {
+	color: #ea580c;
+	font-size: 1.45rem;
+	font-weight: 800;
+	line-height: 1.45;
 }
 
 .story-card__result {

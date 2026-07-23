@@ -14,7 +14,7 @@ export const routes: Routes = [
 	{ path: 'news/detail/:id', loadComponent: () => import('./pages/news-detail/news-detail.page').then(m => m.NewsDetailPageComponent) },
 	{ path: 'success-stories/:id', loadComponent: () => import('./pages/success-story-detail/success-story-detail.page').then(m => m.SuccessStoryDetailPageComponent) },
 	{ path: 'success-stories', loadComponent: () => import('./pages/success-stories/success-stories.page').then(m => m.SuccessStoriesPageComponent) },
-	{ path: 'subscription-details', loadComponent: () => import('./pages/subscription-details/subscription-details.page').then(m => m.SubscriptionDetailsPageComponent) },
+	{ path: 'subscription-details', redirectTo: 'subscription-ab-reviews', pathMatch: 'full' },
 	{ path: 'subscription-ab-reviews', loadComponent: () => import('./pages/subscription-ab-reviews/subscription-ab-reviews.page').then(m => m.SubscriptionAbReviewsPageComponent) },
 	{ path: 'subscription-intensive', loadComponent: () => import('./pages/subscription-intensive/subscription-intensive.page').then(m => m.SubscriptionIntensivePageComponent) },
 	{ path: 'social', loadComponent: () => import('./pages/social/social.page').then(m => m.SocialPageComponent) },

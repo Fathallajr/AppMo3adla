@@ -3,29 +3,16 @@
 		<div class="success-hero__content" @fadeInUp>
 			<a routerLink="/" class="success-hero__back">العودة للرئيسية</a>
 			<p class="success-hero__eyebrow">قصص نجاح الطلاب</p>
-			<h1 class="success-hero__title">قصص نجاح طلاب المراجعات والمكثف</h1>
+			<h1 class="success-hero__title">قصص نجاح طلاب <span>المراجعات والمكثف</span></h1>
 			<p class="success-hero__text">
 			</p>
 		</div>
 		<div class="success-hero__media" @fadeInUp>
-			<img src="assets/success.png" alt="طلاب ناجحين في معادلة كلية هندسة" loading="eager" decoding="async">
+			<img src="/assets/قصص النجاح.jpeg?v=20260621-2" alt="طلاب ناجحين في معادلة كلية هندسة" loading="eager" decoding="async">
 			<div class="success-hero__media-caption">
 				<span>دفعات نجحت وكمّلت الطريق</span>
 				<strong>معادلة هندسة</strong>
 			</div>
-		</div>
-	</section>
-
-	<section class="success-filter-section" aria-label="تصنيف قصص النجاح">
-		<div class="success-filters">
-			<button
-				*ngFor="let category of categories"
-				type="button"
-				class="filter-chip"
-				[class.filter-chip--active]="activeCategory === category.key"
-				(click)="setCategory(category.key)">
-				<span>{{ category.label }}</span>
-			</button>
 		</div>
 	</section>
 
@@ -35,16 +22,16 @@
 		</div>
 
 		<div class="stories-grid" @staggerList>
-			<a *ngFor="let story of filteredStories" class="story-card" [routerLink]="['/success-stories', story.id]">
+			<a *ngFor="let story of stories" class="story-card" [routerLink]="['/success-stories', story.id]">
 				<div class="story-card__image">
 					<img [src]="story.image" [alt]="'قصة نجاح ' + story.name" loading="lazy" decoding="async" onerror="this.src='/assets/logo.png'">
-					<span class="story-card__badge" [class.story-card__badge--reviews]="story.category === 'reviews'">{{ story.badge }}</span>
 				</div>
 				<div class="story-card__body">
-					<div class="story-card__topline">{{ story.category === 'reviews' ? 'مسار المراجعات' : 'مسار المكثف' }}</div>
-					<h3>{{ story.name }}</h3>
-					<p class="story-card__result">{{ story.result }}</p>
-					<p class="story-card__quote">"{{ story.quote }}"</p>
+					<h3 class="story-card__title">
+						<span>قصة نجاح</span>
+						<strong>{{ story.honorific }} {{ story.name }}</strong>
+					</h3>
+					<p class="story-card__result">&quot;{{ story.result }}&quot;</p>
 					<span class="story-card__button">عرض التفاصيل</span>
 				</div>
 			</a>

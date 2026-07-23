@@ -33,8 +33,8 @@ export const monthlyContentDefaults = {
 					label: 'جروب C',
 					description: 'للمشتركين الجدد جروب C',
 					buttonText: 'سجل فورم جروب C',
-					link: 'https://forms.gle/YjNPWmYYvA1MipRf7',
-					isClosed: true
+					link: 'https://forms.gle/mXzLb7Bnff43GUxK8',
+					isClosed: false
 				}
 			},
 			vodafoneNumbers: [
@@ -46,7 +46,7 @@ export const monthlyContentDefaults = {
 			scheduleImages: [
 				{
 					group: 'جدول جروب C',
-					src: '/assets/جروب C.png',
+					src: '/assets/جروب C.jpeg?v=20260621',
 					alt: 'جدول محتوى شهر مايو - جروب C',
 					note: '👆 اضغط على الصورة للتكبير'
 				}
@@ -81,25 +81,39 @@ export const monthlyContentDefaults = {
 		isEnrollmentClosed: false,
 		enrollmentReopenMessage: 'سيتم فتح المراجعات مع بداية الشهر القادم بإذن الله.',
 		subscriptionDetails: {
-			month: 'مراجعات شهر يونيو 2026',
+			month: 'مراجعات شهر أغسطس 2026',
 			review: {
-				name: 'مراجعات A-B',
+				name: 'مراجعات A-B-C',
 				price: '800'
+			},
+			groups: {
+				groupAB: { name: 'مراجعات A-B', price: '800' },
+				groupC: { name: 'مراجعات C', price: '800' }
 			},
 			currency: 'ج',
 			features: [
-				'مراجعات شاملة لمواد جروب A و B',
-				'فيديوهات حل ومراجعة',
-				'ملازم وملفات PDF للتحميل',
-				'امتحانات إلكترونية تفاعلية',
-				'دعم فني على مدار الساعة'
+				'فيديوهات المراجعة',
+				'محتوى السبورة (PDF)',
+				'فيديوهات حل الواجبات بالتفصيل',
+				'اختبارات إلكترونية تقييمية أسبوعياً',
+				'playlist شرح المنهج كاملاً'
 			],
 			googleForm: {
 				label: 'مراجعات A-B',
-				description: 'فورم اشتراك مراجعات يونيو',
+				description: 'فورم اشتراك مراجعات أغسطس',
 				buttonText: 'سجل فورم المراجعة',
-				link: 'https://forms.gle/qjpyARRjxGTUKRY26',
-				isClosed: true
+				link: 'https://forms.gle/J6CBxzZuFCEz2AmA6',
+				isClosed: false
+			},
+			googleForms: {
+				groupAB: {
+					label: 'مراجعات A-B', description: 'فورم اشتراك مراجعات A-B', buttonText: 'سجل فورم مراجعات A-B',
+					link: 'https://forms.gle/J6CBxzZuFCEz2AmA6', isClosed: false
+				},
+				groupC: {
+					label: 'مراجعات C', description: 'فورم اشتراك مراجعات C', buttonText: 'سجل فورم مراجعات C',
+					link: 'https://forms.gle/jwKoocsd4m7yANQW6', isClosed: false
+				}
 			},
 			vodafoneNumbers: [
 				{ number: '01025326080', owner: 'احمد م**** ا***** ز***' },
@@ -109,9 +123,17 @@ export const monthlyContentDefaults = {
 			],
 			scheduleImages: [
 				{
+					groupKey: 'groupAB',
 					group: 'جدول مراجعات A-B',
-					src: '/assets/جدول مراجعات  A-B.jpeg',
-					alt: 'جدول مراجعات شهر يونيو - جروب A و B',
+					src: '/assets/جداول مراجعات شهر 8/جدول جروب A-B.png',
+					alt: 'جدول مراجعات شهر أغسطس - جروب A و B',
+					note: '👆 اضغط على الصورة للتكبير'
+				},
+				{
+					groupKey: 'groupC',
+					group: 'جدول مراجعات C',
+					src: '/assets/جداول مراجعات شهر 8/جدول جروب C.png',
+					alt: 'جدول مراجعات شهر أغسطس - جروب C',
 					note: '👆 اضغط على الصورة للتكبير'
 				}
 			],
@@ -123,9 +145,9 @@ export const monthlyContentDefaults = {
 			whatsappNumber: '201554843745',
 			subscriptionWarnings: {
 				refund: {
-					title: 'سياسة الاسترداد:',
+					title: 'سياسة الاسترداد',
 					points: [
-						'لا يوجد استرداد أو سحب للاشتراك نهائيًا لأي سبب من الأسباب'
+						'⚠️ لا يوجد استرداد أو سحب للاشتراك نهائيًا لأي سبب من الأسباب.'
 					]
 				},
 				validity: {
@@ -138,11 +160,11 @@ export const monthlyContentDefaults = {
 					]
 				}
 			},
-			subtitle: 'مراجعات جروب A و B — دفعة 2026'
+			subtitle: 'مراجعات جروبات A و B و C — دفعة 2026'
 		}
 	},
 	'subscription-intensive': {
-		isEnrollmentClosed: false,
+		isEnrollmentClosed: true,
 		enrollmentReopenMessage: 'انتظروا التفاصيل قريباً بإذن الله 🔥',
 		subscriptionDetails: {
 			title: 'الاشتراك المكثف',
@@ -164,10 +186,7 @@ export const monthlyContentDefaults = {
 			},
 			currency: 'ج',
 			vodafoneNumbers: [
-				{ number: '01025326080', owner: 'احمد م**** ا***** ز***' },
-				{ number: '01040490779', owner: 'سعد ف** ص*** ا***' },
-				{ number: '01040490778', owner: 'احمد ع********* س***' },
-				{ number: '01080681865', owner: 'Mona k***** A**' }
+				{ number: '01036744561', owner: '***Omneya S** S' }
 			],
 			requiredInfo: [
 				'رقم الموبايل اللي حولت منه 📲',
