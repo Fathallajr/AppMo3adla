@@ -25,6 +25,90 @@ export class NewsDetailPageComponent implements OnInit {
 
 	// Mock data - في التطبيق الحقيقي ستحصل على البيانات من API
 	newsData: { [key: string]: any } = {
+		'engineering-equation-application-open-2026': {
+			id: 'engineering-equation-application-open-2026',
+			title: 'المجلس الأعلى للجامعات يعلن فتح باب التقديم لاختبارات معادلة كلية الهندسة 2026',
+			content: `
+				<div class="mb-8 text-center">
+					<img src="/assets/خبر فتح باب التقديم.jpeg" alt="فتح باب التقديم لاختبارات معادلة كلية الهندسة 2026" class="mx-auto rounded-lg shadow-lg max-w-full" style="max-width: 800px;">
+				</div>
+
+				<div class="bg-orange-50 border-l-4 border-orange-500 p-6 mb-6">
+					<h3 class="text-orange-800 font-bold mb-3 text-2xl">المجلس الأعلى للجامعات يعلن فتح باب التقديم لاختبارات معادلة كلية الهندسة 2026</h3>
+					<p class="text-orange-700 text-lg">
+						أعلن المجلس الأعلى للجامعات فتح باب التقديم لاختبارات معادلة كلية الهندسة للعام الجامعي 2026/2027.
+					</p>
+				</div>
+
+				<div class="bg-blue-50 border-l-4 border-blue-500 p-6 mb-6">
+					<h3 class="text-blue-800 font-bold mb-4 text-xl">أهم التفاصيل</h3>
+					<ul class="space-y-3 text-blue-700 text-lg list-none">
+						<li>📅 بدء التقديم رسميًا عبر الموقع الإلكتروني للمجلس الأعلى للجامعات.</li>
+						<li>👨‍🎓 التقديم متاح لطلاب الدبلومات الفنية والمعاهد الفنية وفقًا للشروط المعلنة.</li>
+						<li>📝 يتم التسجيل إلكترونيًا خلال الفترة المحددة.</li>
+						<li>⏳ ننصح جميع الطلاب بسرعة إنهاء إجراءات التقديم وعدم الانتظار لآخر موعد.</li>
+					</ul>
+				</div>
+
+				<div class="bg-green-50 border-l-4 border-green-500 p-6 mb-6">
+					<h3 class="text-green-800 font-bold mb-3 text-xl">مساعدة في التقديم</h3>
+					<p class="text-green-700 text-lg mb-4">
+						لو بتوجهك مشاكل في التقديم وفرنا رقم تقدر تتواصل معانا عبر واتساب.
+					</p>
+					<a href="https://wa.me/201013305510" target="_blank"
+					   class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg font-semibold transition-colors no-underline hover:no-underline">
+						تواصل واتساب: 01013305510
+					</a>
+				</div>
+			`,
+			date: '2026-07-31',
+			author: 'فريق الابلكيشن',
+			category: 'التقديم والقبول',
+			important: true,
+			image: '/assets/خبر فتح باب التقديم.jpeg',
+			images: ['/assets/خبر فتح باب التقديم.jpeg']
+		},
+		'engineering-equation-exam-schedule-2026': {
+			id: 'engineering-equation-exam-schedule-2026',
+			title: 'جدول اختبارات معادلة كلية الهندسة 2026',
+			content: `
+				<div class="mb-8 text-center">
+					<img src="/assets/جدول اختبارات معادلة كلية الهندسة .jpeg" alt="جدول اختبارات معادلة كلية الهندسة 2026" class="mx-auto rounded-lg shadow-lg max-w-full" style="max-width: 800px;">
+				</div>
+
+				<div class="bg-red-50 border-l-4 border-red-500 p-6 mb-6">
+					<h3 class="text-red-800 font-bold mb-3 text-2xl">خبر هام | جدول اختبارات معادلة كلية الهندسة 2026</h3>
+					<p class="text-red-700 text-lg">
+						أعلن المجلس الأعلى للجامعات جدول اختبارات معادلة كلية الهندسة للعام الجامعي 2026/2027.
+					</p>
+				</div>
+
+				<div class="bg-blue-50 border-l-4 border-blue-500 p-6 mb-6">
+					<h3 class="text-blue-800 font-bold mb-4 text-xl">مواعيد الامتحانات</h3>
+					<ul class="space-y-3 text-blue-700 text-lg list-none">
+						<li>📅 12 سبتمبر 2026: اللغة الإنجليزية.</li>
+						<li>📅 13 سبتمبر 2026: رياضة (1) (الجبر والهندسة الفراغية).</li>
+						<li>📅 14 سبتمبر 2026: رياضة (2) (التفاضل والتكامل).</li>
+						<li>📅 15 سبتمبر 2026: الفيزياء.</li>
+						<li>📅 16 سبتمبر 2026: الميكانيكا.</li>
+						<li>📅 17 سبتمبر 2026: الكيمياء.</li>
+					</ul>
+				</div>
+
+				<div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 mb-6">
+					<h3 class="text-yellow-800 font-bold mb-3 text-xl">تنويه مهم</h3>
+					<p class="text-yellow-700 text-lg">
+						تُعقد الاختبارات وفق أماكن التوزيع الجغرافي التي يحددها المجلس الأعلى للجامعات.
+					</p>
+				</div>
+			`,
+			date: '2026-07-31',
+			author: 'فريق المعادلة',
+			category: 'جداول الامتحانات',
+			important: true,
+			image: '/assets/جدول اختبارات معادلة كلية الهندسة .jpeg',
+			images: ['/assets/جدول اختبارات معادلة كلية الهندسة .jpeg']
+		},
 		'app-book-order-2026': {
 			id: 'app-book-order-2026',
 			title: 'كتاب أبلكيشن معادلة كلية الهندسة 📘💪',

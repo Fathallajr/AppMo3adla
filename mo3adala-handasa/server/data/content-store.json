@@ -133,6 +133,12 @@
         "title": "أخبار المعادلة",
         "items": [
           {
+            "title": "جدول اختبارات معادلة كلية الهندسة 2026",
+            "description": "خبر هام | أعلن المجلس الأعلى للجامعات جدول اختبارات معادلة كلية الهندسة للعام الجامعي 2026/2027.",
+            "image": "/assets/جدول اختبارات معادلة كلية الهندسة .jpeg",
+            "link": "/news/detail/engineering-equation-exam-schedule-2026"
+          },
+          {
             "title": "تيست",
             "description": "تيست",
             "image": "/uploads/1778531047542-ab109933.png",
@@ -142,6 +148,21 @@
       },
       "updatedAt": "2026-05-11T20:24:22.517Z"
     },
+    "news-app": {
+      "data": {
+        "visible": true,
+        "title": "أخبار الأبلكيشن",
+        "items": [
+          {
+            "title": "المجلس الأعلى للجامعات يعلن فتح باب التقديم لاختبارات معادلة كلية الهندسة 2026",
+            "description": "أعلن المجلس الأعلى للجامعات فتح باب التقديم لاختبارات معادلة كلية الهندسة للعام الجامعي 2026/2027.",
+            "image": "/assets/خبر فتح باب التقديم.jpeg",
+            "link": "/news/detail/engineering-equation-application-open-2026"
+          }
+        ]
+      },
+      "updatedAt": "2026-07-31T18:15:00.000Z"
+    },
     "subscription-intensive": {
       "data": {
         "isEnrollmentClosed": true,
@@ -149,7 +170,7 @@
         "subscriptionDetails": {
           "title": "الاشتراك المكثف",
           "subtitle": "كورس مكثف لكلية الهندسة - دفعة 2026",
-          "googleFormLink": "https://forms.gle/CA4CshRiJgR6zUgH9",
+          "googleFormLink": "https://forms.gle/CYS6WCbAeX4W3E6Z7",
           "paymentPlans": {
             "installments": {
               "label": "الدفع على قسطين",
@@ -175,8 +196,20 @@
           "currency": "ج",
           "vodafoneNumbers": [
             {
-              "number": "01036744561",
-              "owner": "***Omneya S** S"
+              "number": "01080594862",
+              "owner": "Ahmed A*********"
+            },
+            {
+              "number": "01001793817",
+              "owner": "Saad F*** S****"
+            },
+            {
+              "number": "01021069340",
+              "owner": "Mona k***** A**"
+            },
+            {
+              "number": "01021201970",
+              "owner": "Mona k***** A**"
             }
           ],
           "requiredInfo": [

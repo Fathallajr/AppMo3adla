@@ -72,6 +72,84 @@
       </div>
     </div>
 
+    <!-- Application Video -->
+    <div class="bg-white rounded-2xl shadow-lg p-8 mb-16" [@fadeInUp]>
+      <div class="flex flex-col lg:flex-row gap-8 items-start">
+        <div class="lg:w-5/12">
+          <div class="flex items-center gap-4 mb-5">
+            <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+              <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-red-600 mb-1">شرح التقديم</p>
+              <h2 class="text-2xl font-bold text-slate-900">لينك التقديم</h2>
+            </div>
+          </div>
+          <p class="text-slate-600 leading-relaxed mb-4">
+            شرح التقديم على موقع المجلس الأعلى للجامعات على جزئين، تابع الفيديوهات خطوة بخطوة قبل بداية التسجيل.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <span
+              *ngFor="let video of applicationVideos"
+              class="inline-flex items-center px-4 py-2 rounded-full bg-blue-50 text-blue-700 font-semibold text-sm">
+              {{ video.part }}
+            </span>
+            <a
+              href="https://wa.me/201013305510?text=السلام%20عليكم،%20أحتاج%20مساعدة%20في%20مشكلة%20أثناء%20التقديم"
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center px-4 py-2 rounded-full bg-emerald-50 text-emerald-700 font-semibold text-sm hover:bg-emerald-100 transition-colors">
+              للمساعدة في مشاكل التقديم: 01013305510
+            </a>
+          </div>
+        </div>
+
+        <div class="lg:w-7/12 w-full">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div *ngFor="let video of applicationVideos" class="space-y-3">
+              <div class="flex items-center justify-between gap-3">
+                <h3 class="font-bold text-slate-900">{{ video.title }}</h3>
+                <span class="text-xs font-bold text-red-600 bg-red-50 rounded-full px-3 py-1">{{ video.part }}</span>
+              </div>
+
+              <div class="requirements-video-frame">
+                <button
+                  *ngIf="!isApplicationVideoLoaded(video.id)"
+                  type="button"
+                  class="requirements-video-thumb"
+                  (click)="loadApplicationVideo(video.id)"
+                  [attr.aria-label]="'تشغيل فيديو ' + video.title">
+                  <img
+                    [src]="getApplicationVideoThumbnail(video.id)"
+                    [alt]="'فيديو ' + video.title"
+                    class="requirements-video-img"
+                    loading="lazy">
+                  <span class="requirements-video-play" aria-hidden="true">
+                    <svg fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"></path>
+                    </svg>
+                  </span>
+                  <span class="requirements-video-label">اضغط لمشاهدة الفيديو</span>
+                </button>
+
+                <iframe
+                  *ngIf="isApplicationVideoLoaded(video.id)"
+                  class="requirements-video-iframe"
+                  [src]="getApplicationVideoEmbedUrl(video.id)"
+                  [title]="video.title"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen>
+                </iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Required Documents -->
     <div class="bg-white rounded-2xl shadow-lg p-8 mb-16">
       <div class="flex items-center gap-4 mb-8">

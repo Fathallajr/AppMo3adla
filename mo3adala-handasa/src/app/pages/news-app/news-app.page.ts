@@ -14,6 +14,16 @@ import { CanonicalService } from '../../core/canonical.service';
 export class NewsAppPageComponent implements OnInit {
 	newsItems = [
 		{
+			id: -5,
+			title: 'المجلس الأعلى للجامعات يعلن فتح باب التقديم لاختبارات معادلة كلية الهندسة 2026',
+			excerpt: 'أعلن المجلس الأعلى للجامعات فتح باب التقديم لاختبارات معادلة كلية الهندسة للعام الجامعي 2026/2027، والتسجيل متاح إلكترونيًا خلال الفترة المحددة.',
+			date: '2026-07-31',
+			image: '/assets/خبر فتح باب التقديم.jpeg',
+			slug: 'engineering-equation-application-open-2026',
+			category: 'التقديم والقبول',
+			important: true
+		},
+		{
 			id: -4,
 			title: 'كتاب أبلكيشن معادلة كلية الهندسة 📘💪',
 			excerpt: 'بتعمل معادلة ومش لاقي مصدر موثوق تحل منه؟ 🤔 أقوى تجميعة أسئلة – تمارين – امتحانات مهمة مصممة علشان توصّلك للنجاح بثقة 🎯',

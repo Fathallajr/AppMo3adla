@@ -13,6 +13,17 @@ import { CanonicalService } from '../../core/canonical.service';
 })
 export class NewsEquationPageComponent implements OnInit {
 	newsItems = [
+		{
+			id: 4,
+			title: 'جدول اختبارات معادلة كلية الهندسة 2026',
+			excerpt: 'أعلن المجلس الأعلى للجامعات جدول اختبارات معادلة كلية الهندسة للعام الجامعي 2026/2027 بداية من 12 سبتمبر وحتى 17 سبتمبر 2026.',
+			date: '2026-07-31',
+			image: '/assets/جدول اختبارات معادلة كلية الهندسة .jpeg',
+			slug: 'engineering-equation-exam-schedule-2026',
+			content: 'أعلن المجلس الأعلى للجامعات جدول اختبارات معادلة كلية الهندسة للعام الجامعي 2026/2027، وجاءت مواعيد الامتحانات من 12 سبتمبر حتى 17 سبتمبر 2026.',
+			category: 'جداول الامتحانات',
+			important: true
+		},
 		// {
 		// 	id: 1,
 		// 	title: 'كتاب امتحانات الأبلكيشن',

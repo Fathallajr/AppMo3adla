@@ -169,7 +169,7 @@ export const monthlyContentDefaults = {
 		subscriptionDetails: {
 			title: 'الاشتراك المكثف',
 			subtitle: 'كورس مكثف لكلية الهندسة - دفعة 2026',
-			googleFormLink: 'https://forms.gle/CA4CshRiJgR6zUgH9',
+			googleFormLink: 'https://forms.gle/CYS6WCbAeX4W3E6Z7',
 			paymentPlans: {
 				installments: {
 					label: 'الدفع على قسطين',
@@ -186,7 +186,10 @@ export const monthlyContentDefaults = {
 			},
 			currency: 'ج',
 			vodafoneNumbers: [
-				{ number: '01036744561', owner: '***Omneya S** S' }
+				{ number: '01080594862', owner: 'Ahmed A*********' },
+				{ number: '01001793817', owner: 'Saad F*** S****' },
+				{ number: '01021069340', owner: 'Mona k***** A**' },
+				{ number: '01021201970', owner: 'Mona k***** A**' }
 			],
 			requiredInfo: [
 				'رقم الموبايل اللي حولت منه 📲',
