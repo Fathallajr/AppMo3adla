@@ -21,11 +21,9 @@ export class SubIntensiveFormComponent implements OnChanges {
 		if (!raw) return;
 
 		const sd = raw.subscriptionDetails ??= {};
-		sd.paymentPlans ??= { full: {}, installments: { installment1: {}, installment2: {} } };
-		sd.paymentPlans.full ??= {};
-		sd.paymentPlans.installments ??= { installment1: {}, installment2: {} };
-		sd.paymentPlans.installments.installment1 ??= {};
-		sd.paymentPlans.installments.installment2 ??= {};
+		sd.paymentPlans ??= {};
+		const legacyInstallment2 = sd.paymentPlans.installments?.installment2;
+		sd.paymentPlans.installment2 ??= legacyInstallment2 ?? {};
 		sd.vodafoneNumbers ??= [];
 		sd.requiredInfo ??= [];
 		sd.subscriptionWarnings ??= {};

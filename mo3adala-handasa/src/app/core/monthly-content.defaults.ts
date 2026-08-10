@@ -164,25 +164,14 @@ export const monthlyContentDefaults = {
 		}
 	},
 	'subscription-intensive': {
-		isEnrollmentClosed: true,
+		isEnrollmentClosed: false,
 		enrollmentReopenMessage: 'انتظروا التفاصيل قريباً بإذن الله 🔥',
 		subscriptionDetails: {
 			title: 'الاشتراك المكثف',
 			subtitle: 'كورس مكثف لكلية الهندسة - دفعة 2026',
 			googleFormLink: 'https://forms.gle/CYS6WCbAeX4W3E6Z7',
 			paymentPlans: {
-				installments: {
-					label: 'الدفع على قسطين',
-					installment1: { amount: '2200', label: 'القسط الأول', note: 'وقت الاشتراك' },
-					installment2: { amount: '1600', label: 'القسط الثاني', note: 'ابتداءً من 7 أغسطس' },
-					total: '3800'
-				},
-				full: {
-					label: 'الدفع كاملًا',
-					amount: '3500',
-					originalAmount: '3800',
-					saving: '300'
-				}
+				installment2: { amount: '1600', label: 'القسط الثاني', note: 'ابتداءً من 7 أغسطس' }
 			},
 			currency: 'ج',
 			vodafoneNumbers: [
@@ -207,10 +196,8 @@ export const monthlyContentDefaults = {
 				validity: {
 					title: 'مدة صلاحية الاشتراك:',
 					points: [
-						'المنصة شغالة لغاية اخر القسط الاول فقط',
-						'مع إنتهاء القسط الاول المحتوى بيقفل تلقائي',
-						'عند التجديد بيتفتح لك كل المحتوى من الأول',
-						'في خطة الدفع الكامل المنصة بتفضل شغالة لحد ليالي الامتحان'
+						'الكود شغال لغاية آخر الامتحانات',
+						'مع انتهاء الامتحانات بيقفل المحتوى تلقائياً'
 					]
 				}
 			}

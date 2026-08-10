@@ -38,59 +38,22 @@
 	<!-- خطط الدفع -->
 	<div class="cms-section">
 		<div class="cms-section-title">خطط الدفع</div>
-		<div class="cms-subsection">
-			<div class="cms-subsection-title">الدفع الكامل (الأوفر)</div>
-			<div class="cms-row">
-				<div class="cms-field">
-					<label class="cms-label">السعر الفعلي</label>
-					<input class="cms-input" [(ngModel)]="data.subscriptionDetails.paymentPlans.full.amount" placeholder="3500" dir="ltr" />
-				</div>
-				<div class="cms-field">
-					<label class="cms-label">السعر الأصلي (قبل الخصم)</label>
-					<input class="cms-input" [(ngModel)]="data.subscriptionDetails.paymentPlans.full.originalAmount" placeholder="3800" dir="ltr" />
-				</div>
-			</div>
-			<div class="cms-row">
-				<div class="cms-field" style="margin-bottom:0">
-					<label class="cms-label">مبلغ التوفير</label>
-					<input class="cms-input" [(ngModel)]="data.subscriptionDetails.paymentPlans.full.saving" placeholder="300" dir="ltr" />
-				</div>
-				<div class="cms-field" style="margin-bottom:0">
-					<label class="cms-label">تسمية الخطة</label>
-					<input class="cms-input" [(ngModel)]="data.subscriptionDetails.paymentPlans.full.label" placeholder="الدفع كاملًا" />
-				</div>
-			</div>
-		</div>
 		<div class="cms-subsection" style="margin-bottom:0">
-			<div class="cms-subsection-title">الدفع على قسطين</div>
-			<div class="cms-row">
-				<div class="cms-field">
-					<label class="cms-label">مبلغ القسط الأول</label>
-					<input class="cms-input" [(ngModel)]="data.subscriptionDetails.paymentPlans.installments.installment1.amount" placeholder="2200" dir="ltr" />
-				</div>
-				<div class="cms-field">
-					<label class="cms-label">ملاحظة القسط الأول</label>
-					<input class="cms-input" [(ngModel)]="data.subscriptionDetails.paymentPlans.installments.installment1.note" placeholder="وقت الاشتراك" />
-				</div>
-			</div>
+			<div class="cms-subsection-title">القسط الثاني فقط</div>
 			<div class="cms-row">
 				<div class="cms-field">
 					<label class="cms-label">مبلغ القسط الثاني</label>
-					<input class="cms-input" [(ngModel)]="data.subscriptionDetails.paymentPlans.installments.installment2.amount" placeholder="1600" dir="ltr" />
+					<input class="cms-input" [(ngModel)]="data.subscriptionDetails.paymentPlans.installment2.amount" placeholder="1600" dir="ltr" />
 				</div>
 				<div class="cms-field">
 					<label class="cms-label">ملاحظة القسط الثاني</label>
-					<input class="cms-input" [(ngModel)]="data.subscriptionDetails.paymentPlans.installments.installment2.note" placeholder="ابتداءً من 7 أغسطس" />
+					<input class="cms-input" [(ngModel)]="data.subscriptionDetails.paymentPlans.installment2.note" placeholder="ابتداءً من 7 أغسطس" />
 				</div>
 			</div>
 			<div class="cms-row">
 				<div class="cms-field" style="margin-bottom:0">
-					<label class="cms-label">الإجمالي</label>
-					<input class="cms-input" [(ngModel)]="data.subscriptionDetails.paymentPlans.installments.total" placeholder="3800" dir="ltr" />
-				</div>
-				<div class="cms-field" style="margin-bottom:0">
 					<label class="cms-label">تسمية الخطة</label>
-					<input class="cms-input" [(ngModel)]="data.subscriptionDetails.paymentPlans.installments.label" placeholder="الدفع على قسطين" />
+					<input class="cms-input" [(ngModel)]="data.subscriptionDetails.paymentPlans.installment2.label" placeholder="القسط الثاني" />
 				</div>
 			</div>
 		</div>

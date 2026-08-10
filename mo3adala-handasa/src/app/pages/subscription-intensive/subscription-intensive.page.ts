@@ -24,10 +24,10 @@ export class SubscriptionIntensivePageComponent implements OnInit, OnDestroy {
 	copiedNumber: string | null = null;
 	isImageModalOpen = false;
 	activeScheduleImage: ScheduleImage | null = null;
-	isEnrollmentClosed = true;
+	isEnrollmentClosed = false;
 	isWarningExpanded = false;
 	isVideoLoaded = false;
-	selectedPlan: 'installments' | 'full' | null = null;
+	selectedPlan: 'installment2' | null = null;
 	shuffledVodafoneNumbers: { number: string; owner: string }[] = [];
 
 	private handleVisibilityChange = () => {
@@ -54,18 +54,7 @@ export class SubscriptionIntensivePageComponent implements OnInit, OnDestroy {
 		subtitle: 'كورس مكثف لكلية الهندسة - دفعة 2026',
 		googleFormLink: 'https://forms.gle/CYS6WCbAeX4W3E6Z7',
 		paymentPlans: {
-			installments: {
-				label: 'الدفع على قسطين',
-				installment1: { amount: '2200', label: 'القسط الأول', note: 'وقت الاشتراك' },
-				installment2: { amount: '1600', label: 'القسط الثاني', note: 'ابتداءً من 7 أغسطس' },
-				total: '3800'
-			},
-			full: {
-				label: 'الدفع كاملًا',
-				amount: '3500',
-				originalAmount: '3800',
-				saving: '300'
-			}
+			installment2: { amount: '1600', label: 'القسط الثاني', note: 'ابتداءً من 7 أغسطس' }
 		},
 		currency: 'ج',
 		vodafoneNumbers: [
@@ -90,10 +79,8 @@ export class SubscriptionIntensivePageComponent implements OnInit, OnDestroy {
 			validity: {
 				title: 'مدة صلاحية الاشتراك:',
 				points: [
-					'المنصة شغالة لغاية اخر القسط الاول فقط',
-					'مع إنتهاء القسط الاول المحتوى بيقفل تلقائي',
-					'عند التجديد بيتفتح لك كل المحتوى من الأول',
-					'في خطة الدفع الكامل المنصة بتفضل شغالة لحد ليالي الامتحان'
+					'الكود شغال لغاية آخر الامتحانات',
+					'مع انتهاء الامتحانات بيقفل المحتوى تلقائياً'
 				]
 			}
 		}
@@ -154,7 +141,7 @@ export class SubscriptionIntensivePageComponent implements OnInit, OnDestroy {
 		window.addEventListener('pageshow', this.handleWindowFocus);
 	}
 
-	selectPlan(plan: 'installments' | 'full'): void {
+	selectPlan(plan: 'installment2'): void {
 		this.selectedPlan = plan;
 		if (typeof document !== 'undefined') {
 			setTimeout(() => {
@@ -166,17 +153,12 @@ export class SubscriptionIntensivePageComponent implements OnInit, OnDestroy {
 
 	getSelectedAmount(): string | null {
 		if (!this.selectedPlan) return null;
-		if (this.selectedPlan === 'full') {
-			return this.subscriptionDetails.paymentPlans.full.amount;
-		}
-		return this.subscriptionDetails.paymentPlans.installments.installment1.amount;
+		return this.subscriptionDetails.paymentPlans.installment2.amount;
 	}
 
 	getSelectedPlanLabel(): string | null {
 		if (!this.selectedPlan) return null;
-		return this.selectedPlan === 'full'
-			? this.subscriptionDetails.paymentPlans.full.label
-			: this.subscriptionDetails.paymentPlans.installments.label;
+		return this.subscriptionDetails.paymentPlans.installment2.label;
 	}
 
 	toggleWarning(): void {
@@ -249,13 +231,13 @@ export class SubscriptionIntensivePageComponent implements OnInit, OnDestroy {
 	}
 
 	getVideoEmbedUrl(): SafeResourceUrl {
-		const videoId = 'Viy_dZ-Fn8w';
+		const videoId = 'OahT64J_VMg';
 		const url = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
 		return this.sanitizer.bypassSecurityTrustResourceUrl(url);
 	}
 
 	getVideoThumbnail(): string {
-		const videoId = 'Viy_dZ-Fn8w';
+		const videoId = 'OahT64J_VMg';
 		return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 	}
 }
