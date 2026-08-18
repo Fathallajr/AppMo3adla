@@ -16,9 +16,31 @@
 			
 			<!-- Video Container -->
 			<div class="relative bg-black rounded-xl overflow-hidden shadow-2xl" style="padding-bottom: 56.25%;">
-				<iframe 
+				<button
+					*ngIf="!isVideoLoaded"
+					type="button"
+					class="absolute inset-0 w-full h-full group"
+					(click)="loadVideo()"
+					aria-label="تشغيل فيديو تفاصيل الاشتراك">
+					<img
+						[src]="getVideoThumbnail()"
+						alt="فيديو تفاصيل الاشتراك لشهر مايو"
+						class="absolute inset-0 w-full h-full object-cover"
+						loading="lazy"
+						decoding="async">
+					<span class="absolute inset-0 bg-black/35 group-hover:bg-black/25 transition-colors"></span>
+					<span class="absolute inset-0 flex items-center justify-center">
+						<span class="flex h-16 w-16 items-center justify-center rounded-full bg-white/95 text-orange-600 shadow-xl group-hover:scale-105 transition-transform">
+							<svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+								<path d="M8 5v14l11-7z"/>
+							</svg>
+						</span>
+					</span>
+				</button>
+				<iframe
+					*ngIf="isVideoLoaded"
 					class="absolute top-0 left-0 w-full h-full"
-					src="https://www.youtube.com/embed/KWeC2tNedQs"
+					[src]="getVideoEmbedUrl()"
 					title="فيديو تفاصيل الاشتراك لشهر مايو - أبلكيشن معادلة كلية هندسة"
 					frameborder="0"
 					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

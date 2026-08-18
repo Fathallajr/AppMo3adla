@@ -164,7 +164,7 @@ export const monthlyContentDefaults = {
 		}
 	},
 	'subscription-intensive': {
-		isEnrollmentClosed: false,
+		isEnrollmentClosed: true,
 		enrollmentReopenMessage: 'انتظروا التفاصيل قريباً بإذن الله 🔥',
 		subscriptionDetails: {
 			title: 'الاشتراك المكثف',

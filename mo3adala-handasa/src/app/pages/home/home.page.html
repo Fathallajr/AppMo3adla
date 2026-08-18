@@ -5,14 +5,16 @@
         <!-- Background Image Fallback -->
         <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('/assets/success.png'); z-index: 1;"></div>
         <!-- Background Video -->
-        <video 
+        <video
+			*ngIf="shouldUseHeroVideo"
             #heroVideo
             class="absolute inset-0 w-full h-full object-cover" 
             autoplay
             muted 
             loop 
             playsinline
-            preload="auto"
+            preload="metadata"
+			poster="/assets/success.png"
             webkit-playsinline
             x5-playsinline
             style="pointer-events: none; z-index: 2;"
@@ -20,7 +22,6 @@
             (canplay)="onVideoCanPlay()"
             (error)="onVideoError()">
             <source src="assets/background-video.mp4" type="video/mp4">
-            <source src="assets/background video.mp4" type="video/mp4">
         </video>
         <!-- Overlay -->
         <div class="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/70 z-10"></div>
@@ -500,82 +501,42 @@
 
 			<!-- Videos Grid -->
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" @staggerList>
-				<!-- Video 1 -->
-				<div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+				<div *ngFor="let video of homeVideos" class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
 					<div class="relative bg-black rounded-t-xl overflow-hidden" style="padding-bottom: 56.25%;">
-                        <iframe loading="lazy"
+						<button
+							*ngIf="!isHomeVideoLoaded(video.id)"
+							type="button"
+							class="absolute inset-0 w-full h-full group"
+							(click)="loadHomeVideo(video.id)"
+							[attr.aria-label]="'تشغيل ' + video.title">
+							<img
+								[src]="getHomeVideoThumbnail(video.id)"
+								[alt]="video.title"
+								class="absolute inset-0 w-full h-full object-cover"
+								loading="lazy"
+								decoding="async">
+							<span class="absolute inset-0 bg-black/35 group-hover:bg-black/25 transition-colors"></span>
+							<span class="absolute inset-0 flex items-center justify-center">
+								<span class="flex h-16 w-16 items-center justify-center rounded-full bg-white/95 text-orange-600 shadow-xl group-hover:scale-105 transition-transform">
+									<svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+										<path d="M8 5v14l11-7z"/>
+									</svg>
+								</span>
+							</span>
+						</button>
+						<iframe
+							*ngIf="isHomeVideoLoaded(video.id)"
 							class="absolute top-0 left-0 w-full h-full"
-							src="https://www.youtube.com/embed/TzWoIqSHVOI"
-							title="آراء الطلاب اللي نجحوا معنا"
+							[src]="getHomeVideoEmbedUrl(video.id)"
+							[title]="video.title"
 							frameborder="0"
 							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 							allowfullscreen>
 						</iframe>
 					</div>
 					<div class="p-6">
-						<h3 class="text-xl font-bold text-slate-900 mb-2"> سيستم المتابعة الجديد</h3>
-						<p class="text-slate-600 mb-4">"تعرف علي سيستم المتابعة الجديد"</p>
-						<div class="flex items-center justify-between">
-							<div class="flex items-center gap-1">
-								<!-- <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-									<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-								</svg> -->
-								
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- Video 2 -->
-				<div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-					<div class="relative bg-black rounded-t-xl overflow-hidden" style="padding-bottom: 56.25%;">
-                        <iframe loading="lazy"
-							class="absolute top-0 left-0 w-full h-full"
-							src="https://www.youtube.com/embed/RMWzTedJlE8"
-							title="بودكاست رحلة صعود طلاب الدبلوم"
-							frameborder="0"
-							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-							allowfullscreen>
-						</iframe>
-					</div>
-					<div class="p-6">
-						<h3 class="text-xl font-bold text-slate-900 mb-2"> بودكاست رحلة صعود طلاب الدبلوم</h3>
-						<p class="text-slate-600 mb-4">" معاناة طلاب الدبلوم في دخول كلية هندسة | وازاي الابلكيشن ساعدهم في الرحلة "</p>
-						<div class="flex items-center justify-between">
-							<div class="flex items-center gap-1">
-								<!-- <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-									<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-								</svg> -->
-								
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- Video 3 -->
-				<div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-					<div class="relative bg-black rounded-t-xl overflow-hidden" style="padding-bottom: 56.25%;">
-                        <iframe loading="lazy"
-							class="absolute top-0 left-0 w-full h-full"
-							src="https://www.youtube.com/embed/bmQ9KjBbsAI"
-							title="بودكاست رحلة صعود اتنين من طلاب التعليم الفني"
-							frameborder="0"
-							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-							allowfullscreen>
-						</iframe>
-					</div>
-					<div class="p-6">
-						<h3 class="text-xl font-bold text-slate-900 mb-2">بودكاست رحلة صعود اتنين من طلاب التعليم الفني </h3>
-						<p class="text-slate-600 mb-4">"معاناة طلاب التعليم الفني في دخول كلية هندسة | وازاي الابلكيشن ساعدهم في الرحلة "</p>
-						<div class="flex items-center justify-between">
-							
-							<div class="flex items-center gap-1">
-								<!-- <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-									<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-								</svg> -->
-								
-							</div>
-						</div>
+						<h3 class="text-xl font-bold text-slate-900 mb-2">{{ video.heading }}</h3>
+						<p class="text-slate-600 mb-4">{{ video.description }}</p>
 					</div>
 				</div>
 			</div>
@@ -589,5 +550,4 @@
 		</div>
 	</div>
 </section>
-
 

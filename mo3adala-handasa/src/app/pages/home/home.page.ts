@@ -1,5 +1,6 @@
 import { Component, ViewChild, ElementRef, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { fadeInUp, staggerList, homePageTransition, cardAnimation } from '../../shared/animations';
 import { SeoService } from '../../core/seo.service';
@@ -24,6 +25,29 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild('backgroundImage', { static: false }) backgroundImage!: ElementRef<HTMLDivElement>;
 	
 	videoPlaying = false;
+	shouldUseHeroVideo = true;
+	activeHomeVideoId: string | null = null;
+
+	homeVideos = [
+		{
+			id: 'TzWoIqSHVOI',
+			title: 'آراء الطلاب اللي نجحوا معنا',
+			heading: 'سيستم المتابعة الجديد',
+			description: '"تعرف علي سيستم المتابعة الجديد"'
+		},
+		{
+			id: 'RMWzTedJlE8',
+			title: 'بودكاست رحلة صعود طلاب الدبلوم',
+			heading: 'بودكاست رحلة صعود طلاب الدبلوم',
+			description: '" معاناة طلاب الدبلوم في دخول كلية هندسة | وازاي الابلكيشن ساعدهم في الرحلة "'
+		},
+		{
+			id: 'bmQ9KjBbsAI',
+			title: 'بودكاست رحلة صعود اتنين من طلاب التعليم الفني',
+			heading: 'بودكاست رحلة صعود اتنين من طلاب التعليم الفني',
+			description: '"معاناة طلاب التعليم الفني في دخول كلية هندسة | وازاي الابلكيشن ساعدهم في الرحلة "'
+		}
+	];
 	
 	features = ['مناهج بسيطة مُحدّثة 2026 ', 'شرح + أمثلة + امتحانات إلكترونية', 'خطط مذاكرة تناسب وقتك', 'دعم ومتابعة علي مدار 24 ساعة'];
 	
@@ -128,7 +152,13 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 		'طلاب 2025/IMG-20251027-WA0085.jpg'
 	];
 	
-	constructor(private seo: SeoService, private canonical: CanonicalService, private jsonld: JsonLdService, private contentService: MonthlyContentService) {
+	constructor(
+		private seo: SeoService,
+		private canonical: CanonicalService,
+		private jsonld: JsonLdService,
+		private contentService: MonthlyContentService,
+		private sanitizer: DomSanitizer
+	) {
 		const siteUrl = (typeof window !== 'undefined' ? (window as any)['NG_SITE_URL'] : process.env['NG_SITE_URL']) || 'https://example.com';
 		const title = 'ابلكيشن معادلة كلية هندسة';
 		const description = 'بنجهّزك لاجتياز معادلة كلية الهندسة بخطوات واضحة ومحتوى مُبسّط وتمارين عملية.';
@@ -160,6 +190,7 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 		// العودة إلى أعلى الصفحة عند تحميل الصفحة
 		if (typeof window !== 'undefined') {
 			window.scrollTo(0, 0);
+			this.shouldUseHeroVideo = !window.matchMedia('(prefers-reduced-motion: reduce)').matches && !(navigator as any).connection?.saveData;
 		}
 		
 		// Preload critical images for faster loading
@@ -279,67 +310,37 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 	
 	private setupVideoAutoplay() {
-		if (typeof window !== 'undefined') {
-			// Try multiple times with different delays
-			const tryPlay = () => {
-				const video = this.heroVideo?.nativeElement;
-				if (video) {
-					// Ensure video is muted for autoplay
-					video.muted = true;
-					video.setAttribute('muted', 'true');
-					video.volume = 0;
-					
-					// Force video to be visible
-					video.style.display = 'block';
-					video.style.opacity = '1';
-					video.style.zIndex = '2';
-					
-					// Set playsinline attributes
-					video.setAttribute('playsinline', 'true');
-					video.setAttribute('webkit-playsinline', 'true');
-					video.setAttribute('x5-playsinline', 'true');
-					
-					// Load the video first
-					video.load();
-					
-					const playPromise = video.play();
-					if (playPromise !== undefined) {
-						playPromise.then(() => {
-							this.videoPlaying = true;
-							// Ensure video stays playing
-							if (video.paused) {
-								video.play();
-							}
-						}).catch(error => {
-							// Try again after user interaction
-							const playOnInteraction = () => {
-								video.play().then(() => {
-									this.videoPlaying = true;
-									document.removeEventListener('click', playOnInteraction);
-									document.removeEventListener('touchstart', playOnInteraction);
-									document.removeEventListener('scroll', playOnInteraction);
-								}).catch(() => {});
-							};
-							document.addEventListener('click', playOnInteraction, { once: true });
-							document.addEventListener('touchstart', playOnInteraction, { once: true });
-							document.addEventListener('scroll', playOnInteraction, { once: true });
-						});
-					}
-				}
-			};
+		if (typeof window === 'undefined' || !this.shouldUseHeroVideo) return;
 
-			// Try immediately
-			setTimeout(tryPlay, 100);
-			
-			// Try after video loads
-			setTimeout(tryPlay, 300);
-			
-			// Try after 500ms
-			setTimeout(tryPlay, 500);
-			
-			// Try after 1 second
-			setTimeout(tryPlay, 1000);
-		}
+		setTimeout(() => {
+			const video = this.heroVideo?.nativeElement;
+			if (!video) return;
+
+			video.muted = true;
+			video.volume = 0;
+			void video.play().then(() => {
+				this.videoPlaying = true;
+			}).catch(() => {
+				this.videoPlaying = false;
+			});
+		}, 150);
+	}
+
+	loadHomeVideo(videoId: string): void {
+		this.activeHomeVideoId = videoId;
+	}
+
+	isHomeVideoLoaded(videoId: string): boolean {
+		return this.activeHomeVideoId === videoId;
+	}
+
+	getHomeVideoThumbnail(videoId: string): string {
+		return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+	}
+
+	getHomeVideoEmbedUrl(videoId: string): SafeResourceUrl {
+		const url = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+		return this.sanitizer.bypassSecurityTrustResourceUrl(url);
 	}
 	
 	private preloadImages() {

@@ -24,7 +24,7 @@ export class SubscriptionIntensivePageComponent implements OnInit, OnDestroy {
 	copiedNumber: string | null = null;
 	isImageModalOpen = false;
 	activeScheduleImage: ScheduleImage | null = null;
-	isEnrollmentClosed = false;
+	isEnrollmentClosed = true;
 	isWarningExpanded = false;
 	isVideoLoaded = false;
 	selectedPlan: 'installment2' | null = null;
