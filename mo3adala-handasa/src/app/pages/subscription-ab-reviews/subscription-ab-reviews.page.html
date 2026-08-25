@@ -2,9 +2,20 @@
 
 	<div class="hero-section hero-section--reviews">
 		<div class="hero-content">
-			<div class="month-badge">{{ subscriptionDetails.month }}</div>
+			<div class="hero-eyebrow"><span></span> المحطة الأخيرة لدفعة 2026</div>
 			<h1 class="hero-title">الجولات الحاسمة وليالي الامتحان</h1>
 			<p class="hero-subtitle">{{ subscriptionDetails.subtitle }}</p>
+			<div class="hero-highlights">
+				<span>خطة مركزة</span>
+				<span>مراجعات نهائية</span>
+				<span>ليالي الامتحان</span>
+			</div>
+		</div>
+		<div class="hero-price-card" aria-label="سعر الاشتراك">
+			<small>الاشتراك الكامل</small>
+			<strong>{{ getPrice() }}<span>ج</span></strong>
+			<p>وصول لكل الجولات وليالي الامتحان</p>
+			<div class="hero-price-status"><i></i> متاح الآن</div>
 		</div>
 		<div class="hero-decoration"></div>
 	</div>
@@ -17,24 +28,14 @@
 		<p class="banner-reopen">{{ enrollmentReopenMessage }}</p>
 	</div>
 
-	<a routerLink="/success-stories" class="success-stories-strip" aria-label="عرض قصص نجاح طلاب المراجعات والمكثف">
+	<a routerLink="/success-stories" class="success-stories-strip" aria-label="عرض قصص نجاح طلاب أبلكيشن معادلة كلية هندسة">
 		<div class="success-stories-strip__visual">
 			<img src="/assets/قصص النجاح.jpeg?v=20260621-3" alt="قصص نجاح طلاب المراجعات والمكثف" loading="lazy" decoding="async">
 		</div>
-		<div class="success-stories-strip__icon" aria-hidden="true">
-			<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.48 3.499a.75.75 0 011.04 0l2.14 2.058 2.97.424a.75.75 0 01.416 1.28l-2.15 2.095.508 2.959a.75.75 0 01-1.088.79L12 11.36l-2.656 1.396a.75.75 0 01-1.088-.79l.508-2.959-2.15-2.095a.75.75 0 01.416-1.28l2.97-.424 1.48-2.058z"></path>
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19h14M7 15h10"></path>
-			</svg>
-		</div>
 		<div class="success-stories-strip__text">
 			<small>طلاب حقيقيين وتجارب ملهمة</small>
-			<strong>شوف قصص نجاح طلاب المراجعات والمكثف</strong>
+			<strong>شوف قصص نجاح طلاب أبلكيشن معادلة كلية هندسة</strong>
 			<span>اعرف كل طالب بدأ منين، اتغير إيه في مذاكرته، وإزاي الخطة ساعدته يوصل.</span>
-			<div class="success-stories-strip__meta">
-				<span>الجولات الحاسمة وليالي الامتحان</span>
-				<span>الكورس المكثف</span>
-			</div>
 		</div>
 		<span class="success-stories-strip__action">
 			عرض القصص
@@ -70,7 +71,8 @@
 
 	<div class="main-container">
 
-		<div class="step-section">
+		<div class="subscription-journey">
+		<div class="step-section step-section--price">
 			<div class="step-section-header">
 				<div class="step-number-badge">1</div>
 				<div>
@@ -87,7 +89,7 @@
 			</div>
 		</div>
 
-		<div class="step-section" id="step-payment">
+		<div class="step-section step-section--payment" id="step-payment">
 			<div class="step-section-header">
 				<div class="step-number-badge">2</div>
 				<div>
@@ -163,7 +165,7 @@
 			</div>
 		</div>
 
-		<div class="step-section">
+		<div class="step-section step-section--form">
 			<div class="step-section-header">
 				<div class="step-number-badge">3</div>
 				<div>
@@ -187,6 +189,10 @@
 						{{ (form.isClosed || isEnrollmentClosed) ? 'مغلق مؤقتاً' : 'متاح الآن' }}
 					</span>
 				</div>
+				<div class="form-preparation-list">
+					<div><span>1</span> اكتب بياناتك ورقم واتساب بشكل صحيح</div>
+					<div><span>2</span> ارفع صورة واضحة لإيصال التحويل</div>
+				</div>
 				<button
 					(click)="openGoogleForm()"
 					class="form-submit-button form-submit-button--large"
@@ -200,7 +206,7 @@
 			</div>
 		</div>
 
-		<div class="step-section">
+		<div class="step-section step-section--code">
 			<div class="step-section-header">
 				<div class="step-number-badge step-number-badge--muted">4</div>
 				<div>
@@ -210,12 +216,19 @@
 			</div>
 
 			<div class="after-submit-card">
-				<div class="after-submit-icon">📲</div>
-				<h3 class="after-submit-title">بعد إتمام تسجيل الفورم</h3>
+				<div class="after-submit-icon" aria-hidden="true">
+					<svg viewBox="0 0 24 24" fill="currentColor">
+						<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884"/>
+					</svg>
+				</div>
+				<div class="whatsapp-label"><i></i> الإرسال عبر واتساب</div>
+				<h3 class="after-submit-title">الكود هيوصلك على واتساب</h3>
 				<p class="after-submit-text">
-					ستتلقى كود المراجعة على واتساب وستتمكن من البدء فوراً
+					بعد مراجعة بيانات التحويل، هنبعتلك كود تفعيل المنصة على نفس الرقم المسجل في الفورم.
 				</p>
+				<div class="delivery-note">تأكد إن رقم الواتساب مكتوب صح علشان الكود يوصلك بدون تأخير</div>
 			</div>
+		</div>
 		</div>
 
 		<div class="accordion-card">
@@ -226,7 +239,10 @@
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
 						</svg>
 					</div>
-					<span class="accordion-title">تنبيهات مهمة قبل الاشتراك</span>
+					<div class="accordion-heading">
+						<span class="accordion-title">قبل ما تكمل اشتراكك</span>
+						<small>اقرأ شروط الصلاحية والاسترداد بعناية</small>
+					</div>
 				</div>
 				<svg class="accordion-chevron" [class.accordion-chevron--open]="isWarningExpanded" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -350,6 +366,27 @@
 					 class="modal-image">
 			</div>
 		</div>
+
+		<section class="farewell-section" aria-labelledby="farewell-title">
+			<div class="farewell-glow farewell-glow--one"></div>
+			<div class="farewell-glow farewell-glow--two"></div>
+			<div class="farewell-content">
+				<div class="farewell-kicker">إلى دفعة 2026</div>
+				<div class="farewell-mark">“</div>
+				<h2 id="farewell-title">كانت رحلة طويلة… وفاضل آخر خطوة</h2>
+				<p>
+					بدأنا معاكم من أول الطريق، حلّينا واتعلمنا وغلطنا وقمنا تاني.
+					الجولات دي مش مجرد مراجعة أخيرة؛ دي ختام رحلة كاملة بنفخر إننا عشناها معاكم.
+				</p>
+				<div class="farewell-message">ادخلوا امتحاناتكم واثقين… مكانكم في هندسة مستنيكم 🧡</div>
+				<div class="farewell-signature">
+					<span class="farewell-signature-line"></span>
+					<strong>فريق أبلكيشن معادلة</strong>
+					<small>هنفضل دايمًا فخورين بيكم</small>
+				</div>
+			</div>
+			<div class="farewell-year" aria-hidden="true">2026</div>
+		</section>
 
 		<div class="account-section">
 			<div class="account-icon">👤</div>

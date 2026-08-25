@@ -28,8 +28,8 @@ export class SuccessStoriesPageComponent implements OnInit {
 		}
 
 		const siteUrl = (window as any)['NG_SITE_URL'] || 'https://appmo3adla.com';
-		const title = 'قصص نجاح طلاب المراجعات والمكثف - ابلكيشن معادلة كلية هندسة';
-		const description = 'شاهد قصص نجاح طلاب مراجعات A-B والكورس المكثف وتجاربهم مع خطة المذاكرة والمتابعة.';
+		const title = 'قصص نجاح طلاب أبلكيشن معادلة كلية هندسة';
+		const description = 'شاهد قصص نجاح طلاب أبلكيشن معادلة كلية هندسة وتجاربهم الحقيقية مع المذاكرة والمتابعة حتى تحقيق هدفهم.';
 		const url = `${siteUrl}/success-stories`;
 
 		this.seo.setTitle(title);

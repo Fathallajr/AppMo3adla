@@ -27,7 +27,10 @@ interface ReviewFormConfig {
 	standalone: true,
 	imports: [CommonModule, RouterLink],
 	templateUrl: './subscription-ab-reviews.page.html',
-	styleUrls: ['../subscription-details/subscription-details.page.css']
+	styleUrls: [
+		'../subscription-details/subscription-details.page.css',
+		'./subscription-ab-reviews.page.css'
+	]
 })
 export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	copiedNumber: string | null = null;
