@@ -7,14 +7,11 @@ import { CanonicalService } from '../../core/canonical.service';
 import { MonthlyContentService } from '../../core/services/monthly-content.service';
 
 interface ScheduleImage {
-	groupKey: ReviewGroupKey;
 	group: string;
 	src: string;
 	alt: string;
 	note?: string;
 }
-
-type ReviewGroupKey = 'groupAB' | 'groupC';
 
 interface ReviewFormConfig {
 	label: string;
@@ -36,12 +33,11 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	copiedNumber: string | null = null;
 	isImageModalOpen = false;
 	activeScheduleImage: ScheduleImage | null = null;
-	isEnrollmentClosed = true;
+	isEnrollmentClosed = false;
 	enrollmentReopenMessage = 'سيتم فتح المراجعات مع بداية الشهر القادم بإذن الله.';
 	shuffledVodafoneNumbers: { number: string; owner: string }[] = [];
 	isWarningExpanded = false;
 	isVideoLoaded = false;
-	selectedGroup: ReviewGroupKey = 'groupAB';
 
 	private handleVisibilityChange = () => {
 		if (typeof document === 'undefined') {
@@ -67,7 +63,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 
 		const loaded = state.subscriptionDetails;
 		if (loaded) {
-			const legacyForm = loaded.googleForm ?? loaded.googleForms?.groupA ?? loaded.googleForms?.groupB;
+			const legacyForm = loaded.googleForm ?? loaded.googleForms?.groupAB ?? loaded.googleForms?.groupA ?? loaded.googleForms?.groupB;
 			this.subscriptionDetails = {
 				...this.subscriptionDetails,
 				...loaded,
@@ -80,14 +76,6 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 				googleForm: {
 					...this.subscriptionDetails.googleForm,
 					...(legacyForm ?? {})
-				},
-				groups: {
-					groupAB: { ...this.subscriptionDetails.groups.groupAB, ...(loaded.groups?.groupAB ?? {}) },
-					groupC: { ...this.subscriptionDetails.groups.groupC, ...(loaded.groups?.groupC ?? {}) }
-				},
-				googleForms: {
-					groupAB: { ...this.subscriptionDetails.googleForms.groupAB, ...(loaded.googleForms?.groupAB ?? {}) },
-					groupC: { ...this.subscriptionDetails.googleForms.groupC, ...(loaded.googleForms?.groupC ?? {}) }
 				},
 				vodafoneNumbers: loaded.vodafoneNumbers?.length
 					? loaded.vodafoneNumbers
@@ -112,14 +100,10 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	}
 
 	subscriptionDetails = {
-		month: 'مراجعات شهر أغسطس 2026',
+		month: 'شهر سبتمبر 2026',
 		review: {
-			name: 'مراجعات A-B-C',
-			price: '800'
-		},
-		groups: {
-			groupAB: { name: 'مراجعات A-B', price: '800' },
-			groupC: { name: 'مراجعات C', price: '800' }
+			name: 'الجولات الحاسمة وليالي الامتحان',
+			price: '400'
 		},
 		currency: 'ج',
 		features: [
@@ -130,21 +114,11 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 			'playlist شرح المنهج كاملاً'
 		],
 		googleForm: {
-			label: 'مراجعات A-B',
-			description: 'فورم اشتراك مراجعات أغسطس',
+			label: 'الجولات الحاسمة وليالي الامتحان',
+			description: 'فورم اشتراك شهر سبتمبر',
 			buttonText: 'سجل فورم المراجعة',
-			link: 'https://forms.gle/J6CBxzZuFCEz2AmA6',
+			link: 'https://forms.gle/yPCxfeX73FmGg2cn8',
 			isClosed: false
-		},
-		googleForms: {
-			groupAB: {
-				label: 'مراجعات A-B', description: 'فورم اشتراك مراجعات A-B', buttonText: 'سجل فورم مراجعات A-B',
-				link: 'https://forms.gle/J6CBxzZuFCEz2AmA6', isClosed: false
-			},
-			groupC: {
-				label: 'مراجعات C', description: 'فورم اشتراك مراجعات C', buttonText: 'سجل فورم مراجعات C',
-				link: 'https://forms.gle/jwKoocsd4m7yANQW6', isClosed: false
-			}
 		},
 		vodafoneNumbers: [
 			{ number: '01025326080', owner: 'احمد م**** ا***** ز***' },
@@ -154,17 +128,9 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 		],
 		scheduleImages: [
 			{
-				groupKey: 'groupAB' as ReviewGroupKey,
-				group: 'جدول مراجعات A-B',
-				src: '/assets/جداول مراجعات شهر 8/جدول جروب A-B.png',
-				alt: 'جدول مراجعات شهر أغسطس - جروب A و B',
-				note: '👆 اضغط على الصورة للتكبير'
-			},
-			{
-				groupKey: 'groupC' as ReviewGroupKey,
-				group: 'جدول مراجعات C',
-				src: '/assets/جداول مراجعات شهر 8/جدول جروب C.png',
-				alt: 'جدول مراجعات شهر أغسطس - جروب C',
+				group: 'جدول الجولات الحاسمة وليالي الامتحان',
+				src: '/assets/جداول مراجعات شهر 8/جدول ليالي الامتحان.jpeg',
+				alt: 'جدول الجولات الحاسمة وليالي الامتحان لشهر سبتمبر',
 				note: '👆 اضغط على الصورة للتكبير'
 			}
 		],
@@ -190,7 +156,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 				]
 			}
 		},
-		subtitle: 'مراجعات جروبات A و B و C — دفعة 2026'
+		subtitle: 'الجولات الحاسمة وليالي الامتحان — سبتمبر 2026'
 	};
 
 	constructor(
@@ -203,8 +169,8 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	ngOnInit(): void {
 		if (typeof window !== 'undefined') {
 			const siteUrl = (window as any)['NG_SITE_URL'] || 'https://appmo3adla.com';
-			const title = 'مراجعات A-B-C - ابلكيشن معادلة كلية هندسة';
-			const description = 'تفاصيل مراجعات جروبات A وB وC مع فورم وجدول منفصل لكل اختيار.';
+			const title = 'الجولات الحاسمة وليالي الامتحان - سبتمبر 2026';
+			const description = 'تفاصيل اشتراك الجولات الحاسمة وليالي الامتحان لشهر سبتمبر 2026 مع فورم وجدول موحد.';
 			const url = `${siteUrl}/subscription-ab-reviews`;
 
 			this.seo.setTitle(title);
@@ -267,23 +233,19 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	}
 
 	getForm(): ReviewFormConfig {
-		return this.subscriptionDetails.googleForms[this.selectedGroup] as ReviewFormConfig;
+		return this.subscriptionDetails.googleForm as ReviewFormConfig;
 	}
 
 	getPrice(): string {
-		return this.subscriptionDetails.groups[this.selectedGroup].price;
+		return this.subscriptionDetails.review.price;
 	}
 
 	getReviewName(): string {
-		return this.subscriptionDetails.groups[this.selectedGroup].name;
-	}
-
-	selectGroup(group: ReviewGroupKey): void {
-		this.selectedGroup = group;
+		return this.subscriptionDetails.review.name;
 	}
 
 	getSelectedSchedules(): ScheduleImage[] {
-		return this.subscriptionDetails.scheduleImages.filter(schedule => schedule.groupKey === this.selectedGroup);
+		return this.subscriptionDetails.scheduleImages.slice(0, 1);
 	}
 
 	toggleWarning(): void {
@@ -354,13 +316,13 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	}
 
 	getVideoEmbedUrl(): SafeResourceUrl {
-		const videoId = 'j66ECxbdYHs';
+		const videoId = 'H2_dh3SsfiI';
 		const url = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
 		return this.sanitizer.bypassSecurityTrustResourceUrl(url);
 	}
 
 	getVideoThumbnail(): string {
-		const videoId = 'j66ECxbdYHs';
+		const videoId = 'H2_dh3SsfiI';
 		return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 	}
 }

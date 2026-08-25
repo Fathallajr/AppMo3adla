@@ -38,7 +38,7 @@ export const cmsPageOptions: CmsPageOption[] = [
 	{ key: 'engineers', route: '/engineers', title: 'المهندسين والمدرسين', description: 'كروت المدرسين وترتيبهم وبياناتهم', group: 'الأشخاص' },
 	{ key: 'teacher-details', route: '/teacher/:id', title: 'تفاصيل المدرس', description: 'صفحات البروفايل والفيديوهات ووسائل التواصل', group: 'الأشخاص' },
 	{ key: 'schools', route: '/schools', title: 'المدارس والمعاهد', description: 'الدليل والقوائم والفلترة', group: 'الدليل والمعارض' },
-	{ key: 'subscription-ab-reviews', route: '/subscription-ab-reviews', title: 'مراجعات A-B-C', description: 'مراجعات جروبات A وB وC والفورمات والجداول المنفصلة', group: 'الاشتراكات' },
+	{ key: 'subscription-ab-reviews', route: '/subscription-ab-reviews', title: 'الجولات الحاسمة وليالي الامتحان', description: 'اشتراك سبتمبر بفورم وجدول موحد', group: 'الاشتراكات' },
 	{ key: 'subscription-intensive', route: '/subscription-intensive', title: 'الاشتراك المكثف', description: 'خطط المكثف والدفع والفودافون كاش', group: 'الاشتراكات' },
 ];
 

@@ -3,7 +3,7 @@
 	<div class="hero-section hero-section--reviews">
 		<div class="hero-content">
 			<div class="month-badge">{{ subscriptionDetails.month }}</div>
-			<h1 class="hero-title">مراجعات A-B-C</h1>
+			<h1 class="hero-title">الجولات الحاسمة وليالي الامتحان</h1>
 			<p class="hero-subtitle">{{ subscriptionDetails.subtitle }}</p>
 		</div>
 		<div class="hero-decoration"></div>
@@ -32,7 +32,7 @@
 			<strong>شوف قصص نجاح طلاب المراجعات والمكثف</strong>
 			<span>اعرف كل طالب بدأ منين، اتغير إيه في مذاكرته، وإزاي الخطة ساعدته يوصل.</span>
 			<div class="success-stories-strip__meta">
-				<span>مراجعات A-B-C</span>
+				<span>الجولات الحاسمة وليالي الامتحان</span>
 				<span>الكورس المكثف</span>
 			</div>
 		</div>
@@ -74,41 +74,15 @@
 			<div class="step-section-header">
 				<div class="step-number-badge">1</div>
 				<div>
-					<h2 class="step-section-title">اختار مجموعة المراجعات</h2>
-					<p class="step-section-subtitle">كل مجموعة لها فورم وجدول منفصل</p>
+					<h2 class="step-section-title">سعر الاشتراك</h2>
+					<p class="step-section-subtitle">اشتراك واحد يشمل جدول الجولة الحاسمة بالكامل</p>
 				</div>
 			</div>
-
-			<div class="pricing-cards-grid pricing-cards-grid--two">
-				<div class="pricing-card" role="button" tabindex="0"
-					 [class.pricing-card--selected]="selectedGroup === 'groupAB'"
-					 (click)="selectGroup('groupAB')" (keydown.enter)="selectGroup('groupAB')">
-					<div class="pricing-card-check">
-						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-						</svg>
-					</div>
-					<div class="pricing-card-label">مراجعات A-B</div>
-					<div class="pricing-card-price">
-						{{ subscriptionDetails.groups.groupAB.price }}
-						<span class="pricing-card-currency">ج</span>
-					</div>
-					<div class="pricing-card-period">/شهر</div>
-				</div>
-				<div class="pricing-card" role="button" tabindex="0"
-					 [class.pricing-card--selected]="selectedGroup === 'groupC'"
-					 (click)="selectGroup('groupC')" (keydown.enter)="selectGroup('groupC')">
-					<div class="pricing-card-check">
-						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-						</svg>
-					</div>
-					<div class="pricing-card-label">مراجعات C</div>
-					<div class="pricing-card-price">
-						{{ subscriptionDetails.groups.groupC.price }}
-						<span class="pricing-card-currency">ج</span>
-					</div>
-					<div class="pricing-card-period">/شهر</div>
+			<div class="pricing-cards-grid">
+				<div class="pricing-card pricing-card--selected">
+					<div class="pricing-card-label">{{ getReviewName() }}</div>
+					<div class="pricing-card-price">{{ getPrice() }} <span class="pricing-card-currency">ج</span></div>
+					<div class="pricing-card-period">/اشتراك</div>
 				</div>
 			</div>
 		</div>
@@ -290,7 +264,7 @@
 				</div>
 				<div>
 					<h3 class="video-section-title">فيديو تفاصيل المراجعة</h3>
-					<p class="video-section-subtitle">شاهد الشرح الكامل لتفاصيل مراجعات A-B-C</p>
+					<p class="video-section-subtitle">شاهد الشرح الكامل لتفاصيل الجولات الحاسمة وليالي الامتحان</p>
 				</div>
 			</div>
 
@@ -312,7 +286,7 @@
 					*ngIf="isVideoLoaded"
 					class="subscription-video-iframe"
 					[src]="getVideoEmbedUrl()"
-					title="فيديو توضيحي - مراجعات A-B-C"
+					title="فيديو توضيحي - الجولات الحاسمة وليالي الامتحان"
 					frameborder="0"
 					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 					allowfullscreen>
