@@ -84,7 +84,7 @@ export const monthlyContentDefaults = {
 			month: 'شهر سبتمبر 2026',
 			review: {
 				name: 'الجولات الحاسمة وليالي الامتحان',
-				price: '400'
+				price: '200'
 			},
 			currency: 'ج',
 			features: [

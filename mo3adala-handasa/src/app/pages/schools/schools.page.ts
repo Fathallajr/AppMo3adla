@@ -15,6 +15,7 @@ import { subPageTransition, fadeInUp, staggerList, cardAnimation } from '../../s
 export class SchoolsPageComponent {
   searchTerm = '';
   selectedFilter = 'الكل';
+  isFilterMenuOpen = false;
   pageSize = 24;
   displayedCount = this.pageSize;
   
@@ -535,6 +536,19 @@ export class SchoolsPageComponent {
     this.displayedCount = this.pageSize;
   }
 
+  toggleFilterMenu() {
+    this.isFilterMenuOpen = !this.isFilterMenuOpen;
+  }
+
+  selectFilter(filter: string) {
+    this.onFilterChange(filter);
+    this.isFilterMenuOpen = false;
+  }
+
+  closeFilterMenu() {
+    this.isFilterMenuOpen = false;
+  }
+
   onSearchChange() {
     // Search happens automatically through the getter
     this.displayedCount = this.pageSize;
@@ -544,6 +558,7 @@ export class SchoolsPageComponent {
     this.searchTerm = '';
     this.selectedFilter = 'الكل';
     this.displayedCount = this.pageSize;
+    this.isFilterMenuOpen = false;
   }
 
   getCountByCategory(category: string): number {

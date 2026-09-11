@@ -22,7 +22,6 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild('reviewsTrack', { static: false }) reviewsTrack!: ElementRef<HTMLDivElement>;
 	@ViewChild('photosTrack', { static: false }) photosTrack!: ElementRef<HTMLDivElement>;
 	@ViewChild('heroVideo', { static: false }) heroVideo!: ElementRef<HTMLVideoElement>;
-	@ViewChild('backgroundImage', { static: false }) backgroundImage!: ElementRef<HTMLDivElement>;
 	
 	videoPlaying = false;
 	shouldUseHeroVideo = true;
@@ -63,6 +62,7 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 	currentDescriptionIndex = 0;
 	currentDescription = this.descriptions[0];
 	private descriptionInterval: any;
+	private photoAutoPlayTimer?: ReturnType<typeof setInterval>;
 	private isTyping = false;
 	private isDeleting = false;
 	private typedText = '';
@@ -302,11 +302,32 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 		if (this.descriptionInterval) {
 			clearInterval(this.descriptionInterval);
 		}
+		if (this.photoAutoPlayTimer) {
+			clearInterval(this.photoAutoPlayTimer);
+		}
 	}
 
 	ngAfterViewInit() {
 		// Setup video autoplay after view is initialized
 		this.setupVideoAutoplay();
+		this.setupPhotoAutoplay();
+	}
+
+	private setupPhotoAutoplay(): void {
+		if (typeof window === 'undefined') return;
+		this.photoAutoPlayTimer = setInterval(() => {
+			if (!this.photosTrack) return;
+			const track = this.photosTrack.nativeElement;
+			const maxScroll = track.scrollWidth - track.clientWidth;
+			const cardWidth = track.querySelector('.photo-card')?.clientWidth || 200;
+			const step = cardWidth + 16;
+			const nextScroll = track.scrollLeft - step;
+			if (maxScroll <= 0 || Math.abs(nextScroll) >= maxScroll - 8) {
+				track.scrollTo({ left: 0, behavior: 'smooth' });
+				return;
+			}
+			track.scrollTo({ left: nextScroll, behavior: 'smooth' });
+		}, 3200);
 	}
 	
 	private setupVideoAutoplay() {
@@ -451,7 +472,7 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 					video.play().then(() => {
 						this.videoPlaying = true;
 					}).catch(() => {
-						// Keep background image visible if video fails
+						// There is intentionally no image fallback; retry on the next media event.
 						this.videoPlaying = false;
 					});
 				}

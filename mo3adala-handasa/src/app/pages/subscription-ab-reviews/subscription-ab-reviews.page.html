@@ -5,10 +5,10 @@
 			<div class="hero-eyebrow"><span></span> المحطة الأخيرة لدفعة 2026</div>
 			<h1 class="hero-title">الجولات الحاسمة وليالي الامتحان</h1>
 			<p class="hero-subtitle">{{ subscriptionDetails.subtitle }}</p>
-			<div class="hero-highlights">
-				<span>خطة مركزة</span>
-				<span>مراجعات نهائية</span>
-				<span>ليالي الامتحان</span>
+			<div class="hero-highlights" aria-label="مميزات الاشتراك">
+				<span class="hero-highlight"><i aria-hidden="true">01</i><b>خطة مركزة</b></span>
+				<span class="hero-highlight"><i aria-hidden="true">02</i><b>مراجعات نهائية</b></span>
+				<span class="hero-highlight"><i aria-hidden="true">03</i><b>ليالي الامتحان</b></span>
 			</div>
 		</div>
 		<div class="hero-price-card" aria-label="سعر الاشتراك">
@@ -27,23 +27,6 @@
 		</p>
 		<p class="banner-reopen">{{ enrollmentReopenMessage }}</p>
 	</div>
-
-	<a routerLink="/success-stories" class="success-stories-strip" aria-label="عرض قصص نجاح طلاب أبلكيشن معادلة كلية هندسة">
-		<div class="success-stories-strip__visual">
-			<img src="/assets/قصص النجاح.jpeg?v=20260621-3" alt="قصص نجاح طلاب المراجعات والمكثف" loading="lazy" decoding="async">
-		</div>
-		<div class="success-stories-strip__text">
-			<small>طلاب حقيقيين وتجارب ملهمة</small>
-			<strong>شوف قصص نجاح طلاب أبلكيشن معادلة كلية هندسة</strong>
-			<span>اعرف كل طالب بدأ منين، اتغير إيه في مذاكرته، وإزاي الخطة ساعدته يوصل.</span>
-		</div>
-		<span class="success-stories-strip__action">
-			عرض القصص
-			<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-			</svg>
-		</span>
-	</a>
 
 	<div class="step-indicator-wrapper">
 		<div class="step-indicator">
@@ -70,6 +53,40 @@
 	</div>
 
 	<div class="main-container">
+
+		<div class="accordion-card accordion-card--notice">
+			<div class="accordion-header accordion-header--static">
+				<div class="accordion-header-right">
+					<div class="accordion-icon">
+						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+						</svg>
+					</div>
+					<div class="accordion-heading">
+						<span class="accordion-title">مهم قبل الاشتراك</span>
+						<small>اقرأ شروط الصلاحية والاسترداد قبل تحويل المبلغ</small>
+					</div>
+				</div>
+				<span class="accordion-notice-badge">اقرأ قبل الدفع</span>
+			</div>
+
+			<div class="accordion-body accordion-body--open">
+				<div class="warning-items">
+					<div class="warning-item orange-border">
+						<h4 class="warning-item-title">{{ subscriptionDetails.subscriptionWarnings.validity.title }}</h4>
+						<ul class="warning-list">
+							<li *ngFor="let point of subscriptionDetails.subscriptionWarnings.validity.points">{{ point }}</li>
+						</ul>
+					</div>
+					<div class="warning-item red-border">
+						<h4 class="warning-item-title">{{ subscriptionDetails.subscriptionWarnings.refund.title }}</h4>
+						<ul class="warning-list">
+							<li *ngFor="let point of subscriptionDetails.subscriptionWarnings.refund.points">{{ point }}</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<div class="subscription-journey">
 		<div class="step-section step-section--price">
@@ -155,10 +172,21 @@
 				</div>
 
 				<div class="required-info-inline">
-					<h4 class="info-title-inline">📌 المعلومات المطلوبة بعد التحويل:</h4>
-					<div class="info-items-inline">
-						<div *ngFor="let info of subscriptionDetails.requiredInfo" class="info-badge">
-							{{ info }}
+					<div class="required-info-heading">
+						<span class="required-info-icon" aria-hidden="true">
+							<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 5.25h6m-8.25 0H5.25A2.25 2.25 0 003 7.5v11.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V7.5a2.25 2.25 0 00-2.25-2.25h-1.5M9 5.25a3 3 0 016 0M8.25 12h7.5m-7.5 3.75h4.5" />
+							</svg>
+						</span>
+						<div>
+							<h4>بيانات التحويل المطلوبة</h4>
+							<p>أرسل البيانات التالية لتأكيد اشتراكك بسرعة</p>
+						</div>
+					</div>
+					<div class="required-info-list">
+						<div *ngFor="let info of subscriptionDetails.requiredInfo; let i = index" class="required-info-item">
+							<span class="required-info-number">{{ (i + 1).toString().padStart(2, '0') }}</span>
+							<span>{{ info }}</span>
 						</div>
 					</div>
 				</div>
@@ -229,46 +257,6 @@
 				<div class="delivery-note">تأكد إن رقم الواتساب مكتوب صح علشان الكود يوصلك بدون تأخير</div>
 			</div>
 		</div>
-		</div>
-
-		<div class="accordion-card">
-			<button class="accordion-header" (click)="toggleWarning()" [attr.aria-expanded]="isWarningExpanded">
-				<div class="accordion-header-right">
-					<div class="accordion-icon">
-						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-						</svg>
-					</div>
-					<div class="accordion-heading">
-						<span class="accordion-title">قبل ما تكمل اشتراكك</span>
-						<small>اقرأ شروط الصلاحية والاسترداد بعناية</small>
-					</div>
-				</div>
-				<svg class="accordion-chevron" [class.accordion-chevron--open]="isWarningExpanded" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-				</svg>
-			</button>
-
-			<div class="accordion-body" [class.accordion-body--open]="isWarningExpanded">
-				<div class="warning-items">
-					<div class="warning-item orange-border">
-						<h4 class="warning-item-title">{{ subscriptionDetails.subscriptionWarnings.validity.title }}</h4>
-						<ul class="warning-list">
-							<li *ngFor="let point of subscriptionDetails.subscriptionWarnings.validity.points">
-								{{ point }}
-							</li>
-						</ul>
-					</div>
-					<div class="warning-item red-border">
-						<h4 class="warning-item-title">{{ subscriptionDetails.subscriptionWarnings.refund.title }}</h4>
-						<ul class="warning-list">
-							<li *ngFor="let point of subscriptionDetails.subscriptionWarnings.refund.points">
-								{{ point }}
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
 		</div>
 
 		<div class="video-section-new">

@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { subPageTransition, fadeInUp, staggerList, waveAnimation, cascadeAnimation } from '../../shared/animations';
+import { subPageTransition, fadeInUp, staggerList, cascadeAnimation } from '../../shared/animations';
 import { SeoService } from '../../core/seo.service';
 import { CanonicalService } from '../../core/canonical.service';
 
@@ -12,28 +11,12 @@ import { CanonicalService } from '../../core/canonical.service';
   imports: [CommonModule, RouterLink],
   templateUrl: './requirements.page.html',
   styleUrls: ['./requirements.page.css'],
-  animations: [subPageTransition, fadeInUp, staggerList, waveAnimation, cascadeAnimation]
+    animations: [subPageTransition, fadeInUp, staggerList, cascadeAnimation]
 })
 export class RequirementsPageComponent implements OnInit {
-  applicationVideos = [
-    {
-      id: '5XgTXDU69ZY',
-      part: 'الجزء الأول',
-      title: 'لينك التقديم - الجزء الأول'
-    },
-    {
-      id: 'cIwrHiF4Mv0',
-      part: 'الجزء الثاني',
-      title: 'خطوات التقديم - الجزء الثاني'
-    }
-  ];
-
-  loadedApplicationVideos: Record<string, boolean> = {};
-
   constructor(
     private seo: SeoService,
-    private canonical: CanonicalService,
-    private sanitizer: DomSanitizer
+    private canonical: CanonicalService
   ) {}
 
   ngOnInit(): void {
@@ -51,20 +34,4 @@ export class RequirementsPageComponent implements OnInit {
     }
   }
 
-  loadApplicationVideo(videoId: string): void {
-    this.loadedApplicationVideos[videoId] = true;
-  }
-
-  isApplicationVideoLoaded(videoId: string): boolean {
-    return !!this.loadedApplicationVideos[videoId];
-  }
-
-  getApplicationVideoEmbedUrl(videoId: string): SafeResourceUrl {
-    const url = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
-    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
-  }
-
-  getApplicationVideoThumbnail(videoId: string): string {
-    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-  }
 }

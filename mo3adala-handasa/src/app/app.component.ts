@@ -1,16 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
+import { RouterOutlet, RouterLink, Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { pageTransition } from './shared/animations';
-import { filter } from 'rxjs/operators';
 import { ViewportScroller } from '@angular/common';
 
 @Component({
 	selector: 'app-root',
 	standalone: true,
-	imports: [CommonModule, RouterOutlet, NavbarComponent, FooterComponent],
+	imports: [CommonModule, RouterOutlet, RouterLink, NavbarComponent, FooterComponent],
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.css'],
 	animations: [pageTransition]
@@ -19,15 +18,23 @@ export class AppComponent implements OnInit {
 	title = 'mo3adala-handasa';
 	currentRoute = '';
 	showLoading = true;
-	loadingProgress = 0;
 
 	constructor(private router: Router, private viewportScroller: ViewportScroller) {
+		if ('scrollRestoration' in history) {
+			history.scrollRestoration = 'manual';
+		}
+		this.currentRoute = this.router.url;
 		this.router.events
-			.pipe(filter(event => event instanceof NavigationEnd))
-			.subscribe((event: NavigationEnd) => {
-				this.currentRoute = event.url;
-				// التمرير إلى الأعلى عند تغيير الصفحة
-				this.scrollToTop();
+			.subscribe((event) => {
+				// Set the route class before the new view is rendered, preventing
+				// internal pages from briefly appearing beneath the fixed navbar.
+				if (event instanceof NavigationStart) {
+					this.currentRoute = event.url;
+				}
+				if (event instanceof NavigationEnd) {
+					this.currentRoute = event.urlAfterRedirects;
+					this.scrollToTop();
+				}
 			});
 	}
 
@@ -35,30 +42,31 @@ export class AppComponent implements OnInit {
 		// التمرير إلى الأعلى عند تحميل الصفحة لأول مرة
 		this.scrollToTop();
 		
-		// Progressive loading - سرعة متوسطة
-		const interval = setInterval(() => {
-			this.loadingProgress += 10;
-			if (this.loadingProgress >= 100) {
-				this.loadingProgress = 100;
-				clearInterval(interval);
-				// إخفاء Loading بعد وصول 100%
-				setTimeout(() => {
-					this.showLoading = false;
-				}, 400);
-			}
-		}, 150);
+		// Keep the spinner short so refreshes feel immediate.
+		setTimeout(() => {
+			this.showLoading = false;
+		}, 300);
+	}
+
+	@HostListener('window:pageshow')
+	onPageShow() {
+		// Browsers can restore the previous scroll position after a refresh.
+		this.scrollToTop();
 	}
 
 	scrollToTop() {
-		// التمرير إلى الأعلى بسلاسة
-		window.scrollTo({
-			top: 0,
-			left: 0,
-			behavior: 'smooth'
-		});
-		
-		// استخدام ViewportScroller كبديل
-		this.viewportScroller.scrollToPosition([0, 0]);
+		const reset = () => {
+			window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+			document.documentElement.scrollTop = 0;
+			document.body.scrollTop = 0;
+			this.viewportScroller.scrollToPosition([0, 0]);
+		};
+
+		reset();
+		// Run again after layout and browser restoration have completed.
+		requestAnimationFrame(reset);
+		setTimeout(reset, 0);
+		setTimeout(reset, 120);
 	}
 
 	getRouteAnimationState() {

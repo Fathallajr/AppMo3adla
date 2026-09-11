@@ -39,7 +39,6 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	isEnrollmentClosed = false;
 	enrollmentReopenMessage = 'سيتم فتح المراجعات مع بداية الشهر القادم بإذن الله.';
 	shuffledVodafoneNumbers: { number: string; owner: string }[] = [];
-	isWarningExpanded = false;
 	isVideoLoaded = false;
 
 	private handleVisibilityChange = () => {
@@ -106,7 +105,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 		month: 'شهر سبتمبر 2026',
 		review: {
 			name: 'الجولات الحاسمة وليالي الامتحان',
-			price: '400'
+			price: '200'
 		},
 		currency: 'ج',
 		features: [
@@ -138,9 +137,9 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 			}
 		],
 		requiredInfo: [
-			'رقم الموبايل اللي حولت منه 📲',
-			'سكرين شوت بالتحويل 🖼',
-			'وقت وتاريخ التحويل ⏳'
+			'رقم الموبايل اللي حولت منه',
+			'سكرين شوت بالتحويل',
+			'وقت وتاريخ التحويل'
 		],
 		whatsappNumber: '201554843745',
 		subscriptionWarnings: {
@@ -249,10 +248,6 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 
 	getSelectedSchedules(): ScheduleImage[] {
 		return this.subscriptionDetails.scheduleImages.slice(0, 1);
-	}
-
-	toggleWarning(): void {
-		this.isWarningExpanded = !this.isWarningExpanded;
 	}
 
 	onNumberCardClick(number: string): void {

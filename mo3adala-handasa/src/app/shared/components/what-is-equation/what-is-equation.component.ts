@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { fadeInUp } from '../../animations';
@@ -11,12 +11,44 @@ import { fadeInUp } from '../../animations';
 	templateUrl: './what-is-equation.component.html',
 	styleUrls: ['./what-is-equation.component.css'],
 })
-export class WhatIsEquationComponent {
+export class WhatIsEquationComponent implements OnInit, OnDestroy {
 	@Input() title = 'يعني إيه معادلة كلية هندسة؟';
 	@Input() text = 'اختبار ومعادلة تؤهّلك لدخول كلية الهندسة لطلاب الدبلومات والمعاهد. بنوفّر لك شرح مبسّط وخطط مذاكرة وتمارين تساعدك تتأهل وتنجح.';
 	isVideoLoaded = false;
+	animatedVideos = 0;
+	animatedStudents = 0;
+	animatedExperience = 0;
+	private counterTimer?: ReturnType<typeof setInterval>;
 
 	constructor(private sanitizer: DomSanitizer) {}
+
+	ngOnInit(): void {
+		const targets = { videos: 5000, students: 350, experience: 5 };
+		if (typeof window === 'undefined') {
+			this.animatedVideos = targets.videos;
+			this.animatedStudents = targets.students;
+			this.animatedExperience = targets.experience;
+			return;
+		}
+		let progress = 0;
+		this.counterTimer = setInterval(() => {
+			progress = Math.min(progress + 0.08, 1);
+			const eased = 1 - Math.pow(1 - progress, 3);
+			this.animatedVideos = Math.round(targets.videos * eased);
+			this.animatedStudents = Math.round(targets.students * eased);
+			this.animatedExperience = Math.round(targets.experience * eased);
+			if (progress >= 1) this.stopCounter();
+		}, 35);
+	}
+
+	private stopCounter(): void {
+		if (this.counterTimer) clearInterval(this.counterTimer);
+		this.counterTimer = undefined;
+	}
+
+	ngOnDestroy(): void {
+		this.stopCounter();
+	}
 
 	loadVideo(): void {
 		this.isVideoLoaded = true;

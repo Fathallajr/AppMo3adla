@@ -25,9 +25,9 @@
   margin: 1rem 0;
 }
 
-/* Force Cairo font on all elements */
+/* Force TheYearofHandicrafts font on all elements */
 * {
-  font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif !important;
+  font-family: 'TheYearofHandicrafts', ui-sans-serif, system-ui, sans-serif !important;
 }
 
 /* Loading animation */

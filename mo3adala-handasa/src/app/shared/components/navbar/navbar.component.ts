@@ -12,6 +12,8 @@ import { filter } from 'rxjs/operators';
 })
 export class NavbarComponent implements OnInit {
 	scrolled = false;
+	navbarHidden = false;
+	private lastScrollY = 0;
 	showSocial = false;
 	currentRoute = '';
 	showFollowUpButton = false;
@@ -29,13 +31,25 @@ export class NavbarComponent implements OnInit {
 	constructor(private router: Router, private viewportScroller: ViewportScroller) {
 		if (typeof window !== 'undefined') {
 			this.checkScreenSize();
-			window.addEventListener('scroll', () => {
-				this.scrolled = window.scrollY > 8;
-			});
+			window.addEventListener('scroll', () => this.handleScroll(), { passive: true });
 			window.addEventListener('resize', () => {
 				this.checkScreenSize();
 			});
 		}
+	}
+
+	private handleScroll(): void {
+		if (typeof window === 'undefined') return;
+		const currentScrollY = window.scrollY;
+		this.scrolled = currentScrollY > 8;
+		if (currentScrollY <= 24) {
+			this.navbarHidden = false;
+		} else if (!this.isMobileMenuOpen && currentScrollY > this.lastScrollY + 4) {
+			this.navbarHidden = true;
+		} else if (currentScrollY < this.lastScrollY - 4) {
+			this.navbarHidden = false;
+		}
+		this.lastScrollY = currentScrollY;
 	}
 
 	checkScreenSize() {

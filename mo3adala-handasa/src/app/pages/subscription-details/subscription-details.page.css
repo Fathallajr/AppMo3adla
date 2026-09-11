@@ -1,13 +1,13 @@
 /* Modern Subscription Page Styles */
 
 .modern-subscription-page {
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 	background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 	min-height: 100vh;
 }
 
 .modern-subscription-page * {
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 /* Hero Section */
@@ -1529,7 +1529,7 @@
 	max-width: 600px;
 	margin-left: auto;
 	margin-right: auto;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 .video-section-header {
@@ -1562,14 +1562,14 @@
 	font-weight: 800;
 	color: #fff;
 	margin: 0 0 0.15rem;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 .video-section-subtitle {
 	font-size: 0.78rem;
 	color: #94a3b8;
 	margin: 0;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 .video-player-wrapper {
@@ -1650,7 +1650,7 @@
 	color: #fff;
 	font-size: 0.9rem;
 	font-weight: 700;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 	background: rgba(0, 0, 0, 0.5);
 	padding: 0.35rem 1rem;
 	border-radius: 20px;
@@ -1676,7 +1676,7 @@
 	position: sticky;
 	top: 64px;
 	z-index: 40;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 .step-indicator {
@@ -1707,7 +1707,7 @@
 	justify-content: center;
 	font-weight: 800;
 	font-size: 0.9rem;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 	transition: all 0.3s ease;
 }
 
@@ -1721,7 +1721,7 @@
 	font-size: 0.72rem;
 	font-weight: 600;
 	color: #94a3b8;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 	white-space: nowrap;
 	transition: color 0.3s ease;
 }
@@ -1754,7 +1754,7 @@
 	margin-bottom: 1.5rem;
 	box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
 	border: 1px solid #f1f5f9;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 .step-section-header {
@@ -1775,7 +1775,7 @@
 	justify-content: center;
 	font-weight: 900;
 	font-size: 1.3rem;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 	flex-shrink: 0;
 	box-shadow: 0 4px 14px rgba(34, 197, 94, 0.35);
 }
@@ -1790,14 +1790,14 @@
 	font-weight: 800;
 	color: #1e293b;
 	margin: 0 0 0.25rem;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 .step-section-subtitle {
 	font-size: 0.9rem;
 	color: #64748b;
 	margin: 0;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 /* ═══════════════════════════════════════════════
@@ -1807,7 +1807,7 @@
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	gap: 1rem;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 .pricing-cards-grid--single {
@@ -1839,7 +1839,7 @@
 	transition: all 0.25s ease;
 	position: relative;
 	background: #fff;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 	user-select: none;
 }
 
@@ -1890,7 +1890,7 @@
 	font-weight: 800;
 	color: #1e293b;
 	margin-bottom: 1rem;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 .pricing-card-price {
@@ -1898,7 +1898,7 @@
 	font-weight: 900;
 	color: #16a34a;
 	line-height: 1;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 .pricing-card-currency {
@@ -1910,7 +1910,7 @@
 	font-size: 0.85rem;
 	color: #94a3b8;
 	margin: 0.4rem 0 1.25rem;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 .pricing-card-btn {
@@ -1922,7 +1922,7 @@
 	color: #16a34a;
 	font-weight: 700;
 	font-size: 0.9rem;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 	cursor: pointer;
 	transition: all 0.2s ease;
 }
@@ -1953,7 +1953,7 @@
 	color: #15803d;
 	font-weight: 700;
 	font-size: 1rem;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 .selected-group-banner svg {
@@ -1977,7 +1977,7 @@
 	margin-bottom: 1.25rem;
 	color: #64748b;
 	font-size: 0.95rem;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 .no-group-hint svg {
@@ -1995,7 +1995,7 @@
 	border-radius: 16px;
 	padding: 1.5rem;
 	background: #f8fafc;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 .single-form-header {
@@ -2027,13 +2027,13 @@
 	font-size: 1.1rem;
 	font-weight: 800;
 	color: #1e293b;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 .single-form-desc {
 	font-size: 0.85rem;
 	color: #64748b;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 .form-submit-button--large {
@@ -2050,7 +2050,7 @@
 	background: #f8fafc;
 	border: 2px dashed #e2e8f0;
 	border-radius: 16px;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 .no-group-icon {
@@ -2063,7 +2063,7 @@
 	font-size: 1rem;
 	font-weight: 600;
 	margin: 0;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 /* ═══════════════════════════════════════════════
@@ -2076,7 +2076,7 @@
 	box-shadow: 0 2px 12px rgba(251, 191, 36, 0.1);
 	margin-bottom: 1.5rem;
 	overflow: hidden;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 .accordion-header {
@@ -2088,7 +2088,7 @@
 	background: transparent;
 	border: none;
 	cursor: pointer;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 	transition: background 0.2s ease;
 }
 
@@ -2123,7 +2123,7 @@
 	font-size: 1rem;
 	font-weight: 800;
 	color: #92400e;
-	font-family: 'Cairo', sans-serif !important;
+	font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 .accordion-chevron {

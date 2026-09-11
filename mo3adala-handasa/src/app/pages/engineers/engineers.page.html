@@ -1,191 +1,31 @@
-<div class="engineers-page" [@subPageTransition]>
-
-	<!-- Hero Section -->
-	<div class="eng-hero">
-		<div class="eng-hero-orb eng-hero-orb--1"></div>
-		<div class="eng-hero-orb eng-hero-orb--2"></div>
-		<div class="eng-hero-content">
-			<div class="eng-hero-badge">
-				<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
-				</svg>
-				فريق محترف
+<div class="engineers-page" dir="rtl" [@subPageTransition]>
+	<section class="eng-hero">
+		<div class="eng-hero__pattern"></div>
+		<a routerLink="/" class="eng-back eng-back--top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m7 7-7-7 7-7" /></svg> العودة للرئيسية</a>
+		<div class="eng-hero__inner">
+			<div class="eng-hero__content">
+				<div class="eng-hero__eyebrow"><span></span> فريق متخصص في معادلة الهندسة</div>
+				<h1>خبرة تشرحلك<br><strong>الطريق لحد ما توصل</strong></h1>
+				<p>اتعرّف على المهندسين اللي بيحوّلوا المنهج لخطة واضحة، وبيفضلوا معاك في كل خطوة من أول شرح لحد يوم الامتحان.</p>
+				<div class="eng-hero__actions"><a routerLink="/subscription-details" class="eng-button eng-button--primary">ابدأ رحلتك <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a><a routerLink="/faq" class="eng-button eng-button--ghost">اعرف أكتر عن الأبلكيشن</a></div>
+				<div class="eng-hero__proof"><span><i></i> شرح منظم</span><span><i></i> خبرة عملية</span><span><i></i> متابعة مستمرة</span></div>
 			</div>
-			<h1 class="eng-hero-title">المهندسين</h1>
-			<p class="eng-hero-subtitle">نخبة من أفضل المدرسين في معادلة كلية الهندسة</p>
+			<div class="eng-hero__visual"><img src="assets/هتلاقي اي.png" alt="فريق مدرسين أبلكيشن معادلة كلية هندسة" loading="eager" decoding="async" onerror="this.src='/assets/logo.png'"><div class="eng-hero__visual-shade"></div><span class="eng-hero__visual-tag">فريق الأبلكيشن</span><div class="eng-hero__visual-caption"><strong>كل مادة مع خبيرها</strong><span>مستعدين يساعدوك توصل</span></div></div>
 		</div>
-	</div>
+	</section>
 
-	<div class="eng-container">
+	<section class="eng-stats" aria-label="مميزات فريق المهندسين" @fadeInUp><div><strong>5</strong><span>مدرسين متخصصين</span></div><div><strong>6</strong><span>تخصصات أساسية</span></div><div><strong>24/7</strong><span>دعم ومتابعة</span></div></section>
 
-		<!-- Teachers Grid -->
+	<section class="eng-team" @fadeInUp>
+		<div class="eng-section-heading"><span>ناس فاهمة مشوارك</span><h2>قابل الفريق اللي هيكون في ضهرك</h2><p>كل مدرس في الفريق متخصص في مادته، وعارف يحوّل أصعب جزء في المنهج لخطوات بسيطة تقدر تمشي عليها.</p></div>
 		<div class="teachers-grid" [@cascadeAnimation]>
-
-			<!-- 1) المهندس أحمد فتح الله -->
-			<div class="teacher-card teacher-card--blue" [@cardAnimation] (click)="viewTeacherDetails(1)">
-				<div class="teacher-card-top">
-					<div class="teacher-avatar teacher-avatar--blue">
-						<img src="assets/teacher.jpg" alt="المهندس أحمد فتح الله"
-							 loading="lazy" decoding="async"
-							 onerror="this.src='/assets/logo.png'">
-					</div>
-					<div class="teacher-subject-badge teacher-subject-badge--blue">رياضيات</div>
-				</div>
-				<div class="teacher-card-body">
-					<h3 class="teacher-name">المهندس أحمد فتح الله</h3>
-					<p class="teacher-subject">أستاذ الرياضيات العامة والخاصة</p>
-					<div class="teacher-card-footer teacher-footer--blue">
-						<span>عرض الملف الشخصي</span>
-						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-						</svg>
-					</div>
-				</div>
-			</div>
-
-			<!-- 2) المهندس أحمد أبو زيد -->
-			<div class="teacher-card teacher-card--green" [@cardAnimation] (click)="viewTeacherDetails(2)">
-				<div class="teacher-card-top">
-					<div class="teacher-avatar teacher-avatar--green">
-						<img src="assets/teacher1.jpg" alt="المهندس أحمد أبو زيد"
-							 loading="lazy" decoding="async"
-							 onerror="this.src='/assets/logo.png'">
-					</div>
-					<div class="teacher-subject-badge teacher-subject-badge--green">ميكانيكا</div>
-				</div>
-				<div class="teacher-card-body">
-					<h3 class="teacher-name">المهندس أحمد أبو زيد</h3>
-					<p class="teacher-subject">أستاذ الميكانيكا</p>
-					<div class="teacher-card-footer teacher-footer--green">
-						<span>عرض الملف الشخصي</span>
-						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-						</svg>
-					</div>
-				</div>
-			</div>
-
-			<!-- 4) المهندس أحمد الشامي -->
-			<div class="teacher-card teacher-card--purple" [@cardAnimation] (click)="viewTeacherDetails(4)">
-				<div class="teacher-card-top">
-					<div class="teacher-avatar teacher-avatar--purple">
-						<img src="assets/teacher3.jpg" alt="المهندس أحمد الشامي"
-							 loading="lazy" decoding="async"
-							 onerror="this.src='/assets/logo.png'">
-					</div>
-					<div class="teacher-subject-badge teacher-subject-badge--purple">فيزياء</div>
-				</div>
-				<div class="teacher-card-body">
-					<h3 class="teacher-name">المهندس أحمد الشامي</h3>
-					<p class="teacher-subject">أستاذ الفيزياء</p>
-					<div class="teacher-card-footer teacher-footer--purple">
-						<span>عرض الملف الشخصي</span>
-						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-						</svg>
-					</div>
-				</div>
-			</div>
-
-			<!-- 5) دكتور سعد العميري -->
-			<div class="teacher-card teacher-card--orange" [@cardAnimation] (click)="viewTeacherDetails(3)">
-				<div class="teacher-card-top">
-					<div class="teacher-avatar teacher-avatar--orange">
-						<img src="assets/teacher4.jpg" alt="دكتور سعد العميري"
-							 loading="lazy" decoding="async"
-							 onerror="this.src='/assets/logo.png'">
-					</div>
-					<div class="teacher-subject-badge teacher-subject-badge--orange">كيمياء</div>
-				</div>
-				<div class="teacher-card-body">
-					<h3 class="teacher-name">دكتور سعد العميري</h3>
-					<p class="teacher-subject">أستاذ الكيمياء</p>
-					<div class="teacher-card-footer teacher-footer--orange">
-						<span>عرض الملف الشخصي</span>
-						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-						</svg>
-					</div>
-				</div>
-			</div>
-
-			<!-- 6) د/ عمر أحمد عبد الفتاح -->
-			<div class="teacher-card teacher-card--red" [@cardAnimation] (click)="viewTeacherDetails(5)">
-				<div class="teacher-card-top">
-					<div class="teacher-avatar teacher-avatar--red">
-						<img src="assets/teacher2.png" alt="د/ عمر أحمد عبد الفتاح"
-							 loading="lazy" decoding="async"
-							 onerror="this.src='/assets/logo.png'">
-					</div>
-					<div class="teacher-subject-badge teacher-subject-badge--red">إنجليزي</div>
-				</div>
-				<div class="teacher-card-body">
-					<h3 class="teacher-name">د/ عمر أحمد عبد الفتاح</h3>
-					<p class="teacher-subject">أستاذ اللغة الإنجليزية</p>
-					<div class="teacher-card-footer teacher-footer--red">
-						<span>عرض الملف الشخصي</span>
-						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-						</svg>
-					</div>
-				</div>
-			</div>
-
+			<article class="teacher-card" [@cardAnimation] role="button" tabindex="0" (click)="viewTeacherDetails(1)" (keydown.enter)="viewTeacherDetails(1)"><div class="teacher-card__image"><img src="assets/teacher.jpg" alt="المهندس أحمد فتح الله" loading="lazy" decoding="async" onerror="this.src='/assets/logo.png'"><span>رياضيات</span></div><div class="teacher-card__body"><h3>المهندس أحمد فتح الله</h3><p>أستاذ الرياضيات العامة والخاصة</p><div class="teacher-card__link">عرض الملف الشخصي <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></div></div></article>
+			<article class="teacher-card" [@cardAnimation] role="button" tabindex="0" (click)="viewTeacherDetails(2)" (keydown.enter)="viewTeacherDetails(2)"><div class="teacher-card__image"><img src="assets/teacher1.jpg" alt="المهندس أحمد أبو زيد" loading="lazy" decoding="async" onerror="this.src='/assets/logo.png'"><span>ميكانيكا</span></div><div class="teacher-card__body"><h3>المهندس أحمد أبو زيد</h3><p>أستاذ الميكانيكا</p><div class="teacher-card__link">عرض الملف الشخصي <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></div></div></article>
+			<article class="teacher-card" [@cardAnimation] role="button" tabindex="0" (click)="viewTeacherDetails(4)" (keydown.enter)="viewTeacherDetails(4)"><div class="teacher-card__image"><img src="assets/teacher3.jpg" alt="المهندس أحمد الشامي" loading="lazy" decoding="async" onerror="this.src='/assets/logo.png'"><span>فيزياء</span></div><div class="teacher-card__body"><h3>المهندس أحمد الشامي</h3><p>أستاذ الفيزياء</p><div class="teacher-card__link">عرض الملف الشخصي <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></div></div></article>
+			<article class="teacher-card" [@cardAnimation] role="button" tabindex="0" (click)="viewTeacherDetails(3)" (keydown.enter)="viewTeacherDetails(3)"><div class="teacher-card__image"><img src="assets/teacher4.jpg" alt="دكتور سعد العميري" loading="lazy" decoding="async" onerror="this.src='/assets/logo.png'"><span>كيمياء</span></div><div class="teacher-card__body"><h3>دكتور سعد العميري</h3><p>أستاذ الكيمياء</p><div class="teacher-card__link">عرض الملف الشخصي <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></div></div></article>
+			<article class="teacher-card" [@cardAnimation] role="button" tabindex="0" (click)="viewTeacherDetails(5)" (keydown.enter)="viewTeacherDetails(5)"><div class="teacher-card__image"><img src="assets/teacher2.png" alt="د/ عمر أحمد عبد الفتاح" loading="lazy" decoding="async" onerror="this.src='/assets/logo.png'"><span>إنجليزي</span></div><div class="teacher-card__body"><h3>د/ عمر أحمد عبد الفتاح</h3><p>أستاذ اللغة الإنجليزية</p><div class="teacher-card__link">عرض الملف الشخصي <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></div></div></article>
 		</div>
+	</section>
 
-		<!-- Motivational Section -->
-		<div class="eng-motiv-section" [@fadeInUp]>
-			<div class="eng-motiv-image-wrap">
-				<img src="assets/هتلاقي اي.png" alt="ابدأ رحلتك نحو النجاح"
-					 loading="lazy" decoding="async"
-					 onerror="this.src='/assets/logo.png'">
-			</div>
-			<div class="eng-motiv-content">
-				<h2 class="eng-motiv-title">مع مهندسينا المحترفين</h2>
-				<p class="eng-motiv-text">
-					فريق من أفضل المدرسين المتخصصين في معادلة كلية الهندسة، خبراء في تخصصاتهم مع سنوات من الخبرة في مساعدة الطلاب على تحقيق أهدافهم.
-				</p>
-				<ul class="eng-motiv-list">
-					<li>
-						<div class="eng-motiv-check">
-							<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
-							</svg>
-						</div>
-						شرح مبسط وسهل الفهم
-					</li>
-					<li>
-						<div class="eng-motiv-check">
-							<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
-							</svg>
-						</div>
-						متابعة مستمرة ودعم على مدار الساعة
-					</li>
-					<li>
-						<div class="eng-motiv-check">
-							<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
-							</svg>
-						</div>
-						مناهج محدثة وتمارين عملية
-					</li>
-				</ul>
-				<div class="eng-motiv-actions">
-					<a routerLink="/subscription-details" class="eng-btn-primary">ابدأ الآن</a>
-					<a routerLink="/faq" class="eng-btn-outline">الأسئلة الشائعة</a>
-				</div>
-			</div>
-		</div>
-
-		<!-- CTA Section -->
-		<div class="eng-cta">
-			<div class="eng-cta-orb eng-cta-orb--1"></div>
-			<div class="eng-cta-orb eng-cta-orb--2"></div>
-			<h2 class="eng-cta-title">كن أنت التالي!</h2>
-			<p class="eng-cta-subtitle">ابدأ رحلتك نحو النجاح المهني معنا في كلية الهندسة</p>
-			<a routerLink="/subscription-details" class="eng-cta-btn">ابدأ الآن</a>
-		</div>
-
-	</div>
+	<section class="eng-cta" @fadeInUp><div><span>جاهز تبدأ؟</span><h2>خلي الخطوة الجاية محسوبة</h2><p>اختار طريقك وابدأ مع فريق فاهم أنت محتاج إيه.</p></div><a routerLink="/subscription-details" class="eng-button eng-button--light">ابدأ الآن <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a></section>
 </div>

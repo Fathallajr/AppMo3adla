@@ -4,6 +4,54 @@ main {
   overflow: hidden;
 }
 
+/* Lightweight loading screen shown briefly during a full refresh. */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  overflow: hidden;
+  color: #fff;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(249, 115, 22, .2), transparent 24rem),
+    radial-gradient(circle at 85% 80%, rgba(37, 99, 235, .2), transparent 26rem),
+    linear-gradient(145deg, #0f172a, #172554);
+  animation: loading-screen-in .25s ease-out both;
+}
+
+.loading-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .25;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .06) 1px, transparent 1px);
+  background-size: 34px 34px;
+}
+
+.loading-spinner {
+  height: 3.6rem;
+  margin: 0;
+  border: 4px solid rgba(255, 255, 255, .14);
+  border-top-color: #fb923c;
+  border-right-color: #38bdf8;
+  border-radius: 50%;
+  animation: loading-spin .75s linear infinite;
+}
+
+@keyframes loading-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes loading-screen-in {
+  from { opacity: 0; transform: scale(1.015); }
+  to { opacity: 1; transform: scale(1); }
+}
+
 /* FORCE CAIRO FONT ON NAVBAR - ULTIMATE SOLUTION */
 nav,
 nav *,
@@ -13,7 +61,7 @@ nav span,
 nav div,
 nav li,
 nav ul {
-  font-family: 'Cairo', sans-serif !important;
+  font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 /* Override any inherited fonts */
@@ -22,10 +70,10 @@ nav a:visited,
 nav a:hover,
 nav a:active,
 nav a:focus {
-  font-family: 'Cairo', sans-serif !important;
+  font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
-/* Force Cairo on all navbar text elements */
+/* Force TheYearofHandicrafts on all navbar text elements */
 nav .text-sm,
 nav .text-base,
 nav .text-lg,
@@ -36,7 +84,7 @@ nav .font-medium,
 nav .font-semibold,
 nav .font-bold,
 nav .font-extrabold {
-  font-family: 'Cairo', sans-serif !important;
+  font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 /* تحسين الانيميشن للعناصر */
@@ -287,4 +335,65 @@ nav .font-extrabold {
   100% {
     background-position: -200% 0;
   }
+}
+/* The navbar floats above the page, so internal routes need breathing room.
+   The home hero intentionally stays underneath it as a full-screen video. */
+.app-page-shell:not(.route-home) {
+		padding-top: 0;
+}
+
+/* Floating subscription CTA, paired with the support pill on the opposite side. */
+.subscription-float-button {
+	position: fixed;
+	left: 24px;
+	bottom: 24px;
+	z-index: 1000;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 16px;
+	background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+	color: #fff;
+	border: 1px solid rgba(255, 255, 255, .22);
+	border-radius: 9999px;
+	text-decoration: none;
+	box-shadow: 0 10px 24px rgba(234, 88, 12, .3);
+	font-family: 'TheYearofHandicrafts', sans-serif;
+	font-weight: 700;
+	transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+
+.floating-action-button,
+.subscription-float-button {
+	width: 7rem !important;
+	height: 2.5rem !important;
+	box-sizing: border-box;
+	justify-content: center;
+	padding: 8px 10px !important;
+	font-size: .82rem;
+}
+
+.subscription-float-button:hover,
+.subscription-float-button:focus-visible {
+	color: #fff;
+	filter: brightness(1.06);
+	transform: translateY(-3px);
+	box-shadow: 0 14px 28px rgba(234, 88, 12, .4);
+}
+
+.subscription-float-button:focus-visible {
+	outline: 3px solid rgba(249, 115, 22, .35);
+	outline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+	.subscription-float-button {
+		left: 12px;
+		bottom: 18px;
+	}
+
+	.whatsapp-float-button {
+		right: 12px !important;
+		bottom: 18px !important;
+	}
 }

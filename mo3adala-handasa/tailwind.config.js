@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        cairo: ['Cairo', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        cairo: ['TheYearofHandicrafts', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       colors: {
         primary: '#ff4d00',
@@ -21,4 +21,3 @@ module.exports = {
     require('@tailwindcss/forms'),
   ],
 }
-

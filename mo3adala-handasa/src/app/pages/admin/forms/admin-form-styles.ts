@@ -59,7 +59,7 @@ export const adminFormStyles = `
   padding: 0.7rem 0.85rem;
   border: 1px solid #cbd5e1;
   border-radius: 10px;
-  font-family: 'Cairo', sans-serif;
+  font-family: 'TheYearofHandicrafts', sans-serif;
   font-size: 0.9rem;
   background: #fff;
   outline: none;
@@ -190,7 +190,7 @@ export const adminFormStyles = `
   cursor: pointer;
   font-weight: 700;
   font-size: 0.88rem;
-  font-family: 'Cairo', sans-serif;
+  font-family: 'TheYearofHandicrafts', sans-serif;
   margin-top: 0.5rem;
   transition: background 0.18s;
 }
@@ -231,7 +231,7 @@ export const adminFormStyles = `
   cursor: pointer;
   font-size: 0.82rem;
   font-weight: 700;
-  font-family: 'Cairo', sans-serif;
+  font-family: 'TheYearofHandicrafts', sans-serif;
   white-space: nowrap;
   transition: background 0.18s;
 }

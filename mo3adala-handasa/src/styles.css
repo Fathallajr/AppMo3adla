@@ -188,14 +188,45 @@ img {
   }
 }
 
-/* Cairo font */
+/* TheYearofHandicrafts font family */
 @font-face {
-  font-family: 'Cairo';
+  font-family: 'TheYearofHandicrafts';
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 400;
   font-display: swap;
-  src: url('https://fonts.gstatic.com/s/cairo/v28/SLXGc1nY6HkvalI.woff2') format('woff2');
-  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F, U+202A-202E, U+2066-2069;
+  src: url('./assets/fonts/TheYearofHandicrafts-Regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'TheYearofHandicrafts';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('./assets/fonts/TheYearofHandicrafts-Medium.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'TheYearofHandicrafts';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./assets/fonts/TheYearofHandicrafts-SemiBold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'TheYearofHandicrafts';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./assets/fonts/TheYearofHandicrafts-Bold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'TheYearofHandicrafts';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('./assets/fonts/TheYearofHandicrafts-Black.otf') format('opentype');
 }
 
 /* Import custom animations */
@@ -203,6 +234,63 @@ img {
 
 html[lang="ar"][dir="rtl"] body {
   @apply bg-slate-50 text-slate-900 font-cairo antialiased;
+}
+
+/* Typography scale using the available TheYearofHandicrafts weights */
+body {
+  font-family: 'TheYearofHandicrafts', sans-serif !important;
+  font-weight: 400;
+  line-height: 1.75;
+}
+
+h1 {
+  font-weight: 900 !important;
+  line-height: 1.25;
+}
+
+h2,
+h3 {
+  font-weight: 700 !important;
+  line-height: 1.35;
+}
+
+h4,
+h5,
+h6,
+label,
+legend {
+  font-weight: 600 !important;
+  line-height: 1.45;
+}
+
+button,
+input,
+select,
+textarea,
+a {
+  font-family: 'TheYearofHandicrafts', sans-serif !important;
+}
+
+button,
+nav a,
+label {
+  font-weight: 600;
+}
+
+strong,
+b {
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  h1 {
+    line-height: 1.3;
+  }
+
+  h2,
+  h3 {
+    line-height: 1.4;
+  }
 }
 
 /* ULTIMATE CAIRO FONT FIX - GLOBAL OVERRIDE */
@@ -221,16 +309,16 @@ nav h3,
 nav h4,
 nav h5,
 nav h6 {
-  font-family: 'Cairo', sans-serif !important;
+  font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
-/* Force Cairo on all navbar states */
+/* Force TheYearofHandicrafts on all navbar states */
 nav a:link,
 nav a:visited,
 nav a:hover,
 nav a:active,
 nav a:focus {
-  font-family: 'Cairo', sans-serif !important;
+  font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
 /* Override Tailwind font classes in navbar */
@@ -248,10 +336,48 @@ nav .font-medium,
 nav .font-semibold,
 nav .font-bold,
 nav .font-extrabold {
-  font-family: 'Cairo', sans-serif !important;
+  font-family: 'TheYearofHandicrafts', sans-serif !important;
 }
 
-/* Nuclear option - force Cairo everywhere */
+/* Nuclear option - force TheYearofHandicrafts everywhere */
 * {
-  font-family: 'Cairo', sans-serif !important;
+  font-family: 'TheYearofHandicrafts', sans-serif !important;
+}
+
+/* The navbar floats over every route: keep page backgrounds at the top,
+   while starting each route's actual content below the navbar. */
+main.app-page-shell:not(.route-home) > div > *:not(router-outlet) > :first-child {
+  padding-top: clamp(6.5rem, 8vw, 7.5rem);
+}
+
+/* Shared site canvas: the light grid is the default background for every
+   route. Individual heroes, cards, and footer sections can still provide
+   their own solid or gradient surfaces above it. */
+:root {
+  --site-canvas: #f7f9fc;
+  --site-grid-line: rgba(15, 23, 42, 0.025);
+}
+
+html,
+body {
+  min-height: 100%;
+  background-color: var(--site-canvas);
+  background-image:
+    linear-gradient(var(--site-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--site-grid-line) 1px, transparent 1px);
+  background-size: 42px 42px;
+  background-attachment: fixed;
+}
+
+main.app-page-shell {
+  background-color: transparent;
+  background-image:
+    linear-gradient(var(--site-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--site-grid-line) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+
+/* The home hero owns its full-screen video background. */
+main.app-page-shell.route-home {
+  background-image: none;
 }
