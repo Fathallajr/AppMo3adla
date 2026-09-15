@@ -46,6 +46,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	wheelChecking = false;
 	wheelVerified = false;
 	wheelUsed = false;
+	wheelAlreadyUsed = false;
 	private giftRevealTimer?: ReturnType<typeof setTimeout>;
 	private wheelTimer?: number;
 
@@ -88,6 +89,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		this.giftWheelSpinning = true;
 		this.wheelResult = null;
 		this.selectedGift = '';
+		this.wheelAlreadyUsed = false;
 		this.wheelAttempts += 1;
 		const totalWeight = this.giftOptions.reduce((total, gift) => total + gift.weight, 0);
 		let pick = Math.random() * totalWeight;
@@ -109,6 +111,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 
 	async verifyWheelEntry(): Promise<void> {
 		this.wheelEntryError = '';
+		this.wheelAlreadyUsed = false;
 		if (!this.wheelEntryName.trim() || !PHONE_PATTERN.test(this.wheelEntryPhone.trim())) {
 			this.wheelEntryError = 'اكتب اسمك ورقم واتساب صحيح يبدأ بـ 01 ويتكون من 11 رقم.';
 			return;
@@ -120,6 +123,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 			const payload = await this.postLead({ name: this.wheelEntryName.trim(), whatsapp: this.wheelEntryPhone.trim(), school: 'عجلة حظ دفعة 2027', studentType: 'دفعة 2027', source: 'عجلة الحظ', discount: wonGift, gift: wonGift, reward: wonGift, consent: 'نعم' });
 			if (payload.alreadyRegistered) {
 				this.wheelEntryError = 'أنت استفدت من هديتك قبل كده.';
+				this.wheelAlreadyUsed = true;
 				this.wheelUsed = true;
 				return;
 			}

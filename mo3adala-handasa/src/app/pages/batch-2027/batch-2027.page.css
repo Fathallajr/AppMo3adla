@@ -173,6 +173,10 @@
 .batch-wheel-result span { font-size: 24px; font-weight: 900; }
 .batch-wheel-result small { color: #687697; font-size: 14px; }
 .batch-wheel-result.is-empty b { color: #687697; }
+.batch-wheel-result.is-used { gap: 7px; }
+.batch-wheel-result.is-used b { color: #dc2626; font-size: clamp(25px, 4vw, 36px); font-weight: 900; }
+.batch-wheel-result.is-used span { color: #dc2626; font-size: clamp(20px, 3vw, 28px); font-weight: 900; }
+.batch-wheel-result.is-used small { color: #b91c1c; font-weight: 700; }
 .batch-wheel-claim { width: min(430px, 100%); margin: 0 auto; }
 .batch-wheel-entry { display: grid; gap: 9px; width: min(430px, 100%); margin: 18px auto 0; padding: 18px; border: 1px solid #ffd0ad; border-radius: 16px; background: #fffaf5; text-align: right; }
 .batch-wheel-entry strong { color: #172452; text-align: center; font-size: 16px; }
