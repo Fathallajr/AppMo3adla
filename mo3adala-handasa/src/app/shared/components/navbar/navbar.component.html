@@ -188,6 +188,24 @@
 								</div>
 							</div>
 						</a>
+
+						<!-- سيستم المتابعة -->
+						<a href="https://www.appmo3adla-follow-up.com/" 
+						   target="_blank"
+						   (click)="closePlatformDropdown()"
+						   class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors border-t border-gray-100" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">
+							<div class="flex items-center gap-3">
+								<div class="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center">
+									<svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2"></path>
+									</svg>
+								</div>
+								<div>
+									<div class="font-semibold">سيستم المتابعة</div>
+									<div class="text-xs text-gray-500">تابع تقدمك ومذاكرتك باستمرار</div>
+								</div>
+							</div>
+						</a>
 					</div>
 				</div>
 			</li>
@@ -216,15 +234,12 @@
 			</a>
 			</li>
 			<li>
-			<a href="https://www.appmo3adla-follow-up.com/" 
-			   target="_blank"
-			   class="bg-blue-600 text-white px-1.5 xl:px-2.5 py-1 rounded-md font-semibold hover:bg-blue-700 transition-all duration-300 text-xs xl:text-sm btn-hover ripple glow flex items-center gap-1 whitespace-nowrap" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">
-					<svg class="w-3.5 h-3.5 xl:w-4 xl:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-					</svg>
-					<span class="hidden xl:inline" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">سيستم المتابعة</span>
-					<span class="xl:hidden" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">المتابعة</span>
-				</a>
+			<a routerLink="/batch-2027"
+			   (click)="scrollToTop()"
+			   [class]="isActiveRoute('/batch-2027') ? 'batch-nav-link active' : 'batch-nav-link'"
+			   class="relative px-1.5 xl:px-2 py-1 rounded-md font-bold whitespace-nowrap batch-nav-link">
+				<span>دفعة 2027</span>
+			</a>
 			</li>
 		<li class="flex items-center">
 			<a routerLink="/subscription-ab-reviews"
@@ -384,6 +399,22 @@
 							</div>
 						</div>
 					</a>
+					<a href="https://www.appmo3adla-follow-up.com/" 
+					   target="_blank"
+					   (click)="closeMobilePlatformDropdown(); closeMobileMenu()"
+					   class="block px-8 py-3 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all duration-300 link-hover border-t border-gray-100" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">
+						<div class="flex items-center gap-3">
+							<div class="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center">
+								<svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2"></path>
+								</svg>
+							</div>
+							<div>
+								<div class="font-semibold">سيستم المتابعة</div>
+								<div class="text-xs text-gray-500">تابع تقدمك ومذاكرتك باستمرار</div>
+							</div>
+						</div>
+					</a>
 				</div>
 			</div>
 			<a routerLink="/faq" 
@@ -404,14 +435,11 @@
 			   class="block px-4 py-3 rounded-lg text-base font-medium hover:bg-gray-50 transition-all duration-300 link-hover mobile-menu-link" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">
 				تابعنا
 			</a>
-			<a href="https://www.appmo3adla-follow-up.com/" 
-			   target="_blank"
+			<a routerLink="/batch-2027"
 			   (click)="closeMobileMenu()"
-			   class="bg-blue-600 text-white block px-4 py-3 rounded-lg text-base font-medium text-center mx-4 mt-2 hover:bg-blue-700 btn-hover ripple glow flex items-center justify-center gap-2 mobile-menu-action mobile-menu-action--followup" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">
-				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-				</svg>
-				سيستم المتابعة
+			   [class]="isActiveRoute('/batch-2027') ? 'mobile-nav-link active' : 'mobile-nav-link'"
+			   class="block px-4 py-3 rounded-lg text-base font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 transition-all duration-300 link-hover mobile-menu-link">
+				دفعة 2027 🎁
 			</a>
 		<div class="px-4 py-2 mobile-subscription-group">
 			<a routerLink="/subscription-ab-reviews"

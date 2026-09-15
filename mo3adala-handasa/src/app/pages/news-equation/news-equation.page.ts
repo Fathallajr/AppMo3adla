@@ -114,10 +114,10 @@ export class NewsEquationPageComponent implements OnInit {
 
 	ngOnInit(): void {
 		if (typeof window !== 'undefined') {
-			const siteUrl = (window as any)['NG_SITE_URL'] || 'https://appmo3adla.com';
+			const siteUrl = (window as any)['NG_SITE_URL'] || 'https://www.appmo3adla.com';
 			const title = 'أخبار المعادلة - ابلكيشن معادلة كلية هندسة';
 			const description = 'تابع آخر أخبار وتحديثات معادلة كلية الهندسة والقرارات الجديدة المتعلقة بالامتحانات';
-			const url = `${siteUrl}/news-equation`;
+			const url = `${siteUrl}/news/equation`;
 			
 			this.seo.setTitle(title);
 			this.seo.setDescription(description);

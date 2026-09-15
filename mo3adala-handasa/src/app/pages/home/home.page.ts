@@ -21,6 +21,7 @@ import { MonthlyContentService } from '../../core/services/monthly-content.servi
 export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild('reviewsTrack', { static: false }) reviewsTrack!: ElementRef<HTMLDivElement>;
 	@ViewChild('photosTrack', { static: false }) photosTrack!: ElementRef<HTMLDivElement>;
+	@ViewChild('featuresTrack', { static: false }) featuresTrack!: ElementRef<HTMLDivElement>;
 	@ViewChild('heroVideo', { static: false }) heroVideo!: ElementRef<HTMLVideoElement>;
 	
 	videoPlaying = false;
@@ -61,8 +62,10 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 	];
 	currentDescriptionIndex = 0;
 	currentDescription = this.descriptions[0];
-	private descriptionInterval: any;
+	private descriptionInterval?: ReturnType<typeof setInterval>;
 	private photoAutoPlayTimer?: ReturnType<typeof setInterval>;
+	private featuresAutoPlayTimer?: ReturnType<typeof setInterval>;
+	featuresAutoPlayPaused = false;
 	private isTyping = false;
 	private isDeleting = false;
 	private typedText = '';
@@ -159,7 +162,7 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 		private contentService: MonthlyContentService,
 		private sanitizer: DomSanitizer
 	) {
-		const siteUrl = (typeof window !== 'undefined' ? (window as any)['NG_SITE_URL'] : process.env['NG_SITE_URL']) || 'https://example.com';
+		const siteUrl = (typeof window !== 'undefined' ? (window as any)['NG_SITE_URL'] : process.env['NG_SITE_URL']) || 'https://www.appmo3adla.com';
 		const title = 'ابلكيشن معادلة كلية هندسة';
 		const description = 'بنجهّزك لاجتياز معادلة كلية الهندسة بخطوات واضحة ومحتوى مُبسّط وتمارين عملية.';
 		this.seo.setTitle(title);
@@ -178,11 +181,6 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 			"@type": "WebSite",
 			name: 'معادلة كلية هندسة',
 			url: siteUrl,
-			potentialAction: {
-				"@type": "SearchAction",
-				target: siteUrl.replace(/\/$/, '') + '/blog?search={query}',
-				"query-input": "required name=query"
-			}
 		}, 'website-ld');
 	}
 
@@ -192,9 +190,6 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 			window.scrollTo(0, 0);
 			this.shouldUseHeroVideo = !window.matchMedia('(prefers-reduced-motion: reduce)').matches && !(navigator as any).connection?.saveData;
 		}
-		
-		// Preload critical images for faster loading
-		this.preloadImages();
 		
 		this.contentService.loadPageState('home', cmsPageDefaults.home).subscribe(content => {
 			this.applyCmsState(content);
@@ -305,12 +300,42 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 		if (this.photoAutoPlayTimer) {
 			clearInterval(this.photoAutoPlayTimer);
 		}
+		if (this.featuresAutoPlayTimer) {
+			clearInterval(this.featuresAutoPlayTimer);
+		}
 	}
 
 	ngAfterViewInit() {
 		// Setup video autoplay after view is initialized
 		this.setupVideoAutoplay();
 		this.setupPhotoAutoplay();
+		this.setupFeaturesAutoplay();
+	}
+
+	private setupFeaturesAutoplay(): void {
+		if (typeof window === 'undefined' || !window.matchMedia('(max-width: 639px)').matches) return;
+		this.featuresAutoPlayTimer = setInterval(() => {
+			if (!this.featuresTrack || this.featuresAutoPlayPaused) return;
+			const track = this.featuresTrack.nativeElement;
+			const card = track.querySelector<HTMLElement>('.feature-card-modern');
+			if (!card) return;
+			const step = card.offsetWidth + 14;
+			const maxScroll = track.scrollWidth - track.clientWidth;
+			const nextScroll = track.scrollLeft - step;
+			if (maxScroll <= 0 || Math.abs(nextScroll) >= maxScroll - 8) {
+				track.scrollTo({ left: 0, behavior: 'smooth' });
+				return;
+			}
+			track.scrollTo({ left: nextScroll, behavior: 'smooth' });
+		}, 3000);
+	}
+
+	pauseFeaturesAutoplay(): void {
+		this.featuresAutoPlayPaused = true;
+	}
+
+	resumeFeaturesAutoplay(): void {
+		this.featuresAutoPlayPaused = false;
 	}
 
 	private setupPhotoAutoplay(): void {
@@ -336,15 +361,19 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 		setTimeout(() => {
 			const video = this.heroVideo?.nativeElement;
 			if (!video) return;
-
-			video.muted = true;
-			video.volume = 0;
-			void video.play().then(() => {
-				this.videoPlaying = true;
-			}).catch(() => {
-				this.videoPlaying = false;
-			});
+			void this.playHeroVideo(video);
 		}, 150);
+	}
+
+	private playHeroVideo(video: HTMLVideoElement): Promise<void> {
+		video.muted = true;
+		video.setAttribute('muted', 'true');
+		video.volume = 0;
+		return video.play().then(() => {
+			this.videoPlaying = true;
+		}).catch(() => {
+			this.videoPlaying = false;
+		});
 	}
 
 	loadHomeVideo(videoId: string): void {
@@ -364,20 +393,6 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 		return this.sanitizer.bypassSecurityTrustResourceUrl(url);
 	}
 	
-	private preloadImages() {
-		if (typeof window !== 'undefined') {
-			const criticalImages = [
-				'/assets/teacher.png',
-				'/assets/student1.png'
-			];
-			
-			criticalImages.forEach(src => {
-				const img = new Image();
-				img.src = src;
-			});
-		}
-	}
-
 	scrollReviewsPrev() {
 		if (this.reviewsTrack) {
 			const track = this.reviewsTrack.nativeElement;
@@ -429,28 +444,14 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 	onVideoReady() {
 		const video = this.heroVideo?.nativeElement;
 		if (video) {
-			video.muted = true;
-			video.setAttribute('muted', 'true');
-			video.volume = 0;
-			video.play().then(() => {
-				this.videoPlaying = true;
-			}).catch(error => {
-				// Will retry in setupVideoAutoplay
-			});
+			void this.playHeroVideo(video);
 		}
 	}
 
 	onVideoCanPlay() {
 		const video = this.heroVideo?.nativeElement;
 		if (video) {
-			video.muted = true;
-			video.setAttribute('muted', 'true');
-			video.volume = 0;
-			video.play().then(() => {
-				this.videoPlaying = true;
-			}).catch(error => {
-				// Will retry in setupVideoAutoplay
-			});
+			void this.playHeroVideo(video);
 		}
 	}
 
@@ -466,15 +467,7 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 			// Try to play again after a short delay
 			setTimeout(() => {
 				if (video) {
-					video.muted = true;
-					video.setAttribute('muted', 'true');
-					video.volume = 0;
-					video.play().then(() => {
-						this.videoPlaying = true;
-					}).catch(() => {
-						// There is intentionally no image fallback; retry on the next media event.
-						this.videoPlaying = false;
-					});
+					void this.playHeroVideo(video);
 				}
 			}, 500);
 		}

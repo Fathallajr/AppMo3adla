@@ -3,14 +3,5 @@ Allow: /
 Disallow: /admin/
 Disallow: /private/
 
-# Important pages
-Allow: /
-Allow: /engineers/
-Allow: /teacher-details/
-Allow: /home/
-
-Sitemap: https://appmo3adla.com/sitemap.xml
-
-# Crawl delay (optional)
-Crawl-delay: 1
+Sitemap: https://www.appmo3adla.com/sitemap.xml
 

@@ -44,7 +44,7 @@ export class SuccessStoryDetailPageComponent implements OnInit {
 			return;
 		}
 
-		const siteUrl = (window as any)['NG_SITE_URL'] || 'https://appmo3adla.com';
+		const siteUrl = (window as any)['NG_SITE_URL'] || 'https://www.appmo3adla.com';
 		const title = `قصة نجاح ${story.name} - ابلكيشن معادلة كلية هندسة`;
 		const description = `${story.result}. ${story.quote}`;
 		const url = `${siteUrl}/success-stories/${story.id}`;
@@ -61,7 +61,7 @@ export class SuccessStoryDetailPageComponent implements OnInit {
 			return;
 		}
 
-		const siteUrl = (window as any)['NG_SITE_URL'] || 'https://appmo3adla.com';
+		const siteUrl = (window as any)['NG_SITE_URL'] || 'https://www.appmo3adla.com';
 		const title = 'قصة النجاح غير موجودة - ابلكيشن معادلة كلية هندسة';
 		const description = 'هذه القصة غير متاحة حالياً.';
 		const url = `${siteUrl}/success-stories`;

@@ -27,19 +27,23 @@ interface ReviewFormConfig {
 	standalone: true,
 	imports: [CommonModule, RouterLink],
 	templateUrl: './subscription-ab-reviews.page.html',
-	styleUrls: [
-		'../subscription-details/subscription-details.page.css',
-		'./subscription-ab-reviews.page.css'
-	]
+	styleUrls: ['./subscription-ab-reviews.page.css']
 })
 export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	copiedNumber: string | null = null;
 	isImageModalOpen = false;
 	activeScheduleImage: ScheduleImage | null = null;
 	isEnrollmentClosed = false;
-	enrollmentReopenMessage = 'سيتم فتح المراجعات مع بداية الشهر القادم بإذن الله.';
+	enrollmentReopenMessage = 'سيتم فتح الاشتراك مع بداية الشهر القادم بإذن الله.';
 	shuffledVodafoneNumbers: { number: string; owner: string }[] = [];
 	isVideoLoaded = false;
+	closingDays = 0;
+	closingHours = 0;
+	closingMinutes = 0;
+	closingSeconds = 0;
+	closingDateLabel = '';
+
+	private closingTimer: ReturnType<typeof setInterval> | null = null;
 
 	private handleVisibilityChange = () => {
 		if (typeof document === 'undefined') {
@@ -102,23 +106,23 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	}
 
 	subscriptionDetails = {
-		month: 'شهر سبتمبر 2026',
+		month: 'الشهر الأول — أكتوبر',
 		review: {
-			name: 'الجولات الحاسمة وليالي الامتحان',
-			price: '200'
+			name: 'اشتراك الشهر الأول',
+			price: '800'
 		},
 		currency: 'ج',
 		features: [
-			'فيديوهات المراجعة',
+			'محاضرات تأسيسية من الصفر',
 			'محتوى السبورة (PDF)',
-			'فيديوهات حل الواجبات بالتفصيل',
+			'حل الواجبات بالتفصيل',
 			'اختبارات إلكترونية تقييمية أسبوعياً',
-			'playlist شرح المنهج كاملاً'
+			'متابعة مستمرة طوال الشهر'
 		],
 		googleForm: {
-			label: 'الجولات الحاسمة وليالي الامتحان',
-			description: 'فورم اشتراك شهر سبتمبر',
-			buttonText: 'سجل فورم المراجعة',
+			label: 'اشتراك الشهر الأول — دفعة 2027',
+			description: 'فورم اشتراك شهر أكتوبر',
+			buttonText: 'سجل فورم الاشتراك',
 			link: 'https://forms.gle/yPCxfeX73FmGg2cn8',
 			isClosed: false
 		},
@@ -128,14 +132,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 			{ number: '01040490778', owner: 'احمد ع********* س***' },
 			{ number: '01080681865', owner: 'Mona k***** A**' }
 		],
-		scheduleImages: [
-			{
-				group: 'جدول الجولات الحاسمة وليالي الامتحان',
-				src: '/assets/جداول مراجعات شهر 8/جدول ليالي الامتحان.jpeg',
-				alt: 'جدول الجولات الحاسمة وليالي الامتحان لشهر سبتمبر',
-				note: '👆 اضغط على الصورة للتكبير'
-			}
-		],
+		scheduleImages: [],
 		requiredInfo: [
 			'رقم الموبايل اللي حولت منه',
 			'سكرين شوت بالتحويل',
@@ -158,7 +155,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 				]
 			}
 		},
-		subtitle: 'الجولات الحاسمة وليالي الامتحان — سبتمبر 2026'
+		subtitle: 'أول خطوة في رحلة دفعة 2027 — أكتوبر'
 	};
 
 	constructor(
@@ -170,9 +167,9 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		if (typeof window !== 'undefined') {
-			const siteUrl = (window as any)['NG_SITE_URL'] || 'https://appmo3adla.com';
-			const title = 'الجولات الحاسمة وليالي الامتحان - سبتمبر 2026';
-			const description = 'تفاصيل اشتراك الجولات الحاسمة وليالي الامتحان لشهر سبتمبر 2026 مع فورم وجدول موحد.';
+			const siteUrl = (window as any)['NG_SITE_URL'] || 'https://www.appmo3adla.com';
+			const title = 'اشتراك الشهر الأول - أكتوبر | دفعة 2027';
+			const description = 'تفاصيل اشتراك الشهر الأول لشهر أكتوبر وبداية رحلة دفعة 2027.';
 			const url = `${siteUrl}/subscription-ab-reviews`;
 
 			this.seo.setTitle(title);
@@ -184,6 +181,8 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 
 		this.shuffleVodafoneNumbers();
 		this.listenForVisibilityChange();
+		this.updateClosingCountdown();
+		this.closingTimer = setInterval(() => this.updateClosingCountdown(), 1000);
 
 		this.monthlyContent
 			.loadPageState('subscription-ab-reviews', {
@@ -195,6 +194,11 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy(): void {
+		if (this.closingTimer) {
+			clearInterval(this.closingTimer);
+			this.closingTimer = null;
+		}
+
 		if (typeof window === 'undefined' || typeof document === 'undefined') {
 			return;
 		}
@@ -202,6 +206,47 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 		document.removeEventListener('visibilitychange', this.handleVisibilityChange);
 		window.removeEventListener('focus', this.handleWindowFocus);
 		window.removeEventListener('pageshow', this.handleWindowFocus);
+	}
+
+	private getNextClosingDate(): Date {
+		const now = new Date();
+		const closingDate = new Date(now.getFullYear(), now.getMonth(), 10, 22, 0, 0, 0);
+
+		if (now >= closingDate) {
+			closingDate.setMonth(closingDate.getMonth() + 1);
+		}
+
+		return closingDate;
+	}
+
+	private updateClosingCountdown(): void {
+		const closingDate = this.getNextClosingDate();
+		const remaining = Math.max(0, closingDate.getTime() - Date.now());
+		const totalSeconds = Math.floor(remaining / 1000);
+		this.closingDateLabel = new Intl.DateTimeFormat('ar-EG-u-nu-latn', {
+			day: 'numeric',
+			month: 'long',
+		}).format(closingDate);
+
+		this.closingDays = Math.floor(totalSeconds / 86400);
+		this.closingHours = Math.floor((totalSeconds % 86400) / 3600);
+		this.closingMinutes = Math.floor((totalSeconds % 3600) / 60);
+		this.closingSeconds = totalSeconds % 60;
+	}
+
+	loadVideo(): void {
+		this.isVideoLoaded = true;
+	}
+
+	getVideoEmbedUrl(): SafeResourceUrl {
+		const videoId = 'H2_dh3SsfiI';
+		const url = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+		return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+	}
+
+	getVideoThumbnail(): string {
+		const videoId = 'H2_dh3SsfiI';
+		return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 	}
 
 	private shuffleVodafoneNumbers(): void {
@@ -309,18 +354,4 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 		document.body.style.overflow = '';
 	}
 
-	loadVideo(): void {
-		this.isVideoLoaded = true;
-	}
-
-	getVideoEmbedUrl(): SafeResourceUrl {
-		const videoId = 'H2_dh3SsfiI';
-		const url = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
-		return this.sanitizer.bypassSecurityTrustResourceUrl(url);
-	}
-
-	getVideoThumbnail(): string {
-		const videoId = 'H2_dh3SsfiI';
-		return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-	}
 }

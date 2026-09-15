@@ -198,7 +198,7 @@ export class TeacherDetailsPageComponent implements OnInit {
       
       // Update page title when teacher is loaded
       if (this.teacher && typeof window !== 'undefined') {
-        const siteUrl = (window as any)['NG_SITE_URL'] || 'https://appmo3adla.com';
+        const siteUrl = (window as any)['NG_SITE_URL'] || 'https://www.appmo3adla.com';
         const title = `${this.teacher.name} - ${this.teacher.subject} - ابلكيشن معادلة كلية هندسة`;
         const description = `تعرف على الأستاذ ${this.teacher.name} مدرس ${this.teacher.subject} في معادلة كلية الهندسة`;
         const url = `${siteUrl}/teacher/${this.teacher.id}`;

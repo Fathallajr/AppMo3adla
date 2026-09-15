@@ -27,7 +27,7 @@ export class SuccessStoriesPageComponent implements OnInit {
 			return;
 		}
 
-		const siteUrl = (window as any)['NG_SITE_URL'] || 'https://appmo3adla.com';
+		const siteUrl = (window as any)['NG_SITE_URL'] || 'https://www.appmo3adla.com';
 		const title = 'قصص نجاح طلاب أبلكيشن معادلة كلية هندسة';
 		const description = 'شاهد قصص نجاح طلاب أبلكيشن معادلة كلية هندسة وتجاربهم الحقيقية مع المذاكرة والمتابعة حتى تحقيق هدفهم.';
 		const url = `${siteUrl}/success-stories`;

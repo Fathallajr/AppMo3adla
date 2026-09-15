@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CmsPageKey, cmsPageDefaults, cmsPageOptions } from '../../core/cms-page.registry';
 import { AdminAuthService } from '../../core/services/admin-auth.service';
 import { MonthlyContentService } from '../../core/services/monthly-content.service';
+import { SeoService } from '../../core/seo.service';
 import { ContactFormComponent } from './forms/contact-form.component';
 import { FaqFormComponent } from './forms/faq-form.component';
 import { HomeFormComponent } from './forms/home-form.component';
@@ -54,10 +55,13 @@ export class AdminDashboardPageComponent implements OnInit {
 		private contentService: MonthlyContentService,
 		private auth: AdminAuthService,
 		private router: Router,
-		private route: ActivatedRoute
+		private route: ActivatedRoute,
+		private seo: SeoService
 	) {}
 
 	ngOnInit(): void {
+		this.seo.setTitle('لوحة تحكم الإدارة');
+		this.seo.setRobots('noindex, nofollow, noarchive');
 		this.refreshSummaries();
 		this.route.paramMap.subscribe(params => {
 			const pageKey = this.resolvePageKey(params.get('pageKey'));

@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import { SeoService } from '../../core/seo.service';
+import { CanonicalService } from '../../core/canonical.service';
 
 @Component({
 	selector: 'app-feedback-page',
@@ -16,6 +18,18 @@ export class FeedbackPageComponent {
 	submitting = false;
 	submitError = '';
 	private readonly feedbackEndpoint = 'https://script.google.com/macros/s/AKfycbx7ijUGUMkI7kk0RNgV4I_OS0GMLvjpypkeZWmNl0V4x7Xk5epvCxggWvQU1krZpQyW/exec';
+
+	constructor(private seo: SeoService, private canonical: CanonicalService) {
+		const siteUrl = (typeof window !== 'undefined' ? (window as any)['NG_SITE_URL'] : process.env['NG_SITE_URL']) || 'https://www.appmo3adla.com';
+		const title = 'شاركنا رأيك - أبلكيشن معادلة كلية هندسة';
+		const description = 'شارك تجربتك مع أبلكيشن معادلة كلية الهندسة وساعدنا نحسّن المحتوى والمتابعة للطلاب.';
+		const url = `${siteUrl}/feedback`;
+		this.seo.setTitle(title);
+		this.seo.setDescription(description);
+		this.seo.setOgTags({ title, description, url });
+		this.seo.setTwitterTags({ title, description });
+		this.canonical.setCanonical(url);
+	}
 
 	async submitFeedback(form: NgForm): Promise<void> {
 		if (form.invalid || this.submitting) return;

@@ -30,6 +30,11 @@
               },
               "src/assets",
               {
+                "glob": "bootstrap-icons.woff2",
+                "input": "node_modules/bootstrap-icons/font",
+                "output": "assets"
+              },
+              {
                 "glob": "sw.js",
                 "input": "src",
                 "output": "/"
@@ -46,6 +51,7 @@
               }
             ],
             "styles": [
+              "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -102,6 +108,7 @@
               }
             ],
             "styles": [
+              "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "src/styles.css"
             ],
             "scripts": []

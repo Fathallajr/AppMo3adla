@@ -14,6 +14,10 @@ export class SeoService {
 		this.meta.updateTag({ name: 'description', content: description });
 	}
 
+	setRobots(content: string) {
+		this.meta.updateTag({ name: 'robots', content });
+	}
+
 	setOgTags(opts: { title?: string; description?: string; url?: string; image?: string }) {
 		if (opts.title) this.meta.updateTag({ property: 'og:title', content: opts.title });
 		if (opts.description) this.meta.updateTag({ property: 'og:description', content: opts.description });

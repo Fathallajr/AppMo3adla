@@ -40,7 +40,7 @@ export class FaqPageComponent implements OnInit {
 		{ q: 'مين اللي بيدرسولنا في الابلكيشن؟', a: 'بيشرحلكم نخبة من المدرسين: م/ أحمد فتح الله، م/ أحمد أبو زيد، د/ سعد العميري، م/ أحمد الشامي، د/ عمر أحمد عبد الفتاح.' },
 	];
 	constructor(private seo: SeoService, private canonical: CanonicalService, private contentService: MonthlyContentService) {
-		const siteUrl = (typeof window !== 'undefined' ? (window as any)['NG_SITE_URL'] : process.env['NG_SITE_URL']) || 'https://example.com';
+		const siteUrl = (typeof window !== 'undefined' ? (window as any)['NG_SITE_URL'] : process.env['NG_SITE_URL']) || 'https://www.appmo3adla.com';
 		const title = 'الأسئلة الشائعة - معادلة كلية هندسة';
 		const description = 'إجابات لأكثر الأسئلة شيوعًا حول المعادلة والمحتوى وخطط الدراسة.';
 		this.seo.setTitle(title);

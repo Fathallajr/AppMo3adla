@@ -4,6 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AdminAuthService } from '../../core/services/admin-auth.service';
+import { SeoService } from '../../core/seo.service';
 
 @Component({
 	selector: 'app-admin-login-page',
@@ -20,8 +21,12 @@ export class AdminLoginPageComponent {
 
 	constructor(
 		private auth: AdminAuthService,
-		private router: Router
-	) {}
+		private router: Router,
+		private seo: SeoService
+	) {
+		this.seo.setTitle('تسجيل دخول الإدارة');
+		this.seo.setRobots('noindex, nofollow, noarchive');
+	}
 
 	submit(): void {
 		if (!this.username.trim()) {

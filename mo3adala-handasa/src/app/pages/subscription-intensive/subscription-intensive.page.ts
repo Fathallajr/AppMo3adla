@@ -95,7 +95,7 @@ export class SubscriptionIntensivePageComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		if (typeof window !== 'undefined') {
-			const siteUrl = (window as any)['NG_SITE_URL'] || 'https://appmo3adla.com';
+			const siteUrl = (window as any)['NG_SITE_URL'] || 'https://www.appmo3adla.com';
 			const title = 'تفاصيل الاشتراك المكثف - ابلكيشن معادلة كلية هندسة';
 			const description = 'تعرف على تفاصيل الاشتراك المكثف في أبلكيشن معادلة كلية هندسة والمميزات المتاحة';
 			const url = `${siteUrl}/subscription-intensive`;

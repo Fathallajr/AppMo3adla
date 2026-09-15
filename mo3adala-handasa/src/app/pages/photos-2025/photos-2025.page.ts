@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { fadeInUp, staggerList } from '../../shared/animations';
+import { SeoService } from '../../core/seo.service';
+import { CanonicalService } from '../../core/canonical.service';
 
 @Component({
 	selector: 'app-photos-2025-page',
@@ -13,6 +15,18 @@ import { fadeInUp, staggerList } from '../../shared/animations';
 })
 export class Photos2025PageComponent {
 	selectedPhoto: string | null = null;
+
+	constructor(private seo: SeoService, private canonical: CanonicalService) {
+		const siteUrl = (typeof window !== 'undefined' ? (window as any)['NG_SITE_URL'] : process.env['NG_SITE_URL']) || 'https://www.appmo3adla.com';
+		const title = 'صور الطلاب الناجحين 2025 - معادلة كلية هندسة';
+		const description = 'شاهد صور طلاب أبلكيشن معادلة كلية الهندسة الناجحين وتجاربهم بعد اجتياز المعادلة.';
+		const url = `${siteUrl}/photos-2025`;
+		this.seo.setTitle(title);
+		this.seo.setDescription(description);
+		this.seo.setOgTags({ title, description, url });
+		this.seo.setTwitterTags({ title, description });
+		this.canonical.setCanonical(url);
+	}
 
 	openPhoto(photo: string) {
 		this.selectedPhoto = photo;

@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { subPageTransition, fadeInUp, staggerList, cardAnimation } from '../../shared/animations';
+import { SeoService } from '../../core/seo.service';
+import { CanonicalService } from '../../core/canonical.service';
 
 @Component({
   selector: 'app-schools-page',
@@ -476,7 +478,17 @@ export class SchoolsPageComponent {
     tech5Schools.forEach(s => this.addSchool(s.name, tech5Category, s.logo));
   }
 
-  constructor() {}
+  constructor(private seo: SeoService, private canonical: CanonicalService) {
+    const siteUrl = (typeof window !== 'undefined' ? (window as any)['NG_SITE_URL'] : process.env['NG_SITE_URL']) || 'https://www.appmo3adla.com';
+    const title = 'دليل المدارس والمعاهد المعتمدة - معادلة كلية هندسة';
+    const description = 'ابحث عن المدارس والمعاهد التكنولوجية والصناعية المعتمدة والمناسبة للتقديم في معادلة كلية الهندسة.';
+    const url = `${siteUrl}/schools`;
+    this.seo.setTitle(title);
+    this.seo.setDescription(description);
+    this.seo.setOgTags({ title, description, url });
+    this.seo.setTwitterTags({ title, description });
+    this.canonical.setCanonical(url);
+  }
 
   get schools() {
     let filteredSchools = this.allSchools;

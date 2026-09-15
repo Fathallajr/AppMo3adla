@@ -22,7 +22,7 @@ export class EngineersPageComponent implements OnInit {
 
   ngOnInit(): void {
     if (typeof window !== 'undefined') {
-      const siteUrl = (window as any)['NG_SITE_URL'] || 'https://appmo3adla.com';
+      const siteUrl = (window as any)['NG_SITE_URL'] || 'https://www.appmo3adla.com';
       const title = 'فريق المدرسين - ابلكيشن معادلة كلية هندسة';
       const description = 'تعرف على فريق المدرسين المتخصصين في معادلة كلية الهندسة وخبراتهم في تدريس المواد المختلفة';
       const url = `${siteUrl}/engineers`;

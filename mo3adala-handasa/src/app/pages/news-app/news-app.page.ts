@@ -162,10 +162,10 @@ export class NewsAppPageComponent implements OnInit {
 
 	ngOnInit(): void {
 		if (typeof window !== 'undefined') {
-			const siteUrl = (window as any)['NG_SITE_URL'] || 'https://appmo3adla.com';
+			const siteUrl = (window as any)['NG_SITE_URL'] || 'https://www.appmo3adla.com';
 			const title = 'أخبار الأبلكيشن - ابلكيشن معادلة كلية هندسة';
 			const description = 'تابع آخر أخبار وتحديثات أبلكيشن معادلة كلية هندسة والعروض الخاصة والمنتجات الجديدة';
-			const url = `${siteUrl}/news-app`;
+			const url = `${siteUrl}/news/app`;
 			
 			this.seo.setTitle(title);
 			this.seo.setDescription(description);

@@ -693,7 +693,19 @@
 		padding-top: 1.5rem;
 	}
 	.success-hero__back {
-		margin-bottom: 1.5rem;
+		top: -1.25rem;
+		right: 1rem;
+		z-index: 5;
+		min-height: 44px;
+		margin-bottom: 0;
+		padding: .45rem .8rem;
+		border: 1px solid rgba(234, 88, 12, .35);
+		border-radius: 999px;
+		background: rgba(255, 255, 255, .94);
+		box-shadow: 0 8px 18px rgba(15, 23, 42, .16);
+		color: #111c3a;
+		font-size: .78rem;
+		backdrop-filter: blur(8px);
 	}
 	.success-hero__title {
 		font-size: clamp(2.25rem, 11vw, 3.4rem);

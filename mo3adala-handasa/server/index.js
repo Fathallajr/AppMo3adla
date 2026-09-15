@@ -233,7 +233,23 @@ app.post('/api/uploads', requireAdmin, upload.single('file'), (req, res) => {
 app.use('/uploads', express.static(UPLOADS_DIR));
 
 if (fssync.existsSync(DIST_DIR)) {
-	app.use(express.static(DIST_DIR));
+	app.use((req, res, next) => {
+		if (req.path === '/admin' || req.path.startsWith('/admin/')) {
+			res.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive');
+		}
+		next();
+	});
+	app.use(express.static(DIST_DIR, {
+		setHeaders: (res, filePath) => {
+			if (/\.[a-f0-9]{8,}\.(?:js|css|woff2|png|jpe?g|webp|svg|ico)$/i.test(filePath)) {
+				res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+				return;
+			}
+			if (/(?:index\.html|env\.js|robots\.txt|sitemap\.xml)$/i.test(filePath)) {
+				res.setHeader('Cache-Control', 'no-cache');
+			}
+		}
+	}));
 }
 
 app.get('*', (req, res, next) => {

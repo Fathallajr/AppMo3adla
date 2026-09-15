@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 export class CanonicalService {
 	private readonly document = inject(DOCUMENT);
 	private readonly router = inject(Router);
-	private readonly siteUrl = (typeof window !== 'undefined' ? (window as any)['NG_SITE_URL'] : process.env['NG_SITE_URL']) || 'https://example.com';
+	private readonly siteUrl = (typeof window !== 'undefined' ? (window as any)['NG_SITE_URL'] : process.env['NG_SITE_URL']) || 'https://www.appmo3adla.com';
 
 	setCanonical(url?: string) {
 		const head = this.document.head as HTMLHeadElement;

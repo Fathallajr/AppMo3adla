@@ -12,6 +12,7 @@
             loop 
             playsinline
             preload="auto"
+            poster="assets/media-hero.jpg"
             webkit-playsinline
             x5-playsinline
             style="pointer-events: none; z-index: 2;"
@@ -86,7 +87,9 @@
 			<p class="features-subtitle">محتوى منظم، تدريب مستمر، ومتابعة تساعدك توصل لهدفك بثقة.</p>
 		</div>
 
-		<div class="features-grid" @staggerList>
+		<div #featuresTrack class="features-grid" @staggerList
+			 (mouseenter)="pauseFeaturesAutoplay()" (mouseleave)="resumeFeaturesAutoplay()"
+			 (touchstart)="pauseFeaturesAutoplay()" (touchend)="resumeFeaturesAutoplay()">
 			<article class="feature-card-modern">
 				<div class="feature-card-top"><span>01</span><div class="feature-icon-modern"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332 1.253"></path></svg></div></div>
 				<h3>مناهج بسيطة ومُحدّثة</h3><p>شرح مرتب ومناسب لمستواك مع تحديثات مستمرة للمحتوى.</p>
@@ -110,7 +113,7 @@
 <app-what-is-equation />
 
 <!-- Successful Students Photos 2025 -->
-<section class="photo-gallery-section bg-gradient-to-br from-orange-50 to-yellow-50 py-8 md:py-16">
+<section class="photo-gallery-section bg-gradient-to-br from-slate-50 to-blue-50 py-8 md:py-16">
 	<div class="mx-auto max-w-7xl px-4">
 		<!-- Section Header -->
 		<div class="photo-gallery-header text-center mb-6 md:mb-12" @fadeInUp>
@@ -132,7 +135,7 @@
 					<img [src]="'assets/' + photo" 
 						 alt="طالب ناجح 2025" 
 						 class="w-full object-cover" 
-						 loading="eager" 
+						 loading="lazy"
 						 decoding="async"
 						 onerror="this.src='/assets/logo.png'">
 					<div class="photo-card-caption">طالب ناجح <span>{{ i + 1 }}</span></div>
@@ -432,7 +435,7 @@
 
 		<!-- Call to Action -->
 		<div class="text-center mt-12" @fadeInUp>
-			<a routerLink="/subscription-details" class="inline-block bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-700 transition-colors duration-300">
+			<a routerLink="/subscription-ab-reviews" class="inline-block bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-700 transition-colors duration-300">
 				انضم إلى مئات الطلاب الناجحين
 			</a>
 		</div>
@@ -447,7 +450,7 @@
 			<h2>ابدأ رحلتك يا بشمهندس</h2>
 			<p>انضم إلى مئات الطلاب وابدأ مذاكرتك بخطة واضحة، شرح متكامل، ومتابعة مستمرة لحد يوم الامتحان.</p>
 			<div class="final-cta-actions">
-				<a routerLink="/subscription-details" class="final-cta-primary">ابدأ الآن <span aria-hidden="true">←</span></a>
+				<a routerLink="/subscription-ab-reviews" class="final-cta-primary">ابدأ الآن <span aria-hidden="true">←</span></a>
 				<a routerLink="/engineers" class="final-cta-secondary">اتعرف على المدرسين</a>
 			</div>
 			<div class="final-cta-proof"><span>✓</span> محتوى منظم <span>✓</span> متابعة مستمرة <span>✓</span> تدريب على شكل الامتحان</div>

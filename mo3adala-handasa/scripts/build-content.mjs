@@ -7,8 +7,6 @@ const root = path.resolve(process.cwd());
 const contentDir = path.join(root, 'content');
 const assetsDir = path.join(root, 'src', 'assets');
 const outJson = path.join(assetsDir, 'content.json');
-const routesJson = path.join(assetsDir, 'routes.json');
-const routesTxt = path.join(assetsDir, 'routes.txt');
 
 /** @typedef {{slug:string,title:string,description:string,date:string, html:string}} Post */
 
@@ -45,12 +43,9 @@ function main() {
   const content = { posts };
   fs.writeFileSync(outJson, JSON.stringify(content, null, 2), 'utf8');
 
-  const staticRoutes = ['/', '/faq', '/contact', '/blog'];
-  const dynamicRoutes = posts.map(p => `/blog/${p.slug}`);
-  const allRoutes = [...staticRoutes, ...dynamicRoutes];
-  fs.writeFileSync(routesJson, JSON.stringify(allRoutes, null, 2), 'utf8');
-  fs.writeFileSync(routesTxt, allRoutes.join('\n') + '\n', 'utf8');
-  console.log(`Wrote ${posts.length} posts to assets/content.json and ${allRoutes.length} routes to assets/routes.{json,txt}`);
+  // Route discovery is maintained separately because the Angular router is the
+  // source of truth; this content generator must not reintroduce removed URLs.
+  console.log(`Wrote ${posts.length} posts to assets/content.json; route files were left unchanged.`);
 }
 
 main();

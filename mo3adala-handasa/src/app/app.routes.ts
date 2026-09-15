@@ -24,5 +24,6 @@ export const routes: Routes = [
 	{ path: 'teacher/:id', loadComponent: () => import('./pages/teacher-details/teacher-details.page').then(m => m.TeacherDetailsPageComponent) },
 	{ path: 'requirements', loadComponent: () => import('./pages/requirements/requirements.page').then(m => m.RequirementsPageComponent) },
 	{ path: 'schools', loadComponent: () => import('./pages/schools/schools.page').then(m => m.SchoolsPageComponent) },
+	{ path: 'batch-2027', loadComponent: () => import('./pages/batch-2027/batch-2027.page').then(m => m.Batch2027PageComponent) },
 	{ path: '**', redirectTo: '' },
 ];

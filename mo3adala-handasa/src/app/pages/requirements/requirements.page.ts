@@ -21,7 +21,7 @@ export class RequirementsPageComponent implements OnInit {
 
   ngOnInit(): void {
     if (typeof window !== 'undefined') {
-      const siteUrl = (window as any)['NG_SITE_URL'] || 'https://appmo3adla.com';
+      const siteUrl = (window as any)['NG_SITE_URL'] || 'https://www.appmo3adla.com';
       const title = 'شروط التقديم - ابلكيشن معادلة كلية هندسة';
       const description = 'تعرف على شروط التقديم لمعادلة كلية الهندسة والمتطلبات اللازمة للدخول لكلية الهندسة';
       const url = `${siteUrl}/requirements`;

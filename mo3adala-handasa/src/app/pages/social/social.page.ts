@@ -19,7 +19,7 @@ export class SocialPageComponent implements OnInit {
 	phoneNumber = '+201554843745';
 
 	constructor(private seo: SeoService, private canonical: CanonicalService) {
-		const siteUrl = (typeof window !== 'undefined' ? (window as any)['NG_SITE_URL'] : process.env['NG_SITE_URL']) || 'https://example.com';
+		const siteUrl = (typeof window !== 'undefined' ? (window as any)['NG_SITE_URL'] : process.env['NG_SITE_URL']) || 'https://www.appmo3adla.com';
 		const title = 'تابعنا وتواصل معنا - معادلة كلية هندسة';
 		const description = 'كل روابط حساباتنا وطرق التواصل معنا في مكان واحد.';
 		this.seo.setTitle(title);
