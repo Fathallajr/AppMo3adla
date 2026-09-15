@@ -54,6 +54,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	offerSubmitted = false;
 	offerError = '';
 	private readonly launchOfferEndpoint = 'https://script.google.com/macros/s/AKfycbzOMDZcgaUgRacnKnqgngxO_97N5iUU9AVoH1bA5HHEFg0LKS3Lju8ku6yl0nYgrLdQ/exec';
+	private readonly giftWhatsAppNumber = '201080681865';
 
 	constructor(
 		private seo: SeoService,
@@ -123,6 +124,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 			this.showWheelEntry = false;
 			this.selectedGift = this.wheelResult?.label || '';
 			this.wheelUsed = true;
+			this.openGiftWhatsApp();
 		} catch {
 			this.wheelEntryError = 'حصلت مشكلة في التحقق. حاول تاني من فضلك.';
 		} finally {
@@ -147,8 +149,14 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	}
 
 	claimGiftOnWhatsApp(): void {
+		this.openGiftWhatsApp();
+	}
+
+	private openGiftWhatsApp(): void {
 		const message = `السلام عليكم، عايز أستلم هدية دفعة 2027: ${this.selectedGift || 'خصم 10% وشحن الكتاب مجاناً'}.`;
-		window.open(`https://wa.me/201554843745?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
+		const whatsappUrl = `https://wa.me/${this.giftWhatsAppNumber}?text=${encodeURIComponent(message)}`;
+		const whatsappWindow = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+		if (!whatsappWindow) window.location.href = whatsappUrl;
 	}
 
 	ngOnDestroy(): void {
