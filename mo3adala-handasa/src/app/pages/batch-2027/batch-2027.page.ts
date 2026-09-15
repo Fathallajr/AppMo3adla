@@ -128,7 +128,6 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 			this.showWheelEntry = false;
 			this.selectedGift = this.wheelResult?.label || '';
 			this.wheelUsed = true;
-			this.openGiftWhatsApp();
 		} catch {
 			this.wheelEntryError = 'حصلت مشكلة في التحقق. حاول تاني من فضلك.';
 		} finally {
