@@ -5,6 +5,10 @@ import { RouterLink } from '@angular/router';
 import { CanonicalService } from '../../core/canonical.service';
 import { SeoService } from '../../core/seo.service';
 
+const PHONE_PATTERN = /^01\d{9}$/;
+const EXTRA_ATTEMPT_GIFT_ID = 'lucky-chance';
+const WHEEL_SPIN_DURATION_MS = 7500;
+
 @Component({
 	selector: 'app-batch-2027',
 	standalone: true,
@@ -20,7 +24,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		{ id: 'cash-gift', label: 'هدية مالية', value: 'مالية', detail: 'هدية مالية', available: true, emoji: 'هدية مالية', weight: 10 },
 		{ id: 'discount-25', label: 'خصم 25% على أول شهر', value: '25%', detail: 'خصم على أول شهر', available: true, emoji: 'خصم 25%', weight: 4 },
 		{ id: 'content', label: 'محتوى مجاني حصري', value: 'محتوى', detail: 'محتوى حصري', available: true, emoji: 'محتوى مجاني', weight: 18 },
-		{ id: 'lucky-chance', label: 'فرصة سعيدة', value: 'فرصة', detail: 'مكافأة مفاجئة', available: true, emoji: 'فرصة سعيدة', weight: 12 },
+		{ id: 'lucky-chance', label: 'حظ سعيد', value: 'فرصة', detail: 'محاولة إضافية', available: false, emoji: 'حظ سعيد', weight: 12 },
 		{ id: 'empty-three', label: 'حظ سعيد', value: 'فارغ', detail: 'حظ سعيد', available: false, emoji: 'حظ سعيد', weight: 8 },
 		{ id: 'free-month', label: 'أول شهر مجاناً', value: 'مجاناً', detail: 'أول شهر', available: true, emoji: 'شهر مجاني', weight: 2 }
 	];
@@ -43,6 +47,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	wheelVerified = false;
 	wheelUsed = false;
 	private giftRevealTimer?: ReturnType<typeof setTimeout>;
+	private wheelTimer?: number;
 
 	lead = {
 		name: '', whatsapp: '', school: '', studentType: '', source: ''
@@ -72,7 +77,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 
 	startGiftWheel(): void {
 		if (this.giftWheelSpinning || this.wheelUsed || this.wheelLocked) {
-			if (this.wheelUsed || this.wheelLocked) this.wheelEntryError = 'اللفة خلصت. لو ظهرت لك «فرصة سعيدة» فقط تقدر تجرب مرة إضافية.';
+			if (this.wheelUsed || this.wheelLocked) this.wheelEntryError = 'اللفة خلصت. لو ظهرت لك «حظ سعيد» تقدر تجرب مرة إضافية.';
 			return;
 		}
 		this.spinGiftWheel();
@@ -88,18 +93,23 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		let pick = Math.random() * totalWeight;
 		const resultIndex = this.giftOptions.findIndex(gift => (pick -= gift.weight) < 0);
 		this.wheelRotation += 1440 + (360 - (resultIndex * 40 + 20));
-		window.setTimeout(() => {
+		this.wheelTimer = window.setTimeout(() => {
 			this.wheelResult = this.giftOptions[resultIndex];
 			this.selectedGift = '';
-			this.wheelUsed = !this.wheelResult.available;
-			this.wheelLocked = this.wheelAttempts >= 2 || this.wheelResult.id !== 'lucky-chance';
+			const hasExtraAttempt = this.wheelResult.id === EXTRA_ATTEMPT_GIFT_ID && this.wheelAttempts < 2;
+			this.wheelUsed = !this.wheelResult.available && !hasExtraAttempt;
+			this.wheelLocked = this.wheelAttempts >= 2 || !hasExtraAttempt;
 			this.giftWheelSpinning = false;
-		}, 7500);
+		}, WHEEL_SPIN_DURATION_MS);
+	}
+
+	isExtraAttemptResult(gift: (typeof this.giftOptions)[number] | null): boolean {
+		return gift?.id === EXTRA_ATTEMPT_GIFT_ID;
 	}
 
 	async verifyWheelEntry(): Promise<void> {
 		this.wheelEntryError = '';
-		if (!this.wheelEntryName.trim() || !/^01\d{9}$/.test(this.wheelEntryPhone.trim())) {
+		if (!this.wheelEntryName.trim() || !PHONE_PATTERN.test(this.wheelEntryPhone.trim())) {
 			this.wheelEntryError = 'اكتب اسمك ورقم واتساب صحيح يبدأ بـ 01 ويتكون من 11 رقم.';
 			return;
 		}
@@ -107,13 +117,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		this.wheelChecking = true;
 		try {
 			const wonGift = this.wheelResult?.label || '';
-			const result = await fetch(this.launchOfferEndpoint, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-				body: new URLSearchParams({ name: this.wheelEntryName.trim(), whatsapp: this.wheelEntryPhone.trim(), school: 'عجلة حظ دفعة 2027', studentType: 'دفعة 2027', source: 'عجلة الحظ', discount: wonGift, gift: wonGift, reward: wonGift, consent: 'نعم' }).toString()
-			});
-			if (!result.ok) throw new Error('request-failed');
-			const payload = await result.json();
+			const payload = await this.postLead({ name: this.wheelEntryName.trim(), whatsapp: this.wheelEntryPhone.trim(), school: 'عجلة حظ دفعة 2027', studentType: 'دفعة 2027', source: 'عجلة الحظ', discount: wonGift, gift: wonGift, reward: wonGift, consent: 'نعم' });
 			if (payload.alreadyRegistered) {
 				this.wheelEntryError = 'أنت استفدت من هديتك قبل كده.';
 				this.wheelUsed = true;
@@ -134,6 +138,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 
 
 	closeGiftResult(): void {
+		if (this.wheelTimer) clearTimeout(this.wheelTimer);
 		this.showGiftResult = false;
 		this.giftOpening = false;
 		this.giftRewardsVisible = false;
@@ -166,6 +171,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 
 	ngOnDestroy(): void {
 		if (this.giftRevealTimer) clearTimeout(this.giftRevealTimer);
+		if (this.wheelTimer) clearTimeout(this.wheelTimer);
 	}
 
 	ngOnInit(): void {
@@ -183,6 +189,22 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		this.canonical.setCanonical(url);
 	}
 
+	private async postLead(data: Record<string, string>): Promise<{ success?: boolean; alreadyRegistered?: boolean; message?: string }> {
+		const response = await fetch(this.launchOfferEndpoint, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+			body: new URLSearchParams(data).toString()
+		});
+		if (!response.ok) throw new Error(`request-failed-${response.status}`);
+
+		const responseText = await response.text();
+		try {
+			return JSON.parse(responseText);
+		} catch {
+			throw new Error('invalid-response');
+		}
+	}
+
 	async submitLaunchOffer(): Promise<void> {
 		if (this.offerSubmitting) return;
 		if (!this.lead.name.trim() || !this.lead.whatsapp.trim() || !this.lead.school.trim() || !this.lead.studentType || !this.lead.source) return;
@@ -190,7 +212,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 			this.offerError = 'لازم توافق على التواصل قبل إرسال البيانات.';
 			return;
 		}
-		if (!/^01\d{9}$/.test(this.lead.whatsapp.trim())) {
+		if (!PHONE_PATTERN.test(this.lead.whatsapp.trim())) {
 			this.offerError = 'اكتب رقم واتساب صحيح يبدأ بـ 01 ويتكون من 11 رقم.';
 			return;
 		}
@@ -198,13 +220,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		this.offerError = '';
 		const lead = { name: this.lead.name.trim(), whatsapp: this.lead.whatsapp.trim(), school: this.lead.school.trim(), studentType: this.lead.studentType, source: this.lead.source, consent: this.offerContactConsent ? 'نعم' : 'لا' };
 		try {
-			const result = await fetch(this.launchOfferEndpoint, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-				body: new URLSearchParams(lead).toString()
-			});
-			if (!result.ok) throw new Error('request-failed');
-			const payload = await result.json();
+			const payload = await this.postLead(lead);
 			if (payload.alreadyRegistered) {
 				this.offerError = 'رقم الواتساب ده مسجل بالفعل.';
 				return;
