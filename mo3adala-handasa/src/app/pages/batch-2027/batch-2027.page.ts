@@ -153,7 +153,12 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	}
 
 	private openGiftWhatsApp(): void {
-		const message = `السلام عليكم، عايز أستلم هدية دفعة 2027: ${this.selectedGift || 'خصم 10% وشحن الكتاب مجاناً'}.`;
+		const message = [
+			'السلام عليكم، عايز أستلم هدية دفعة 2027.',
+			`الاسم: ${this.wheelEntryName.trim() || 'غير مسجل'}`,
+			`رقم الواتساب: ${this.wheelEntryPhone.trim() || 'غير مسجل'}`,
+			`الخصم/الهدية: ${this.selectedGift || 'خصم 10% وشحن الكتاب مجاناً'}`
+		].join('\n');
 		const whatsappUrl = `https://wa.me/${this.giftWhatsAppNumber}?text=${encodeURIComponent(message)}`;
 		const whatsappWindow = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
 		if (!whatsappWindow) window.location.href = whatsappUrl;
