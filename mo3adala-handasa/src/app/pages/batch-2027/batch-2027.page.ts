@@ -115,16 +115,24 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		}
 		if (this.wheelChecking) return;
 		this.wheelChecking = true;
-		const wonGift = this.wheelResult?.label || '';
-		const lead = { name: this.wheelEntryName.trim(), whatsapp: this.wheelEntryPhone.trim(), school: 'عجلة حظ دفعة 2027', studentType: 'دفعة 2027', source: 'عجلة الحظ', discount: wonGift, gift: wonGift, reward: wonGift, consent: 'نعم' };
-
-		// Queue the lead without blocking the student on the slow Google Sheets response.
-		this.queueLead(lead);
-		this.wheelVerified = true;
-		this.showWheelEntry = false;
-		this.selectedGift = wonGift;
-		this.wheelUsed = true;
-		this.wheelChecking = false;
+		try {
+			const wonGift = this.wheelResult?.label || '';
+			const payload = await this.postLead({ name: this.wheelEntryName.trim(), whatsapp: this.wheelEntryPhone.trim(), school: 'عجلة حظ دفعة 2027', studentType: 'دفعة 2027', source: 'عجلة الحظ', discount: wonGift, gift: wonGift, reward: wonGift, consent: 'نعم' });
+			if (payload.alreadyRegistered) {
+				this.wheelEntryError = 'أنت استفدت من هديتك قبل كده.';
+				this.wheelUsed = true;
+				return;
+			}
+			if (!payload.success) throw new Error(payload.message || 'request-failed');
+			this.wheelVerified = true;
+			this.showWheelEntry = false;
+			this.selectedGift = wonGift;
+			this.wheelUsed = true;
+		} catch {
+			this.wheelEntryError = 'حصلت مشكلة في التحقق. حاول تاني من فضلك.';
+		} finally {
+			this.wheelChecking = false;
+		}
 	}
 
 
@@ -194,21 +202,6 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		} catch {
 			throw new Error('invalid-response');
 		}
-	}
-
-	private queueLead(data: Record<string, string>): void {
-		const body = new URLSearchParams(data).toString();
-		if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
-			const beacon = new Blob([body], { type: 'application/x-www-form-urlencoded;charset=UTF-8' });
-			if (navigator.sendBeacon(this.launchOfferEndpoint, beacon)) return;
-		}
-
-		void fetch(this.launchOfferEndpoint, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-			body,
-			keepalive: true
-		}).catch(() => undefined);
 	}
 
 	async submitLaunchOffer(): Promise<void> {
