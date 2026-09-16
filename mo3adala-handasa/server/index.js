@@ -7,6 +7,12 @@ const multer = require('multer');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const LAUNCH_OFFER_ENDPOINT = process.env.LAUNCH_OFFER_ENDPOINT || 'https://script.google.com/macros/s/AKfycbzOMDZcgaUgRacnKnqgngxO_97N5iUU9AVoH1bA5HHEFg0LKS3Lju8ku6yl0nYgrLdQ/exec';
+const WHEEL_APPS_SCRIPT_ENDPOINT = process.env.WHEEL_APPS_SCRIPT_ENDPOINT || 'https://script.google.com/macros/s/AKfycbyvJVNsv_v4MCnBVQm4rA7074zhpzVVYWADIJTlTcu9XeqebON6s-tQpnMH11QoE-34/exec';
+// Apps Script can be slow while scanning the sheet for an existing phone.
+// Give it enough time to finish so the UI does not invite duplicate retries.
+const LAUNCH_OFFER_TIMEOUT_MS = 60000;
+const WHEEL_CLAIM_TIMEOUT_MS = 30000;
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'jr1';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'jr1';
 const PAGE_KEYS = [
@@ -30,6 +36,29 @@ const TOKEN_TTL_MS = 48 * 60 * 60 * 1000;
 const DATA_DIR = path.join(__dirname, 'data');
 const STORE_FILE = path.join(DATA_DIR, 'content-store.json');
 const TOKENS_FILE = path.join(DATA_DIR, 'tokens.json');
+const WHEEL_STATE_FILE = path.join(DATA_DIR, 'wheel-state.json');
+const WHEEL_SECRET_FILE = path.join(DATA_DIR, 'wheel-secret.txt');
+const WHEEL_APPS_SCRIPT_SECRET = process.env.WHEEL_APPS_SCRIPT_SECRET || readLocalWheelSecret();
+const WHEEL_TTL_MS = 30 * 60 * 1000;
+const WHEEL_OPTIONS = [
+	{ id: 'discount', label: 'خصم 10% على أول شهر', weight: 18, available: true },
+	{ id: 'discount-5', label: 'خصم 5% على أول شهر', weight: 8, available: true },
+	{ id: 'shipping', label: 'شحن الكتاب مجاناً', weight: 15, available: true },
+	{ id: 'cash-gift', label: 'هدية مالية', weight: 10, available: true },
+	{ id: 'discount-25', label: 'خصم 25% على أول شهر', weight: 4, available: true },
+	{ id: 'content', label: 'محتوى مجاني حصري', weight: 18, available: true },
+	{ id: 'lucky-chance', label: 'حظ سعيد', weight: 12, available: false },
+	{ id: 'empty-three', label: 'حظ سعيد', weight: 8, available: false },
+	{ id: 'free-month', label: 'أول شهر مجاناً', weight: 2, available: true }
+];
+
+function readLocalWheelSecret() {
+	try {
+		return fssync.readFileSync(WHEEL_SECRET_FILE, 'utf8').trim();
+	} catch {
+		return '';
+	}
+}
 
 function loadTokens() {
 	try {
@@ -81,6 +110,7 @@ const upload = multer({
 });
 
 app.use(express.json({ limit: '2mb' }));
+app.use(express.urlencoded({ extended: false, limit: '32kb' }));
 
 app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*');
@@ -164,6 +194,148 @@ app.post('/api/auth/login', (req, res) => {
 		token,
 		expiresAt: new Date(Date.now() + TOKEN_TTL_MS).toISOString()
 	});
+});
+
+app.post('/api/wheel/spin', (req, res) => {
+	const sessionId = typeof req.body?.sessionId === 'string' ? req.body.sessionId.trim() : '';
+	if (!sessionId || sessionId.length > 128) return res.status(400).json({ message: 'Invalid wheel session' });
+
+	const state = readWheelState();
+	const now = Date.now();
+	for (const [token, spin] of Object.entries(state.spins)) {
+		if (!spin || now - spin.createdAt > WHEEL_TTL_MS) delete state.spins[token];
+	}
+	const existing = Object.values(state.spins).find(spin => spin.sessionId === sessionId);
+	if (existing?.claimed) return res.status(409).json({ alreadyUsed: true, message: 'Wheel already used' });
+	if (existing && existing.gift.id !== 'lucky-chance') return res.json({ token: existing.token, gift: existing.gift });
+	if (existing && existing.attempts >= 2) return res.json({ token: existing.token, gift: existing.gift });
+
+	const totalWeight = WHEEL_OPTIONS.reduce((sum, gift) => sum + gift.weight, 0);
+	let pick = crypto.randomInt(totalWeight);
+	const gift = WHEEL_OPTIONS.find(option => (pick -= option.weight) < 0) || WHEEL_OPTIONS[0];
+	const token = crypto.randomBytes(24).toString('hex');
+	state.spins[token] = { token, sessionId, gift, attempts: existing ? 2 : 1, createdAt: now, claimed: false };
+	if (existing) {
+		delete state.spins[existing.token];
+		state.spins[token].attempts = 2;
+	}
+	saveWheelState(state);
+	return res.json({ token, gift });
+});
+
+async function postToAppsScript(endpoint, values, timeoutMs) {
+	const controller = new AbortController();
+	const timeout = setTimeout(() => controller.abort(), timeoutMs);
+	try {
+		const upstream = await fetch(endpoint, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+			body: new URLSearchParams(values).toString(),
+			signal: controller.signal
+		});
+		const responseText = await upstream.text();
+		let payload;
+		try {
+			payload = JSON.parse(responseText);
+		} catch {
+			throw new Error('invalid-response');
+		}
+		if (!upstream.ok) throw new Error(payload.message || 'upstream-failed');
+		return payload;
+	} finally {
+		clearTimeout(timeout);
+	}
+}
+
+// This endpoint is only for the normal site forms. Wheel claims have their own
+// endpoint and their own Apps Script deployment below.
+app.post('/api/launch-offer', async (req, res) => {
+	const { name, whatsapp, school, studentType, source, consent } = req.body || {};
+	if (source === 'عجلة الحظ') {
+		return res.status(400).json({ success: false, message: 'Wheel claims must use the dedicated wheel service' });
+	}
+	const cleanWhatsapp = typeof whatsapp === 'string' ? whatsapp.trim() : '';
+	const requiredValues = { name, whatsapp: cleanWhatsapp, school, studentType, source, consent };
+	const values = { ...requiredValues, whatsapp: `'${cleanWhatsapp}` };
+
+	if (Object.values(requiredValues).some(value => typeof value !== 'string' || !value.trim())) {
+		return res.status(400).json({ success: false, message: 'Missing required fields' });
+	}
+
+	if (!/^01\d{9}$/.test(cleanWhatsapp)) {
+		return res.status(400).json({ success: false, message: 'Invalid WhatsApp number' });
+	}
+
+	try {
+		const payload = await postToAppsScript(LAUNCH_OFFER_ENDPOINT, values, LAUNCH_OFFER_TIMEOUT_MS);
+		return res.json(payload);
+	} catch (error) {
+		const timedOut = error?.name === 'AbortError';
+		return res.status(timedOut ? 504 : 502).json({ success: false, message: timedOut ? 'Registration service timed out' : 'Registration service unavailable' });
+	}
+});
+
+// Wheel claims are intentionally isolated from every other form and Apps Script.
+app.post('/api/wheel/claim', async (req, res) => {
+	const name = typeof req.body?.name === 'string' ? req.body.name.trim() : '';
+	const whatsapp = normalizePhone(req.body?.whatsapp);
+	const wheelToken = typeof req.body?.wheelToken === 'string' ? req.body.wheelToken.trim() : '';
+
+	if (name.length < 2 || name.length > 120) {
+		return res.status(400).json({ success: false, message: 'اكتب اسم صحيح.' });
+	}
+	if (!/^01\d{9}$/.test(whatsapp)) {
+		return res.status(400).json({ success: false, message: 'رقم الواتساب يجب أن يبدأ بـ 01 ويتكون من 11 رقم.' });
+	}
+	if (!wheelToken) return res.status(400).json({ success: false, message: 'نتيجة العجلة غير موجودة.' });
+
+	const state = readWheelState();
+	const spin = state.spins[wheelToken];
+	if (!spin || Date.now() - spin.createdAt > WHEEL_TTL_MS) {
+		return res.status(409).json({ success: false, message: 'انتهت صلاحية نتيجة العجلة. لف العجلة من جديد.' });
+	}
+	if (!spin.gift?.available) {
+		return res.status(400).json({ success: false, message: 'هذه النتيجة لا تحتوي على هدية قابلة للاستلام.' });
+	}
+	if (spin.claimed || state.claims[whatsapp]) {
+		return res.json({ success: false, alreadyRegistered: true, message: 'تم استلام هدية العجلة بهذا الرقم من قبل.' });
+	}
+	if (!WHEEL_APPS_SCRIPT_ENDPOINT) {
+		return res.status(503).json({ success: false, message: 'خدمة تسجيل العجلة غير مفعلة بعد.' });
+	}
+	if (!WHEEL_APPS_SCRIPT_SECRET) {
+		return res.status(503).json({ success: false, message: 'حماية خدمة العجلة غير مفعلة على السيرفر.' });
+	}
+
+	try {
+		const createdAt = getNowIso();
+		const payload = await postToAppsScript(WHEEL_APPS_SCRIPT_ENDPOINT, {
+			name,
+			whatsapp,
+			gift: spin.gift.label,
+			wheelToken,
+			createdAt,
+			apiSecret: WHEEL_APPS_SCRIPT_SECRET
+		}, WHEEL_CLAIM_TIMEOUT_MS);
+		if (!payload.success && !payload.alreadyRegistered) {
+			return res.status(502).json({ success: false, message: payload.message || 'تعذر تسجيل هدية العجلة.' });
+		}
+
+		spin.claimed = true;
+		spin.phone = whatsapp;
+		spin.name = name;
+		spin.claimedAt = getNowIso();
+		state.spins[wheelToken] = spin;
+		state.claims[whatsapp] = wheelToken;
+		saveWheelState(state);
+		return res.json(payload);
+	} catch (error) {
+		const timedOut = error?.name === 'AbortError';
+		return res.status(timedOut ? 504 : 502).json({
+			success: false,
+			message: timedOut ? 'خدمة تسجيل العجلة اتأخرت. من فضلك ما تضغطش مرة تانية.' : 'تعذر الاتصال بخدمة تسجيل العجلة.'
+		});
+	}
 });
 
 function noCache(res) {
@@ -250,6 +422,25 @@ if (fssync.existsSync(DIST_DIR)) {
 			}
 		}
 	}));
+}
+
+function readWheelState() {
+	try {
+		if (fssync.existsSync(WHEEL_STATE_FILE)) return JSON.parse(fssync.readFileSync(WHEEL_STATE_FILE, 'utf8'));
+	} catch {}
+	return { spins: {}, claims: {} };
+}
+
+function saveWheelState(state) {
+	fssync.mkdirSync(DATA_DIR, { recursive: true });
+	fssync.writeFileSync(WHEEL_STATE_FILE, JSON.stringify(state), 'utf8');
+}
+
+function normalizePhone(value) {
+	return String(value || '')
+		.replace(/[٠-٩]/g, digit => String(digit.charCodeAt(0) - '٠'.charCodeAt(0)))
+		.replace(/[۰-۹]/g, digit => String(digit.charCodeAt(0) - '۰'.charCodeAt(0)))
+		.replace(/[^0-9]/g, '');
 }
 
 app.get('*', (req, res, next) => {

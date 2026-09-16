@@ -9,6 +9,13 @@ const PHONE_PATTERN = /^01\d{9}$/;
 const EXTRA_ATTEMPT_GIFT_ID = 'lucky-chance';
 const WHEEL_SPIN_DURATION_MS = 7500;
 
+function normalizePhone(value: string): string {
+	return value
+		.replace(/[٠-٩]/g, digit => String(digit.charCodeAt(0) - '٠'.charCodeAt(0)))
+		.replace(/[۰-۹]/g, digit => String(digit.charCodeAt(0) - '۰'.charCodeAt(0)))
+		.replace(/\D/g, '');
+}
+
 @Component({
 	selector: 'app-batch-2027',
 	standalone: true,
@@ -39,12 +46,12 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	wheelAttempts = 0;
 	wheelLocked = false;
 	wheelResult: (typeof this.giftOptions)[number] | null = null;
-	showWheelEntry = false;
-	wheelEntryName = '';
-	wheelEntryPhone = '';
-	wheelEntryError = '';
-	wheelChecking = false;
-	wheelVerified = false;
+	wheelToken = '';
+	wheelSessionId = '';
+	wheelClaim = { name: '', whatsapp: '' };
+	wheelClaimError = '';
+	wheelClaimSubmitting = false;
+	wheelClaimComplete = false;
 	wheelUsed = false;
 	wheelAlreadyUsed = false;
 	private giftRevealTimer?: ReturnType<typeof setTimeout>;
@@ -59,7 +66,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	offerSubmitting = false;
 	offerSubmitted = false;
 	offerError = '';
-	private readonly launchOfferEndpoint = 'https://script.google.com/macros/s/AKfycbzOMDZcgaUgRacnKnqgngxO_97N5iUU9AVoH1bA5HHEFg0LKS3Lju8ku6yl0nYgrLdQ/exec';
+	private readonly launchOfferEndpoint = '/api/launch-offer';
 	private readonly giftWhatsAppNumber = '201080681865';
 
 	constructor(
@@ -78,22 +85,39 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 
 	startGiftWheel(): void {
 		if (this.giftWheelSpinning || this.wheelUsed || this.wheelLocked) {
-			if (this.wheelUsed || this.wheelLocked) this.wheelEntryError = 'اللفة خلصت. لو ظهرت لك «حظ سعيد» تقدر تجرب مرة إضافية.';
+			if (this.wheelUsed || this.wheelLocked) this.wheelClaimError = 'اللفة خلصت. لو ظهرت لك «حظ سعيد» تقدر تجرب مرة إضافية.';
 			return;
 		}
 		this.spinGiftWheel();
 	}
 
-	private spinGiftWheel(): void {
+	private async spinGiftWheel(): Promise<void> {
 		if (this.giftWheelSpinning) return;
 		this.giftWheelSpinning = true;
 		this.wheelResult = null;
 		this.selectedGift = '';
 		this.wheelAlreadyUsed = false;
 		this.wheelAttempts += 1;
-		const totalWeight = this.giftOptions.reduce((total, gift) => total + gift.weight, 0);
-		let pick = Math.random() * totalWeight;
-		const resultIndex = this.giftOptions.findIndex(gift => (pick -= gift.weight) < 0);
+		try {
+		const response = await fetch('/api/wheel/spin', {
+			method: 'POST', headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ sessionId: this.wheelSessionId })
+		});
+		const payload = await response.json();
+		if (!response.ok) {
+			this.wheelAttempts -= 1;
+			this.giftWheelSpinning = false;
+			this.wheelClaimError = payload.message || 'تعذر تشغيل العجلة. حاول تاني.';
+			return;
+		}
+		this.wheelToken = payload.token;
+		const resultIndex = this.giftOptions.findIndex(gift => gift.id === payload.gift?.id);
+		if (resultIndex < 0) {
+			this.wheelAttempts -= 1;
+			this.giftWheelSpinning = false;
+			this.wheelClaimError = 'تعذر قراءة نتيجة العجلة. حاول تاني.';
+			return;
+		}
 		this.wheelRotation += 1440 + (360 - (resultIndex * 40 + 20));
 		this.wheelTimer = window.setTimeout(() => {
 			this.wheelResult = this.giftOptions[resultIndex];
@@ -103,39 +127,74 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 			this.wheelLocked = this.wheelAttempts >= 2 || !hasExtraAttempt;
 			this.giftWheelSpinning = false;
 		}, WHEEL_SPIN_DURATION_MS);
+		} catch {
+			this.wheelAttempts -= 1;
+			this.giftWheelSpinning = false;
+			this.wheelClaimError = 'تعذر تشغيل العجلة. حاول تاني.';
+		}
 	}
 
 	isExtraAttemptResult(gift: (typeof this.giftOptions)[number] | null): boolean {
 		return gift?.id === EXTRA_ATTEMPT_GIFT_ID;
 	}
 
-	async verifyWheelEntry(): Promise<void> {
-		this.wheelEntryError = '';
+	updateWheelPhone(value: string): void {
+		this.wheelClaim.whatsapp = normalizePhone(value).slice(0, 11);
+		this.wheelClaimError = '';
+	}
+
+	get wheelPhoneLength(): number {
+		return this.wheelClaim.whatsapp.length;
+	}
+
+	async submitWheelClaim(): Promise<void> {
+		if (this.wheelClaimSubmitting) return;
+		this.wheelClaimError = '';
 		this.wheelAlreadyUsed = false;
-		if (!this.wheelEntryName.trim() || !PHONE_PATTERN.test(this.wheelEntryPhone.trim())) {
-			this.wheelEntryError = 'اكتب اسمك ورقم واتساب صحيح يبدأ بـ 01 ويتكون من 11 رقم.';
+		const name = this.wheelClaim.name.trim();
+		const whatsapp = normalizePhone(this.wheelClaim.whatsapp);
+		this.wheelClaim.whatsapp = whatsapp;
+		if (name.length < 2) {
+			this.wheelClaimError = 'اكتب اسمك الأول والثاني على الأقل.';
 			return;
 		}
-		if (this.wheelChecking) return;
-		this.wheelChecking = true;
+		if (!PHONE_PATTERN.test(whatsapp)) {
+			this.wheelClaimError = `اكتب رقم واتساب مصري صحيح من 11 رقم يبدأ بـ 01. المكتوب حاليًا ${whatsapp.length} رقم.`;
+			return;
+		}
+		if (!this.wheelToken || !this.wheelResult?.available) {
+			this.wheelClaimError = 'لف العجلة أولًا للحصول على هدية.';
+			return;
+		}
+
+		this.wheelClaimSubmitting = true;
+		const controller = new AbortController();
+		const timeout = window.setTimeout(() => controller.abort(), 35000);
 		try {
-			const wonGift = this.wheelResult?.label || '';
-			const payload = await this.postLead({ name: this.wheelEntryName.trim(), whatsapp: this.wheelEntryPhone.trim(), school: 'عجلة حظ دفعة 2027', studentType: 'دفعة 2027', source: 'عجلة الحظ', discount: wonGift, gift: wonGift, reward: wonGift, consent: 'نعم' });
+			const response = await fetch('/api/wheel/claim', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ name, whatsapp, wheelToken: this.wheelToken }),
+				signal: controller.signal
+			});
+			const payload = await response.json() as { success?: boolean; alreadyRegistered?: boolean; message?: string };
 			if (payload.alreadyRegistered) {
-				this.wheelEntryError = 'أنت استفدت من هديتك قبل كده.';
+				this.wheelClaimError = payload.message || 'تم استلام هدية العجلة بهذا الرقم من قبل.';
 				this.wheelAlreadyUsed = true;
 				this.wheelUsed = true;
 				return;
 			}
-			if (!payload.success) throw new Error(payload.message || 'request-failed');
-			this.wheelVerified = true;
-			this.showWheelEntry = false;
-			this.selectedGift = wonGift;
+			if (!response.ok || !payload.success) throw new Error(payload.message || 'تعذر تسجيل هدية العجلة.');
+			this.wheelClaimComplete = true;
+			this.selectedGift = this.wheelResult.label;
 			this.wheelUsed = true;
-		} catch {
-			this.wheelEntryError = 'حصلت مشكلة في التحقق. حاول تاني من فضلك.';
+		} catch (error) {
+			this.wheelClaimError = error instanceof DOMException && error.name === 'AbortError'
+				? 'خدمة تسجيل العجلة اتأخرت. من فضلك ما تضغطش مرة تانية.'
+				: error instanceof Error ? error.message : 'تعذر تسجيل هدية العجلة.';
 		} finally {
-			this.wheelChecking = false;
+			window.clearTimeout(timeout);
+			this.wheelClaimSubmitting = false;
 		}
 	}
 
@@ -163,8 +222,8 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	private openGiftWhatsApp(): void {
 		const message = [
 			'السلام عليكم، عايز أستلم هدية دفعة 2027.',
-			`الاسم: ${this.wheelEntryName.trim() || 'غير مسجل'}`,
-			`رقم الواتساب: ${this.wheelEntryPhone.trim() || 'غير مسجل'}`,
+			`الاسم: ${this.wheelClaim.name.trim() || 'غير مسجل'}`,
+			`رقم الواتساب: ${this.wheelClaim.whatsapp || 'غير مسجل'}`,
 			`الخصم/الهدية: ${this.selectedGift || 'خصم 10% وشحن الكتاب مجاناً'}`
 		].join('\n');
 		const whatsappUrl = `https://wa.me/${this.giftWhatsAppNumber}?text=${encodeURIComponent(message)}`;
@@ -179,6 +238,8 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		if (typeof window === 'undefined') return;
+		this.wheelSessionId = sessionStorage.getItem('batch-2027-wheel-session') || crypto.randomUUID();
+		sessionStorage.setItem('batch-2027-wheel-session', this.wheelSessionId);
 
 		const siteUrl = (window as any)['NG_SITE_URL'] || 'https://www.appmo3adla.com';
 		const title = 'دفعة 2027 | ابدأ صح مع أبلكيشن معادلة كلية هندسة';
@@ -193,18 +254,26 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	}
 
 	private async postLead(data: Record<string, string>): Promise<{ success?: boolean; alreadyRegistered?: boolean; message?: string }> {
+		const controller = new AbortController();
+		const timeout = window.setTimeout(() => controller.abort(), 70000);
 		const response = await fetch(this.launchOfferEndpoint, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-			body: new URLSearchParams(data).toString()
+			body: new URLSearchParams(data).toString(),
+			signal: controller.signal
 		});
-		if (!response.ok) throw new Error(`request-failed-${response.status}`);
-
-		const responseText = await response.text();
 		try {
-			return JSON.parse(responseText);
-		} catch {
-			throw new Error('invalid-response');
+			const responseText = await response.text();
+			let payload: { success?: boolean; alreadyRegistered?: boolean; message?: string };
+			try {
+				payload = JSON.parse(responseText);
+			} catch {
+				throw new Error('invalid-response');
+			}
+			if (!response.ok) throw new Error(payload.message || `request-failed-${response.status}`);
+			return payload;
+		} finally {
+			window.clearTimeout(timeout);
 		}
 	}
 

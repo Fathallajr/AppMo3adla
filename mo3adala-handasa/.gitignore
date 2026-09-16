@@ -35,6 +35,9 @@ yarn-error.log
 /libpeerconnection.log
 testem.log
 /typings
+/server/data/wheel-state.json
+/server/data/wheel-secret.txt
+/npm-start*.log
 
 # System files
 .DS_Store

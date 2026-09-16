@@ -35,7 +35,7 @@ export class AppComponent implements OnInit, OnDestroy {
 	offerSourceOptions = ['فيسبوك', 'إنستجرام', 'تيك توك', 'يوتيوب', 'ترشيح من صديق', 'أخرى'];
 	offerSubmitting = false;
 	offerError = '';
-	private readonly launchOfferEndpoint = 'https://script.google.com/macros/s/AKfycbzOMDZcgaUgRacnKnqgngxO_97N5iUU9AVoH1bA5HHEFg0LKS3Lju8ku6yl0nYgrLdQ/exec';
+	private readonly launchOfferEndpoint = '/api/launch-offer';
 	countdownDays = 15;
 	countdownHours = 0;
 	countdownMinutes = 0;
@@ -163,14 +163,23 @@ export class AppComponent implements OnInit, OnDestroy {
 		this.offerSubmitting = true;
 		this.offerError = '';
 		const lead = { name: this.offerName.trim(), whatsapp: this.offerWhatsapp.trim(), school: this.offerSchool.trim(), studentType: this.offerStudentType, source: this.offerSource, consent: this.offerContactConsent ? 'نعم' : 'لا' };
+		const controller = new AbortController();
+		const timeout = setTimeout(() => controller.abort(), 20000);
 		try {
 			const result = await fetch(this.launchOfferEndpoint, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-				body: new URLSearchParams(lead).toString()
+				body: new URLSearchParams(lead).toString(),
+				signal: controller.signal
 			});
 			if (!result.ok) throw new Error('request-failed');
-			const payload = await result.json();
+			const responseText = await result.text();
+			let payload: { success?: boolean; alreadyRegistered?: boolean; message?: string };
+			try {
+				payload = JSON.parse(responseText);
+			} catch {
+				throw new Error('invalid-response');
+			}
 			if (payload.alreadyRegistered) {
 				this.offerError = 'رقم الواتساب ده مسجل بالفعل.';
 				return;
@@ -181,9 +190,12 @@ export class AppComponent implements OnInit, OnDestroy {
 				localStorage.setItem('launch-offer-submitted', '1');
 			}
 			this.offerSubmitted = true;
-		} catch {
-			this.offerError = 'حصلت مشكلة بسيطة في الاتصال. حاول تاني من فضلك.';
+		} catch (error) {
+			this.offerError = error instanceof DOMException && error.name === 'AbortError'
+				? 'الخدمة اتأخرت عن المعتاد. حاول تاني بعد لحظات.'
+				: 'حصلت مشكلة بسيطة في الاتصال. حاول تاني من فضلك.';
 		} finally {
+			clearTimeout(timeout);
 			this.offerSubmitting = false;
 		}
 	}

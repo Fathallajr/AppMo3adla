@@ -62,7 +62,7 @@
 .batch-consent input:checked::after { font-size: 23px; line-height: 1; }
 .batch-form-error { grid-column: 1 / -1; margin: 0; padding: 9px 11px; border: 1px solid #f3a6a0; border-radius: 9px; color: #b42318; background: #fff1f0; font-size: 13px; font-weight: 800; }
 .batch-form button:disabled { opacity: .7; cursor: wait; }
-.batch-join__success { text-align: center; }
+.batch-join__success { grid-column: 1 / -1; width: 100%; display: grid; justify-items: center; text-align: center; }
 .batch-join__success > div { display: grid; width: 65px; height: 65px; margin: 0 auto 18px; place-items: center; border-radius: 50%; color: #fff; background: #16a36a; font: 900 34px Arial; }
 .batch-join__success p { color: #687697; font-size: 18px; line-height: 1.8; }
 
@@ -178,13 +178,25 @@
 .batch-wheel-result.is-used span { color: #dc2626; font-size: clamp(20px, 3vw, 28px); font-weight: 900; }
 .batch-wheel-result.is-used small { color: #b91c1c; font-weight: 700; }
 .batch-wheel-claim { width: min(430px, 100%); margin: 0 auto; }
-.batch-wheel-entry { display: grid; gap: 9px; width: min(430px, 100%); margin: 18px auto 0; padding: 18px; border: 1px solid #ffd0ad; border-radius: 16px; background: #fffaf5; text-align: right; }
-.batch-wheel-entry strong { color: #172452; text-align: center; font-size: 16px; }
-.batch-wheel-entry input { width: 100%; padding: 11px 13px; border: 1px solid #d9e6ef; border-radius: 9px; outline: none; color: #172452; background: #fff; font: inherit; }
-.batch-wheel-entry input:focus { border-color: #ed6b22; box-shadow: 0 0 0 3px rgba(237,107,34,.12); }
-.batch-wheel-entry button { padding: 11px; border: 0; border-radius: 9px; color: #fff; background: #ed6b22; font: inherit; font-weight: 800; cursor: pointer; }
-.batch-wheel-entry button:disabled { opacity: .65; cursor: wait; }
-.batch-wheel-entry p, .batch-wheel-used { margin: 0; color: #c0392b; font-size: 13px; font-weight: 700; text-align: center; }
+.wheel-claim-card { display: grid; gap: 14px; width: min(460px, 100%); margin: 20px auto; padding: 22px; border: 1px solid #ffc99f; border-radius: 22px; background: #fffaf6; box-shadow: 0 16px 40px rgba(23, 36, 82, .08); text-align: right; }
+.wheel-claim-card__heading { display: grid; gap: 3px; padding-bottom: 12px; border-bottom: 1px solid #ffe0c8; text-align: center; }
+.wheel-claim-card__heading small { color: #ed6b22; font-weight: 800; }
+.wheel-claim-card__heading strong { color: #172452; font-size: 21px; }
+.wheel-claim-card__heading span { color: #687697; font-size: 13px; }
+.wheel-claim-field { display: grid; gap: 7px; color: #172452; font-size: 13px; font-weight: 800; }
+.wheel-claim-field input { box-sizing: border-box; width: 100%; min-height: 50px; padding: 12px 14px; border: 1px solid #d6e2ef; border-radius: 12px; outline: none; color: #172452; background: #fff; font: inherit; font-size: 16px; }
+.wheel-claim-field input:focus { border-color: #ed6b22; box-shadow: 0 0 0 3px rgba(237, 107, 34, .12); }
+.wheel-claim-field small { color: #7b8aa5; font-weight: 600; text-align: left; direction: rtl; }
+.wheel-claim-field small.is-complete { color: #15965c; }
+.wheel-claim-submit { min-height: 52px; border: 0; border-radius: 12px; color: #fff; background: #ed6b22; font: inherit; font-size: 16px; font-weight: 900; cursor: pointer; }
+.wheel-claim-submit:hover:not(:disabled) { background: #db5c17; }
+.wheel-claim-submit:disabled { opacity: .62; cursor: wait; }
+.wheel-claim-status { margin: 0; padding: 10px 12px; border-radius: 10px; font-size: 13px; font-weight: 800; text-align: center; }
+.wheel-claim-status--error, .batch-wheel-used { color: #b42318; background: #fff0ee; }
+.batch-wheel-used { width: min(460px, 100%); margin: 12px auto; padding: 10px 12px; border-radius: 10px; font-size: 13px; font-weight: 800; text-align: center; }
+.wheel-claim-success { display: grid; gap: 5px; width: min(460px, 100%); margin: 14px auto; padding: 16px; border: 1px solid #a6e3c4; border-radius: 14px; color: #11633b; background: #effcf5; text-align: center; }
+.wheel-claim-success b { font-size: 17px; }
+.wheel-claim-success span { direction: rtl; font-size: 13px; }
 @media (max-width: 600px) {
   .batch-gift-wheel-wrap { padding-inline: 0; }
   .batch-gift-wheel { width: 285px; height: 285px; }

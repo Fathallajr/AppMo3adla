@@ -42,10 +42,30 @@
 				</div>
 				<button type="button" class="batch-gift-wheel__spin" [attr.aria-label]="giftWheelSpinning ? 'العجلة تدور' : 'لف العجلة'" [disabled]="giftWheelSpinning || wheelUsed || wheelLocked" (click)="startGiftWheel()"><span class="batch-gift-wheel__center-box"><b>عجلة الحظ</b></span></button>
 			</div>
-			<form *ngIf="wheelResult?.available && !wheelVerified && !wheelUsed" class="batch-wheel-entry" (ngSubmit)="verifyWheelEntry()"><strong>سجل بياناتك لاستلام: {{ wheelResult?.label }}</strong><input name="wheelName" [(ngModel)]="wheelEntryName" required placeholder="اسمك" /><input name="wheelPhone" [(ngModel)]="wheelEntryPhone" required inputmode="numeric" type="tel" maxlength="11" placeholder="رقم الواتساب 01xxxxxxxxx" /><button type="submit" [disabled]="wheelChecking">{{ wheelChecking ? 'جاري التحقق...' : 'تسجيل واستلام الهدية' }}</button><p *ngIf="wheelEntryError" role="alert">{{ wheelEntryError }}</p></form>
-			<p *ngIf="wheelUsed && wheelEntryError && !wheelAlreadyUsed" class="batch-wheel-used" role="alert">{{ wheelEntryError }}</p>
+			<form *ngIf="wheelResult?.available && !wheelClaimComplete && !wheelAlreadyUsed" class="wheel-claim-card" novalidate (ngSubmit)="submitWheelClaim()">
+				<div class="wheel-claim-card__heading">
+					<small>هديتك</small>
+					<strong>{{ wheelResult?.label }}</strong>
+					<span>اكتب بياناتك مرة واحدة لتأكيد الاستلام</span>
+				</div>
+				<label class="wheel-claim-field">
+					<span>الاسم</span>
+					<input name="wheelClaimName" [(ngModel)]="wheelClaim.name" (ngModelChange)="wheelClaimError = ''" autocomplete="name" maxlength="120" placeholder="اكتب اسمك" />
+				</label>
+				<label class="wheel-claim-field">
+					<span>رقم الواتساب</span>
+					<input name="wheelClaimWhatsapp" [ngModel]="wheelClaim.whatsapp" (ngModelChange)="updateWheelPhone($event)" inputmode="numeric" autocomplete="tel" type="tel" maxlength="11" placeholder="01xxxxxxxxx" dir="ltr" />
+					<small [class.is-complete]="wheelPhoneLength === 11">{{ wheelPhoneLength }} / 11 رقم</small>
+				</label>
+				<button type="submit" class="wheel-claim-submit" [disabled]="wheelClaimSubmitting">
+					{{ wheelClaimSubmitting ? 'جاري تسجيل الهدية...' : 'تأكيد واستلام الهدية' }}
+				</button>
+				<p *ngIf="wheelClaimError" class="wheel-claim-status wheel-claim-status--error" role="alert">{{ wheelClaimError }}</p>
+			</form>
+			<p *ngIf="wheelUsed && wheelClaimError && !wheelAlreadyUsed && !wheelResult?.available" class="batch-wheel-used" role="alert">{{ wheelClaimError }}</p>
 			<div *ngIf="wheelResult" class="batch-wheel-result" [class.is-empty]="!wheelResult.available" [class.is-used]="wheelAlreadyUsed" aria-live="polite"><b>{{ wheelAlreadyUsed ? 'أنت استفدت قبل كده!' : (wheelResult.available ? 'مبروك! كسبت' : (isExtraAttemptResult(wheelResult) ? 'حظ سعيد!' : 'حظ أوفر!')) }}</b><span>{{ wheelAlreadyUsed ? 'استفدت من: ' + wheelResult.label : wheelResult.label }}</span><small *ngIf="!wheelAlreadyUsed && !wheelResult.available">{{ isExtraAttemptResult(wheelResult) ? 'عندك محاولة إضافية، لف العجلة مرة كمان' : 'جرّب مرة تانية، يمكن تكسب المرة الجاية' }}</small></div>
-			<button *ngIf="wheelVerified && selectedGift" type="button" class="batch-button batch-button--primary batch-wheel-claim" (click)="claimGiftOnWhatsApp()">استلم هديتك على واتساب <span>←</span></button>
+			<div *ngIf="wheelClaimComplete && selectedGift" class="wheel-claim-success" role="status"><b>✓ تم تسجيل هديتك بنجاح</b><span>رقمك اتسجل كما كتبته: {{ wheelClaim.whatsapp }}</span></div>
+			<button *ngIf="wheelClaimComplete && selectedGift" type="button" class="batch-button batch-button--primary batch-wheel-claim" (click)="claimGiftOnWhatsApp()">استلم هديتك على واتساب <span>←</span></button>
 		</div>
 	</section>
 
