@@ -1,6 +1,7 @@
 // Runtime environment variables (override in deploys)
 window.NG_SITE_URL = window.NG_SITE_URL || 'https://www.appmo3adla.com';
 window.NG_FORMSPREE_ENDPOINT = window.NG_FORMSPREE_ENDPOINT || 'https://formspree.io/f/XXXXXXX';
+window.NG_LAUNCH_OFFER_ENDPOINT = window.NG_LAUNCH_OFFER_ENDPOINT || 'https://script.google.com/macros/s/AKfycbzOMDZcgaUgRacnKnqgngxO_97N5iUU9AVoH1bA5HHEFg0LKS3Lju8ku6yl0nYgrLdQ/exec';
 window.NG_WHATSAPP = window.NG_WHATSAPP || '201554843745';
 window.NG_GISCUS_REPO = window.NG_GISCUS_REPO || '';
 window.NG_GISCUS_REPO_ID = window.NG_GISCUS_REPO_ID || '';
