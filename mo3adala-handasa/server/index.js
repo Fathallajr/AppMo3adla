@@ -250,12 +250,12 @@ async function postToAppsScript(endpoint, values, timeoutMs) {
 // This endpoint is only for the normal site forms. Wheel claims have their own
 // endpoint and their own Apps Script deployment below.
 app.post('/api/launch-offer', async (req, res) => {
-	const { name, whatsapp, school, studentType, source, consent } = req.body || {};
+	const { name, whatsapp, school, studentType, program, source, consent } = req.body || {};
 	if (source === 'عجلة الحظ') {
 		return res.status(400).json({ success: false, message: 'Wheel claims must use the dedicated wheel service' });
 	}
 	const cleanWhatsapp = typeof whatsapp === 'string' ? whatsapp.trim() : '';
-	const requiredValues = { name, whatsapp: cleanWhatsapp, school, studentType, source, consent };
+	const requiredValues = { name, whatsapp: cleanWhatsapp, school, studentType, program, source, consent };
 	const values = { ...requiredValues, whatsapp: `'${cleanWhatsapp}` };
 
 	if (Object.values(requiredValues).some(value => typeof value !== 'string' || !value.trim())) {
@@ -264,6 +264,9 @@ app.post('/api/launch-offer', async (req, res) => {
 
 	if (!/^01\d{9}$/.test(cleanWhatsapp)) {
 		return res.status(400).json({ success: false, message: 'Invalid WhatsApp number' });
+	}
+	if (!['معادلة هندسة', 'معادلة حاسبات'].includes(program)) {
+		return res.status(400).json({ success: false, message: 'Invalid program' });
 	}
 
 	try {
@@ -279,6 +282,7 @@ app.post('/api/launch-offer', async (req, res) => {
 app.post('/api/wheel/claim', async (req, res) => {
 	const name = typeof req.body?.name === 'string' ? req.body.name.trim() : '';
 	const whatsapp = normalizePhone(req.body?.whatsapp);
+	const program = typeof req.body?.program === 'string' ? req.body.program.trim() : '';
 	const wheelToken = typeof req.body?.wheelToken === 'string' ? req.body.wheelToken.trim() : '';
 
 	if (name.length < 2 || name.length > 120) {
@@ -286,6 +290,9 @@ app.post('/api/wheel/claim', async (req, res) => {
 	}
 	if (!/^01\d{9}$/.test(whatsapp)) {
 		return res.status(400).json({ success: false, message: 'رقم الواتساب يجب أن يبدأ بـ 01 ويتكون من 11 رقم.' });
+	}
+	if (!['معادلة هندسة', 'معادلة حاسبات'].includes(program)) {
+		return res.status(400).json({ success: false, message: 'اختار نوع المعادلة.' });
 	}
 	if (!wheelToken) return res.status(400).json({ success: false, message: 'نتيجة العجلة غير موجودة.' });
 
@@ -312,6 +319,7 @@ app.post('/api/wheel/claim', async (req, res) => {
 		const payload = await postToAppsScript(WHEEL_APPS_SCRIPT_ENDPOINT, {
 			name,
 			whatsapp,
+			program,
 			gift: spin.gift.label,
 			wheelToken,
 			createdAt,

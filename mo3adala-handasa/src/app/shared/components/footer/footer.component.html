@@ -3,8 +3,8 @@
 		<!-- Footer Intro -->
 		<div class="footer-intro text-center mb-8">
 			<span>معاك لحد ما تحقق حلمك</span>
-			<h2 class="text-2xl font-bold text-orange-400 mb-4 font-cairo">ابدأ طريقك لكلية الهندسة بثقة</h2>
-			<p>محتوى منظم، متابعة مستمرة، وتدريب عملي يساعدك تعدّي المعادلة.</p>
+			<h2 class="text-2xl font-bold text-orange-400 mb-4 font-cairo">{{ isComputersSubscription ? 'ابدأ طريقك لمعادلة حاسبات بثقة' : 'ابدأ طريقك لكلية الهندسة بثقة' }}</h2>
+			<p>{{ isComputersSubscription ? 'محتوى منظم، متابعة مستمرة، وتدريب عملي يساعدك تستعد لمعادلة حاسبات.' : 'محتوى منظم، متابعة مستمرة، وتدريب عملي يساعدك تعدّي المعادلة.' }}</p>
 		</div>
 
 		<!-- Main Footer Content -->
@@ -14,14 +14,14 @@
 				<div class="flex items-center gap-3">
 					<img src="assets/logo.png" 
 						 class="h-10 w-10 sm:h-12 sm:w-12 object-contain transition-transform duration-300 hover:scale-110" 
-						 alt="ابلكيشن معادلة كلية هندسة" 
+							 [alt]="isComputersSubscription ? 'ابلكيشن معادلة كلية حاسبات' : 'ابلكيشن معادلة كلية هندسة'"
 						 loading="lazy"
 						 decoding="async"
 						 style="max-width: 100%; height: auto;" />
-					<h3 class="text-xl font-bold font-cairo">معادلة كلية هندسة</h3>
+					<h3 class="text-xl font-bold font-cairo">{{ isComputersSubscription ? 'ابلكيشن معادلة كلية حاسبات' : 'ابلكيشن معادلة كلية هندسة' }}</h3>
 				</div>
 				<p class="text-slate-300 text-sm leading-relaxed font-cairo">
-					نحن نساعدك في تحقيق حلمك في دراسة الهندسة من خلال إعدادك لاجتياز معادلة كلية الهندسة بأفضل الطرق والمناهج.
+					{{ isComputersSubscription ? 'نحن نساعدك في تحقيق حلمك من خلال إعدادك لاجتياز معادلة كلية حاسبات بأفضل الطرق والمناهج.' : 'نحن نساعدك في تحقيق حلمك في دراسة الهندسة من خلال إعدادك لاجتياز معادلة كلية الهندسة بأفضل الطرق والمناهج.' }}
 				</p>
 				<div class="flex gap-4">
 					<!-- TikTok -->

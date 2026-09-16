@@ -184,8 +184,8 @@
 .wheel-claim-card__heading strong { color: #172452; font-size: 21px; }
 .wheel-claim-card__heading span { color: #687697; font-size: 13px; }
 .wheel-claim-field { display: grid; gap: 7px; color: #172452; font-size: 13px; font-weight: 800; }
-.wheel-claim-field input { box-sizing: border-box; width: 100%; min-height: 50px; padding: 12px 14px; border: 1px solid #d6e2ef; border-radius: 12px; outline: none; color: #172452; background: #fff; font: inherit; font-size: 16px; }
-.wheel-claim-field input:focus { border-color: #ed6b22; box-shadow: 0 0 0 3px rgba(237, 107, 34, .12); }
+.wheel-claim-field input, .wheel-claim-field select { box-sizing: border-box; width: 100%; min-height: 50px; padding: 12px 14px; border: 1px solid #d6e2ef; border-radius: 12px; outline: none; color: #172452; background: #fff; font: inherit; font-size: 16px; }
+.wheel-claim-field input:focus, .wheel-claim-field select:focus { border-color: #ed6b22; box-shadow: 0 0 0 3px rgba(237, 107, 34, .12); }
 .wheel-claim-field small { color: #7b8aa5; font-weight: 600; text-align: left; direction: rtl; }
 .wheel-claim-field small.is-complete { color: #15965c; }
 .wheel-claim-submit { min-height: 52px; border: 0; border-radius: 12px; color: #fff; background: #ed6b22; font: inherit; font-size: 16px; font-weight: 900; cursor: pointer; }

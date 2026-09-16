@@ -12,6 +12,10 @@ export class FooterComponent {
 	year = new Date().getFullYear();
 	showFollowUpLinks = false;
 
+	get isComputersSubscription(): boolean {
+		return window.location.pathname === '/subscription-computers';
+	}
+
 	constructor(private viewportScroller: ViewportScroller) {}
 
 	scrollToTop() {

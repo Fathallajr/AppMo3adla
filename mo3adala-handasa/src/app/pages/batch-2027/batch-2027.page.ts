@@ -48,7 +48,8 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	wheelResult: (typeof this.giftOptions)[number] | null = null;
 	wheelToken = '';
 	wheelSessionId = '';
-	wheelClaim = { name: '', whatsapp: '' };
+	wheelClaim = { name: '', whatsapp: '', program: '' };
+	programOptions = ['معادلة هندسة', 'معادلة حاسبات'];
 	wheelClaimError = '';
 	wheelClaimSubmitting = false;
 	wheelClaimComplete = false;
@@ -58,7 +59,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	private wheelTimer?: number;
 
 	lead = {
-		name: '', whatsapp: '', school: '', studentType: '', source: ''
+		name: '', whatsapp: '', school: '', studentType: '', program: '', source: ''
 	};
 	offerStudentTypeOptions = ['المعاهد الفنية', 'مدارس الثانوية الصناعية نظام 3 سنوات', 'مدارس الثانوية الصناعية نظام 5 سنوات', 'مدارس تكنولوجيا تطبيقية نظام 3 سنوات', 'مدارس تكنولوجيا تطبيقية نظام 5 سنوات'];
 	offerSourceOptions = ['فيسبوك', 'إنستجرام', 'تيك توك', 'يوتيوب', 'ترشيح من صديق', 'أخرى'];
@@ -152,10 +153,15 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		this.wheelClaimError = '';
 		this.wheelAlreadyUsed = false;
 		const name = this.wheelClaim.name.trim();
+		const program = this.wheelClaim.program.trim();
 		const whatsapp = normalizePhone(this.wheelClaim.whatsapp);
 		this.wheelClaim.whatsapp = whatsapp;
 		if (name.length < 2) {
 			this.wheelClaimError = 'اكتب اسمك الأول والثاني على الأقل.';
+			return;
+		}
+		if (!this.programOptions.includes(program)) {
+			this.wheelClaimError = 'اختار نوع المعادلة الأول.';
 			return;
 		}
 		if (!PHONE_PATTERN.test(whatsapp)) {
@@ -174,7 +180,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 			const response = await fetch('/api/wheel/claim', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ name, whatsapp, wheelToken: this.wheelToken }),
+				body: JSON.stringify({ name, whatsapp, program, wheelToken: this.wheelToken }),
 				signal: controller.signal
 			});
 			const payload = await response.json() as { success?: boolean; alreadyRegistered?: boolean; message?: string };
@@ -279,7 +285,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 
 	async submitLaunchOffer(): Promise<void> {
 		if (this.offerSubmitting) return;
-		if (!this.lead.name.trim() || !this.lead.whatsapp.trim() || !this.lead.school.trim() || !this.lead.studentType || !this.lead.source) return;
+		if (!this.lead.name.trim() || !this.lead.whatsapp.trim() || !this.lead.school.trim() || !this.lead.studentType || !this.lead.program || !this.lead.source) return;
 		if (!this.offerContactConsent) {
 			this.offerError = 'لازم توافق على التواصل قبل إرسال البيانات.';
 			return;
@@ -290,7 +296,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		}
 		this.offerSubmitting = true;
 		this.offerError = '';
-		const lead = { name: this.lead.name.trim(), whatsapp: this.lead.whatsapp.trim(), school: this.lead.school.trim(), studentType: this.lead.studentType, source: this.lead.source, consent: this.offerContactConsent ? 'نعم' : 'لا' };
+		const lead = { name: this.lead.name.trim(), whatsapp: this.lead.whatsapp.trim(), school: this.lead.school.trim(), studentType: this.lead.studentType, program: this.lead.program, source: this.lead.source, consent: this.offerContactConsent ? 'نعم' : 'لا' };
 		try {
 			const payload = await this.postLead(lead);
 			if (payload.alreadyRegistered) {

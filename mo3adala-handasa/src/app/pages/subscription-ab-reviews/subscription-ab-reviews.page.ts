@@ -30,6 +30,7 @@ interface ReviewFormConfig {
 	styleUrls: ['./subscription-ab-reviews.page.css']
 })
 export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
+	isComputersSubscription = false;
 	copiedNumber: string | null = null;
 	isImageModalOpen = false;
 	activeScheduleImage: ScheduleImage | null = null;
@@ -166,11 +167,17 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	) {}
 
 	ngOnInit(): void {
+		this.isComputersSubscription = typeof window !== 'undefined' && window.location.pathname === '/subscription-computers';
+		this.applySubscriptionProgram();
 		if (typeof window !== 'undefined') {
 			const siteUrl = (window as any)['NG_SITE_URL'] || 'https://www.appmo3adla.com';
-			const title = 'اشتراك الشهر الأول - أكتوبر | دفعة 2027';
-			const description = 'تفاصيل اشتراك الشهر الأول لشهر أكتوبر وبداية رحلة دفعة 2027.';
-			const url = `${siteUrl}/subscription-ab-reviews`;
+			const title = this.isComputersSubscription
+				? 'اشتراك معادلة حاسبات | أبلكيشن معادلة كلية هندسة'
+				: 'اشتراك الشهر الأول - أكتوبر | دفعة 2027';
+			const description = this.isComputersSubscription
+				? 'تفاصيل اشتراك معادلة حاسبات بسعر 650 جنيه.'
+				: 'تفاصيل اشتراك الشهر الأول لشهر أكتوبر وبداية رحلة دفعة 2027.';
+			const url = `${siteUrl}/${this.isComputersSubscription ? 'subscription-computers' : 'subscription-ab-reviews'}`;
 
 			this.seo.setTitle(title);
 			this.seo.setDescription(description);
@@ -184,13 +191,47 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 		this.updateClosingCountdown();
 		this.closingTimer = setInterval(() => this.updateClosingCountdown(), 1000);
 
-		this.monthlyContent
-			.loadPageState('subscription-ab-reviews', {
-				isEnrollmentClosed: this.isEnrollmentClosed,
-				enrollmentReopenMessage: this.enrollmentReopenMessage,
-				subscriptionDetails: this.subscriptionDetails
-			})
-			.subscribe(state => this.applyLoadedState(state));
+		if (!this.isComputersSubscription) {
+			this.monthlyContent
+				.loadPageState('subscription-ab-reviews', {
+					isEnrollmentClosed: this.isEnrollmentClosed,
+					enrollmentReopenMessage: this.enrollmentReopenMessage,
+					subscriptionDetails: this.subscriptionDetails
+				})
+				.subscribe(state => this.applyLoadedState(state));
+		}
+	}
+
+	private applySubscriptionProgram(): void {
+		if (!this.isComputersSubscription) return;
+
+		this.subscriptionDetails = {
+			...this.subscriptionDetails,
+			month: 'اشتراك معادلة حاسبات',
+			review: {
+				...this.subscriptionDetails.review,
+				name: 'اشتراك معادلة حاسبات',
+				price: '650'
+			},
+			subtitle: 'ابدأ طريقك في معادلة حاسبات باشتراك كامل بسعر 650 جنيه.',
+			googleForm: {
+				...this.subscriptionDetails.googleForm,
+				label: 'اشتراك معادلة حاسبات',
+				description: 'فورم اشتراك معادلة حاسبات',
+				buttonText: 'سجل اشتراك حاسبات'
+			},
+			subscriptionWarnings: {
+				...this.subscriptionDetails.subscriptionWarnings,
+				validity: {
+					...this.subscriptionDetails.subscriptionWarnings.validity,
+					points: [
+						'المواد المتاحة: رياضة عامة، رياضة خاصة، فيزياء، إنجليزي',
+						'الكود شغال خلال مدة الاشتراك فقط',
+						'مع انتهاء مدة الاشتراك بيقفل المحتوى تلقائيًا'
+					]
+				}
+			}
+		};
 	}
 
 	ngOnDestroy(): void {

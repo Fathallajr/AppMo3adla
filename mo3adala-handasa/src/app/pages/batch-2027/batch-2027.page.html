@@ -53,6 +53,13 @@
 					<input name="wheelClaimName" [(ngModel)]="wheelClaim.name" (ngModelChange)="wheelClaimError = ''" autocomplete="name" maxlength="120" placeholder="اكتب اسمك" />
 				</label>
 				<label class="wheel-claim-field">
+					<span>نوع المعادلة</span>
+					<select name="wheelClaimProgram" [(ngModel)]="wheelClaim.program" (ngModelChange)="wheelClaimError = ''" required>
+						<option value="" disabled>اختار نوع المعادلة</option>
+						<option *ngFor="let program of programOptions" [value]="program">{{ program }}</option>
+					</select>
+				</label>
+				<label class="wheel-claim-field">
 					<span>رقم الواتساب</span>
 					<input name="wheelClaimWhatsapp" [ngModel]="wheelClaim.whatsapp" (ngModelChange)="updateWheelPhone($event)" inputmode="numeric" autocomplete="tel" type="tel" maxlength="11" placeholder="01xxxxxxxxx" dir="ltr" />
 					<small [class.is-complete]="wheelPhoneLength === 11">{{ wheelPhoneLength }} / 11 رقم</small>
@@ -78,6 +85,7 @@
 			<label><span>رقم الواتساب <b>*</b></span><input name="offerWhatsapp" [(ngModel)]="lead.whatsapp" required inputmode="numeric" type="tel" pattern="01[0-9]{9}" minlength="11" maxlength="11" placeholder="01xxxxxxxxx" /></label>
 			<label><span>المدرسة أو المعهد <b>*</b></span><input name="offerSchool" [(ngModel)]="lead.school" required placeholder="اكتب اسم المدرسة أو المعهد" /></label>
 			<label><span>نوع التعليم <b>*</b></span><select name="offerStudentType" [(ngModel)]="lead.studentType" required><option value="" disabled>اختار نوع التعليم</option><option *ngFor="let type of offerStudentTypeOptions" [value]="type">{{ type }}</option></select></label>
+			<label><span>نوع المعادلة <b>*</b></span><select name="offerProgram" [(ngModel)]="lead.program" required><option value="" disabled>اختار نوع المعادلة</option><option *ngFor="let program of programOptions" [value]="program">{{ program }}</option></select></label>
 			<label><span>عرفتنا منين؟ <b>*</b></span><select name="offerSource" [(ngModel)]="lead.source" required><option value="" disabled>اختار مصدر معرفتك بنا</option><option *ngFor="let source of offerSourceOptions" [value]="source">{{ source }}</option></select></label>
 			<label class="launch-offer-consent"><input id="batchContactConsent" type="checkbox" name="offerContactConsent" [(ngModel)]="offerContactConsent" required (change)="offerError = ''" /><span>أوافق على التواصل معي بخصوص العرض والدفعة الجديدة <b>*</b></span></label>
 			<button type="submit" [disabled]="offerSubmitting" class="batch-button batch-button--submit">{{ offerSubmitting ? 'جاري تسجيل بياناتك...' : 'احصل على الخصم الآن' }} <span>{{ offerSubmitting ? '⟳' : '←' }}</span></button>

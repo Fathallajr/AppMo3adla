@@ -26,7 +26,9 @@ export class AppComponent implements OnInit, OnDestroy {
 	offerName = '';
 	offerWhatsapp = '';
 	offerSchool = '';
+	offerProgram = '';
 	offerSource = '';
+	offerProgramOptions = ['معادلة هندسة', 'معادلة حاسبات'];
 	offerStudentType = '';
 	offerStudentTypeOptions = ['المعاهد الفنية', 'مدارس الثانوية الصناعية نظام 3 سنوات', 'مدارس الثانوية الصناعية نظام 5 سنوات', 'مدارس تكنولوجيا تطبيقية نظام 3 سنوات', 'مدارس تكنولوجيا تطبيقية نظام 5 سنوات'];
 	offerContactConsent = false;
@@ -151,7 +153,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
 	async submitLaunchOffer() {
 		if (this.offerSubmitting) return;
-		if (!this.offerName.trim() || !this.offerWhatsapp.trim() || !this.offerSchool.trim() || !this.offerStudentType || !this.offerSource) return;
+		if (!this.offerName.trim() || !this.offerWhatsapp.trim() || !this.offerSchool.trim() || !this.offerStudentType || !this.offerProgram || !this.offerSource) return;
 		if (!this.offerContactConsent) {
 			this.offerError = 'لازم توافق على التواصل قبل إرسال البيانات.';
 			return;
@@ -162,7 +164,7 @@ export class AppComponent implements OnInit, OnDestroy {
 		}
 		this.offerSubmitting = true;
 		this.offerError = '';
-		const lead = { name: this.offerName.trim(), whatsapp: this.offerWhatsapp.trim(), school: this.offerSchool.trim(), studentType: this.offerStudentType, source: this.offerSource, consent: this.offerContactConsent ? 'نعم' : 'لا' };
+		const lead = { name: this.offerName.trim(), whatsapp: this.offerWhatsapp.trim(), school: this.offerSchool.trim(), studentType: this.offerStudentType, program: this.offerProgram, source: this.offerSource, consent: this.offerContactConsent ? 'نعم' : 'لا' };
 		const controller = new AbortController();
 		const timeout = setTimeout(() => controller.abort(), 20000);
 		try {

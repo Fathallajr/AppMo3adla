@@ -4,7 +4,7 @@
  */
 const SPREADSHEET_ID = '1lDtfrNTh-q4kXZfg7qt9S8CgmhMkxeLB8UBtgMifTKo';
 const SHEET_NAME = 'Wheel Claims';
-const HEADERS = ['وقت التسجيل', 'الاسم', 'رقم الواتساب', 'الهدية', 'Wheel Token'];
+const HEADERS = ['وقت التسجيل', 'الاسم', 'رقم الواتساب', 'الهدية', 'Wheel Token', 'نوع المعادلة'];
 
 function doGet() {
   return jsonResponse_({ success: true, service: 'wheel-claims' });
@@ -18,6 +18,7 @@ function doPost(event) {
     const name = String(params.name || '').trim();
     const whatsapp = normalizePhone_(params.whatsapp);
     const gift = String(params.gift || '').trim();
+    const program = String(params.program || '').trim();
     const wheelToken = String(params.wheelToken || '').trim();
     const createdAt = String(params.createdAt || '').trim();
     const apiSecret = String(params.apiSecret || '').trim();
@@ -28,7 +29,7 @@ function doPost(event) {
 
     if (name.length < 2) return jsonResponse_({ success: false, message: 'Invalid name' });
     if (!/^01\d{9}$/.test(whatsapp)) return jsonResponse_({ success: false, message: 'Invalid WhatsApp number' });
-    if (!gift || !wheelToken) return jsonResponse_({ success: false, message: 'Missing wheel result' });
+    if (!gift || !wheelToken || !['معادلة هندسة', 'معادلة حاسبات'].includes(program)) return jsonResponse_({ success: false, message: 'Missing wheel result or program' });
 
     const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
     const sheet = spreadsheet.getSheetByName(SHEET_NAME) || spreadsheet.getSheets()[0];
@@ -36,7 +37,7 @@ function doPost(event) {
 
     const lastRow = sheet.getLastRow();
     if (lastRow > 1) {
-      const rows = sheet.getRange(2, 3, lastRow - 1, 3).getDisplayValues();
+      const rows = sheet.getRange(2, 3, lastRow - 1, 4).getDisplayValues();
       const duplicate = rows.some(function(row) {
         return normalizeStoredPhone_(row[0]) === whatsapp || String(row[2]).trim() === wheelToken;
       });
@@ -50,6 +51,7 @@ function doPost(event) {
     sheet.getRange(row, 3).setNumberFormat('@').setValue(whatsapp);
     sheet.getRange(row, 4).setValue(gift);
     sheet.getRange(row, 5).setValue(wheelToken);
+    sheet.getRange(row, 6).setValue(program);
     SpreadsheetApp.flush();
 
     return jsonResponse_({ success: true });
