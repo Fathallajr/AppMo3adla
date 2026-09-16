@@ -8,6 +8,12 @@ import { pageTransition } from './shared/animations';
 import { ViewportScroller } from '@angular/common';
 import { SeoService } from './core/seo.service';
 
+declare global {
+	interface Window {
+		NG_LAUNCH_OFFER_ENDPOINT?: string;
+	}
+}
+
 @Component({
 	selector: 'app-root',
 	standalone: true,
@@ -37,7 +43,9 @@ export class AppComponent implements OnInit, OnDestroy {
 	offerSourceOptions = ['فيسبوك', 'إنستجرام', 'تيك توك', 'يوتيوب', 'ترشيح من صديق', 'أخرى'];
 	offerSubmitting = false;
 	offerError = '';
-	private readonly launchOfferEndpoint = '/api/launch-offer';
+	private readonly launchOfferEndpoint = typeof window !== 'undefined'
+		? window.NG_LAUNCH_OFFER_ENDPOINT || '/api/launch-offer'
+		: '/api/launch-offer';
 	countdownDays = 15;
 	countdownHours = 0;
 	countdownMinutes = 0;
