@@ -166,7 +166,9 @@ export class AppComponent implements OnInit, OnDestroy {
 		this.offerError = '';
 		const lead = { name: this.offerName.trim(), whatsapp: this.offerWhatsapp.trim(), school: this.offerSchool.trim(), studentType: this.offerStudentType, program: this.offerProgram, source: this.offerSource, consent: this.offerContactConsent ? 'نعم' : 'لا' };
 		const controller = new AbortController();
-		const timeout = setTimeout(() => controller.abort(), 20000);
+		// The backend may wait up to 60 seconds for Google Apps Script while it
+		// scans the sheet for an existing WhatsApp number.
+		const timeout = setTimeout(() => controller.abort(), 65000);
 		try {
 			const result = await fetch(this.launchOfferEndpoint, {
 				method: 'POST',
@@ -174,7 +176,6 @@ export class AppComponent implements OnInit, OnDestroy {
 				body: new URLSearchParams(lead).toString(),
 				signal: controller.signal
 			});
-			if (!result.ok) throw new Error('request-failed');
 			const responseText = await result.text();
 			let payload: { success?: boolean; alreadyRegistered?: boolean; message?: string };
 			try {
@@ -182,6 +183,7 @@ export class AppComponent implements OnInit, OnDestroy {
 			} catch {
 				throw new Error('invalid-response');
 			}
+			if (!result.ok) throw new Error(payload.message || 'request-failed');
 			if (payload.alreadyRegistered) {
 				this.offerError = 'رقم الواتساب ده مسجل بالفعل.';
 				return;
