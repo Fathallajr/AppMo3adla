@@ -38,6 +38,9 @@ export class FaqPageComponent implements OnInit {
 		{ q: 'بعد التخرج من الهندسة، بتفرق معادلة عن ثانوي عام في الشغل؟', a: 'لا مفيش فرق، أنت خريج هندسة زيك زي أي طالب.' },
 		{ q: 'هل ليّا الحق في الالتحاق بالنقابة زي خريج الثانوية العامة؟', a: 'آه طبعًا، ليك الحق كامل في نقابة المهندسين.' },
 		{ q: 'مين اللي بيدرسولنا في الابلكيشن؟', a: 'بيشرحلكم نخبة من المدرسين: م/ أحمد فتح الله، م/ أحمد أبو زيد، د/ سعد العميري، م/ أحمد الشامي، د/ عمر أحمد عبد الفتاح.' },
+		{ q: 'يعني إيه معادلة حاسبات؟', a: 'هي معادلة مشابهة لمعادلة كلية الهندسة، ومخصصة للطلاب الراغبين في الالتحاق بكليات الحاسبات والمعلومات حسب الشروط المعلنة.' },
+		{ q: 'مين الطلاب المسموح لهم بالتقديم على معادلة حاسبات؟', a: 'طلاب التعليم التكنولوجي المستوفون لشروط التقديم والدفعات المطلوبة طبقًا للإعلان الرسمي.' },
+		{ q: 'ما هي مواد معادلة حاسبات؟', a: 'مواد معادلة حاسبات أربع مواد: رياضة عامة، رياضة خاصة، فيزياء، وإنجليزي.' },
 	];
 	constructor(private seo: SeoService, private canonical: CanonicalService, private contentService: MonthlyContentService) {
 		const siteUrl = (typeof window !== 'undefined' ? (window as any)['NG_SITE_URL'] : process.env['NG_SITE_URL']) || 'https://www.appmo3adla.com';
@@ -54,7 +57,11 @@ export class FaqPageComponent implements OnInit {
 		this.contentService.loadPageState('faq', { ...(cmsPageDefaults.faq as object), faqs: this.faqs }).subscribe(content => {
 			const state = content as { faqs?: Array<{ q: string; a: string }> };
 			if (Array.isArray(state.faqs)) {
-				this.faqs = state.faqs;
+				const existingQuestions = new Set(state.faqs.map(item => item.q));
+				this.faqs = [
+					...state.faqs,
+					...this.faqs.filter(item => !existingQuestions.has(item.q)),
+				];
 			}
 		});
 

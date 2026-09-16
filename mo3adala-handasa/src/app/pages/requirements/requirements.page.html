@@ -10,14 +10,27 @@
       <div class="requirements-hero__mark" aria-hidden="true"><span>✓</span><b>READY<br>TO APPLY</b></div>
     </section>
 
+    <nav class="requirements-program-switcher" aria-label="اختار نوع المعادلة">
+      <button type="button" [class.is-active]="selectedProgram === 'engineering'" (click)="selectProgram('engineering')">شروط معادلة هندسة</button>
+      <button type="button" [class.is-active]="selectedProgram === 'computers'" (click)="selectProgram('computers')">شروط معادلة حاسبات</button>
+    </nav>
+
     <section class="requirements-section requirements-section--conditions" @cascadeAnimation>
       <div class="requirements-section__heading"><div class="requirements-section__icon requirements-section__icon--blue">✓</div><div><span>قبل ما تبدأ</span><h2>شروط التقديم</h2></div></div>
-      <div class="condition-grid">
+      <div class="condition-grid" *ngIf="selectedProgram === 'engineering'">
         <article class="condition-card"><span>01</span><p>لا يمكن استرداد المقابل المادي للاختبارات.</p></article>
         <article class="condition-card"><span>02</span><p>الحصول علي 70% فأكثر لطلبة دبلوم 3 سنوات.</p></article>
         <article class="condition-card"><span>03</span><p>الحصول علي 50% فأكثر لطلاب الدبلوم 5 سنوات وطلاب المعاهد الفنية.</p></article>
         <article class="condition-card"><span>04</span><p>الدفعات المطلوبة: خريجي أعوام 2025 و2026.</p></article>
         <article class="condition-card"><span>05</span><p>فرصة واحدة فقط خلال عامين متتاليين، تحسب ابتداءً من عام حصول الطالب على المؤهل والعام الذي يليه.</p></article>
+      </div>
+      <div class="condition-grid condition-grid--computers" *ngIf="selectedProgram === 'computers'">
+        <article class="condition-card"><span>01</span><p>يشترط أن يكون الطالب من طلاب التعليم التكنولوجي.</p></article>
+        <article class="condition-card"><span>02</span><p>الحصول على 70% فأكثر لطلاب الدبلوم 3 سنوات.</p></article>
+        <article class="condition-card"><span>03</span><p>الحصول على 50% فأكثر لطلاب الدبلوم 5 سنوات وطلاب المعاهد الفنية.</p></article>
+        <article class="condition-card"><span>04</span><p>الدفعات المطلوبة: خريجو أعوام 2025 و2026.</p></article>
+        <article class="condition-card"><span>05</span><p>فرصة واحدة فقط خلال عامين متتاليين، تحسب من عام الحصول على المؤهل والعام الذي يليه.</p></article>
+        <article class="condition-card"><span>06</span><p>مواد المعادلة: رياضة عامة، رياضة خاصة، فيزياء، وإنجليزي.</p></article>
       </div>
     </section>
 

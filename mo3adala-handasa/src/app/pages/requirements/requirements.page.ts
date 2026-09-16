@@ -14,10 +14,16 @@ import { CanonicalService } from '../../core/canonical.service';
     animations: [subPageTransition, fadeInUp, staggerList, cascadeAnimation]
 })
 export class RequirementsPageComponent implements OnInit {
+  selectedProgram: 'engineering' | 'computers' = 'engineering';
+
   constructor(
     private seo: SeoService,
     private canonical: CanonicalService
   ) {}
+
+  selectProgram(program: 'engineering' | 'computers'): void {
+    this.selectedProgram = program;
+  }
 
   ngOnInit(): void {
     if (typeof window !== 'undefined') {
