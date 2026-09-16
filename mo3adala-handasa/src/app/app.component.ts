@@ -43,9 +43,7 @@ export class AppComponent implements OnInit, OnDestroy {
 	offerSourceOptions = ['فيسبوك', 'إنستجرام', 'تيك توك', 'يوتيوب', 'ترشيح من صديق', 'أخرى'];
 	offerSubmitting = false;
 	offerError = '';
-	private readonly launchOfferEndpoint = typeof window !== 'undefined'
-		? window.NG_LAUNCH_OFFER_ENDPOINT || '/api/launch-offer'
-		: '/api/launch-offer';
+	private readonly fallbackLaunchOfferEndpoint = '/api/launch-offer';
 	countdownDays = 15;
 	countdownHours = 0;
 	countdownMinutes = 0;
@@ -178,7 +176,12 @@ export class AppComponent implements OnInit, OnDestroy {
 		// scans the sheet for an existing WhatsApp number.
 		const timeout = setTimeout(() => controller.abort(), 65000);
 		try {
-			const result = await fetch(this.launchOfferEndpoint, {
+			// env.js is loaded asynchronously on the static deployment, so read
+			// the runtime endpoint at submit time instead of during app startup.
+			const launchOfferEndpoint = typeof window !== 'undefined'
+				? window.NG_LAUNCH_OFFER_ENDPOINT || this.fallbackLaunchOfferEndpoint
+				: this.fallbackLaunchOfferEndpoint;
+			const result = await fetch(launchOfferEndpoint, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
 				body: new URLSearchParams(lead).toString(),
