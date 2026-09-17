@@ -172,17 +172,22 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 		if (typeof window !== 'undefined') {
 			const siteUrl = (window as any)['NG_SITE_URL'] || 'https://www.appmo3adla.com';
 			const title = this.isComputersSubscription
-				? 'اشتراك معادلة حاسبات | أبلكيشن معادلة كلية هندسة'
-				: 'اشتراك الشهر الأول - أكتوبر | دفعة 2027';
+				? 'اشتراك حاسبات | أبلكيشن معادلة كلية هندسة'
+				: 'اشتراك هندسة | أبلكيشن معادلة كلية هندسة';
 			const description = this.isComputersSubscription
-				? 'تفاصيل اشتراك معادلة حاسبات بسعر 650 جنيه.'
-				: 'تفاصيل اشتراك الشهر الأول لشهر أكتوبر وبداية رحلة دفعة 2027.';
-			const url = `${siteUrl}/${this.isComputersSubscription ? 'subscription-computers' : 'subscription-ab-reviews'}`;
+				? 'اشترك في محتوى حاسبات المنظم والمناسب لطلاب المعادلة، مع خطة واضحة للمذاكرة والمراجعة.'
+				: 'اشترك في محتوى هندسة المنظم لطلاب دفعة 2027، مع شرح ومراجعة ومتابعة مستمرة.';
+			const slug = this.isComputersSubscription ? 'subscription-computers' : 'subscription-engineer';
+			const imagePath = this.isComputersSubscription
+				? '/assets/جداول مراجعات شهر 8/جدول جروب C.png'
+				: '/assets/جداول مراجعات شهر 8/جدول جروب A-B.png';
+			const url = `${siteUrl}/${slug}`;
+			const image = `${siteUrl.replace(/\/$/, '')}${encodeURI(imagePath)}`;
 
 			this.seo.setTitle(title);
 			this.seo.setDescription(description);
-			this.seo.setOgTags({ title, description, url });
-			this.seo.setTwitterTags({ title, description });
+			this.seo.setOgTags({ title, description, url, image, imageAlt: title });
+			this.seo.setTwitterTags({ title, description, image });
 			this.canonical.setCanonical(url);
 		}
 

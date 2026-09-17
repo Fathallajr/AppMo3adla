@@ -25,6 +25,7 @@ const PAGE_KEYS = [
 	'news-detail',
 	'subscription-details',
 	'subscription-ab-reviews',
+	'subscription-engineer',
 	'subscription-intensive',
 	'social',
 	'engineers',

@@ -343,7 +343,7 @@ export class NewsDetailPageComponent implements OnInit {
 				
 				<div class="bg-purple-50 border-l-4 border-purple-500 p-6 mb-6 text-center">
 					<h3 class="text-purple-800 font-bold mb-4 text-xl">📢 تشترك في جروب C ازاي؟</h3>
-					<a href="https://www.appmo3adla.com/subscription-ab-reviews" target="_blank"
+					<a href="https://www.appmo3adla.com/subscription-engineer" target="_blank"
 					   class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors no-underline hover:no-underline">
 						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
