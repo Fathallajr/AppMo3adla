@@ -28,6 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
 	showLoading = true;
 	routeTransitioning = false;
 	showLaunchOffer = false;
+	showSubscriptionChoices = false;
 	offerSubmitted = false;
 	offerName = '';
 	offerWhatsapp = '';
@@ -129,6 +130,16 @@ export class AppComponent implements OnInit, OnDestroy {
 		this.showLaunchOffer = false;
 	}
 
+	openSubscriptionChoices(event?: Event) {
+		event?.preventDefault();
+		event?.stopPropagation();
+		this.showSubscriptionChoices = !this.showSubscriptionChoices;
+	}
+
+	closeSubscriptionChoices() {
+		this.showSubscriptionChoices = false;
+	}
+
 	toggleOfferSourceMenu(event: Event) {
 		event.stopPropagation();
 		this.showOfferSourceMenu = !this.showOfferSourceMenu;
@@ -155,6 +166,7 @@ export class AppComponent implements OnInit, OnDestroy {
 	closeOfferSourceMenu() {
 		this.showOfferSourceMenu = false;
 		this.showStudentTypeMenu = false;
+		this.showSubscriptionChoices = false;
 	}
 
 	async submitLaunchOffer() {

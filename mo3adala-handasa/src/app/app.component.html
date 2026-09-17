@@ -37,15 +37,21 @@
   </section>
 </div>
 
-<!-- Subscription pill button (hidden on all subscription pages) -->
-<a *ngIf="!currentRoute.startsWith('/subscription')"
-   routerLink="/subscription-ab-reviews"
-   class="subscription-float-button">
-  <span>اشترك الآن</span>
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-    <path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M20 12H4" />
-  </svg>
-</a>
+<!-- Subscription choices (hidden on all subscription pages) -->
+<div *ngIf="!currentRoute.startsWith('/subscription')" class="subscription-float-wrap">
+  <div *ngIf="showSubscriptionChoices" class="subscription-choice-menu" aria-label="اختار نوع الاشتراك">
+    <a routerLink="/subscription-computers" (click)="closeSubscriptionChoices()" class="subscription-choice-link subscription-choice-link--computers">
+      <i class="bi bi-laptop" aria-hidden="true"></i><span>حاسبات</span>
+    </a>
+    <a routerLink="/subscription-ab-reviews" (click)="closeSubscriptionChoices()" class="subscription-choice-link subscription-choice-link--engineering">
+      <i class="bi bi-building" aria-hidden="true"></i><span>هندسة</span>
+    </a>
+  </div>
+  <button type="button" (click)="openSubscriptionChoices($event)" [attr.aria-expanded]="showSubscriptionChoices" aria-label="اختار نوع الاشتراك" class="subscription-float-button">
+    <span>اشترك الآن</span>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M20 12H4" /></svg>
+  </button>
+</div>
 
 <!-- WhatsApp pill button (hidden on subscription details page) -->
 <a *ngIf="currentRoute !== '/subscription-details'"

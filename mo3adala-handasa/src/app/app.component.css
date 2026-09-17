@@ -382,6 +382,7 @@ nav .font-extrabold {
 	font-family: 'TheYearofHandicrafts', sans-serif;
 	font-weight: 700;
 	transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+	cursor: pointer;
 }
 
 .floating-action-button,
@@ -475,6 +476,121 @@ nav .font-extrabold {
   transform: translate(-50%, -50%);
   animation: offer-float-centered 4s ease-in-out infinite;
 }
+
+.subscription-choice-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 2100;
+	display: grid;
+	place-items: center;
+	padding: 1rem;
+	background: rgba(7, 20, 38, .68);
+	backdrop-filter: blur(7px);
+	animation: subscription-choice-fade .2s ease both;
+}
+
+.subscription-choice-modal {
+	position: relative;
+	width: min(28rem, 100%);
+	padding: 2rem 1.5rem 1.5rem;
+	border: 1px solid rgba(255, 255, 255, .7);
+	border-radius: 1.5rem;
+	color: #102a43;
+	background: linear-gradient(145deg, #fffaf4, #fff 55%, #eef7ff);
+	box-shadow: 0 24px 70px rgba(7, 20, 38, .3);
+	text-align: center;
+	animation: subscription-choice-pop .3s cubic-bezier(.2, .85, .25, 1) both;
+}
+
+.subscription-choice-close {
+	position: absolute;
+	top: .7rem;
+	right: .75rem;
+	display: grid;
+	width: 2rem;
+	height: 2rem;
+	place-items: center;
+	border: 0;
+	border-radius: 50%;
+	color: #627d98;
+	background: rgba(255, 255, 255, .8);
+	font-size: 1.5rem;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.subscription-choice-eyebrow {
+	color: #ed6b22;
+	font-size: .72rem;
+	font-weight: 800;
+}
+
+.subscription-choice-modal h2 {
+	margin: .45rem 0 .35rem;
+	font-size: 1.55rem;
+	font-weight: 900;
+}
+
+.subscription-choice-modal p {
+	margin: 0 0 1.2rem;
+	color: #627d98;
+	font-size: .78rem;
+	line-height: 1.7;
+}
+
+.subscription-choice-options {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: .75rem;
+}
+
+.subscription-choice-card {
+	display: grid;
+	place-items: center;
+	gap: .25rem;
+	padding: 1.15rem .7rem;
+	border: 1px solid #dce8f1;
+	border-radius: 1rem;
+	color: #102a43;
+	background: #fff;
+	text-decoration: none;
+	box-shadow: 0 8px 18px rgba(16, 42, 67, .07);
+	transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+.subscription-choice-card:hover,
+.subscription-choice-card:focus-visible {
+	transform: translateY(-3px);
+	border-color: #ed6b22;
+	box-shadow: 0 14px 24px rgba(16, 42, 67, .13);
+}
+
+.subscription-choice-card i {
+	margin-bottom: .25rem;
+	font-size: 1.8rem;
+}
+
+.subscription-choice-card span {
+	font-size: 1rem;
+	font-weight: 900;
+}
+
+.subscription-choice-card small {
+	color: #829ab1;
+	font-size: .65rem;
+}
+
+.subscription-choice-card--computers i { color: #1f78b4; }
+.subscription-choice-card--engineering i { color: #ed6b22; }
+
+@keyframes subscription-choice-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes subscription-choice-pop { from { opacity: 0; transform: translateY(12px) scale(.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+@media (max-width: 480px) {
+	.subscription-choice-modal { padding: 1.8rem 1rem 1.1rem; }
+	.subscription-choice-options { gap: .5rem; }
+	.subscription-choice-card { padding: 1rem .45rem; }
+}
 @keyframes offer-float-centered {
   0%, 100% { transform: translate(-50%, -50%) rotate(0); }
   50% { transform: translate(-50%, calc(-50% - 10px)) rotate(1deg); }
@@ -517,3 +633,15 @@ nav .font-extrabold {
   to { transform: scaleX(1) rotate(-4deg); }
 }
 @media(prefers-reduced-motion:reduce){.launch-offer-visual-note,.launch-offer-proof-note{clip-path:none;animation:none}.launch-offer-visual-note:after,.launch-offer-proof-note:before,.launch-offer-proof-note:after{animation:none;transform:none}}
+
+/* Compact choices that unfold from the floating subscription button. */
+.subscription-float-wrap { position: fixed; left: 24px; bottom: 24px; z-index: 1000; display: grid; justify-items: start; gap: .25rem; }
+.subscription-float-wrap .subscription-float-button { position: static; }
+.subscription-choice-menu { display: grid; gap: .2rem; padding: .25rem; border-radius: .85rem; background: rgba(255,255,255,.95); box-shadow: 0 10px 22px rgba(16,42,67,.16); animation: subscription-choice-menu-in .22s ease both; }
+.subscription-choice-link { display: flex; width: 8.2rem; align-items: center; justify-content: center; gap: .35rem; padding: .38rem .5rem; border-radius: .55rem; color: #102a43; background: #fff; text-decoration: none; font-family: 'TheYearofHandicrafts', sans-serif; font-size: .76rem; font-weight: 800; transition: transform .18s ease, background .18s ease; }
+.subscription-choice-link:hover,.subscription-choice-link:focus-visible { transform: translateX(2px); background: #fff4e9; }
+.subscription-choice-link i { font-size: 1rem; }
+.subscription-choice-link--computers i { color: #1f78b4; }
+.subscription-choice-link--engineering i { color: #ed6b22; }
+@keyframes subscription-choice-menu-in { from { opacity: 0; transform: translateY(8px) scale(.96); transform-origin: bottom left; } to { opacity: 1; transform: translateY(0) scale(1); } }
+@media (max-width: 640px) { .subscription-float-wrap { left: 12px; bottom: 18px; } .subscription-float-wrap .subscription-float-button { left: auto; bottom: auto; } }
