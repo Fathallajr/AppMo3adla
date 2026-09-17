@@ -8,7 +8,8 @@
     "build": "ng build",
     "gen:content": "node scripts/build-content.mjs",
     "gen:sitemap": "node scripts/generate-sitemap.mjs",
-    "postbuild": "npm run gen:sitemap",
+    "postbuild": "npm run gen:sitemap && npm run gen:social",
+    "gen:social": "node scripts/generate-social-pages.mjs",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

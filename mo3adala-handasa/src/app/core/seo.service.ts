@@ -18,11 +18,12 @@ export class SeoService {
 		this.meta.updateTag({ name: 'robots', content });
 	}
 
-	setOgTags(opts: { title?: string; description?: string; url?: string; image?: string }) {
+	setOgTags(opts: { title?: string; description?: string; url?: string; image?: string; imageAlt?: string }) {
 		if (opts.title) this.meta.updateTag({ property: 'og:title', content: opts.title });
 		if (opts.description) this.meta.updateTag({ property: 'og:description', content: opts.description });
 		if (opts.url) this.meta.updateTag({ property: 'og:url', content: opts.url });
 		if (opts.image) this.meta.updateTag({ property: 'og:image', content: opts.image });
+		if (opts.imageAlt) this.meta.updateTag({ property: 'og:image:alt', content: opts.imageAlt });
 		this.meta.updateTag({ property: 'og:type', content: 'website' });
 	}
 

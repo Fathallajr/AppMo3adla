@@ -1176,14 +1176,20 @@ export class NewsDetailPageComponent implements OnInit {
 			const title = `${this.newsItem.title} - ابلكيشن معادلة كلية هندسة`;
 			const description = this.extractDescription(this.newsItem.content);
 			const url = `${siteUrl}/news/detail/${this.newsItem.id}`;
+			const image = this.toAbsoluteUrl(this.newsItem.image || '/assets/logo.png', siteUrl);
 			
 			// Update page title
 			this.seo.setTitle(title);
 			this.seo.setDescription(description);
-			this.seo.setOgTags({ title, description, url });
-			this.seo.setTwitterTags({ title, description });
+			this.seo.setOgTags({ title, description, url, image, imageAlt: this.newsItem.title });
+			this.seo.setTwitterTags({ title, description, image });
 			this.canonical.setCanonical(url);
 		}
+	}
+
+	private toAbsoluteUrl(value: string, siteUrl: string): string {
+		if (/^https?:\/\//i.test(value)) return value;
+		return `${siteUrl.replace(/\/$/, '')}/${value.replace(/^\//, '')}`;
 	}
 
 	private extractDescription(content: string): string {
