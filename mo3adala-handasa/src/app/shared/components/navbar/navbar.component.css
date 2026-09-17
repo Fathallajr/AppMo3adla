@@ -1044,15 +1044,38 @@ nav .absolute.top-full a:hover { background: #f1f5f9 !important; color: #0f172a 
 }
 
 .batch-nav-link {
-  color: #ea580c !important;
-  background: #fff7ed;
-  border: 1px solid #fed7aa;
+  color: #f97316 !important;
+  background: transparent !important;
+  border: 1px solid transparent;
+  animation: batch-nav-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes batch-nav-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
+  50% {
+    transform: scale(1.06);
+    box-shadow: 0 0 0 5px rgba(249, 115, 22, .24), 0 0 18px rgba(249, 115, 22, .25);
+  }
 }
 
 .batch-nav-link:hover,
 .batch-nav-link.active {
-  color: #c2410c !important;
-  background: #ffedd5;
+  color: #ea580c !important;
+  background: #fff7ed !important;
+}
+
+/* Keep the 2027 callout orange above the generic navbar link states. */
+.nav-main-menu > li > a.batch-nav-link,
+.nav-main-menu > li > a.batch-nav-link:hover,
+.nav-main-menu > li > a.batch-nav-link.active {
+  color: #f97316 !important;
+  background: transparent !important;
+}
+
+.nav-main-menu > li > a.batch-nav-link:hover,
+.nav-main-menu > li > a.batch-nav-link.active:hover {
+  color: #ea580c !important;
+  background: #fff7ed !important;
 }
 
 /* Keep the mobile subscription dropdown identical to the news/requirements dropdowns. */
