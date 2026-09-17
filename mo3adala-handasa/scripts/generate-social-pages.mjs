@@ -19,6 +19,7 @@ const pageMeta = {
   '/news/equation': { title: 'أخبار معادلة كلية الهندسة', description: 'آخر أخبار ومواعيد وشروط معادلة كلية الهندسة.', image: '/assets/logo.png' },
   '/success-stories': { title: 'قصص النجاح - ابلكيشن معادلة كلية هندسة', description: 'تجارب وقصص نجاح طلاب معادلة كلية الهندسة.', image: '/assets/success.png' },
   '/success-story': { title: 'قصص النجاح - ابلكيشن معادلة كلية هندسة', description: 'شاهد قصص نجاح طلاب أبلكيشن معادلة كلية هندسة.', image: '/assets/success.png' },
+  '/subscription-ab-reviews': { title: 'اشتراك هندسة | ابلكيشن معادلة كلية هندسة', description: 'اشترك في محتوى هندسة المنظم لطلاب دفعة 2027، مع شرح ومراجعة ومتابعة مستمرة.', image: '/assets/جداول مراجعات شهر 8/جدول جروب A-B.png' },
   '/subscription-engineer': { title: 'اشتراك هندسة | ابلكيشن معادلة كلية هندسة', description: 'اشترك في محتوى هندسة المنظم لطلاب دفعة 2027، مع شرح ومراجعة ومتابعة مستمرة.', image: '/assets/جداول مراجعات شهر 8/جدول جروب A-B.png' },
   '/subscription-computers': { title: 'اشتراك حاسبات | ابلكيشن معادلة كلية هندسة', description: 'اشترك في محتوى حاسبات المنظم والمناسب لطلاب المعادلة، مع خطة واضحة للمذاكرة والمراجعة.', image: '/assets/جداول مراجعات شهر 8/جدول جروب C.png' },
   '/subscription-intensive': { title: 'الاشتراك المكثف - ابلكيشن معادلة كلية هندسة', description: 'تفاصيل الاشتراك المكثف وخطة الاستعداد لاختبارات المعادلة.', image: '/assets/logo.png' },
@@ -26,6 +27,10 @@ const pageMeta = {
   '/requirements': { title: 'متطلبات المعادلة - ابلكيشن معادلة كلية هندسة', description: 'تعرف على متطلبات وشروط التقديم لمعادلة كلية الهندسة.', image: '/assets/logo.png' },
   '/schools': { title: 'المدارس والمعاهد - ابلكيشن معادلة كلية هندسة', description: 'المدارس والمعاهد المؤهلة للتقديم في معادلة كلية الهندسة.', image: '/assets/logo.png' },
   '/batch-2027': { title: 'دفعة 2027 - ابلكيشن معادلة كلية هندسة', description: 'كل ما يخص دفعة 2027 وخطة الاستعداد لمعادلة كلية الهندسة.', image: '/assets/جروب السنة الجديدة 2027.png' }
+};
+
+const routeRedirects = {
+  '/subscription-ab-reviews': '/subscription-engineer'
 };
 
 function escapeHtml(value) {
@@ -77,7 +82,15 @@ function replaceMeta(html, route, meta) {
 function writeRoute(template, route, meta) {
   const targetDir = route === '/' ? distRoot : path.join(distRoot, ...route.split('/').filter(Boolean));
   fs.mkdirSync(targetDir, { recursive: true });
-  fs.writeFileSync(path.join(targetDir, 'index.html'), replaceMeta(template, route, meta), 'utf8');
+  let html = replaceMeta(template, route, meta);
+  const redirectTo = routeRedirects[route];
+  if (redirectTo) {
+    html = html.replace(
+      '</head>',
+      `<meta http-equiv="refresh" content="0;url=${redirectTo}">\n  <script>location.replace(${JSON.stringify(redirectTo)});</script>\n</head>`
+    );
+  }
+  fs.writeFileSync(path.join(targetDir, 'index.html'), html, 'utf8');
 }
 
 function main() {
