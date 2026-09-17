@@ -35,13 +35,10 @@ jobs:
         working-directory: .
         env:
           HOSTINGER_SSH_KEY: ${{ secrets.HOSTINGER_SSH_KEY }}
-          HOSTINGER_HOST: ${{ secrets.HOSTINGER_HOST }}
-          HOSTINGER_PORT: ${{ secrets.HOSTINGER_PORT }}
         run: |
           mkdir -p ~/.ssh
           printf '%s\n' "$HOSTINGER_SSH_KEY" > ~/.ssh/hostinger_deploy_key
           chmod 600 ~/.ssh/hostinger_deploy_key
-          ssh-keyscan -p "$HOSTINGER_PORT" "$HOSTINGER_HOST" >> ~/.ssh/known_hosts
 
       - name: Archive build output
         working-directory: .
@@ -53,7 +50,7 @@ jobs:
           HOSTINGER_HOST: ${{ secrets.HOSTINGER_HOST }}
           HOSTINGER_PORT: ${{ secrets.HOSTINGER_PORT }}
           HOSTINGER_USERNAME: ${{ secrets.HOSTINGER_USERNAME }}
-        run: scp -i ~/.ssh/hostinger_deploy_key -P "$HOSTINGER_PORT" site-dist.tar.gz "$HOSTINGER_USERNAME@$HOSTINGER_HOST:/tmp/site-dist.tar.gz"
+        run: scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/.ssh/hostinger_deploy_key -P "$HOSTINGER_PORT" site-dist.tar.gz "$HOSTINGER_USERNAME@$HOSTINGER_HOST:/tmp/site-dist.tar.gz"
 
       - name: Extract build on Hostinger
         working-directory: .
@@ -63,5 +60,5 @@ jobs:
           HOSTINGER_USERNAME: ${{ secrets.HOSTINGER_USERNAME }}
           HOSTINGER_DEPLOY_PATH: ${{ secrets.HOSTINGER_DEPLOY_PATH }}
         run: |
-          ssh -i ~/.ssh/hostinger_deploy_key -p "$HOSTINGER_PORT" "$HOSTINGER_USERNAME@$HOSTINGER_HOST" \
+          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/.ssh/hostinger_deploy_key -p "$HOSTINGER_PORT" "$HOSTINGER_USERNAME@$HOSTINGER_HOST" \
             "mkdir -p '$HOSTINGER_DEPLOY_PATH' && tar -xzf /tmp/site-dist.tar.gz -C '$HOSTINGER_DEPLOY_PATH' && rm -f /tmp/site-dist.tar.gz"
