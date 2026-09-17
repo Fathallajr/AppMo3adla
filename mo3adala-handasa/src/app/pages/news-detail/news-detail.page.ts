@@ -16,6 +16,11 @@ export class NewsDetailPageComponent implements OnInit {
 	newsItem: any = null;
 	newsId: string = '';
 
+	isEquationNews(): boolean {
+		const category = this.newsItem?.category;
+		return Boolean(this.newsItem?.id?.startsWith('engineering-') || category === 'أخبار المعادلة' || category === 'التقديم والقبول' || category === 'جداول الامتحانات');
+	}
+
 	constructor(
 		private route: ActivatedRoute,
 		private location: Location,

@@ -73,3 +73,21 @@
   .news-intro h2 { font-size: 1.35rem; }
   .news-card:first-child .news-card__body h2 { font-size: 1.25rem; }
 }
+
+/* Signature visual language for official equation updates. */
+.news-page--equation .news-hero {
+  background: linear-gradient(120deg, #111c3a 0%, #17345a 62%, #c2410c 150%);
+}
+
+.news-page--equation .news-card {
+  border-top: 3px solid #f97316;
+}
+
+.news-page--equation .news-card__link {
+  color: #c2410c;
+}
+
+.news-page--equation .news-card__category {
+  color: #c2410c;
+  background: #fff7ed;
+}

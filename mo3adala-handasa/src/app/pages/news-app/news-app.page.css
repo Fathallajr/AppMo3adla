@@ -74,4 +74,25 @@
   .news-card:first-child .news-card__body h2 { font-size: 1.25rem; }
 }
 
+/* Signature visual language for product and app updates. */
+.news-page--app .news-hero {
+  background: linear-gradient(120deg, #101b38 0%, #312e81 62%, #0891b2 150%);
+}
+
+.news-page--app .news-card {
+  border-top: 3px solid #6366f1;
+}
+
+.news-page--app .news-card__link {
+  color: #4338ca;
+}
+
+.news-page--app .news-card__category {
+  color: #4338ca;
+  background: #eef2ff;
+}
+
+.news-page--app .news-cta {
+  background: linear-gradient(120deg, #111c3a, #312e81);
+}
 

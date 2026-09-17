@@ -11,7 +11,7 @@ export const routes: Routes = [
 	{ path: 'contact', redirectTo: 'social', pathMatch: 'full' },
 	{ path: 'feedback', loadComponent: () => import('./pages/feedback/feedback.page').then(m => m.FeedbackPageComponent) },
 	{ path: 'news/equation', loadComponent: () => import('./pages/news-equation/news-equation.page').then(m => m.NewsEquationPageComponent) },
-	{ path: 'news/app', loadComponent: () => import('./pages/news-app/news-app.page').then(m => m.NewsAppPageComponent) },
+	{ path: 'news/app', redirectTo: 'news/equation', pathMatch: 'full' },
 	{ path: 'news/detail/:id', loadComponent: () => import('./pages/news-detail/news-detail.page').then(m => m.NewsDetailPageComponent) },
 	{ path: 'success-stories/:id', loadComponent: () => import('./pages/success-story-detail/success-story-detail.page').then(m => m.SuccessStoryDetailPageComponent) },
 	{ path: 'success-stories', loadComponent: () => import('./pages/success-stories/success-stories.page').then(m => m.SuccessStoriesPageComponent) },
