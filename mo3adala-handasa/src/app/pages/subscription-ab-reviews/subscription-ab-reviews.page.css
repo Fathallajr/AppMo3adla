@@ -591,14 +591,14 @@
 .review-notice__grid {
 	display: grid;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
-	gap: .9rem;
-	padding: 1rem;
+	gap: 1.1rem;
+	padding: 1.2rem;
 	border-top: 1px solid #eee9dc;
 }
 
 .review-rule {
 	position: relative;
-	padding: 1.15rem 1.2rem;
+	padding: 1.45rem 1.5rem;
 	border-radius: 17px;
 	background: #f7f8fa;
 	overflow: hidden;
@@ -613,9 +613,9 @@
 }
 
 .review-rule--red::before { background: #ef4444; }
-.review-rule h3 { margin: 0 0 .75rem; font-size: .92rem; font-weight: 950; }
-.review-rule ul { display: grid; gap: .55rem; margin: 0; padding: 0; list-style: none; }
-.review-rule li { position: relative; padding-right: 1rem; color: #556070; font-size: .78rem; line-height: 1.7; }
+.review-rule h3 { margin: 0 0 .9rem; font-size: 1.08rem; font-weight: 950; }
+.review-rule ul { display: grid; gap: .7rem; margin: 0; padding: 0; list-style: none; }
+.review-rule li { position: relative; padding-right: 1.2rem; color: #556070; font-size: .94rem; line-height: 1.85; }
 .review-rule li::before { content: ''; position: absolute; top: .65em; right: 0; width: 5px; height: 5px; border-radius: 50%; background: #f59e0b; }
 .review-rule--red li::before { background: #ef4444; }
 
@@ -636,9 +636,10 @@
 
 .review-chapter p {
 	margin: 0;
-	color: var(--muted);
-	font-size: .92rem;
-	line-height: 1.7;
+	color: #486581;
+	font-size: 1.08rem;
+	font-weight: 600;
+	line-height: 1.8;
 }
 
 .review-flow {

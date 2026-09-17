@@ -1054,3 +1054,57 @@ nav .absolute.top-full a:hover { background: #f1f5f9 !important; color: #0f172a 
   color: #c2410c !important;
   background: #ffedd5;
 }
+
+/* Keep the mobile subscription dropdown identical to the news/requirements dropdowns. */
+.mobile-subscription-group > button {
+  min-height: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: .5rem !important;
+  background: transparent !important;
+  color: #374151 !important;
+  box-shadow: none !important;
+}
+
+.mobile-subscription-group > button:hover,
+.mobile-subscription-group > button:focus-visible {
+  background: #f9fafb !important;
+  color: #ea580c !important;
+  border-color: transparent !important;
+}
+
+.mobile-subscription-group > div.mt-2 {
+  padding: 0;
+}
+
+.mobile-subscription-group > div.mt-2 > a {
+  display: block !important;
+  padding: .5rem 2rem !important;
+  border: 0 !important;
+  border-radius: .5rem !important;
+  background: transparent !important;
+  color: #374151 !important;
+  font-size: .875rem !important;
+  font-weight: 500 !important;
+}
+
+.mobile-subscription-group > div.mt-2 > a:hover,
+.mobile-subscription-group > div.mt-2 > a:focus-visible {
+  background: #f9fafb !important;
+  color: #ea580c !important;
+}
+
+.mobile-subscription-group > div.mt-2 > a > div:first-child,
+.mobile-subscription-group > div.mt-2 > a .text-xs {
+  display: none !important;
+}
+
+.mobile-subscription-group > div.mt-2 > a > div:last-child {
+  display: block !important;
+}
+
+.mobile-subscription-group > div.mt-2 > a .font-bold {
+  color: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+}

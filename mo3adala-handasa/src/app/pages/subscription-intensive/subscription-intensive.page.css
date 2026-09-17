@@ -288,7 +288,7 @@
 
 .warning-item {
 	background: #fef2f2;
-	padding: 1.5rem;
+	padding: 1.8rem;
 	border-radius: 12px;
 	border-right: 4px solid;
 }
@@ -302,7 +302,7 @@
 }
 
 .warning-item-title {
-	font-size: 1.125rem;
+	font-size: 1.3rem;
 	font-weight: 700;
 	margin-bottom: 0.75rem;
 	color: #7f1d1d;
@@ -314,9 +314,11 @@
 }
 
 .warning-list li {
-	padding: 0.5rem 0;
+	padding: 0.65rem 0;
 	color: #991b1b;
 	font-weight: 500;
+	font-size: 1.05rem;
+	line-height: 1.8;
 	position: relative;
 	padding-right: 1.5rem;
 }
