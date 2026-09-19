@@ -45,6 +45,19 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	closingMinutes = 0;
 	closingSeconds = 0;
 	closingDateLabel = '';
+
+	get heroProgramLabel(): string {
+		if (!this.isEnglishSubscription) return this.subscriptionProgramLabel;
+		return this.isComputersSubscription ? 'Computer Equation' : 'Engineering Equation';
+	}
+
+	get heroMonthLabel(): string {
+		return this.isEnglishSubscription ? 'October' : 'شهر أكتوبر';
+	}
+
+	get heroClosingDateLabel(): string {
+		return this.isEnglishSubscription ? 'October 10' : this.closingDateLabel;
+	}
 	private closingDate: Date | null = null;
 
 	private closingTimer: ReturnType<typeof setInterval> | null = null;
