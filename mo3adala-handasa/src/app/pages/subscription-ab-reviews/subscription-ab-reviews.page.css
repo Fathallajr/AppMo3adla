@@ -2413,7 +2413,35 @@
 /* The hero no longer contains a price card, so let its content use the full width. */
 .review-page:not(.review-page--computers) .review-hero__layout,
 .review-page--computers .computer-hero__layout {
-	grid-template-columns: minmax(0, 1fr);
+	grid-template-columns: minmax(0, 1.3fr) minmax(250px, .55fr);
+}
+
+.review-hero__mascot,
+.computer-hero__mascot {
+	display: grid;
+	place-items: center;
+	min-width: 0;
+}
+
+.review-hero__mascot img,
+.computer-hero__mascot img {
+	display: block;
+	width: min(100%, 370px);
+	height: auto;
+	max-height: 520px;
+	object-fit: contain;
+	filter: drop-shadow(0 24px 30px rgba(0, 0, 0, .22));
+}
+
+.review-page--computers .computer-hero__mascot img {
+	filter: drop-shadow(0 24px 30px rgba(0, 0, 0, .4));
+}
+
+@media (max-width: 760px) {
+	.review-hero__mascot,
+	.computer-hero__mascot {
+		display: none;
+	}
 }
 
 .computer-hero__content { min-width: 0; }
@@ -2570,6 +2598,8 @@
 	}
 	.computer-hero__status { top: 86px; left: 1rem; right: 1rem; font-size: .58rem; }
 	.computer-hero__layout { grid-template-columns: 1fr; gap: 2.4rem; padding-block: 7.4rem 3.5rem; }
+	.review-hero__mascot,
+	.computer-hero__mascot { display: none; }
 	.computer-hero h1 { font-size: clamp(2.45rem, 11vw, 4rem); }
 	.computer-hero__content > p { font-size: .98rem; }
 	.computer-hero__features { grid-template-columns: 1fr; max-width: none; }
