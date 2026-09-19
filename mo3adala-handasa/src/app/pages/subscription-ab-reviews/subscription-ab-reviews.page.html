@@ -9,11 +9,6 @@
 				<div class="review-eyebrow"><span></span> {{ subscriptionProgramLabel }}</div>
 				<h1>{{ subscriptionProgramLabel }}<br><span>شهر أكتوبر</span></h1>
 				<p>{{ subscriptionDetails.subtitle }}</p>
-				<div class="review-points" aria-label="مميزات الاشتراك">
-					<span><b><i class="bi bi-lightning-charge-fill"></i><small>01</small></b> تأسيس قوي</span>
-					<span><b><i class="bi bi-book-half"></i><small>02</small></b> شرح من الصفر</span>
-					<span><b><i class="bi bi-person-check-fill"></i><small>03</small></b> متابعة يومية</span>
-				</div>
 				<section class="review-countdown" aria-labelledby="countdown-title" aria-live="polite">
 					<div class="review-countdown__headline"><span>REGISTRATION CLOSES IN</span><h2 id="countdown-title">الإغلاق هيتم بتاريخ <b>{{ closingDateLabel }}</b> الساعة <b>10 مساءً</b></h2></div>
 					<div class="review-countdown__clock" dir="ltr"><div><strong>{{ closingDays | number:'2.0-0' }}</strong><span>يوم</span></div><i>:</i><div><strong>{{ closingHours | number:'2.0-0' }}</strong><span>ساعة</span></div><i>:</i><div><strong>{{ closingMinutes | number:'2.0-0' }}</strong><span>دقيقة</span></div><i>:</i><div><strong>{{ closingSeconds | number:'2.0-0' }}</strong><span>ثانية</span></div></div>
@@ -33,7 +28,6 @@
 				<div class="computer-hero__eyebrow"><span>01</span> {{ subscriptionProgramLabel }}</div>
 				<h1 id="computer-hero-title">{{ subscriptionProgramLabel }} <em>شهر أكتوبر</em></h1>
 				<p>{{ subscriptionDetails.subtitle }}</p>
-				<div class="computer-hero__features" aria-label="مميزات الاشتراك"><span><b>01</b> تأسيس قوي</span><span><b>02</b> شرح من الصفر</span><span><b>03</b> متابعة يومية</span></div>
 				<section class="computer-hero__countdown" aria-labelledby="computer-countdown-title" aria-live="polite"><div><small>REGISTRATION CLOSES IN</small><h2 id="computer-countdown-title">الإغلاق هيتم بتاريخ <b>{{ closingDateLabel }}</b> الساعة <b>10 مساءً</b></h2></div><div class="computer-hero__clock" dir="ltr"><span><b>{{ closingDays | number:'2.0-0' }}</b><small>يوم</small></span><i>:</i><span><b>{{ closingHours | number:'2.0-0' }}</b><small>ساعة</small></span><i>:</i><span><b>{{ closingMinutes | number:'2.0-0' }}</b><small>دقيقة</small></span><i>:</i><span><b>{{ closingSeconds | number:'2.0-0' }}</b><small>ثانية</small></span></div></section>
 			</div>
 			<aside class="computer-hero__price"><div class="computer-hero__price-label">FULL ACCESS</div><div class="computer-hero__price-name">{{ subscriptionProgramLabel }}</div><div class="computer-hero__price-caption">الاشتراك الكامل</div><strong>{{ getPrice() }}<small>جنيه</small></strong><p>وصول كامل لكل محتوى الاشتراك</p><div class="computer-hero__price-state"><span></span> متاح الآن</div></aside>
