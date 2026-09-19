@@ -3204,3 +3204,31 @@
 		font-size: clamp(1.05rem, 7vw, 1.4rem);
 	}
 }
+
+@media (max-width: 760px) {
+	/* Keep the counter visually smaller than the surrounding hero section. */
+	.review-page .review-countdown,
+	.review-page .computer-hero__countdown {
+		width: min(calc(100% - 1rem), 430px);
+		margin-inline: auto;
+		padding: .85rem;
+	}
+
+	.review-page .review-countdown__clock,
+	.review-page .computer-hero__clock {
+		gap: .3rem;
+	}
+
+	.review-page .review-countdown__clock > div,
+	.review-page .computer-hero__clock span {
+		min-height: 60px;
+	}
+
+	.review-page .review-countdown__clock strong {
+		font-size: clamp(1.2rem, 6vw, 1.65rem);
+	}
+
+	.review-page .computer-hero__clock b {
+		font-size: clamp(1.2rem, 6vw, 1.5rem);
+	}
+}
