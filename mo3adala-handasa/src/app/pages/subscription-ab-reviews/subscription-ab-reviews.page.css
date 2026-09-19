@@ -3148,3 +3148,59 @@
 		padding-top: 7rem !important;
 	}
 }
+
+/* Countdown cards stay inside their section at every viewport width. */
+.review-page .review-countdown,
+.review-page .computer-hero__countdown {
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+		box-sizing: border-box;
+}
+
+.review-page .review-countdown__headline,
+.review-page .computer-hero__countdown > div:first-child,
+.review-page .review-countdown__clock,
+.review-page .computer-hero__clock {
+		width: 100%;
+		min-width: 0;
+}
+
+.review-page .review-countdown__headline {
+		flex-wrap: wrap;
+}
+
+.review-page .review-countdown__headline h2,
+.review-page .review-countdown__headline > span,
+.review-page .computer-hero__countdown h2,
+.review-page .computer-hero__countdown small {
+		min-width: 0;
+		max-width: 100%;
+		overflow-wrap: anywhere;
+}
+
+.review-page .review-countdown__clock > div,
+.review-page .computer-hero__clock span {
+		min-width: 0;
+		width: 100%;
+	}
+
+@media (max-width: 460px) {
+	.review-page .review-countdown,
+	.review-page .computer-hero__countdown {
+		padding-inline: .7rem;
+	}
+
+	.review-page .review-countdown__clock,
+	.review-page .computer-hero__clock {
+		gap: .2rem;
+	}
+
+	.review-page .review-countdown__clock strong {
+		font-size: clamp(1.05rem, 7vw, 1.55rem);
+	}
+
+	.review-page .computer-hero__clock b {
+		font-size: clamp(1.05rem, 7vw, 1.4rem);
+	}
+}
