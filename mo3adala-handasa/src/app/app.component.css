@@ -638,7 +638,7 @@ nav .font-extrabold {
 .subscription-float-wrap { position: fixed; left: 24px; bottom: 24px; z-index: 1000; display: grid; justify-items: start; gap: .25rem; }
 .subscription-float-wrap .subscription-float-button { position: static; }
 .subscription-choice-menu { display: grid; gap: .2rem; padding: .25rem; border-radius: .85rem; background: rgba(255,255,255,.95); box-shadow: 0 10px 22px rgba(16,42,67,.16); animation: subscription-choice-menu-in .22s ease both; }
-.subscription-choice-link { display: flex; width: 8.2rem; align-items: center; justify-content: center; gap: .35rem; padding: .38rem .5rem; border-radius: .55rem; color: #102a43; background: #fff; text-decoration: none; font-family: 'TheYearofHandicrafts', sans-serif; font-size: .76rem; font-weight: 800; transition: transform .18s ease, background .18s ease; }
+.subscription-choice-link { display: flex; width: 10rem; align-items: center; justify-content: center; gap: .35rem; padding: .38rem .5rem; border-radius: .55rem; color: #102a43; background: #fff; text-decoration: none; font-family: 'TheYearofHandicrafts', sans-serif; font-size: .76rem; font-weight: 800; transition: transform .18s ease, background .18s ease; }
 .subscription-choice-link:hover,.subscription-choice-link:focus-visible { transform: translateX(2px); background: #fff4e9; }
 .subscription-choice-link i { font-size: 1rem; }
 .subscription-choice-link--computers i { color: #1f78b4; }

@@ -40,12 +40,18 @@
 <!-- Subscription choices (hidden on all subscription pages) -->
 <div *ngIf="!currentRoute.startsWith('/subscription')" class="subscription-float-wrap">
   <div *ngIf="showSubscriptionChoices" class="subscription-choice-menu" aria-label="اختار نوع الاشتراك">
-    <a routerLink="/subscription-computers" (click)="closeSubscriptionChoices()" class="subscription-choice-link subscription-choice-link--computers">
-      <i class="bi bi-laptop" aria-hidden="true"></i><span>حاسبات</span>
-    </a>
-	<a routerLink="/subscription-engineer" (click)="closeSubscriptionChoices()" class="subscription-choice-link subscription-choice-link--engineering">
-      <i class="bi bi-building" aria-hidden="true"></i><span>هندسة</span>
-    </a>
+	<a routerLink="/subscription-computers-ar" (click)="closeSubscriptionChoices()" class="subscription-choice-link subscription-choice-link--computers">
+	  <i class="bi bi-laptop" aria-hidden="true"></i><span>حاسبات عربي</span>
+	</a>
+	<a routerLink="/subscription-computers-en" (click)="closeSubscriptionChoices()" class="subscription-choice-link subscription-choice-link--computers">
+	  <i class="bi bi-laptop" aria-hidden="true"></i><span>حاسبات انجليزي</span>
+	</a>
+	<a routerLink="/subscription-engineering-ar" (click)="closeSubscriptionChoices()" class="subscription-choice-link subscription-choice-link--engineering">
+	  <i class="bi bi-building" aria-hidden="true"></i><span>هندسة عربي</span>
+	</a>
+	<a routerLink="/subscription-engineering-en" (click)="closeSubscriptionChoices()" class="subscription-choice-link subscription-choice-link--engineering">
+	  <i class="bi bi-building" aria-hidden="true"></i><span>هندسة انجليزي</span>
+	</a>
   </div>
   <button type="button" (click)="openSubscriptionChoices($event)" [attr.aria-expanded]="showSubscriptionChoices" aria-label="اختار نوع الاشتراك" class="subscription-float-button">
     <span>اشترك الآن</span>
