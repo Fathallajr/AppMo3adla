@@ -3211,6 +3211,23 @@
 		display: none;
 	}
 
+	/* Match the engineering hero: keep the computer title centered and fully visible. */
+	.review-page--computers .computer-hero__content {
+		text-align: center;
+	}
+
+	.review-page--computers .computer-hero h1 {
+		margin-inline: auto;
+	}
+
+	.review-page--computers .computer-hero h1 em {
+		margin-inline: auto;
+	}
+
+	.review-page--computers .computer-hero h1 em::after {
+		margin-inline: auto;
+	}
+
 	.review-page .review-countdown,
 	.review-page .computer-hero__countdown {
 		width: min(calc(100% - 1rem), 430px);
