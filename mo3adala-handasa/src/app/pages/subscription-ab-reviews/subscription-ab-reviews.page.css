@@ -1248,7 +1248,7 @@
 
 .review-benefits__grid {
 	display: grid;
-	grid-template-columns: repeat(5, minmax(0, 1fr));
+	grid-template-columns: repeat(6, minmax(0, 1fr));
 	gap: .7rem;
 }
 
@@ -1280,6 +1280,7 @@
 .review-benefits article:nth-child(3) { border-top-color: #8b5cf6; }
 .review-benefits article:nth-child(4) { border-top-color: #13b96c; }
 .review-benefits article:nth-child(5) { border-top-color: #e0a11b; }
+.review-benefits article:nth-child(6) { border-top-color: #0ea5e9; }
 
 .review-benefits article > span {
 	position: absolute;
@@ -1308,6 +1309,7 @@
 .review-benefits article:nth-child(3) > i { color: #8b5cf6; background: #f5f3ff; border-color: #ddd6fe; }
 .review-benefits article:nth-child(4) > i { color: #0a9a58; background: #ecfdf5; border-color: #bbf7d0; }
 .review-benefits article:nth-child(5) > i { color: #b77904; background: #fff8e1; border-color: #fde68a; }
+.review-benefits article:nth-child(6) > i { color: #0284c7; background: #e0f2fe; border-color: #bae6fd; }
 
 .review-benefits article > strong {
 	color: #26344b;

@@ -134,7 +134,8 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 			'محتوى السبورة (PDF)',
 			'حل الواجبات بالتفصيل',
 			'اختبارات إلكترونية تقييمية أسبوعياً',
-			'متابعة مستمرة طوال الشهر'
+			'متابعة شخصية من التيم',
+			'سيستم متابعة لمتابعة المستوى'
 		],
 		googleForm: {
 			label: 'اشتراك الشهر الأول — دفعة 2027',
