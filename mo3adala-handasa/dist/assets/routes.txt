@@ -36,7 +36,6 @@
 /success-story
 /subscription-ab-reviews
 /subscription-engineer
-/subscription-intensive
 /subscription-engineering-ar
 /subscription-computers-ar
 /subscription-engineering-en

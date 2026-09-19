@@ -23,7 +23,6 @@ export const routes: Routes = [
 	{ path: 'subscription-computers-ar', loadComponent: () => import('./pages/subscription-ab-reviews/subscription-ab-reviews.page').then(m => m.SubscriptionAbReviewsPageComponent) },
 	{ path: 'subscription-engineering-en', loadComponent: () => import('./pages/subscription-ab-reviews/subscription-ab-reviews.page').then(m => m.SubscriptionAbReviewsPageComponent) },
 	{ path: 'subscription-computers-en', loadComponent: () => import('./pages/subscription-ab-reviews/subscription-ab-reviews.page').then(m => m.SubscriptionAbReviewsPageComponent) },
-	{ path: 'subscription-intensive', loadComponent: () => import('./pages/subscription-intensive/subscription-intensive.page').then(m => m.SubscriptionIntensivePageComponent) },
 	{ path: 'success-story', loadComponent: () => import('./pages/social/social.page').then(m => m.SocialPageComponent) },
 	{ path: 'social', redirectTo: 'success-story', pathMatch: 'full' },
 	{ path: 'engineers', redirectTo: 'engineers-ar', pathMatch: 'full' },
