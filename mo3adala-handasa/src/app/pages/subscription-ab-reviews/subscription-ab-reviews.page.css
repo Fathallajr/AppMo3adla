@@ -2556,8 +2556,12 @@
 
 @media (max-width: 680px) {
 	.review-page--computers .computer-hero { border-radius: 0 0 24px 24px; }
-	.computer-hero__video { opacity: .4; object-position: center; }
-	.computer-hero__veil { background: linear-gradient(180deg, rgba(4, 14, 21, .8), rgba(4, 14, 21, .88)); }
+	.computer-hero__video { opacity: .52; object-position: 65% center; }
+	.computer-hero__veil {
+		background:
+			linear-gradient(180deg, rgba(4, 14, 21, .66), rgba(4, 14, 21, .78)),
+			linear-gradient(90deg, rgba(4, 14, 21, .72), rgba(4, 14, 21, .42));
+	}
 	.computer-hero__status { top: 86px; left: 1rem; right: 1rem; font-size: .58rem; }
 	.computer-hero__layout { grid-template-columns: 1fr; gap: 2.4rem; padding-block: 7.4rem 3.5rem; }
 	.computer-hero h1 { font-size: clamp(2.45rem, 11vw, 4rem); }
