@@ -2421,20 +2421,41 @@
 	display: grid;
 	place-items: center;
 	min-width: 0;
+	animation: subscription-mascot-enter 900ms cubic-bezier(.2, .8, .2, 1) both;
 }
 
 .review-hero__mascot img,
 .computer-hero__mascot img {
 	display: block;
-	width: min(100%, 370px);
+	width: min(100%, 470px);
 	height: auto;
-	max-height: 520px;
+	max-height: 620px;
 	object-fit: contain;
 	filter: drop-shadow(0 24px 30px rgba(0, 0, 0, .22));
+	animation: subscription-mascot-float 5s ease-in-out 900ms infinite;
 }
 
 .review-page--computers .computer-hero__mascot img {
 	filter: drop-shadow(0 24px 30px rgba(0, 0, 0, .4));
+}
+
+@keyframes subscription-mascot-enter {
+	from { opacity: 0; transform: translateX(-42px) scale(.82); }
+	to { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes subscription-mascot-float {
+	0%, 100% { transform: translateY(0); }
+	50% { transform: translateY(-10px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.review-hero__mascot,
+	.computer-hero__mascot,
+	.review-hero__mascot img,
+	.computer-hero__mascot img {
+		animation: none;
+	}
 }
 
 @media (max-width: 760px) {
