@@ -2343,7 +2343,8 @@
 }
 
 .computer-hero__video {
-	z-index: -3;
+	z-index: 0;
+	display: block;
 	object-fit: cover;
 	opacity: .58;
 	mix-blend-mode: screen;
@@ -2351,14 +2352,14 @@
 }
 
 .computer-hero__veil {
-	z-index: -2;
+	z-index: 1;
 	background:
 		linear-gradient(90deg, rgba(4, 14, 21, .64) 0%, rgba(4, 14, 21, .18) 52%, rgba(4, 14, 21, .58) 100%),
 		linear-gradient(180deg, rgba(3, 11, 17, .5), rgba(3, 11, 17, .45));
 }
 
 .computer-hero__grid {
-	z-index: -1;
+	z-index: 2;
 	opacity: .26;
 	background-image: linear-gradient(rgba(83, 255, 215, .1) 1px, transparent 1px), linear-gradient(90deg, rgba(83, 255, 215, .1) 1px, transparent 1px);
 	background-size: 46px 46px;
