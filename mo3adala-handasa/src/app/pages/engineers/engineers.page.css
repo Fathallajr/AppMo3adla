@@ -12,6 +12,10 @@
 	font-family: 'TheYearofHandicrafts', sans-serif;
 }
 
+/* Keep each language page focused on its own teaching team. */
+.engineers-page:not(.engineers-page--en) .teacher-card:nth-child(5) { display: none; }
+.engineers-page--en .teacher-card:nth-child(-n + 4) { display: none; }
+
 .engineers-page::before {
 	content: '';
 	position: absolute;

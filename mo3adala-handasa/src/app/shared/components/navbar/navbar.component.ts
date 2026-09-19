@@ -26,6 +26,8 @@ export class NavbarComponent implements OnInit {
 	isMobilePlatformDropdownOpen = false;
 	isSubscriptionDropdownOpen = false;
 	isMobileSubscriptionDropdownOpen = false;
+	isEngineersDropdownOpen = false;
+	isMobileEngineersDropdownOpen = false;
 	isMobile = false;
 
 	constructor(private router: Router, private viewportScroller: ViewportScroller) {
@@ -103,7 +105,9 @@ export class NavbarComponent implements OnInit {
 	}
 
 	toggleRequirementsDropdown() {
-		this.isRequirementsDropdownOpen = !this.isRequirementsDropdownOpen;
+		const next = !this.isRequirementsDropdownOpen;
+		this.closeDropdownMenus();
+		this.isRequirementsDropdownOpen = next;
 	}
 
 	closeRequirementsDropdown() {
@@ -113,7 +117,9 @@ export class NavbarComponent implements OnInit {
 	}
 
 	toggleNewsDropdown() {
-		this.isNewsDropdownOpen = !this.isNewsDropdownOpen;
+		const next = !this.isNewsDropdownOpen;
+		this.closeDropdownMenus();
+		this.isNewsDropdownOpen = next;
 	}
 
 	closeNewsDropdown() {
@@ -123,11 +129,15 @@ export class NavbarComponent implements OnInit {
 	}
 
 	toggleMobileNewsDropdown() {
-		this.isMobileNewsDropdownOpen = !this.isMobileNewsDropdownOpen;
+		const next = !this.isMobileNewsDropdownOpen;
+		this.closeDropdownMenus();
+		this.isMobileNewsDropdownOpen = next;
 	}
 
 	toggleMobileRequirementsDropdown() {
-		this.isMobileRequirementsDropdownOpen = !this.isMobileRequirementsDropdownOpen;
+		const next = !this.isMobileRequirementsDropdownOpen;
+		this.closeDropdownMenus();
+		this.isMobileRequirementsDropdownOpen = next;
 	}
 
 	closeMobileNewsDropdown() {
@@ -143,7 +153,9 @@ export class NavbarComponent implements OnInit {
 	}
 
 	togglePlatformDropdown() {
-		this.isPlatformDropdownOpen = !this.isPlatformDropdownOpen;
+		const next = !this.isPlatformDropdownOpen;
+		this.closeDropdownMenus();
+		this.isPlatformDropdownOpen = next;
 	}
 
 	closePlatformDropdown() {
@@ -153,7 +165,9 @@ export class NavbarComponent implements OnInit {
 	}
 
 	toggleMobilePlatformDropdown() {
-		this.isMobilePlatformDropdownOpen = !this.isMobilePlatformDropdownOpen;
+		const next = !this.isMobilePlatformDropdownOpen;
+		this.closeDropdownMenus();
+		this.isMobilePlatformDropdownOpen = next;
 	}
 
 	closeMobilePlatformDropdown() {
@@ -163,7 +177,9 @@ export class NavbarComponent implements OnInit {
 	}
 
 	toggleSubscriptionDropdown() {
-		this.isSubscriptionDropdownOpen = !this.isSubscriptionDropdownOpen;
+		const next = !this.isSubscriptionDropdownOpen;
+		this.closeDropdownMenus();
+		this.isSubscriptionDropdownOpen = next;
 	}
 
 	closeSubscriptionDropdown() {
@@ -172,12 +188,40 @@ export class NavbarComponent implements OnInit {
 	}
 
 	toggleMobileSubscriptionDropdown() {
-		this.isMobileSubscriptionDropdownOpen = !this.isMobileSubscriptionDropdownOpen;
+		const next = !this.isMobileSubscriptionDropdownOpen;
+		this.closeDropdownMenus();
+		this.isMobileSubscriptionDropdownOpen = next;
 	}
 
 	closeMobileSubscriptionDropdown() {
 		this.isMobileSubscriptionDropdownOpen = false;
 		this.scrollToTop();
+	}
+
+	toggleEngineersDropdown() {
+		const next = !this.isEngineersDropdownOpen;
+		this.closeDropdownMenus();
+		this.isEngineersDropdownOpen = next;
+	}
+	closeEngineersDropdown() { this.isEngineersDropdownOpen = false; this.scrollToTop(); }
+	toggleMobileEngineersDropdown() {
+		const next = !this.isMobileEngineersDropdownOpen;
+		this.closeDropdownMenus();
+		this.isMobileEngineersDropdownOpen = next;
+	}
+	closeMobileEngineersDropdown() { this.isMobileEngineersDropdownOpen = false; this.scrollToTop(); }
+
+	private closeDropdownMenus() {
+		this.isRequirementsDropdownOpen = false;
+		this.isNewsDropdownOpen = false;
+		this.isPlatformDropdownOpen = false;
+		this.isSubscriptionDropdownOpen = false;
+		this.isEngineersDropdownOpen = false;
+		this.isMobileNewsDropdownOpen = false;
+		this.isMobileRequirementsDropdownOpen = false;
+		this.isMobilePlatformDropdownOpen = false;
+		this.isMobileSubscriptionDropdownOpen = false;
+		this.isMobileEngineersDropdownOpen = false;
 	}
 
 	// دالة لإغلاق جميع القوائم المنسدلة
@@ -187,12 +231,14 @@ export class NavbarComponent implements OnInit {
 		this.isNewsDropdownOpen = false;
 		this.isPlatformDropdownOpen = false;
 		this.isSubscriptionDropdownOpen = false;
+		this.isEngineersDropdownOpen = false;
 		
 		// إغلاق القوائم المنسدلة للموبايل
 		this.isMobileNewsDropdownOpen = false;
 		this.isMobileRequirementsDropdownOpen = false;
 		this.isMobilePlatformDropdownOpen = false;
 		this.isMobileSubscriptionDropdownOpen = false;
+		this.isMobileEngineersDropdownOpen = false;
 		
 		// إغلاق القائمة المحمولة الرئيسية
 		this.isMobileMenuOpen = false;

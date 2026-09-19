@@ -54,6 +54,10 @@
 	overflow: hidden;
 }
 
+.review-hero__video {
+	display: none;
+}
+
 .review-hero::before {
 	content: '';
 	position: absolute;
@@ -1971,5 +1975,964 @@
 	@keyframes reviewLineIn {
 		from { opacity: 0; transform: scaleX(0); }
 		to { opacity: 1; transform: scaleX(1); }
+	}
+}
+
+/* Computer Science subscriptions use a dedicated cyber / hacker visual identity. */
+.review-page--computers {
+	--ink: #d9f7f2;
+	--paper: #07131b;
+	--line: rgba(72, 239, 207, .2);
+	--muted: #8eb6b5;
+	background: radial-gradient(circle at 12% 18%, rgba(0, 255, 190, .14), transparent 24rem), radial-gradient(circle at 88% 68%, rgba(91, 83, 255, .16), transparent 28rem), #07131b;
+	color: var(--ink);
+}
+
+.review-page--computers .review-hero {
+	background: radial-gradient(circle at 78% 16%, rgba(0, 255, 190, .2), transparent 24%), radial-gradient(circle at 12% 88%, rgba(93, 84, 255, .2), transparent 28%), linear-gradient(135deg, #02070d 0%, #071923 52%, #080d20 100%);
+	box-shadow: 0 28px 80px rgba(0, 255, 190, .12);
+}
+
+.review-page--computers .review-hero::before {
+	border-color: rgba(0, 255, 190, .18);
+	box-shadow: 0 0 0 1px rgba(0, 255, 190, .1), 0 0 130px rgba(0, 255, 190, .2);
+}
+
+.review-page--computers .review-hero::after { background: linear-gradient(90deg, transparent, #00f5c4, #8a7dff, #00f5c4, transparent); }
+
+.review-page--computers .review-hero__noise {
+	background: linear-gradient(rgba(0, 255, 190, .07) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 190, .07) 1px, transparent 1px);
+	background-size: 34px 34px;
+	mask-image: linear-gradient(#000, transparent 96%);
+}
+
+.review-page--computers .review-hero__frame { border-color: rgba(0, 255, 190, .16); }
+.review-page--computers .review-hero__frame::before,
+.review-page--computers .review-hero__frame::after { border-color: #00f5c4; }
+.review-page--computers .review-eyebrow { color: #6fffe4; text-shadow: 0 0 18px rgba(0, 245, 196, .45); }
+.review-page--computers .review-eyebrow::after { content: ' // SYSTEM ONLINE'; color: #8a7dff; font-family: Arial, sans-serif !important; font-size: .62rem; letter-spacing: .08em; }
+.review-page--computers .review-hero h1 { text-shadow: 0 0 24px rgba(0, 245, 196, .18); }
+.review-page--computers .review-hero h1 span { color: #00f5c4; }
+
+.review-page--computers .review-price {
+	background: linear-gradient(150deg, #0c272b, #101336);
+	border-color: rgba(0, 245, 196, .35);
+	box-shadow: 18px 22px 0 rgba(0, 245, 196, .18), 0 24px 55px rgba(0, 0, 0, .35);
+}
+
+.review-page--computers .review-price::before { border-color: rgba(0, 245, 196, .25); }
+.review-page--computers .review-price__tag { color: #061b1b; background: #00f5c4; }
+.review-page--computers .review-price > strong { color: #6fffe4; text-shadow: 0 0 20px rgba(0, 245, 196, .32); }
+.review-page--computers .review-countdown { border-color: #00f5c4; background: rgba(4, 18, 27, .72); box-shadow: 0 0 24px rgba(0, 245, 196, .12); }
+.review-page--computers .review-countdown__clock > div { border-color: rgba(0, 245, 196, .35); background: #10272d; }
+.review-page--computers .review-countdown__clock strong { color: #b8fff2; }
+.review-page--computers .review-content { background: transparent; }
+
+.review-page--computers .review-notice,
+.review-page--computers .review-step,
+.review-page--computers .review-video,
+.review-page--computers .review-benefits article,
+.review-page--computers .review-actions > article {
+	border-color: rgba(0, 245, 196, .16);
+	background: linear-gradient(145deg, rgba(12, 39, 47, .96), rgba(11, 17, 39, .96));
+	box-shadow: 0 18px 45px rgba(0, 0, 0, .18);
+}
+
+.review-page--computers .review-section-head h2,
+.review-page--computers .review-chapter h2,
+.review-page--computers .review-step__head h2,
+.review-page--computers .review-benefits strong,
+.review-page--computers .review-actions h2 { color: #d9f7f2; }
+
+.review-page--computers .review-section-head p,
+.review-page--computers .review-chapter p,
+.review-page--computers .review-step__head p,
+.review-page--computers .review-actions p { color: #8eb6b5; }
+
+@media (min-width: 701px) {
+	.review-page--computers .review-hero h1 {
+		font-size: clamp(2.9rem, 4.65vw, 5rem);
+		white-space: nowrap;
+	}
+}
+
+@media (max-width: 700px) {
+	.review-page--computers .review-hero h1 {
+		font-size: clamp(2.15rem, 10vw, 3.4rem);
+		white-space: normal;
+	}
+}
+
+/* Stronger Computer Science landing treatment. */
+.review-page--computers .review-hero {
+	min-height: 760px;
+	border-radius: 0 0 42px 42px;
+	background:
+		radial-gradient(ellipse at 72% 18%, rgba(0, 245, 196, .24), transparent 30%),
+		radial-gradient(ellipse at 24% 78%, rgba(103, 88, 255, .26), transparent 34%),
+		linear-gradient(135deg, #02080d 0%, #061b24 47%, #0a0b24 100%);
+}
+
+.review-page--computers .review-hero__video {
+	display: block;
+	position: absolute;
+	inset: 0;
+	z-index: -2;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	opacity: .25;
+	mix-blend-mode: screen;
+	filter: saturate(1.3) contrast(1.08) brightness(.9);
+	pointer-events: none;
+}
+
+.review-page--computers .review-hero__video-shade {
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	background:
+		linear-gradient(90deg, rgba(2, 8, 13, .78), rgba(2, 8, 13, .52) 48%, rgba(2, 8, 13, .72)),
+		linear-gradient(180deg, rgba(2, 8, 13, .52), rgba(2, 8, 13, .7));
+	pointer-events: none;
+}
+
+.review-page--computers .review-hero::after {
+	inset: auto 4% 0;
+	height: 5px;
+	background: linear-gradient(90deg, transparent, #00f5c4, #8a7dff, #00f5c4, transparent);
+}
+
+.review-page--computers .review-hero__layout {
+	grid-template-columns: 330px minmax(0, 1fr);
+	gap: clamp(3.5rem, 7vw, 7rem);
+	padding-block: 8.5rem 5rem;
+}
+
+.review-page--computers .review-hero__copy {
+	position: relative;
+	filter: drop-shadow(0 16px 30px rgba(0, 0, 0, .18));
+}
+
+.review-page--computers .review-hero__copy::before {
+	content: '>_  SYSTEM ONLINE  /  CS-2027';
+	position: absolute;
+	top: -3.4rem;
+	right: 0;
+	padding: .55rem .85rem;
+	border: 1px solid rgba(0, 245, 196, .3);
+	border-radius: 7px;
+	color: #00f5c4;
+	background: rgba(0, 245, 196, .06);
+	font-family: 'Courier New', monospace !important;
+	font-size: .7rem;
+	letter-spacing: .08em;
+	box-shadow: 0 0 24px rgba(0, 245, 196, .08);
+}
+
+.review-page--computers .review-hero__copy::after {
+	content: 'const future = await build();';
+	position: absolute;
+	left: -1rem;
+	top: 42%;
+	color: rgba(138, 125, 255, .5);
+	font-family: 'Courier New', monospace !important;
+	font-size: .72rem;
+	transform: rotate(-90deg) translateX(-50%);
+	transform-origin: left top;
+}
+
+.review-page--computers .review-hero h1 {
+	max-width: 620px;
+	font-weight: 950;
+	letter-spacing: -.055em;
+	line-height: .98;
+}
+
+.review-page--computers .review-hero h1 span {
+	position: relative;
+	display: inline-block;
+	padding-inline: .12em;
+	color: #00f5c4;
+	text-shadow: 0 0 32px rgba(0, 245, 196, .35);
+}
+
+.review-page--computers .review-hero h1 span::before {
+	content: '';
+	position: absolute;
+	inset: 48% -.08em auto;
+	height: 4px;
+	background: linear-gradient(90deg, #8a7dff, #00f5c4);
+	box-shadow: 0 0 14px rgba(0, 245, 196, .7);
+	transform: skewX(-18deg);
+}
+
+.review-page--computers .review-hero__copy > p {
+	max-width: 40rem;
+	margin-top: 1.8rem;
+	color: rgba(224, 255, 250, .82);
+	font-size: clamp(1rem, 1.5vw, 1.2rem);
+	line-height: 1.9;
+}
+
+.review-page--computers .review-points {
+	gap: .7rem;
+	margin-top: 2rem;
+}
+
+.review-page--computers .review-points > span {
+	padding: .7rem .9rem;
+	border: 1px solid rgba(0, 245, 196, .16);
+	border-radius: 10px;
+	background: rgba(8, 35, 42, .7);
+	box-shadow: inset 0 1px rgba(255, 255, 255, .05);
+}
+
+.review-page--computers .review-points > span b {
+	color: #00f5c4;
+}
+
+.review-page--computers .review-price {
+	position: relative;
+	width: min(100%, 330px);
+	justify-self: center;
+	min-height: 420px;
+	padding: 2rem 1.5rem;
+	border: 1px solid rgba(0, 245, 196, .42);
+	border-radius: 24px;
+	transform: rotate(-2deg);
+	background:
+		linear-gradient(145deg, rgba(10, 39, 46, .96), rgba(12, 14, 39, .98)),
+		linear-gradient(135deg, #00f5c4, #796eff);
+	box-shadow: 16px 20px 0 rgba(0, 245, 196, .14), 0 30px 70px rgba(0, 0, 0, .38);
+}
+
+.review-page--computers .review-price::after {
+	content: '$ access --full';
+	position: absolute;
+	left: 1.5rem;
+	bottom: 1.35rem;
+	color: rgba(111, 255, 228, .5);
+	font-family: 'Courier New', monospace !important;
+	font-size: .72rem;
+}
+
+.review-page--computers .review-countdown {
+	position: relative;
+	margin-top: 2.3rem;
+	border-radius: 16px;
+	backdrop-filter: blur(14px);
+}
+
+.review-page--computers .review-countdown::before {
+	content: 'DEADLINE_MONITOR';
+	position: absolute;
+	top: -1.25rem;
+	right: 1rem;
+	color: #8a7dff;
+	font-family: 'Courier New', monospace !important;
+	font-size: .62rem;
+	letter-spacing: .12em;
+}
+
+.review-page--computers .review-content {
+	position: relative;
+	max-width: 1180px;
+	padding-top: 4rem;
+}
+
+.review-page--computers .review-content::before {
+	content: 'COMPUTER SCIENCE / LEARNING ENVIRONMENT';
+	display: block;
+	margin-bottom: 1.2rem;
+	color: rgba(0, 245, 196, .46);
+	font-family: 'Courier New', monospace !important;
+	font-size: .68rem;
+	letter-spacing: .16em;
+	text-align: center;
+}
+
+@media (max-width: 700px) {
+	.review-page--computers .review-hero__layout { gap: 2rem; padding-block: 7.5rem 4.5rem; }
+	.review-page--computers .review-hero__copy::before { top: -2.5rem; font-size: .58rem; }
+	.review-page--computers .review-hero__copy::after { display: none; }
+	.review-page--computers .review-price { min-height: 390px; transform: none; }
+}
+
+@media (max-width: 1100px) {
+	.review-page--computers .review-hero__layout {
+		grid-template-columns: minmax(250px, .5fr) minmax(0, 1fr);
+		gap: 2.25rem;
+		padding-block: 8rem 4rem;
+	}
+	.review-page--computers .review-hero h1 {
+		max-width: 560px;
+		font-size: clamp(2.8rem, 5.2vw, 4.4rem);
+	}
+	.review-page--computers .review-price {
+		width: min(100%, 290px);
+		min-height: 390px;
+	}
+}
+
+@media (max-width: 760px) {
+	.review-page--computers .review-hero {
+		min-height: auto;
+		border-radius: 0 0 28px 28px;
+	}
+	.review-page--computers .review-hero__layout {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 2.75rem;
+		padding-block: 7.5rem 3.5rem;
+	}
+	.review-page--computers .review-hero__copy {
+		width: 100%;
+	}
+	.review-page--computers .review-hero h1 {
+		max-width: none;
+		font-size: clamp(2.35rem, 10.5vw, 3.8rem);
+		line-height: 1.04;
+	}
+	.review-page--computers .review-hero__copy > p {
+		font-size: 1rem;
+	}
+	.review-page--computers .review-price {
+		width: min(100%, 340px);
+		justify-self: center;
+	}
+	.review-page--computers .review-hero__video {
+		object-position: center;
+		opacity: .18;
+	}
+	.review-page--computers .review-hero__video-shade {
+		background:
+			linear-gradient(180deg, rgba(2, 8, 13, .68), rgba(2, 8, 13, .84)),
+			linear-gradient(90deg, rgba(2, 8, 13, .82), rgba(2, 8, 13, .62));
+	}
+	.review-page--computers .review-hero__frame { inset: 12px; border-radius: 22px; }
+}
+
+@media (max-width: 520px) {
+	.review-page--computers .review-shell { width: min(calc(100% - 1.25rem), 1160px); }
+	.review-page--computers .review-hero__meta { left: 20px; top: 86px; }
+	.review-page--computers .review-points { grid-template-columns: 1fr; }
+	.review-page--computers .review-countdown__clock { gap: .25rem; }
+}
+
+/* Rebuilt computer-science subscription hero. */
+.review-page--computers .computer-hero {
+	position: relative;
+	min-height: 790px;
+	display: flex;
+	align-items: center;
+	color: #f5fffc;
+	background: #07131a;
+	isolation: isolate;
+	overflow: hidden;
+	border-radius: 0 0 36px 36px;
+}
+
+.computer-hero__video,
+.computer-hero__veil,
+.computer-hero__grid {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.computer-hero__video {
+	z-index: -3;
+	object-fit: cover;
+	opacity: .58;
+	mix-blend-mode: screen;
+	filter: saturate(1.25) contrast(1.08) brightness(.8);
+}
+
+.computer-hero__veil {
+	z-index: -2;
+	background:
+		linear-gradient(90deg, rgba(4, 14, 21, .64) 0%, rgba(4, 14, 21, .18) 52%, rgba(4, 14, 21, .58) 100%),
+		linear-gradient(180deg, rgba(3, 11, 17, .5), rgba(3, 11, 17, .45));
+}
+
+.computer-hero__grid {
+	z-index: -1;
+	opacity: .26;
+	background-image: linear-gradient(rgba(83, 255, 215, .1) 1px, transparent 1px), linear-gradient(90deg, rgba(83, 255, 215, .1) 1px, transparent 1px);
+	background-size: 46px 46px;
+	mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+}
+
+.computer-hero::after {
+	content: '';
+	position: absolute;
+	z-index: 2;
+	inset: auto 5% 0;
+	height: 4px;
+	background: linear-gradient(90deg, transparent, #1fffc5 25%, #7b61ff 50%, #1fffc5 75%, transparent);
+	box-shadow: 0 0 24px rgba(31, 255, 197, .55);
+}
+
+.computer-hero__status {
+	position: absolute;
+	z-index: 3;
+	top: 112px;
+	left: max(2rem, calc((100% - 1160px) / 2));
+	display: flex;
+	align-items: center;
+	gap: .6rem;
+	color: #96b9b7;
+	font: 700 .7rem/1 'Courier New', monospace;
+	letter-spacing: .12em;
+}
+
+.computer-hero__status span {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: #20e9a8;
+	box-shadow: 0 0 14px #20e9a8;
+}
+
+.computer-hero__status b { color: #6b6dff; }
+.computer-hero__status strong { padding: .45rem .65rem; border-radius: 999px; color: #041712; background: #20e9a8; font-size: .58rem; }
+
+.computer-hero__layout {
+	position: relative;
+	z-index: 3;
+	display: grid;
+	grid-template-columns: minmax(0, 1.3fr) minmax(280px, .55fr);
+	align-items: center;
+	gap: clamp(3rem, 7vw, 7rem);
+	padding-block: 9.5rem 5rem;
+}
+
+.computer-hero__content { min-width: 0; }
+
+.computer-hero__eyebrow {
+	display: inline-flex;
+	align-items: center;
+	gap: .75rem;
+	margin-bottom: 1.15rem;
+	color: #9bfff0;
+	font-size: 1rem;
+	font-weight: 800;
+}
+
+.computer-hero__eyebrow span {
+	display: grid;
+	place-items: center;
+	width: 32px;
+	height: 32px;
+	border: 1px solid rgba(31, 255, 197, .55);
+	border-radius: 9px;
+	color: #20e9a8;
+	font: 700 .72rem 'Courier New', monospace;
+}
+
+.computer-hero h1 {
+	max-width: 760px;
+	margin: 0;
+	color: #fff;
+	font-size: clamp(3.2rem, 6vw, 6.1rem);
+	font-weight: 950;
+	letter-spacing: -.065em;
+	line-height: .98;
+	text-wrap: balance;
+}
+
+.computer-hero h1 em {
+	display: block;
+	width: fit-content;
+	margin-top: .45rem;
+	color: #20e9a8;
+	font-style: normal;
+	text-shadow: 0 0 28px rgba(31, 255, 197, .28);
+}
+
+.computer-hero h1 em::after {
+	content: '';
+	display: block;
+	width: 58%;
+	height: 5px;
+	margin-top: .45rem;
+	margin-right: auto;
+	border-radius: 99px;
+	background: #ffb84a;
+	box-shadow: 0 0 18px rgba(255, 184, 74, .6);
+}
+
+.computer-hero__content > p {
+	max-width: 620px;
+	margin: 1.65rem 0 1.8rem;
+	color: #c5d9d7;
+	font-size: clamp(1rem, 1.5vw, 1.2rem);
+	line-height: 1.9;
+}
+
+.computer-hero__features {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: .7rem;
+	max-width: 650px;
+}
+
+.computer-hero__features span {
+	min-height: 64px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: .6rem;
+	padding: .7rem .85rem;
+	border: 1px solid rgba(148, 255, 235, .19);
+	border-radius: 12px;
+	background: rgba(10, 36, 42, .72);
+	color: #e7fffb;
+	font-size: .95rem;
+	font-weight: 800;
+}
+
+.computer-hero__features b {
+	display: grid;
+	place-items: center;
+	min-width: 34px;
+	height: 28px;
+	border-radius: 7px;
+	color: #06211b;
+	background: #ffbf4a;
+	font: 800 .72rem 'Courier New', monospace;
+}
+
+.computer-hero__countdown {
+	max-width: 650px;
+	margin-top: 1.7rem;
+	padding: 1rem 1.1rem 1.15rem;
+	border: 1px solid rgba(31, 255, 197, .42);
+	border-radius: 16px;
+	background: rgba(4, 20, 27, .78);
+	box-shadow: 0 18px 50px rgba(0, 0, 0, .2);
+}
+
+.computer-hero__countdown > div:first-child { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.computer-hero__countdown small { color: #8ee7d5; font: 700 .66rem 'Courier New', monospace; letter-spacing: .12em; }
+.computer-hero__countdown h2 { margin: .55rem 0 0; color: #dbece9; font-size: .92rem; }
+.computer-hero__countdown h2 b { color: #ffbd58; }
+.computer-hero__clock { display: grid; grid-template-columns: repeat(7, auto); align-items: center; gap: .4rem; margin-top: .85rem; }
+.computer-hero__clock span { display: grid; place-items: center; min-width: 68px; padding: .45rem .35rem; border-top: 3px solid #20e9a8; border-radius: 8px; background: #102c35; }
+.computer-hero__clock b { color: #b9fff0; font-size: 1.75rem; line-height: 1; }
+.computer-hero__clock small { margin-top: .28rem; color: #83aaa6; font: .7rem sans-serif; letter-spacing: 0; }
+.computer-hero__clock i { color: #20e9a8; font-style: normal; font-weight: 900; }
+
+.computer-hero__price {
+	width: min(100%, 330px);
+	justify-self: center;
+	padding: 1.5rem;
+	border: 1px solid rgba(31, 255, 197, .5);
+	border-radius: 24px;
+	background: linear-gradient(155deg, rgba(8, 39, 47, .94), rgba(10, 18, 42, .96));
+	box-shadow: 16px 18px 0 rgba(31, 255, 197, .12), 0 24px 80px rgba(0, 0, 0, .36);
+}
+
+.computer-hero__price-label { color: #ff774d; font: 800 .7rem 'Courier New', monospace; letter-spacing: .14em; }
+.computer-hero__price-name { margin-top: 1.3rem; padding: .65rem .8rem; border-radius: 10px; color: #06211b; background: #20e9a8; font-weight: 900; text-align: center; }
+.computer-hero__price-caption { margin-top: 2rem; color: #83aaa6; font-weight: 700; }
+.computer-hero__price strong { display: block; margin-top: .3rem; color: #b9fff0; font-size: clamp(4.8rem, 8vw, 6.5rem); line-height: .95; letter-spacing: -.08em; text-shadow: 0 0 25px rgba(31, 255, 197, .24); }
+.computer-hero__price strong small { margin-right: .45rem; color: #7ba8a2; font-size: 1rem; letter-spacing: 0; }
+.computer-hero__price p { margin: 1rem 0 2rem; color: #8eb6b1; font-size: .9rem; }
+.computer-hero__price-state { display: inline-flex; align-items: center; gap: .5rem; padding: .6rem .8rem; border-radius: 999px; color: #8af7d9; background: rgba(31, 255, 197, .1); font-weight: 800; }
+.computer-hero__price-state span { width: 8px; height: 8px; border-radius: 50%; background: #20e9a8; box-shadow: 0 0 12px #20e9a8; }
+
+@media (max-width: 900px) {
+	.review-page--computers .computer-hero { min-height: auto; }
+	.computer-hero__status { top: 94px; left: 1.25rem; }
+	.computer-hero__layout { grid-template-columns: minmax(0, 1fr) 280px; gap: 2rem; padding-block: 8rem 4rem; }
+	.computer-hero h1 { font-size: clamp(2.8rem, 6.5vw, 4.8rem); }
+	.computer-hero__features { grid-template-columns: 1fr; }
+	.computer-hero__countdown > div:first-child { display: block; }
+}
+
+@media (max-width: 680px) {
+	.review-page--computers .computer-hero { border-radius: 0 0 24px 24px; }
+	.computer-hero__video { opacity: .4; object-position: center; }
+	.computer-hero__veil { background: linear-gradient(180deg, rgba(4, 14, 21, .8), rgba(4, 14, 21, .88)); }
+	.computer-hero__status { top: 86px; left: 1rem; right: 1rem; font-size: .58rem; }
+	.computer-hero__layout { grid-template-columns: 1fr; gap: 2.4rem; padding-block: 7.4rem 3.5rem; }
+	.computer-hero h1 { font-size: clamp(2.45rem, 11vw, 4rem); }
+	.computer-hero__content > p { font-size: .98rem; }
+	.computer-hero__features { grid-template-columns: 1fr; max-width: none; }
+	.computer-hero__countdown { max-width: none; }
+	.computer-hero__clock { gap: .2rem; }
+	.computer-hero__clock span { min-width: 0; flex: 1; }
+	.computer-hero__clock b { font-size: 1.35rem; }
+	.computer-hero__price { width: min(100%, 340px); }
+}
+
+/* Keep the content sections consistent with the computer hero. */
+.review-page--computers .review-content {
+	color: #d9f7f2;
+	background: transparent;
+}
+
+.review-page--computers .review-notice,
+.review-page--computers .review-step,
+.review-page--computers .review-video,
+.review-page--computers .review-benefits article,
+.review-page--computers .review-actions > article {
+	border-color: rgba(31, 255, 197, .2);
+	background: linear-gradient(145deg, rgba(8, 38, 45, .94), rgba(8, 17, 35, .96));
+	box-shadow: 0 18px 55px rgba(0, 0, 0, .22);
+}
+
+.review-page--computers .review-section-head h2,
+.review-page--computers .review-section-head p,
+.review-page--computers .review-section-head span,
+.review-page--computers .review-section-head strong,
+.review-page--computers .review-notice h3,
+.review-page--computers .review-notice li,
+.review-page--computers .review-rule h3,
+.review-page--computers .review-rule li {
+	color: #e5fffa;
+}
+
+.review-page--computers .review-section-head p,
+.review-page--computers .review-rule li {
+	color: #a7c9c5;
+}
+
+.review-page--computers .review-notice__badge {
+	border-color: rgba(255, 190, 74, .55);
+	color: #151006 !important;
+	background: #ffbe4e;
+}
+
+.review-page--computers .review-notice__grid {
+	gap: 1rem;
+}
+
+.review-page--computers .review-rule {
+	border: 1px solid rgba(31, 255, 197, .16);
+	border-radius: 16px;
+	background: rgba(5, 24, 33, .78);
+}
+
+.review-page--computers .review-rule--amber { border-right-color: #ffbe4e; }
+.review-page--computers .review-rule--red { border-right-color: #ff674e; }
+.review-page--computers .review-rule li::marker { color: #20e9a8; }
+
+.review-page--computers .review-step--payment {
+	background: linear-gradient(145deg, rgba(8, 38, 45, .96), rgba(8, 17, 35, .98));
+}
+
+.review-page--computers .review-step__head h2,
+.review-page--computers .review-step__head p {
+	color: #e5fffa;
+}
+
+.review-page--computers .review-step__head p {
+	color: #9fc8c1;
+}
+
+.review-page--computers .review-step__amount {
+	color: #241407;
+	background: #ffbe4e;
+}
+
+.review-page--computers .review-payment {
+	border-color: rgba(31, 255, 197, .24);
+	background: rgba(5, 25, 34, .84);
+}
+
+.review-page--computers .review-payment__brand {
+	border-bottom-color: rgba(158, 232, 220, .16);
+}
+
+.review-page--computers .review-payment__brand strong { color: #ff7561; }
+.review-page--computers .review-payment__brand span { color: #75e6bd; }
+
+.review-page--computers .review-wallet {
+	border-color: rgba(158, 232, 220, .18);
+	background: #102d36;
+	color: #e7fffb;
+}
+
+.review-page--computers .review-wallet:hover {
+	border-color: #20e9a8;
+	box-shadow: 0 14px 26px rgba(31, 255, 197, .12);
+}
+
+.review-page--computers .review-wallet__index { color: #ff8068; }
+.review-page--computers .review-wallet > strong { color: #66f1c2; }
+.review-page--computers .review-wallet > small { color: #a7c9c5; }
+.review-page--computers .review-wallet__copy { color: #6fe8c3; }
+
+.review-page--computers .review-transfer-data {
+	border-color: rgba(158, 232, 220, .2);
+	background: linear-gradient(145deg, rgba(12, 45, 53, .95), rgba(8, 25, 40, .95));
+	color: #e5fffa;
+}
+
+.review-page--computers .review-transfer-data h3 { color: #e5fffa; }
+.review-page--computers .review-transfer-data p { color: #9fc8c1; }
+
+.review-page--computers .review-transfer-data > div > span {
+	border-color: rgba(158, 232, 220, .16);
+	background: #102d36;
+	color: #dffaf5;
+}
+
+.review-page--computers .review-transfer-data b {
+	color: #06211b;
+	background: #ffbe4e;
+}
+
+.review-page--computers .review-benefits {
+	border-color: rgba(31, 255, 197, .2);
+	background: linear-gradient(145deg, rgba(8, 38, 45, .96), rgba(8, 17, 35, .98));
+}
+
+.review-page--computers .review-benefits .review-chapter h2 { color: #e5fffa; }
+.review-page--computers .review-benefits .review-chapter p { color: #9fc8c1; }
+
+.review-page--computers .review-benefits article {
+	border-color: rgba(158, 232, 220, .18);
+	background: linear-gradient(160deg, #102f38, #0c2030);
+	box-shadow: none;
+}
+
+.review-page--computers .review-benefits article > span { color: #85b6ae; }
+.review-page--computers .review-benefits article > strong { color: #e7fffb; }
+.review-page--computers .review-benefits article > i { box-shadow: 0 8px 18px rgba(0, 0, 0, .2); }
+
+.review-page--computers .review-form {
+	border-color: rgba(31, 255, 197, .22);
+	background: linear-gradient(145deg, rgba(12, 48, 56, .96), rgba(8, 20, 38, .98));
+	color: #e5fffa;
+}
+
+.review-page--computers .review-form__title > span {
+	color: #dffff7;
+	background: #123d4a;
+}
+
+.review-page--computers .review-form__title strong { color: #e9fffb; }
+.review-page--computers .review-form__title small { color: #9fc8c1; }
+.review-page--computers .review-form__title > b { color: #06211b; background: #72f0bb; }
+.review-page--computers .review-form__title > b.is-closed { color: #fff0ed; background: #b94438; }
+
+.review-page--computers .review-form li {
+	color: #d7f4ee;
+}
+
+.review-page--computers .review-form li i {
+	color: #06211b;
+	background: #ffbe4e;
+}
+
+.review-page--computers .review-step__head > b {
+	color: #55f2ca;
+	text-shadow: 0 0 18px rgba(31, 255, 197, .26);
+}
+
+.review-page--computers .review-step--payment .review-step__head > b { color: #ff9278; }
+.review-page--computers .review-step--form .review-step__head > b { color: #9baeff; }
+.review-page--computers .review-step--delivery .review-step__head > b { color: #63e6a8; }
+
+.review-page--computers .computer-media-roadmap {
+	display: grid;
+	grid-template-columns: minmax(0, 1.08fr) minmax(320px, .92fr);
+	gap: 1.2rem;
+	margin-top: 1.35rem;
+	align-items: stretch;
+}
+
+.review-page--computers .computer-media-roadmap__video.review-video,
+.review-page--computers .computer-media-roadmap__schedule.review-schedule {
+	min-width: 0;
+	margin-top: 0;
+	border: 1px solid rgba(31, 255, 197, .22);
+	border-radius: 24px;
+	background: linear-gradient(145deg, rgba(8, 38, 45, .96), rgba(8, 17, 35, .98));
+	box-shadow: 0 18px 55px rgba(0, 0, 0, .22);
+}
+
+.review-page--computers .computer-media-roadmap__video .review-video__frame {
+	width: 100%;
+	border-color: rgba(31, 255, 197, .2);
+	border-radius: 18px;
+}
+
+.review-page--computers .computer-media-roadmap__schedule .review-section-head {
+	margin-bottom: 1.2rem;
+}
+
+.review-page--computers .computer-media-roadmap__schedule .review-schedule__grid {
+	min-height: 330px;
+	place-items: stretch;
+}
+
+.review-page--computers .computer-media-roadmap__schedule .review-schedule__grid > article {
+	border-color: rgba(31, 255, 197, .18);
+	background: #102d36;
+}
+
+@media (min-width: 901px) {
+	.review-page--computers .review-flow__split {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		grid-auto-rows: 430px;
+	}
+	.review-page--computers .review-flow__split > .review-step {
+		height: 430px;
+		min-height: 0;
+	}
+	.review-page--computers .computer-media-roadmap {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		grid-auto-rows: 430px;
+	}
+	.review-page--computers .computer-media-roadmap__video.review-video,
+	.review-page--computers .computer-media-roadmap__schedule.review-schedule {
+		height: 430px;
+		padding: 1.25rem;
+	}
+	.review-page--computers .computer-media-roadmap__video.review-video {
+		display: flex;
+		flex-direction: column;
+	}
+	.review-page--computers .computer-media-roadmap__video .review-video__frame {
+		flex: 1;
+		min-height: 0;
+		aspect-ratio: auto;
+	}
+	.review-page--computers .computer-media-roadmap__video .review-video__cover > img {
+		object-fit: cover;
+	}
+	.review-page--computers .computer-media-roadmap__schedule .review-schedule__grid > article {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		padding: .85rem;
+	}
+	.review-page--computers .computer-media-roadmap__schedule .review-schedule__grid h3 {
+		margin-bottom: .7rem;
+	}
+	.review-page--computers .computer-media-roadmap__schedule .review-schedule__image img {
+		max-height: 220px;
+		object-fit: contain;
+	}
+	.review-page--computers .computer-media-roadmap__schedule .review-schedule__grid > article > a {
+		align-self: center;
+		margin-top: 1rem;
+	}
+}
+
+@media (max-width: 900px) {
+	.review-page--computers .computer-media-roadmap {
+		grid-template-columns: 1fr;
+	}
+	.review-page--computers .computer-media-roadmap__schedule .review-schedule__grid {
+		min-height: 0;
+	}
+}
+
+/* Shared video + monthly schedule layout for all four subscription pages. */
+.review-media-roadmap {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 1.2rem;
+	margin-top: 0;
+	transform: translateY(-.45rem);
+	align-items: stretch;
+}
+
+.review-media-roadmap > .review-video,
+.review-media-roadmap > .review-schedule {
+	min-width: 0;
+	margin-top: 0;
+}
+
+/* Keep the video card consistent with the light engineering cards. */
+.review-media-roadmap > .review-video {
+	border-color: var(--line);
+	color: #17233a;
+	background:
+		radial-gradient(circle at 90% 0, rgba(246, 183, 60, .12), transparent 18rem),
+		#fff;
+}
+
+.review-media-roadmap > .review-video .review-section-head--dark h2 {
+	color: #17233a !important;
+}
+
+.review-media-roadmap > .review-video .review-section-head--dark p {
+	color: #61708a;
+}
+
+.review-page--computers .review-media-roadmap > .review-video .review-section-head--dark h2 {
+	color: #fff !important;
+}
+
+.review-page--computers .review-media-roadmap > .review-video .review-section-head--dark p {
+	color: #d7e0ee;
+}
+
+@media (min-width: 901px) {
+	.review-media-roadmap > .review-video,
+	.review-media-roadmap > .review-schedule {
+		height: 430px;
+		padding: 1.25rem;
+	}
+	.review-media-roadmap > .review-video {
+		display: flex;
+		flex-direction: column;
+	}
+	.review-media-roadmap > .review-video .review-video__frame {
+		flex: 1;
+		min-height: 0;
+		aspect-ratio: auto;
+		width: 100%;
+	}
+	.review-media-roadmap > .review-schedule .review-schedule__grid {
+		min-height: 0;
+		place-items: stretch;
+	}
+	.review-media-roadmap > .review-schedule .review-schedule__grid > article {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		padding: .85rem;
+	}
+	.review-media-roadmap > .review-schedule .review-schedule__image img {
+		max-height: 220px;
+		object-fit: contain;
+	}
+	.review-media-roadmap > .review-schedule .review-schedule__grid > article > a {
+		align-self: center;
+		margin-top: 1rem;
+	}
+}
+
+@media (max-width: 900px) {
+	.review-media-roadmap {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* Show the schedule image at its natural ratio, without side bars. */
+@media (min-width: 901px) {
+	.review-media-roadmap > .review-schedule .review-schedule__grid > article {
+		padding: .65rem;
+	}
+	.review-media-roadmap > .review-schedule .review-schedule__image img {
+		width: 100%;
+		height: auto;
+		max-height: none;
+		margin-inline: auto;
+		object-fit: initial;
+	}
+	.review-media-roadmap > .review-schedule .review-schedule__grid > article > a {
+		margin-top: .65rem;
+		padding: .5rem .8rem;
+		font-size: .64rem;
 	}
 }

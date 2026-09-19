@@ -31,6 +31,8 @@ interface ReviewFormConfig {
 })
 export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	isComputersSubscription = false;
+	isEnglishSubscription = false;
+	subscriptionProgramLabel = 'معادلة هندسة عربي';
 	copiedNumber: string | null = null;
 	isImageModalOpen = false;
 	activeScheduleImage: ScheduleImage | null = null;
@@ -43,6 +45,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	closingMinutes = 0;
 	closingSeconds = 0;
 	closingDateLabel = '';
+	private closingDate: Date | null = null;
 
 	private closingTimer: ReturnType<typeof setInterval> | null = null;
 
@@ -133,7 +136,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 			{ number: '01040490778', owner: 'احمد ع********* س***' },
 			{ number: '01080681865', owner: 'Mona k***** A**' }
 		],
-		scheduleImages: [],
+		scheduleImages: [] as ScheduleImage[],
 		requiredInfo: [
 			'رقم الموبايل اللي حولت منه',
 			'سكرين شوت بالتحويل',
@@ -167,17 +170,16 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	) {}
 
 	ngOnInit(): void {
-		this.isComputersSubscription = typeof window !== 'undefined' && window.location.pathname === '/subscription-computers';
+		const pathname = typeof window !== 'undefined' ? window.location.pathname : '/subscription-engineering-ar';
+		this.isComputersSubscription = pathname.includes('computers');
+		this.isEnglishSubscription = pathname.endsWith('-en');
+		this.subscriptionProgramLabel = `معادلة ${this.isComputersSubscription ? 'حاسبات' : 'هندسة'} ${this.isEnglishSubscription ? 'انجليزي' : 'عربي'}`;
 		this.applySubscriptionProgram();
 		if (typeof window !== 'undefined') {
 			const siteUrl = (window as any)['NG_SITE_URL'] || 'https://www.appmo3adla.com';
-			const title = this.isComputersSubscription
-				? 'اشتراك حاسبات | أبلكيشن معادلة كلية هندسة'
-				: 'اشتراك هندسة | أبلكيشن معادلة كلية هندسة';
-			const description = this.isComputersSubscription
-				? 'اشترك في محتوى حاسبات المنظم والمناسب لطلاب المعادلة، مع خطة واضحة للمذاكرة والمراجعة.'
-				: 'اشترك في محتوى هندسة المنظم لطلاب دفعة 2027، مع شرح ومراجعة ومتابعة مستمرة.';
-			const slug = this.isComputersSubscription ? 'subscription-computers' : 'subscription-engineer';
+			const title = `${this.subscriptionProgramLabel} | أبلكيشن معادلة كلية هندسة`;
+			const description = `اشترك في ${this.subscriptionProgramLabel} بخطة واضحة للمذاكرة والمراجعة والمتابعة المستمرة.`;
+			const slug = pathname.replace(/^\//, '');
 			const imagePath = this.isComputersSubscription
 				? '/assets/جداول مراجعات شهر 8/جدول جروب C.png'
 				: '/assets/جداول مراجعات شهر 8/جدول جروب A-B.png';
@@ -193,10 +195,13 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 
 		this.shuffleVodafoneNumbers();
 		this.listenForVisibilityChange();
+		this.closingDate = this.getNextClosingDate();
 		this.updateClosingCountdown();
-		this.closingTimer = setInterval(() => this.updateClosingCountdown(), 1000);
+		if (!this.isEnrollmentClosed) {
+			this.closingTimer = setInterval(() => this.updateClosingCountdown(), 1000);
+		}
 
-		if (!this.isComputersSubscription) {
+		if (!this.isComputersSubscription && !this.isEnglishSubscription) {
 			this.monthlyContent
 				.loadPageState('subscription-ab-reviews', {
 					isEnrollmentClosed: this.isEnrollmentClosed,
@@ -208,29 +213,35 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	}
 
 	private applySubscriptionProgram(): void {
-		if (!this.isComputersSubscription) return;
-
 		this.subscriptionDetails = {
 			...this.subscriptionDetails,
-			month: 'اشتراك معادلة حاسبات',
+			month: this.subscriptionProgramLabel,
 			review: {
 				...this.subscriptionDetails.review,
-				name: 'اشتراك معادلة حاسبات',
-				price: '650'
+				name: this.subscriptionProgramLabel,
+				price: this.isComputersSubscription ? '600' : '800'
 			},
-			subtitle: 'ابدأ طريقك في معادلة حاسبات باشتراك كامل بسعر 650 جنيه.',
+			subtitle: `ابدأ طريقك في ${this.subscriptionProgramLabel} باشتراك كامل بسعر ${this.isComputersSubscription ? '600' : '800'} جنيه.`,
 			googleForm: {
 				...this.subscriptionDetails.googleForm,
-				label: 'اشتراك معادلة حاسبات',
-				description: 'فورم اشتراك معادلة حاسبات',
-				buttonText: 'سجل اشتراك حاسبات'
+				label: this.subscriptionProgramLabel,
+				description: `فورم ${this.subscriptionProgramLabel}`,
+				buttonText: `سجل ${this.subscriptionProgramLabel}`
 			},
+			scheduleImages: this.subscriptionDetails.scheduleImages.length
+				? this.subscriptionDetails.scheduleImages
+				: [{
+					group: `جدول شهر أكتوبر ${this.isComputersSubscription ? 'حاسبات' : 'هندسة'} ${this.isEnglishSubscription ? 'انجليزي' : 'عربي'}`,
+					src: this.isComputersSubscription ? '/assets/جداول مراجعات شهر 8/جدول جروب C.png' : '/assets/جداول مراجعات شهر 8/جدول جروب A-B.png',
+					alt: `جدول شهر أكتوبر ${this.subscriptionProgramLabel}`,
+					note: 'اضغط على الصورة للتكبير'
+				}],
 			subscriptionWarnings: {
 				...this.subscriptionDetails.subscriptionWarnings,
 				validity: {
 					...this.subscriptionDetails.subscriptionWarnings.validity,
 					points: [
-						'المواد المتاحة: رياضة عامة، رياضة خاصة، فيزياء، إنجليزي',
+						`المحتوى الخاص بـ ${this.subscriptionProgramLabel}`,
 						'الكود شغال خلال مدة الاشتراك فقط',
 						'مع انتهاء مدة الاشتراك بيقفل المحتوى تلقائيًا'
 					]
@@ -266,8 +277,22 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	}
 
 	private updateClosingCountdown(): void {
-		const closingDate = this.getNextClosingDate();
-		const remaining = Math.max(0, closingDate.getTime() - Date.now());
+		const closingDate = this.closingDate ?? this.getNextClosingDate();
+		this.closingDate = closingDate;
+		const remaining = closingDate.getTime() - Date.now();
+		if (remaining <= 0) {
+			this.closingDays = 0;
+			this.closingHours = 0;
+			this.closingMinutes = 0;
+			this.closingSeconds = 0;
+			this.isEnrollmentClosed = true;
+			this.enrollmentReopenMessage = 'انتهى وقت الاشتراك تلقائيًا، وسيتم فتح التسجيل مع بداية فترة الاشتراك القادمة.';
+			if (this.closingTimer) {
+				clearInterval(this.closingTimer);
+				this.closingTimer = null;
+			}
+			return;
+		}
 		const totalSeconds = Math.floor(remaining / 1000);
 		this.closingDateLabel = new Intl.DateTimeFormat('ar-EG-u-nu-latn', {
 			day: 'numeric',
@@ -338,6 +363,15 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	}
 
 	getSelectedSchedules(): ScheduleImage[] {
+		if (!this.subscriptionDetails.scheduleImages.length) {
+			return [{
+				group: `جدول شهر أكتوبر ${this.isComputersSubscription ? 'حاسبات' : 'هندسة'} ${this.isEnglishSubscription ? 'انجليزي' : 'عربي'}`,
+				src: this.isComputersSubscription ? '/assets/جداول مراجعات شهر 8/جدول جروب C.png' : '/assets/جداول مراجعات شهر 8/جدول جروب A-B.png',
+				alt: `جدول شهر أكتوبر ${this.subscriptionProgramLabel}`,
+				note: 'اضغط على الصورة للتكبير'
+			}];
+		}
+
 		return this.subscriptionDetails.scheduleImages.slice(0, 1);
 	}
 

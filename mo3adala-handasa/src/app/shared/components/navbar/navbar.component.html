@@ -172,13 +172,21 @@
 					<span style="font-family: 'TheYearofHandicrafts', sans-serif !important;">الأسئلة الشائعة</span>
 				</a>
 			</li>
-			<li>
-			<a routerLink="/engineers" 
-			   (click)="scrollToTop()"
-			   [class]="isActiveRoute('/engineers') ? 'nav-link active' : 'nav-link'"
-			   class="relative px-1.5 xl:px-2 py-1 text-gray-700 link-hover whitespace-nowrap" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">
-					<span style="font-family: 'TheYearofHandicrafts', sans-serif !important;">المهندسين</span>
-				</a>
+			<li class="relative group">
+				<button type="button" (click)="toggleEngineersDropdown()" [class.text-orange-600]="isEngineersDropdownOpen || isActiveRoute('/engineers')" class="relative px-1.5 xl:px-2 py-1 text-gray-700 flex items-center gap-1 btn-hover ripple whitespace-nowrap" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">
+					<span>المهندسين</span>
+					<svg class="w-3 h-3 transition-transform duration-200" [class.rotate-180]="isEngineersDropdownOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+				</button>
+				<div *ngIf="isEngineersDropdownOpen" class="absolute top-full right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-200 z-50" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">
+					<div class="py-2">
+						<a routerLink="/engineers-ar" (click)="closeEngineersDropdown()" class="block px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-700 transition-colors">
+							<div class="font-semibold">مهندسين المعادلة عربي</div>
+						</a>
+						<a routerLink="/engineers-en" (click)="closeEngineersDropdown()" class="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors border-t border-gray-100">
+							<div class="font-semibold">مهندسين المعادلة انجليزي</div>
+						</a>
+					</div>
+				</div>
 			</li>
 			<li>
 			<a routerLink="/success-story" 
@@ -211,40 +219,16 @@
 			</button>
 
 			<!-- Subscription Dropdown Menu -->
-			<div *ngIf="isSubscriptionDropdownOpen" class="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-200 z-50"
+			<div *ngIf="isSubscriptionDropdownOpen" class="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-200 z-50"
 				 style="font-family: 'TheYearofHandicrafts', sans-serif !important;">
-				<div class="py-2">
-					<!-- معادلة هندسة -->
-					<a routerLink="/subscription-engineer"
-					   (click)="closeSubscriptionDropdown()"
-					   class="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors border-t border-gray-100" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">
-						<div class="flex items-center gap-3">
-							<div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-								<svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-								</svg>
-							</div>
-							<div>
-								<div class="font-semibold">معادلة هندسة</div>
-								<div class="text-xs text-gray-500">تفاصيل الاشتراك</div>
-							</div>
-						</div>
-					</a>
-					<!-- معادلة حاسبات -->
-					<a routerLink="/subscription-computers"
-					   (click)="closeSubscriptionDropdown()"
-					   class="block px-4 py-3 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 transition-colors border-t border-gray-100" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">
-						<div class="flex items-center gap-3">
-							<div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
-								<svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-								</svg>
-							</div>
-							<div>
-								<div class="font-semibold">معادلة حاسبات</div>
-								<div class="text-xs text-gray-500">تفاصيل الاشتراك</div>
-							</div>
-						</div>
+				<div class="py-1">
+					<a *ngFor="let plan of [
+						{ path: '/subscription-engineering-ar', name: 'معادلة هندسة عربي' },
+						{ path: '/subscription-computers-ar', name: 'معادلة حاسبات عربي' },
+						{ path: '/subscription-engineering-en', name: 'معادلة هندسة انجليزي' },
+						{ path: '/subscription-computers-en', name: 'معادلة حاسبات انجليزي' }
+						]" [routerLink]="plan.path" (click)="closeSubscriptionDropdown()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-700 transition-colors border-t border-gray-100" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">
+						<div class="font-semibold">{{ plan.name }}</div>
 					</a>
 				</div>
 			</div>
@@ -364,12 +348,16 @@
 			   class="block px-4 py-3 rounded-lg text-base font-medium hover:bg-gray-50 transition-all duration-300 link-hover mobile-menu-link" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">
 				الأسئلة الشائعة
 			</a>
-			<a routerLink="/engineers" 
-			   (click)="closeMobileMenu()"
-			   [class]="isActiveRoute('/engineers') ? 'mobile-nav-link active' : 'mobile-nav-link'"
-			   class="block px-4 py-3 rounded-lg text-base font-medium hover:bg-gray-50 transition-all duration-300 link-hover mobile-menu-link" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">
-				المهندسين
-			</a>
+			<div class="px-4 py-2 mobile-menu-group">
+				<button type="button" (click)="toggleMobileEngineersDropdown()" class="flex items-center justify-between w-full text-base font-medium text-gray-700 hover:text-orange-600 transition-colors px-4 py-3 rounded-lg hover:bg-gray-50 mobile-menu-toggle" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">
+					المهندسين
+					<svg class="w-4 h-4 transition-transform duration-200" [class.rotate-180]="isMobileEngineersDropdownOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+				</button>
+				<div *ngIf="isMobileEngineersDropdownOpen" class="mt-2 space-y-1">
+					<a routerLink="/engineers-ar" (click)="closeMobileEngineersDropdown(); closeMobileMenu()" class="block px-4 py-3 rounded-lg text-base font-medium hover:bg-orange-50 transition-all duration-300 mobile-menu-link">مهندسين المعادلة عربي</a>
+					<a routerLink="/engineers-en" (click)="closeMobileEngineersDropdown(); closeMobileMenu()" class="block px-4 py-3 rounded-lg text-base font-medium hover:bg-blue-50 transition-all duration-300 mobile-menu-link">مهندسين المعادلة انجليزي</a>
+				</div>
+			</div>
 			<a routerLink="/success-story" 
 			   (click)="closeMobileMenu()"
 			   [class]="isActiveRoute('/success-story') ? 'mobile-nav-link active' : 'mobile-nav-link'"
@@ -391,7 +379,7 @@
 				<svg class="w-4 h-4 transition-transform duration-200" [class.rotate-180]="isMobileSubscriptionDropdownOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
 			</button>
 		<div *ngIf="isMobileSubscriptionDropdownOpen" class="mt-2 space-y-1" [class.hidden]="!isMobileSubscriptionDropdownOpen">
-			<a routerLink="/subscription-engineer"
+			<a routerLink="/subscription-engineering-ar"
 			   (click)="closeMobileSubscriptionDropdown(); closeMobileMenu()"
 			   class="flex items-center gap-3 px-4 py-3 rounded-xl border border-blue-100 bg-blue-50 hover:bg-blue-100 transition-all duration-300" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">
 				<div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
@@ -400,11 +388,10 @@
 					</svg>
 				</div>
 				<div>
-					<div class="font-bold text-blue-800 text-base" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">معادلة هندسة</div>
-					<div class="text-xs text-blue-600" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">تفاصيل الاشتراك</div>
+					<div class="font-bold text-blue-800 text-base" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">معادلة هندسة عربي</div>
 				</div>
 			</a>
-			<a routerLink="/subscription-computers"
+			<a routerLink="/subscription-computers-ar"
 			   (click)="closeMobileSubscriptionDropdown(); closeMobileMenu()"
 			   class="flex items-center gap-3 px-4 py-3 rounded-xl border border-orange-100 bg-orange-50 hover:bg-orange-100 transition-all duration-300" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">
 				<div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center flex-shrink-0">
@@ -413,9 +400,16 @@
 					</svg>
 				</div>
 				<div>
-					<div class="font-bold text-orange-800 text-base" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">معادلة حاسبات</div>
-					<div class="text-xs text-orange-600" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">اشتراك 650 جنيه</div>
+					<div class="font-bold text-orange-800 text-base" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">معادلة حاسبات عربي</div>
 				</div>
+			</a>
+					<a routerLink="/subscription-engineering-en" (click)="closeMobileSubscriptionDropdown(); closeMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl border border-blue-100 bg-blue-50 hover:bg-blue-100 transition-all duration-300" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">
+						<div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0"><span class="text-white font-bold">EN</span></div>
+						<div><div class="font-bold text-blue-800 text-base">معادلة هندسة انجليزي</div></div>
+			</a>
+			<a routerLink="/subscription-computers-en" (click)="closeMobileSubscriptionDropdown(); closeMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl border border-orange-100 bg-orange-50 hover:bg-orange-100 transition-all duration-300" style="font-family: 'TheYearofHandicrafts', sans-serif !important;">
+				<div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center flex-shrink-0"><span class="text-white font-bold">EN</span></div>
+						<div><div class="font-bold text-orange-800 text-base">معادلة حاسبات انجليزي</div></div>
 			</a>
 		</div>
 		</div>
