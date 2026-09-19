@@ -8,10 +8,14 @@ export class SeoService {
 
 	setTitle(value: string) {
 		this.title.setTitle(value);
+		this.meta.updateTag({ property: 'og:title', content: value });
+		this.meta.updateTag({ name: 'twitter:title', content: value });
 	}
 
 	setDescription(description: string) {
 		this.meta.updateTag({ name: 'description', content: description });
+		this.meta.updateTag({ property: 'og:description', content: description });
+		this.meta.updateTag({ name: 'twitter:description', content: description });
 	}
 
 	setRobots(content: string) {

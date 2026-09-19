@@ -5,6 +5,8 @@ const root = path.resolve(process.cwd());
 const distRoot = path.join(root, 'dist');
 const templatePath = path.join(distRoot, 'index.html');
 const newsSourcePath = path.join(root, 'src', 'app', 'pages', 'news-detail', 'news-detail.page.ts');
+const successStoriesSourcePath = path.join(root, 'src', 'app', 'pages', 'success-stories', 'success-stories.data.ts');
+const teachersSourcePath = path.join(root, 'src', 'app', 'pages', 'teacher-details', 'teacher-details.page.ts');
 const siteUrl = (process.env.NG_SITE_URL || 'https://www.appmo3adla.com').replace(/\/$/, '');
 
 const defaultMeta = {
@@ -19,14 +21,22 @@ const pageMeta = {
   '/news/equation': { title: 'أخبار معادلة كلية الهندسة', description: 'آخر أخبار ومواعيد وشروط معادلة كلية الهندسة.', image: '/assets/logo.png' },
   '/success-stories': { title: 'قصص النجاح - ابلكيشن معادلة كلية هندسة', description: 'تجارب وقصص نجاح طلاب معادلة كلية الهندسة.', image: '/assets/success.png' },
   '/success-story': { title: 'قصص النجاح - ابلكيشن معادلة كلية هندسة', description: 'شاهد قصص نجاح طلاب أبلكيشن معادلة كلية هندسة.', image: '/assets/success.png' },
-  '/subscription-ab-reviews': { title: 'اشتراك هندسة | ابلكيشن معادلة كلية هندسة', description: 'اشترك في محتوى هندسة المنظم لطلاب دفعة 2027، مع شرح ومراجعة ومتابعة مستمرة.', image: '/assets/جداول مراجعات شهر 8/جدول جروب A-B.png' },
-  '/subscription-engineer': { title: 'اشتراك هندسة | ابلكيشن معادلة كلية هندسة', description: 'اشترك في محتوى هندسة المنظم لطلاب دفعة 2027، مع شرح ومراجعة ومتابعة مستمرة.', image: '/assets/جداول مراجعات شهر 8/جدول جروب A-B.png' },
-  '/subscription-computers': { title: 'اشتراك حاسبات | ابلكيشن معادلة كلية هندسة', description: 'اشترك في محتوى حاسبات المنظم والمناسب لطلاب المعادلة، مع خطة واضحة للمذاكرة والمراجعة.', image: '/assets/جداول مراجعات شهر 8/جدول جروب C.png' },
+  '/subscription-ab-reviews': { title: 'معادلة هندسة عربي - أبلكيشن معادلة كلية هندسة', description: 'اشتراك معادلة هندسة عربي لشهر أكتوبر، مع شرح ومراجعة ومتابعة مستمرة.', image: '/assets/جداول مراجعات شهر 8/جدول جروب A-B.png' },
+  '/subscription-engineer': { title: 'معادلة هندسة عربي - أبلكيشن معادلة كلية هندسة', description: 'اشتراك معادلة هندسة عربي لشهر أكتوبر، مع شرح ومراجعة ومتابعة مستمرة.', image: '/assets/جداول مراجعات شهر 8/جدول جروب A-B.png' },
+  '/subscription-computers': { title: 'معادلة حاسبات عربي - أبلكيشن معادلة كلية هندسة', description: 'اشتراك معادلة حاسبات عربي لشهر أكتوبر، مع خطة واضحة للمذاكرة والمراجعة.', image: '/assets/جداول مراجعات شهر 8/جدول جروب C.png' },
+  '/subscription-engineering-ar': { title: 'معادلة هندسة عربي - أبلكيشن معادلة كلية هندسة', description: 'اشتراك معادلة هندسة عربي لشهر أكتوبر، مع شرح ومراجعة ومتابعة مستمرة.', image: '/assets/جداول مراجعات شهر 8/جدول جروب A-B.png' },
+  '/subscription-engineering-en': { title: 'معادلة هندسة انجليزي - أبلكيشن معادلة كلية هندسة', description: 'اشتراك معادلة هندسة انجليزي لشهر أكتوبر، مع شرح ومراجعة ومتابعة مستمرة.', image: '/assets/جداول مراجعات شهر 8/جدول جروب A-B.png' },
+  '/subscription-computers-ar': { title: 'معادلة حاسبات عربي - أبلكيشن معادلة كلية هندسة', description: 'اشتراك معادلة حاسبات عربي لشهر أكتوبر، مع خطة واضحة للمذاكرة والمراجعة.', image: '/assets/جداول مراجعات شهر 8/جدول جروب C.png' },
+  '/subscription-computers-en': { title: 'معادلة حاسبات انجليزي - أبلكيشن معادلة كلية هندسة', description: 'اشتراك معادلة حاسبات انجليزي لشهر أكتوبر، مع خطة واضحة للمذاكرة والمراجعة.', image: '/assets/جداول مراجعات شهر 8/جدول جروب C.png' },
   '/subscription-intensive': { title: 'الاشتراك المكثف - ابلكيشن معادلة كلية هندسة', description: 'تفاصيل الاشتراك المكثف وخطة الاستعداد لاختبارات المعادلة.', image: '/assets/logo.png' },
   '/engineers': { title: 'المهندسين والمدرسين - ابلكيشن معادلة كلية هندسة', description: 'تعرف على فريق المهندسين والمدرسين في أبلكيشن معادلة كلية هندسة.', image: '/assets/logo.png' },
+  '/engineers-ar': { title: 'المهندسين والمدرسين - ابلكيشن معادلة كلية هندسة', description: 'تعرف على فريق المهندسين والمدرسين في أبلكيشن معادلة كلية هندسة.', image: '/assets/logo.png' },
+  '/engineers-en': { title: 'المهندسين والمدرسين - أبلكيشن معادلة كلية هندسة', description: 'تعرف على فريق المهندسين والمدرسين في أبلكيشن معادلة كلية هندسة.', image: '/assets/logo.png' },
   '/requirements': { title: 'متطلبات المعادلة - ابلكيشن معادلة كلية هندسة', description: 'تعرف على متطلبات وشروط التقديم لمعادلة كلية الهندسة.', image: '/assets/logo.png' },
   '/schools': { title: 'المدارس والمعاهد - ابلكيشن معادلة كلية هندسة', description: 'المدارس والمعاهد المؤهلة للتقديم في معادلة كلية الهندسة.', image: '/assets/logo.png' },
-  '/batch-2027': { title: 'دفعة 2027 - ابلكيشن معادلة كلية هندسة', description: 'كل ما يخص دفعة 2027 وخطة الاستعداد لمعادلة كلية الهندسة.', image: '/assets/جروب السنة الجديدة 2027.png' }
+  '/batch-2027': { title: 'دفعة 2027 - ابلكيشن معادلة كلية هندسة', description: 'كل ما يخص دفعة 2027 وخطة الاستعداد لمعادلة كلية الهندسة.', image: '/assets/جروب السنة الجديدة 2027.png' },
+  '/social': { title: 'تواصل معنا - أبلكيشن معادلة كلية هندسة', description: 'كل روابط أبلكيشن معادلة كلية هندسة الرسمية في مكان واحد.', image: '/assets/logo.png' },
+  '/success-story': { title: 'تواصل معنا - أبلكيشن معادلة كلية هندسة', description: 'كل روابط أبلكيشن معادلة كلية هندسة الرسمية في مكان واحد.', image: '/assets/logo.png' }
 };
 
 const routeRedirects = {
@@ -54,6 +64,35 @@ function parseNewsMeta() {
       image
     };
   }
+  return result;
+}
+
+function parseSuccessStoryMeta() {
+  const source = fs.readFileSync(successStoriesSourcePath, 'utf8');
+  const result = {};
+  const names = [...source.matchAll(/\{\s*name:\s*'([^']+)'/g)].map(match => match[1]);
+  names.forEach((name, index) => {
+    result[`/success-stories/${index + 1}`] = {
+      title: `قصة نجاح ${name} - أبلكيشن معادلة كلية هندسة`,
+      description: `شاهد قصة نجاح ${name} ونصيحته لطلاب معادلة كلية الهندسة.`,
+      image: '/assets/success.png'
+    };
+  });
+  return result;
+}
+
+function parseTeacherMeta() {
+  const source = fs.readFileSync(teachersSourcePath, 'utf8');
+  const result = {};
+  const matches = [...source.matchAll(/id:\s*(\d+),[\s\S]*?name:\s*'([^']+)'[\s\S]*?subject:\s*'([^']*)'/g)];
+  matches.forEach(([, id, name, subject]) => {
+    const subjectLabel = subject.trim() || 'معادلة كلية الهندسة';
+    result[`/teacher/${id}`] = {
+      title: `${name} - ${subjectLabel} - أبلكيشن معادلة كلية هندسة`,
+      description: `تعرف على ${name} وخبرته في تدريس ${subjectLabel}.`,
+      image: '/assets/logo.png'
+    };
+  });
   return result;
 }
 
@@ -98,7 +137,7 @@ function main() {
   const template = fs.readFileSync(templatePath, 'utf8');
   const routesFile = path.join(root, 'src', 'assets', 'routes.json');
   const routes = JSON.parse(fs.readFileSync(routesFile, 'utf8'));
-  const allMeta = { ...pageMeta, ...parseNewsMeta() };
+  const allMeta = { ...pageMeta, ...parseNewsMeta(), ...parseSuccessStoryMeta(), ...parseTeacherMeta() };
 
   for (const route of routes) writeRoute(template, route, allMeta[route] || defaultMeta);
   console.log(`Generated social metadata HTML for ${routes.length} routes.`);
