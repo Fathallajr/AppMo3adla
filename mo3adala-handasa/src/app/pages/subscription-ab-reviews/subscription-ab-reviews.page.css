@@ -2320,6 +2320,32 @@
 	.review-page--computers .review-countdown__clock { gap: .25rem; }
 }
 
+/* Keep the subscription hero content inside the viewport on phones and tablets. */
+@media (max-width: 760px) {
+	.review-page:not(.review-page--computers) .review-hero__layout {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 2rem;
+		padding-block: 4.5rem 3.5rem;
+	}
+
+	.review-page:not(.review-page--computers) .review-hero__copy,
+	.review-page--computers .computer-hero__content {
+		width: 100%;
+		min-width: 0;
+	}
+
+	.review-page:not(.review-page--computers) .review-hero h1 {
+		max-width: 100%;
+		font-size: clamp(2.35rem, 11vw, 4rem);
+		line-height: 1.05;
+	}
+
+	.review-page--computers .computer-hero h1 {
+		max-width: 100%;
+		font-size: clamp(2.35rem, 11vw, 4rem);
+	}
+}
+
 /* Rebuilt computer-science subscription hero. */
 .review-page--computers .computer-hero {
 	position: relative;
@@ -2603,7 +2629,7 @@
 @media (max-width: 900px) {
 	.review-page--computers .computer-hero { min-height: auto; }
 	.computer-hero__status { top: 94px; left: 1.25rem; }
-	.computer-hero__layout { grid-template-columns: minmax(0, 1fr) 280px; gap: 2rem; padding-block: 8rem 4rem; }
+	.review-page--computers .computer-hero__layout { grid-template-columns: minmax(0, 1fr); gap: 2rem; padding-block: 8rem 4rem; }
 	.computer-hero h1 { font-size: clamp(2.8rem, 6.5vw, 4.8rem); }
 	.computer-hero__features { grid-template-columns: 1fr; }
 	.computer-hero__countdown > div:first-child { display: block; }
@@ -2618,9 +2644,10 @@
 			linear-gradient(90deg, rgba(4, 14, 21, .72), rgba(4, 14, 21, .42));
 	}
 	.computer-hero__status { top: 86px; left: 1rem; right: 1rem; font-size: .58rem; }
-	.computer-hero__layout { grid-template-columns: 1fr; gap: 2.4rem; padding-block: 7.4rem 3.5rem; }
+	.review-page--computers .computer-hero__layout { grid-template-columns: 1fr; gap: 2.4rem; padding-block: 7.4rem 3.5rem; }
 	.review-hero__mascot,
 	.computer-hero__mascot { display: none; }
+	.review-page--computers .computer-hero__content { width: 100%; }
 	.computer-hero h1 { font-size: clamp(2.45rem, 11vw, 4rem); }
 	.computer-hero__content > p { font-size: .98rem; }
 	.computer-hero__features { grid-template-columns: 1fr; max-width: none; }
