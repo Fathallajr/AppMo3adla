@@ -3207,6 +3207,10 @@
 
 @media (max-width: 760px) {
 	/* Keep the counter visually smaller than the surrounding hero section. */
+	.review-page--computers .computer-hero__status {
+		display: none;
+	}
+
 	.review-page .review-countdown,
 	.review-page .computer-hero__countdown {
 		width: min(calc(100% - 1rem), 430px);
