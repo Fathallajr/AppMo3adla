@@ -2,6 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Site-wide responsive baseline: pages must never widen the viewport. */
+html,
+body,
+app-root {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+app-root,
+.route-page-transition,
+main {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+}
+
+img,
+video,
+iframe,
+svg,
+canvas {
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .route-page-transition {
+    overflow-x: clip;
+  }
+
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    max-width: 100%;
+  }
+}
+
 /* Performance optimizations */
 * {
   box-sizing: border-box;
