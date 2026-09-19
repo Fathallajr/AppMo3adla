@@ -2410,6 +2410,12 @@
 	padding-block: 9.5rem 5rem;
 }
 
+/* The hero no longer contains a price card, so let its content use the full width. */
+.review-page:not(.review-page--computers) .review-hero__layout,
+.review-page--computers .computer-hero__layout {
+	grid-template-columns: minmax(0, 1fr);
+}
+
 .computer-hero__content { min-width: 0; }
 
 .computer-hero__eyebrow {
