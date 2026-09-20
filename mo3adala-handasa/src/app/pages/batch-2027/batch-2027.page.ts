@@ -50,7 +50,12 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	wheelToken = '';
 	wheelSessionId = '';
 	wheelClaim = { name: '', whatsapp: '', program: '' };
-	programOptions = ['معادلة هندسة', 'معادلة حاسبات'];
+	programOptions = [
+		'معادلة هندسة عربي',
+		'معادلة حاسبات عربي',
+		'معادلة هندسة إنجليزي',
+		'معادلة حاسبات إنجليزي'
+	];
 	wheelClaimError = '';
 	wheelClaimSubmitting = false;
 	wheelClaimComplete = false;

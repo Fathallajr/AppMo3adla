@@ -250,6 +250,16 @@ async function postToAppsScript(endpoint, values, timeoutMs) {
 
 // This endpoint is only for the normal site forms. Wheel claims have their own
 // endpoint and their own Apps Script deployment below.
+const LAUNCH_OFFER_PROGRAMS = [
+	// Keep the old values valid so existing saved forms and integrations remain compatible.
+	'معادلة هندسة',
+	'معادلة حاسبات',
+	'معادلة هندسة عربي',
+	'معادلة حاسبات عربي',
+	'معادلة هندسة إنجليزي',
+	'معادلة حاسبات إنجليزي'
+];
+
 app.post('/api/launch-offer', async (req, res) => {
 	const { name, whatsapp, school, studentType, program, source, consent } = req.body || {};
 	if (source === 'عجلة الحظ') {
@@ -266,7 +276,7 @@ app.post('/api/launch-offer', async (req, res) => {
 	if (!/^01\d{9}$/.test(cleanWhatsapp)) {
 		return res.status(400).json({ success: false, message: 'Invalid WhatsApp number' });
 	}
-	if (!['معادلة هندسة', 'معادلة حاسبات'].includes(program)) {
+	if (!LAUNCH_OFFER_PROGRAMS.includes(program)) {
 		return res.status(400).json({ success: false, message: 'Invalid program' });
 	}
 
@@ -292,7 +302,14 @@ app.post('/api/wheel/claim', async (req, res) => {
 	if (!/^01\d{9}$/.test(whatsapp)) {
 		return res.status(400).json({ success: false, message: 'رقم الواتساب يجب أن يبدأ بـ 01 ويتكون من 11 رقم.' });
 	}
-	if (!['معادلة هندسة', 'معادلة حاسبات'].includes(program)) {
+	if (![
+		'معادلة هندسة',
+		'معادلة حاسبات',
+		'معادلة هندسة عربي',
+		'معادلة حاسبات عربي',
+		'معادلة هندسة إنجليزي',
+		'معادلة حاسبات إنجليزي'
+	].includes(program)) {
 		return res.status(400).json({ success: false, message: 'اختار نوع المعادلة.' });
 	}
 	if (!wheelToken) return res.status(400).json({ success: false, message: 'نتيجة العجلة غير موجودة.' });

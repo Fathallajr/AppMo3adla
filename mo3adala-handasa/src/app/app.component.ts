@@ -35,7 +35,12 @@ export class AppComponent implements OnInit, OnDestroy {
 	offerSchool = '';
 	offerProgram = '';
 	offerSource = '';
-	offerProgramOptions = ['معادلة هندسة', 'معادلة حاسبات'];
+	offerProgramOptions = [
+		'معادلة هندسة عربي',
+		'معادلة حاسبات عربي',
+		'معادلة هندسة إنجليزي',
+		'معادلة حاسبات إنجليزي'
+	];
 	offerStudentType = '';
 	offerStudentTypeOptions = ['المعاهد الفنية', 'مدارس الثانوية الصناعية نظام 3 سنوات', 'مدارس الثانوية الصناعية نظام 5 سنوات', 'مدارس تكنولوجيا تطبيقية نظام 3 سنوات', 'مدارس تكنولوجيا تطبيقية نظام 5 سنوات'];
 	offerContactConsent = false;
