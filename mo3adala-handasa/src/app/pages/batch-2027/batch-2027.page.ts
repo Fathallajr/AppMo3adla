@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CanonicalService } from '../../core/canonical.service';
 import { SeoService } from '../../core/seo.service';
+import { StyledSelectComponent } from '../../shared/components/styled-select/styled-select.component';
 
 const PHONE_PATTERN = /^01\d{9}$/;
 const EXTRA_ATTEMPT_GIFT_ID = 'lucky-chance';
@@ -19,7 +20,7 @@ function normalizePhone(value: string): string {
 @Component({
 	selector: 'app-batch-2027',
 	standalone: true,
-	imports: [CommonModule, FormsModule, RouterLink],
+	imports: [CommonModule, FormsModule, RouterLink, StyledSelectComponent],
 	templateUrl: './batch-2027.page.html',
 	styleUrls: ['./batch-2027.page.css']
 })

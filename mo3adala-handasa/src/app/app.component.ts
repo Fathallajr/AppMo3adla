@@ -7,6 +7,7 @@ import { FooterComponent } from './shared/components/footer/footer.component';
 import { pageTransition } from './shared/animations';
 import { ViewportScroller } from '@angular/common';
 import { SeoService } from './core/seo.service';
+import { StyledSelectComponent } from './shared/components/styled-select/styled-select.component';
 
 declare global {
 	interface Window {
@@ -17,7 +18,7 @@ declare global {
 @Component({
 	selector: 'app-root',
 	standalone: true,
-	imports: [CommonModule, FormsModule, RouterOutlet, RouterLink, NavbarComponent, FooterComponent],
+	imports: [CommonModule, FormsModule, RouterOutlet, RouterLink, NavbarComponent, FooterComponent, StyledSelectComponent],
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.css'],
 	animations: [pageTransition]
