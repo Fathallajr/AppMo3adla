@@ -12,8 +12,8 @@ import { fadeInUp } from '../../animations';
 	styleUrls: ['./what-is-equation.component.css'],
 })
 export class WhatIsEquationComponent implements OnInit, OnDestroy {
-	@Input() title = 'يعني إيه معادلة كلية هندسة؟';
-	@Input() text = 'اختبار ومعادلة تؤهّلك لدخول كلية الهندسة لطلاب الدبلومات والمعاهد. بنوفّر لك شرح مبسّط وخطط مذاكرة وتمارين تساعدك تتأهل وتنجح.';
+	@Input() title = 'يعني إيه معادلة؟';
+	@Input() text = 'اختبار يؤهّلك لدخول كلية الهندسة أو الحاسبات لطلاب الدبلومات والمعاهد والمدارس التكنولوجية. بنوفّر لك شرح مبسّط وخطط مذاكرة وتمارين تساعدك تتأهل وتنجح.';
 	isVideoLoaded = false;
 	animatedVideos = 0;
 	animatedStudents = 0;

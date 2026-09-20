@@ -5,11 +5,12 @@ import { CanonicalService } from '../../core/canonical.service';
 import { SeoService } from '../../core/seo.service';
 import { fadeInUp, staggerList } from '../../shared/animations';
 import { SuccessStory, successStories } from './success-stories.data';
+import { SubscriptionChoiceTriggerComponent } from '../../shared/components/subscription-choice-trigger/subscription-choice-trigger.component';
 
 @Component({
 	selector: 'app-success-stories',
 	standalone: true,
-	imports: [CommonModule, RouterLink],
+	imports: [CommonModule, RouterLink, SubscriptionChoiceTriggerComponent],
 	animations: [fadeInUp, staggerList],
 	templateUrl: './success-stories.page.html',
 	styleUrls: ['./success-stories.page.css']

@@ -4,11 +4,12 @@ import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { subPageTransition, cardAnimation, staggerList, waveAnimation, cascadeAnimation, fadeInUp } from '../../shared/animations';
 import { SeoService } from '../../core/seo.service';
 import { CanonicalService } from '../../core/canonical.service';
+import { SubscriptionChoiceTriggerComponent } from '../../shared/components/subscription-choice-trigger/subscription-choice-trigger.component';
 
 @Component({
   selector: 'app-engineers-page',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, SubscriptionChoiceTriggerComponent],
   templateUrl: './engineers.page.html',
   styleUrls: ['./engineers.page.css'],
   animations: [subPageTransition, cardAnimation, staggerList, waveAnimation, cascadeAnimation, fadeInUp]

@@ -27,14 +27,10 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 	videoPlaying = false;
 	shouldUseHeroVideo = true;
 	activeHomeVideoId: string | null = null;
+	showFinalSubscriptionChoices = false;
+	showFinalTeacherChoices = false;
 
 	homeVideos = [
-		{
-			id: 'TzWoIqSHVOI',
-			title: 'آراء الطلاب اللي نجحوا معنا',
-			heading: 'سيستم المتابعة الجديد',
-			description: '"تعرف علي سيستم المتابعة الجديد"'
-		},
 		{
 			id: 'RMWzTedJlE8',
 			title: 'بودكاست رحلة صعود طلاب الدبلوم',
@@ -380,6 +376,26 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.activeHomeVideoId = videoId;
 	}
 
+	toggleFinalSubscriptionChoices(event: Event): void {
+		event.preventDefault();
+		event.stopPropagation();
+		this.showFinalSubscriptionChoices = !this.showFinalSubscriptionChoices;
+	}
+
+	closeFinalSubscriptionChoices(): void {
+		this.showFinalSubscriptionChoices = false;
+	}
+
+	toggleFinalTeacherChoices(event: Event): void {
+		event.preventDefault();
+		event.stopPropagation();
+		this.showFinalTeacherChoices = !this.showFinalTeacherChoices;
+	}
+
+	closeFinalTeacherChoices(): void {
+		this.showFinalTeacherChoices = false;
+	}
+
 	isHomeVideoLoaded(videoId: string): boolean {
 		return this.activeHomeVideoId === videoId;
 	}
@@ -389,8 +405,12 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	getHomeVideoEmbedUrl(videoId: string): SafeResourceUrl {
-		const url = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+		const url = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`;
 		return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+	}
+
+	getHomeVideoWatchUrl(videoId: string): string {
+		return `https://youtu.be/${videoId}`;
 	}
 	
 	scrollReviewsPrev() {

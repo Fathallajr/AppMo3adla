@@ -11,6 +11,22 @@
 	--green: #13b96c;
 }
 
+/* Final override: match computer benefit cards to the lighter engineering style. */
+.review-page--computers .review-benefits article {
+	border: 1px solid #e2e8f0;
+	border-top-width: 3px;
+	background: linear-gradient(160deg, #fff, #f8fafc);
+	box-shadow: 0 10px 24px rgba(16, 24, 39, .08);
+}
+.review-page--computers .review-benefits article:nth-child(1) { border-top-color: #f15a3a; }
+.review-page--computers .review-benefits article:nth-child(2) { border-top-color: #4f75db; }
+.review-page--computers .review-benefits article:nth-child(3) { border-top-color: #8b5cf6; }
+.review-page--computers .review-benefits article:nth-child(4) { border-top-color: #13b96c; }
+.review-page--computers .review-benefits article:nth-child(5) { border-top-color: #e0a11b; }
+.review-page--computers .review-benefits article:nth-child(6) { border-top-color: #0ea5e9; }
+.review-page--computers .review-benefits article > span { color: #cbd1da; }
+.review-page--computers .review-benefits article > strong { color: #14244b; }
+
 * {
 	box-sizing: border-box;
 }
@@ -1873,6 +1889,22 @@
 	}
 }
 
+/* Keep computer benefit cards aligned with the lighter engineering card style. */
+.review-page--computers .review-benefits article {
+	border: 1px solid #e2e8f0;
+	border-top-width: 3px;
+	background: linear-gradient(160deg, #fff, #f8fafc);
+	box-shadow: 0 10px 24px rgba(16, 24, 39, .08);
+}
+.review-page--computers .review-benefits article:nth-child(1) { border-top-color: #f15a3a; }
+.review-page--computers .review-benefits article:nth-child(2) { border-top-color: #4f75db; }
+.review-page--computers .review-benefits article:nth-child(3) { border-top-color: #8b5cf6; }
+.review-page--computers .review-benefits article:nth-child(4) { border-top-color: #13b96c; }
+.review-page--computers .review-benefits article:nth-child(5) { border-top-color: #e0a11b; }
+.review-page--computers .review-benefits article:nth-child(6) { border-top-color: #0ea5e9; }
+.review-page--computers .review-benefits article > span { color: #cbd1da; }
+.review-page--computers .review-benefits article > strong { color: #14244b; }
+
 @media (max-width: 700px) {
 	/* Mobile wallet layout: readable horizontal rows instead of desktop cards. */
 	.review-wallets {
@@ -3255,3 +3287,19 @@
 		font-size: clamp(1.2rem, 6vw, 1.5rem);
 	}
 }
+
+/* Final override: match computer benefit cards to the lighter engineering style. */
+.review-page--computers .review-benefits article {
+	border: 1px solid #e2e8f0;
+	border-top-width: 3px;
+	background: linear-gradient(160deg, #fff, #f8fafc);
+	box-shadow: 0 10px 24px rgba(16, 24, 39, .08);
+}
+.review-page--computers .review-benefits article:nth-child(1) { border-top-color: #f15a3a; }
+.review-page--computers .review-benefits article:nth-child(2) { border-top-color: #4f75db; }
+.review-page--computers .review-benefits article:nth-child(3) { border-top-color: #8b5cf6; }
+.review-page--computers .review-benefits article:nth-child(4) { border-top-color: #13b96c; }
+.review-page--computers .review-benefits article:nth-child(5) { border-top-color: #e0a11b; }
+.review-page--computers .review-benefits article:nth-child(6) { border-top-color: #0ea5e9; }
+.review-page--computers .review-benefits article > span { color: #cbd1da; }
+.review-page--computers .review-benefits article > strong { color: #14244b; }

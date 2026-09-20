@@ -48,7 +48,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 
 	get heroProgramLabel(): string {
 		if (!this.isEnglishSubscription) return this.subscriptionProgramLabel;
-		return this.isComputersSubscription ? 'Computer Equation' : 'Engineering Equation';
+		return this.isComputersSubscription ? 'Computer Equivalency' : 'Engineering Equivalency';
 	}
 
 	get heroMonthLabel(): string {
@@ -161,15 +161,15 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 			validity: {
 				title: 'مدة صلاحية الاشتراك:',
 				points: [
-					'الكود شغال لغاية آخر الشهر فقط',
-					'مع انتهاء الشهر بيقفل المحتوى تلقائياً',
-					'عند تجديد الاشتراك الكود الجديد بيفتحلك كل المحتوى من الأول'
+					'الكود ساري حتى نهاية الشهر المشترك فيه',
+					'عند انتهاء الشهر، يتم إغلاق المحتوى تلقائياً، وعند تجديد الاشتراك يتم فتح المحتوى من جديد.'
 				]
 			},
 			refund: {
 				title: 'سياسة الاسترداد',
 				points: [
-					'⚠️ لا يوجد استرداد أو سحب للاشتراك نهائيًا لأي سبب من الأسباب.'
+					'⚠️ السحب متاح خلال أسبوع من الاشتراك مع استرداد نصف المبلغ فقط.',
+					'بعد الأسبوع، لا يُمكن استرداد أي مبلغ.'
 				]
 			}
 		},
@@ -256,8 +256,8 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 					...this.subscriptionDetails.subscriptionWarnings.validity,
 					points: [
 						`المحتوى الخاص بـ ${this.subscriptionProgramLabel}`,
-						'الكود شغال خلال مدة الاشتراك فقط',
-						'مع انتهاء مدة الاشتراك بيقفل المحتوى تلقائيًا'
+						'الكود ساري حتى نهاية الشهر المشترك فيه',
+						'عند انتهاء الشهر، يتم إغلاق المحتوى تلقائياً، وعند تجديد الاشتراك يتم فتح المحتوى من جديد.'
 					]
 				}
 			}

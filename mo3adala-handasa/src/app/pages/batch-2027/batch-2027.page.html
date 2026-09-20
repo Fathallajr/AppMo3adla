@@ -22,7 +22,15 @@
 						<span><b>03</b> متابعة مستمرة<br><small>مش لوحدك في الطريق</small></span>
 					</div>
 					<div class="batch-hero__actions">
-						<a href="#join" class="batch-button batch-button--primary">ابدأ رحلتك الآن <span>←</span></a>
+						<div class="batch-subscription-picker">
+							<button type="button" class="batch-button batch-button--primary" (click)="toggleHeroSubscriptionChoices($event)" [attr.aria-expanded]="showHeroSubscriptionChoices" aria-haspopup="menu">ابدأ رحلتك الآن <span>←</span></button>
+							<div *ngIf="showHeroSubscriptionChoices" class="batch-subscription-menu" role="menu" aria-label="اختار نوع الاشتراك">
+								<a routerLink="/subscription-engineering-ar" (click)="closeHeroSubscriptionChoices()" role="menuitem">هندسة عربي</a>
+								<a routerLink="/subscription-computers-ar" (click)="closeHeroSubscriptionChoices()" role="menuitem">حاسبات عربي</a>
+								<a routerLink="/subscription-engineering-en" (click)="closeHeroSubscriptionChoices()" role="menuitem">هندسة إنجليزي</a>
+								<a routerLink="/subscription-computers-en" (click)="closeHeroSubscriptionChoices()" role="menuitem">حاسبات إنجليزي</a>
+							</div>
+						</div>
 						<a href="https://app-mo3adlet-handsa.com/register.php" target="_blank" rel="noopener" class="batch-button batch-button--ghost">اعمل حساب على المنصة</a>
 					</div>
 					<a href="#join" class="batch-hero-ref__video"><span>▶</span> شاهد فيديو تعريفي عن المنصة</a>

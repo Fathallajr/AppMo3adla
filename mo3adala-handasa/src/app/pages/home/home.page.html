@@ -422,6 +422,13 @@
 							allowfullscreen>
 						</iframe>
 					</div>
+					<a
+						class="mx-5 mt-3 inline-flex items-center gap-2 text-sm font-bold text-orange-600 hover:text-orange-700"
+						[target]="'_blank'"
+						[rel]="'noopener noreferrer'"
+						[href]="getHomeVideoWatchUrl(video.id)">
+						فتح الفيديو على يوتيوب <span aria-hidden="true">↗</span>
+					</a>
 					<div class="experience-card-content p-6">
 						<h3 class="text-xl font-bold text-slate-900 mb-2">{{ video.heading }}</h3>
 						<p class="text-slate-600 mb-4">{{ video.description }}</p>
@@ -450,8 +457,26 @@
 			<h2>ابدأ رحلتك يا بشمهندس</h2>
 			<p>انضم إلى مئات الطلاب وابدأ مذاكرتك بخطة واضحة، شرح متكامل، ومتابعة مستمرة لحد يوم الامتحان.</p>
 			<div class="final-cta-actions">
-				<a routerLink="/subscription-engineer" class="final-cta-primary">ابدأ الآن <span aria-hidden="true">←</span></a>
-				<a routerLink="/engineers" class="final-cta-secondary">اتعرف على المدرسين</a>
+				<div class="final-subscription-picker">
+					<button type="button" class="final-cta-primary" (click)="toggleFinalSubscriptionChoices($event)" [attr.aria-expanded]="showFinalSubscriptionChoices" aria-haspopup="menu">
+						ابدأ الآن <span aria-hidden="true">←</span>
+					</button>
+					<div *ngIf="showFinalSubscriptionChoices" class="final-subscription-menu" role="menu" aria-label="اختار نوع الاشتراك">
+						<a routerLink="/subscription-engineering-ar" (click)="closeFinalSubscriptionChoices()" role="menuitem">هندسة عربي</a>
+						<a routerLink="/subscription-computers-ar" (click)="closeFinalSubscriptionChoices()" role="menuitem">حاسبات عربي</a>
+						<a routerLink="/subscription-engineering-en" (click)="closeFinalSubscriptionChoices()" role="menuitem">هندسة إنجليزي</a>
+						<a routerLink="/subscription-computers-en" (click)="closeFinalSubscriptionChoices()" role="menuitem">حاسبات إنجليزي</a>
+					</div>
+				</div>
+				<div class="final-teacher-picker">
+					<button type="button" class="final-cta-secondary" (click)="toggleFinalTeacherChoices($event)" [attr.aria-expanded]="showFinalTeacherChoices" aria-haspopup="menu">
+						اتعرف على المدرسين
+					</button>
+					<div *ngIf="showFinalTeacherChoices" class="final-subscription-menu" role="menu" aria-label="اختار لغة المدرسين">
+						<a routerLink="/engineers-ar" (click)="closeFinalTeacherChoices()" role="menuitem">المدرسين عربي</a>
+						<a routerLink="/engineers-en" (click)="closeFinalTeacherChoices()" role="menuitem">المدرسين إنجليزي</a>
+					</div>
+				</div>
 			</div>
 			<div class="final-cta-proof"><span>✓</span> محتوى منظم <span>✓</span> متابعة مستمرة <span>✓</span> تدريب على شكل الامتحان</div>
 		</div>

@@ -12,6 +12,11 @@
 .batch-hero h1 strong { color: #ff7917; }
 .batch-hero__lead { max-width: 590px; color: #dbe5ff; font-size: 20px; line-height: 1.9; margin: 0 0 28px; }
 .batch-hero__actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.batch-subscription-picker { position: relative; }
+.batch-subscription-picker > .batch-button { border: 0; }
+.batch-subscription-menu { position: absolute; right: 0; bottom: calc(100% + 8px); z-index: 10; display: grid; min-width: 190px; gap: 3px; padding: 6px; border: 1px solid #ffd0ad; border-radius: 14px; background: #fff; box-shadow: 0 14px 30px rgba(23,36,82,.2); }
+.batch-subscription-menu a { padding: 9px 12px; border-radius: 9px; color: #172452; font-size: 14px; font-weight: 800; text-decoration: none; white-space: nowrap; }
+.batch-subscription-menu a:hover, .batch-subscription-menu a:focus-visible { background: #fff2e9; color: #ed6b22; }
 .batch-button { border: 0; border-radius: 14px; padding: 15px 24px; display: inline-flex; align-items: center; justify-content: center; gap: 16px; font-size: 17px; font-weight: 800; transition: transform .2s, box-shadow .2s, background .2s; cursor: pointer; }
 .batch-button:hover { transform: translateY(-3px); }
 .batch-button--primary, .batch-button--submit { background: #ff7917; color: #fff; box-shadow: 0 12px 25px rgba(255, 121, 23, .25); }

@@ -4,11 +4,12 @@ import { SeoService } from '../../core/seo.service';
 import { CanonicalService } from '../../core/canonical.service';
 import { cmsPageDefaults } from '../../core/cms-page.registry';
 import { MonthlyContentService } from '../../core/services/monthly-content.service';
+import { SubscriptionChoiceTriggerComponent } from '../../shared/components/subscription-choice-trigger/subscription-choice-trigger.component';
 
 @Component({
 	selector: 'app-social-page',
 	standalone: true,
-	imports: [CommonModule],
+	imports: [CommonModule, SubscriptionChoiceTriggerComponent],
 	templateUrl: './social.page.html',
 	styleUrls: ['./social.page.css'],
 })

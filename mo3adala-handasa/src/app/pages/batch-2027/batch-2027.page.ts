@@ -24,6 +24,7 @@ function normalizePhone(value: string): string {
 	styleUrls: ['./batch-2027.page.css']
 })
 export class Batch2027PageComponent implements OnInit, OnDestroy {
+	showHeroSubscriptionChoices = false;
 	readonly giftOptions = [
 		{ id: 'discount', label: 'خصم 10% على أول شهر', value: '10%', detail: 'خصم على أول شهر', available: true, emoji: 'خصم 10%', weight: 18 },
 		{ id: 'discount-5', label: 'خصم 5% على أول شهر', value: '5%', detail: 'خصم على أول شهر', available: true, emoji: 'خصم 5%', weight: 8 },
@@ -57,6 +58,16 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	wheelAlreadyUsed = false;
 	private giftRevealTimer?: ReturnType<typeof setTimeout>;
 	private wheelTimer?: number;
+
+	toggleHeroSubscriptionChoices(event: Event): void {
+		event.preventDefault();
+		event.stopPropagation();
+		this.showHeroSubscriptionChoices = !this.showHeroSubscriptionChoices;
+	}
+
+	closeHeroSubscriptionChoices(): void {
+		this.showHeroSubscriptionChoices = false;
+	}
 
 	lead = {
 		name: '', whatsapp: '', school: '', studentType: '', program: '', source: ''
