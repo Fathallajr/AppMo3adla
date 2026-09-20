@@ -9,11 +9,12 @@ import { JsonLdService } from '../../core/jsonld.service';
 import { WhatIsEquationComponent } from '../../shared/components/what-is-equation/what-is-equation.component';
 import { cmsPageDefaults } from '../../core/cms-page.registry';
 import { MonthlyContentService } from '../../core/services/monthly-content.service';
+import { SubscriptionChoiceTriggerComponent } from '../../shared/components/subscription-choice-trigger/subscription-choice-trigger.component';
 
 @Component({
 	selector: 'app-home-page',
 	standalone: true,
-	imports: [CommonModule, RouterLink, WhatIsEquationComponent],
+	imports: [CommonModule, RouterLink, WhatIsEquationComponent, SubscriptionChoiceTriggerComponent],
 	animations: [fadeInUp, staggerList, homePageTransition, cardAnimation],
 	templateUrl: './home.page.html',
 	styleUrls: ['./home.page.css'],
