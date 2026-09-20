@@ -59,6 +59,8 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 		return this.isEnglishSubscription ? 'October 10' : this.closingDateLabel;
 	}
 	private closingDate: Date | null = null;
+	private readonly closingDeadlineStorageKey = 'subscription-enrollment-deadline';
+	private readonly enrollmentClosedStorageKey = 'subscription-enrollment-closed';
 
 	private closingTimer: ReturnType<typeof setInterval> | null = null;
 
@@ -81,7 +83,8 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 			return;
 		}
 
-		this.isEnrollmentClosed = state.isEnrollmentClosed ?? this.isEnrollmentClosed;
+		const countdownClosed = typeof window !== 'undefined' && localStorage.getItem(this.enrollmentClosedStorageKey) === 'true';
+		this.isEnrollmentClosed = countdownClosed || state.isEnrollmentClosed || this.isEnrollmentClosed;
 		this.enrollmentReopenMessage = state.enrollmentReopenMessage ?? this.enrollmentReopenMessage;
 
 		const loaded = state.subscriptionDetails;
@@ -189,6 +192,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 		this.isEnglishSubscription = pathname.endsWith('-en');
 		this.subscriptionProgramLabel = `معادلة ${this.isComputersSubscription ? 'حاسبات' : 'هندسة'} ${this.isEnglishSubscription ? 'انجليزي' : 'عربي'}`;
 		this.applySubscriptionProgram();
+		this.restoreCountdownState();
 		if (typeof window !== 'undefined') {
 			const siteUrl = (window as any)['NG_SITE_URL'] || 'https://www.appmo3adla.com';
 			const title = `${this.subscriptionProgramLabel} | أبلكيشن معادلة كلية هندسة`;
@@ -280,6 +284,13 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 	}
 
 	private getNextClosingDate(): Date {
+		if (typeof window !== 'undefined') {
+			const storedDeadline = Number(localStorage.getItem(this.closingDeadlineStorageKey));
+			if (storedDeadline > 0) {
+				return new Date(storedDeadline);
+			}
+		}
+
 		const now = new Date();
 		const closingDate = new Date(now.getFullYear(), now.getMonth(), 10, 22, 0, 0, 0);
 
@@ -287,13 +298,29 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 			closingDate.setMonth(closingDate.getMonth() + 1);
 		}
 
+		if (typeof window !== 'undefined') {
+			localStorage.setItem(this.closingDeadlineStorageKey, String(closingDate.getTime()));
+		}
+
 		return closingDate;
+	}
+
+	private restoreCountdownState(): void {
+		if (typeof window !== 'undefined' && localStorage.getItem(this.enrollmentClosedStorageKey) === 'true') {
+			this.isEnrollmentClosed = true;
+			this.enrollmentReopenMessage = 'انتهى وقت الاشتراك تلقائيًا، وسيتم فتح التسجيل مع بداية فترة الاشتراك القادمة.';
+		}
 	}
 
 	private updateClosingCountdown(): void {
 		const closingDate = this.closingDate ?? this.getNextClosingDate();
 		this.closingDate = closingDate;
 		const remaining = closingDate.getTime() - Date.now();
+		this.closingDateLabel = new Intl.DateTimeFormat('ar-EG-u-nu-latn', {
+			day: 'numeric',
+			month: 'long',
+		}).format(closingDate);
+
 		if (remaining <= 0) {
 			this.closingDays = 0;
 			this.closingHours = 0;
@@ -301,6 +328,9 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 			this.closingSeconds = 0;
 			this.isEnrollmentClosed = true;
 			this.enrollmentReopenMessage = 'انتهى وقت الاشتراك تلقائيًا، وسيتم فتح التسجيل مع بداية فترة الاشتراك القادمة.';
+			if (typeof window !== 'undefined') {
+				localStorage.setItem(this.enrollmentClosedStorageKey, 'true');
+			}
 			if (this.closingTimer) {
 				clearInterval(this.closingTimer);
 				this.closingTimer = null;
@@ -308,11 +338,6 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, OnDestroy {
 			return;
 		}
 		const totalSeconds = Math.floor(remaining / 1000);
-		this.closingDateLabel = new Intl.DateTimeFormat('ar-EG-u-nu-latn', {
-			day: 'numeric',
-			month: 'long',
-		}).format(closingDate);
-
 		this.closingDays = Math.floor(totalSeconds / 86400);
 		this.closingHours = Math.floor((totalSeconds % 86400) / 3600);
 		this.closingMinutes = Math.floor((totalSeconds % 3600) / 60);
