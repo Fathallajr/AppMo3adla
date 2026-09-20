@@ -460,12 +460,17 @@ nav .font-extrabold {
 /* Extra educational details for the visual panel. */
 .launch-offer-visual-note{position:absolute;top:12%;right:8%;z-index:2;color:#ed6b22;font-size:1rem;font-weight:900;line-height:1.35;text-align:right;transform:rotate(-5deg)}
 .launch-offer-visual-note strong{color:#102a43}
-.launch-offer-visual-note:after{content:'';position:absolute;right:0;bottom:-.7rem;width:78%;height:.65rem;border-bottom:2px solid #ed6b22;border-radius:50%;transform:rotate(-4deg) skewX(-18deg);opacity:.9}
+.launch-offer-visual-note:before,.launch-offer-visual-note:after{content:'';position:absolute;right:0;height:.65rem;border-bottom:2px solid #ed6b22;border-radius:50%;opacity:.9}
+.launch-offer-visual-note:before{bottom:-.55rem;width:68%;right:7%;transform:rotate(-6deg) skewX(-18deg)}
+.launch-offer-visual-note:after{bottom:-.85rem;width:78%;transform:rotate(-4deg) skewX(-18deg)}
 .launch-offer-books{position:absolute;left:7%;bottom:9%;z-index:2;width:7.5rem;padding:.55rem .7rem;border:1px solid rgba(16,42,67,.2);border-radius:.35rem;color:#486581;background:rgba(255,255,255,.75);box-shadow:0 .35rem 0 #ed6b22,.15rem .7rem 0 rgba(16,42,67,.15);font-family:Georgia,serif;font-size:.75rem;font-weight:700;line-height:1.1;transform:rotate(-7deg)}
 .launch-offer-helmet{position:absolute;right:5%;bottom:8%;z-index:2;width:5rem;height:2.9rem;border:3px solid rgba(237,107,34,.55);border-bottom-width:5px;border-radius:4rem 4rem .8rem .8rem;background:rgba(255,180,112,.23);transform:rotate(6deg)}
 .launch-offer-helmet:before{content:'';position:absolute;left:50%;top:-.8rem;width:2.2rem;height:1.1rem;border:3px solid rgba(237,107,34,.55);border-bottom:0;border-radius:2rem 2rem 0 0;transform:translateX(-50%)}
 .launch-offer-helmet:after{content:'';position:absolute;right:-.65rem;bottom:-.3rem;width:6.2rem;height:.45rem;border:3px solid rgba(237,107,34,.55);border-radius:99px}
-@media(max-width:700px){.launch-offer-visual-note{top:8%;right:6%;font-size:.72rem}.launch-offer-visual-note:after{bottom:-.55rem;height:.5rem;border-bottom-width:1.5px}.launch-offer-books{left:4%;bottom:7%;width:5.5rem;font-size:.55rem}.launch-offer-helmet{right:3%;bottom:7%;width:3.6rem;height:2rem}.launch-offer-helmet:before{top:-.55rem;width:1.6rem;height:.75rem}.launch-offer-helmet:after{width:4.4rem}}
+.launch-offer-laptop{position:absolute;left:6%;bottom:8%;z-index:2;width:4.4rem;height:2.7rem;border:3px solid rgba(237,107,34,.55);border-radius:.35rem .35rem .55rem .55rem;background:rgba(255,180,112,.23);filter:drop-shadow(0 .35rem .25rem rgba(16,42,67,.16));transform:rotate(-8deg)}
+.launch-offer-laptop:before{content:'';position:absolute;left:.35rem;top:.3rem;width:3.35rem;height:1.65rem;border:2px solid rgba(237,107,34,.45);border-radius:.18rem;background:rgba(255,255,255,.18)}
+.launch-offer-laptop:after{content:'';position:absolute;left:-.55rem;bottom:-.45rem;width:5.3rem;height:.42rem;border:3px solid rgba(237,107,34,.55);border-radius:99px;background:rgba(255,180,112,.23)}
+@media(max-width:700px){.launch-offer-visual-note{top:8%;right:6%;font-size:.72rem}.launch-offer-visual-note:after{bottom:-.55rem;height:.5rem;border-bottom-width:1.5px}.launch-offer-books{left:4%;bottom:7%;width:5.5rem;font-size:.55rem}.launch-offer-helmet{right:3%;bottom:7%;width:3.6rem;height:2rem}.launch-offer-helmet:before{top:-.55rem;width:1.6rem;height:.75rem}.launch-offer-helmet:after{width:4.4rem}.launch-offer-laptop{left:4%;bottom:8%;width:3rem;height:1.85rem}.launch-offer-laptop:before{left:.22rem;top:.2rem;width:2.25rem;height:1.1rem}.launch-offer-laptop:after{left:-.4rem;bottom:-.35rem;width:3.75rem;height:.3rem}}
 
 /* Center the mascot precisely inside the circular visual area. */
 .launch-offer-visual img {
@@ -615,6 +620,7 @@ nav .font-extrabold {
 .launch-offer-visual-note { animation-delay: .25s; }
 .launch-offer-proof-note--success { animation-delay: .75s; }
 .launch-offer-proof-note--rules { animation-delay: 1.05s; }
+.launch-offer-visual-note:before,
 .launch-offer-visual-note:after,
 .launch-offer-proof-note:before,
 .launch-offer-proof-note:after {

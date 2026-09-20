@@ -83,7 +83,7 @@
 
 	<div class="batch-form-heading"><span>خطوتك الجاية تبدأ هنا</span><h2>سجل الآن يا بشمهندس</h2></div>
 	<section id="join" class="batch-join batch-container">
-		<div class="batch-join__intro" *ngIf="!offerSubmitted"><span class="batch-kicker"><span></span> خليك أول واحد يعرف</span><h2>سجل دلوقتي<br><b>وهنكلمك أول واحد عشان العروض والخصومات الحصرية</b></h2><p>سيب بياناتك واحجز أولوية التواصل قبل بداية الدفعة الجديدة.</p><div class="batch-join__note">🔒 بياناتك للتواصل معاك بخصوص العرض والدفعة الجديدة فقط.</div></div>
+		<div class="batch-join__intro" *ngIf="!offerSubmitted"><span class="batch-kicker"><span></span> خليك أول واحد يعرف</span><h2>سجل دلوقتي<br><b>وخد أولوية العروض والخصومات</b></h2><p>سيب بياناتك واحجز أولوية التواصل قبل بداية الدفعة الجديدة.</p><div class="batch-join__note">🔒 بياناتك للتواصل معاك بخصوص العرض والدفعة الجديدة فقط.</div></div>
 		<div class="batch-join__success" *ngIf="offerSubmitted"><div>✓</div><h2>تم تسجيل بياناتك بنجاح</h2><p>هنكلمك قريب بكل تفاصيل دفعة 2027 والعرض الخاص بيك.</p></div>
 		<form *ngIf="!offerSubmitted" class="batch-form launch-offer-form" (ngSubmit)="submitLaunchOffer()">
 			<label><span>اسمك الثلاثي <b>*</b></span><input name="offerName" [(ngModel)]="lead.name" required placeholder="اكتب اسمك الثلاثي" /></label>

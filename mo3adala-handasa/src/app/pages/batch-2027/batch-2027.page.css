@@ -54,7 +54,7 @@
 .batch-float { border: 1px solid rgba(255,255,255,.25); box-shadow: 0 16px 32px rgba(0,0,0,.2); }
 @media (max-width: 800px) { .batch-hero { padding: 16px 0 35px; }.batch-hero__grid { width: min(100% - 28px, 600px); gap: 20px; padding: 25px 0 30px; }.batch-hero__content { padding: 24px 18px 28px; border-radius: 24px; }.batch-hero__content .batch-back { margin-bottom: 16px; }.batch-hero h1 { font-size: clamp(35px, 11vw, 52px); }.batch-hero__lead { font-size: 16px; }.batch-hero__visual { min-height: 375px; border-radius: 27px; }.batch-year-card img { width: min(350px, 100%); }.batch-hero__visual:before { inset: 10% 5%; }.batch-float--gift { right: 1%; }.batch-float--free { left: 1%; } }
 
-.batch-join__intro h2 b { color: #ed6b22; }
+.batch-join__intro h2 b { display: inline-block; color: #ed6b22; font-size: clamp(24px, 3vw, 34px); line-height: 1.3; }
 .batch-form label { display: grid; gap: 5px; }
 .batch-form label > span b { color: #ed6b22; }
 .batch-form input, .batch-form select { margin-top: 0; color: #102a43; background: #fff; }
