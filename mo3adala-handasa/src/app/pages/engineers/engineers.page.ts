@@ -24,6 +24,12 @@ export class EngineersPageComponent implements OnInit {
     { id: 3, image: 'assets/teacher4.jpg', alt: 'دكتور سعد العميري', subject: 'كيمياء', description: 'أستاذ الكيمياء' },
     { id: 5, image: 'assets/teacher2.png', alt: 'د/ عمر أحمد عبد الفتاح', subject: 'English', description: 'أستاذ اللغة الإنجليزية' }
   ];
+  englishTeachers = [
+    { name: 'المهندس أحمد علي', subject: 'Math 1 / Math 2' },
+    { name: 'المهندس محمد أشرف', subject: 'Mechanics' },
+    { name: 'المهندس محمد نبيل', subject: 'Chemistry' },
+    { name: 'المهندس أحمد عبد المنعم', subject: 'Physics' }
+  ];
   constructor(
     private router: Router,
     private route: ActivatedRoute,

@@ -12,9 +12,6 @@
 	font-family: 'TheYearofHandicrafts', sans-serif;
 }
 
-/* Keep each language page focused on its own teaching team. */
-.engineers-page--en .teacher-card:nth-child(-n + 4) { display: none; }
-
 .engineers-page::before {
 	content: '';
 	position: absolute;
@@ -262,6 +259,31 @@
 	object-position: center 28%;
 }
 
+/* The English page uses the new engineering image as a clean editorial panel. */
+.engineers-page--en .eng-hero__visual {
+	border: 1px solid rgba(147, 197, 253, .35);
+	border-radius: 1.5rem 5rem 1.5rem 5rem;
+	box-shadow: 0 26px 64px rgba(2, 12, 34, .42), 0 0 0 10px rgba(59, 130, 246, .08);
+	transform: none;
+}
+
+.engineers-page--en .eng-hero__visual img {
+	object-position: 24% center;
+}
+
+/* The Arabic team artwork is a wide group portrait; preserve its full composition. */
+.engineers-page:not(.engineers-page--en) .eng-hero__visual {
+	min-height: 0;
+	height: auto;
+	aspect-ratio: 16 / 10;
+}
+
+.engineers-page:not(.engineers-page--en) .eng-hero__visual img {
+	min-height: 0;
+	height: 100%;
+	object-position: center center;
+}
+
 .eng-hero__visual-shade {
 	position: absolute;
 	inset: 0;
@@ -390,6 +412,16 @@
 	box-shadow: 0 12px 28px rgba(15, 23, 42, .06);
 	cursor: pointer;
 	transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+}
+
+.teacher-card--static {
+	cursor: default;
+}
+
+.teacher-card.teacher-card--static:hover {
+	border-color: #e2e8f0;
+	box-shadow: 0 12px 28px rgba(15, 23, 42, .06);
+	transform: none;
 }
 
 .teacher-card:hover,
@@ -664,7 +696,7 @@
 	}
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1100px) {
 	.eng-back--top {
 		top: 5.35rem;
 		inset-inline-start: 1rem;
@@ -712,6 +744,53 @@
 	}
 	.eng-cta > div { width: 100%; }
 	.eng-cta .eng-button--light { width: 100%; }
+
+	/* Mobile English hero: keep the image compact and give the copy its own space. */
+	.engineers-page--en .eng-hero__inner {
+		gap: 1.35rem;
+		padding-top: 6.7rem;
+		padding-bottom: 2.25rem;
+	}
+	.engineers-page--en .eng-back--top {
+		top: .85rem;
+		inset-inline-start: auto;
+		inset-inline-end: 1rem;
+	}
+	.engineers-page--en .eng-hero__visual {
+		order: -1;
+		min-height: 245px;
+		max-height: 245px;
+		border-radius: 1.25rem 3.5rem 1.25rem 3.5rem;
+		box-shadow: 0 18px 42px rgba(2, 12, 34, .34), 0 0 0 7px rgba(59, 130, 246, .07);
+	}
+	.engineers-page--en .eng-hero__visual img {
+		min-height: 245px;
+		object-position: 24% center;
+	}
+	.engineers-page--en .eng-hero__visual-tag {
+		top: .8rem;
+		right: .8rem;
+		padding: .35rem .6rem;
+		font-size: .66rem;
+	}
+	.engineers-page--en .eng-hero__visual-caption {
+		right: 1rem;
+		bottom: 1rem;
+		left: 1rem;
+	}
+	.engineers-page--en .eng-hero__visual-caption strong { font-size: 1.05rem; }
+	.engineers-page--en .eng-hero__visual-caption span { font-size: .68rem; }
+	.engineers-page--en .eng-hero__content { text-align: right; }
+	.engineers-page--en .eng-hero p { font-size: .88rem; line-height: 1.85; }
+
+	.engineers-page:not(.engineers-page--en) .eng-hero__visual {
+		min-height: 0;
+		max-height: none;
+		aspect-ratio: 16 / 10;
+	}
+	.engineers-page:not(.engineers-page--en) .eng-hero__visual img {
+		min-height: 0;
+	}
 }
 
 @media (max-width: 520px) {
@@ -732,7 +811,7 @@
 		padding-inline: 1rem;
 	}
 	.eng-hero h1 {
-		font-size: 2.7rem;
+		font-size: clamp(2rem, 9vw, 2.7rem);
 	}
 	.eng-hero__actions,
 	.eng-button {
