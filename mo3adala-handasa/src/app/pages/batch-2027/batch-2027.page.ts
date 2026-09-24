@@ -124,11 +124,14 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		this.selectedGift = '';
 		this.wheelAlreadyUsed = false;
 		this.wheelAttempts += 1;
+		const controller = new AbortController();
+		const timeout = window.setTimeout(() => controller.abort(), 15000);
 		try {
-		const endpoint = this.resolveWheelEndpoint();
+		const endpoint = this.resolveWheelEndpoint('spin');
 		const response = await fetch(endpoint, {
 			method: 'POST',
-			body: new URLSearchParams({ action: 'spin', sessionId: this.wheelSessionId })
+			body: new URLSearchParams({ action: 'spin', sessionId: this.wheelSessionId }),
+			signal: controller.signal
 		});
 		const payload = await response.json();
 		if (!response.ok || payload.success === false) {
@@ -157,6 +160,8 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 			this.wheelAttempts -= 1;
 			this.giftWheelSpinning = false;
 			this.wheelClaimError = 'تعذر تشغيل العجلة. حاول تاني.';
+		} finally {
+			window.clearTimeout(timeout);
 		}
 	}
 
@@ -198,7 +203,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		const controller = new AbortController();
 		const timeout = window.setTimeout(() => controller.abort(), 35000);
 		try {
-			const response = await fetch(this.resolveWheelEndpoint(), {
+			const response = await fetch(this.resolveWheelEndpoint('claim'), {
 				method: 'POST',
 				body: new URLSearchParams({ action: 'claim', name, whatsapp, program, wheelToken: this.wheelToken }),
 				signal: controller.signal
@@ -224,7 +229,10 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	private resolveWheelEndpoint(): string {
+	private resolveWheelEndpoint(action: 'spin' | 'claim'): string {
+		if (typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname)) {
+			return `/api/wheel/${action}`;
+		}
 		if (typeof window !== 'undefined') {
 			return window.NG_WHEEL_APPS_SCRIPT_ENDPOINT || WHEEL_APPS_SCRIPT_ENDPOINT;
 		}
