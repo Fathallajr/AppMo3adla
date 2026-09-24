@@ -8,8 +8,9 @@ const HEADERS = ['وقت التسجيل', 'الاسم', 'رقم الواتساب
 
 function doGet(event) {
   const params = event && event.parameter ? event.parameter : {};
-  if (String(params.action || '').trim() === 'spin') {
-    const response = spin_(params);
+  const action = String(params.action || '').trim();
+  if (action === 'spin' || action === 'check') {
+    const response = action === 'spin' ? spin_(params) : check_(params);
     const callback = String(params.callback || '').trim();
     if (callback && /^[A-Za-z_$][\w$]*$/.test(callback)) {
       return ContentService
@@ -19,6 +20,28 @@ function doGet(event) {
     return response;
   }
   return jsonResponse_({ success: true, service: 'wheel-claims' });
+}
+
+function check_(params) {
+  const whatsapp = normalizePhone_(params.whatsapp);
+  if (!/^01\d{9}$/.test(whatsapp)) {
+    return jsonResponse_({ success: false, exists: false, message: 'Invalid WhatsApp number' });
+  }
+
+  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const sheet = spreadsheet.getSheetByName(SHEET_NAME) || spreadsheet.getSheets()[0];
+  ensureHeaders_(sheet);
+  const lastRow = sheet.getLastRow();
+  let exists = false;
+
+  if (lastRow > 1) {
+    const rows = sheet.getRange(2, 3, lastRow - 1, 1).getDisplayValues();
+    exists = rows.some(function(row) {
+      return normalizeStoredPhone_(row[0]) === whatsapp;
+    });
+  }
+
+  return jsonResponse_({ success: true, exists: exists });
 }
 
 function doPost(event) {

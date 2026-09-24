@@ -241,8 +241,15 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		const timeout = window.setTimeout(() => controller.abort(), 35000);
 		try {
 			const claimBody = new URLSearchParams({ action: 'claim', name, whatsapp, program, wheelToken: this.wheelToken });
-			if (this.isStaticDeployment()) {
-				await fetch(this.resolveWheelEndpoint('claim'), { method: 'POST', mode: 'no-cors', body: claimBody });
+			if (this.isStaticDeployment() || this.isLocalBrowser()) {
+				const exists = await this.requestWheelPhoneCheck(whatsapp);
+				if (exists) {
+					this.wheelClaimError = 'تم تسجيل هذا الرقم من قبل.';
+					this.wheelAlreadyUsed = true;
+					this.wheelUsed = true;
+					return;
+				}
+				void fetch(this.wheelAppsScriptEndpoint(), { method: 'POST', mode: 'no-cors', body: claimBody });
 				this.wheelClaimComplete = true;
 				this.selectedGift = this.wheelResult.label;
 				this.wheelUsed = true;
@@ -275,17 +282,52 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	}
 
 	private resolveWheelEndpoint(action: 'spin' | 'claim'): string {
-		if (typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname)) {
+		if (this.isLocalBrowser()) {
 			return `/api/wheel/${action}`;
 		}
+		return this.wheelAppsScriptEndpoint();
+	}
+
+	private isStaticDeployment(): boolean {
+		return typeof window !== 'undefined' && !this.isLocalBrowser();
+	}
+
+	private isLocalBrowser(): boolean {
+		return typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname);
+	}
+
+	private wheelAppsScriptEndpoint(): string {
 		if (typeof window !== 'undefined') {
 			return window.NG_WHEEL_APPS_SCRIPT_ENDPOINT || WHEEL_APPS_SCRIPT_ENDPOINT;
 		}
 		return WHEEL_APPS_SCRIPT_ENDPOINT;
 	}
 
-	private isStaticDeployment(): boolean {
-		return typeof window !== 'undefined' && !['localhost', '127.0.0.1'].includes(window.location.hostname);
+	private requestWheelPhoneCheck(whatsapp: string): Promise<boolean> {
+		return new Promise((resolve, reject) => {
+			const callbackName = `__wheelCheck_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+			const script = document.createElement('script');
+			const timer = window.setTimeout(() => {
+				cleanup();
+				reject(new Error('wheel-check-timeout'));
+			}, 10000);
+			const cleanup = () => {
+				window.clearTimeout(timer);
+				delete (window as any)[callbackName];
+				script.remove();
+			};
+			(window as any)[callbackName] = (payload: any) => {
+				cleanup();
+				if (!payload?.success) reject(new Error(payload?.message || 'تعذر التحقق من الرقم.'));
+				else resolve(Boolean(payload.exists));
+			};
+			script.onerror = () => {
+				cleanup();
+				reject(new Error('wheel-check-failed'));
+			};
+			script.src = `${this.wheelAppsScriptEndpoint()}?action=check&whatsapp=${encodeURIComponent(whatsapp)}&callback=${encodeURIComponent(callbackName)}&t=${Date.now()}`;
+			document.body.appendChild(script);
+		});
 	}
 
 	closeGiftResult(): void {
