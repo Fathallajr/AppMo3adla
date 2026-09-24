@@ -240,7 +240,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		const controller = new AbortController();
 		const timeout = window.setTimeout(() => controller.abort(), 35000);
 		try {
-			const claimBody = new URLSearchParams({ action: 'claim', name, whatsapp, program, wheelToken: this.wheelToken });
+			const claimBody = new URLSearchParams({ action: 'claim', name, whatsapp, program, gift: this.wheelResult.label, wheelToken: this.wheelToken });
 			if (this.isStaticDeployment() || this.isLocalBrowser()) {
 				const payload = await this.requestWheelClaim(claimBody);
 				if (payload.alreadyRegistered) {
