@@ -208,6 +208,11 @@ app.post('/api/wheel/spin', (req, res) => {
 	}
 	let existing = Object.values(state.spins).find(spin => spin.sessionId === sessionId);
 	if (existing?.claimed) return res.status(409).json({ alreadyUsed: true, message: 'Wheel already used' });
+	// Do not reuse pre-fix tokens; Apps Script accepts only the new server-* format.
+	if (existing && !String(existing.token || '').startsWith('server-')) {
+		delete state.spins[existing.token];
+		existing = undefined;
+	}
 	if (existing && !WHEEL_OPTIONS.some(option => option.id === existing.gift?.id)) {
 		delete state.spins[existing.token];
 		existing = undefined;
