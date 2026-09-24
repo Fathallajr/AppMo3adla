@@ -243,7 +243,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 			const claimBody = new URLSearchParams({ action: 'claim', name, whatsapp, program, wheelToken: this.wheelToken });
 			if (this.isStaticDeployment() || this.isLocalBrowser()) {
 				const exists = await this.requestWheelPhoneCheck(whatsapp);
-				if (exists) {
+				if (exists === true) {
 					this.wheelClaimError = 'تم تسجيل هذا الرقم من قبل.';
 					this.wheelAlreadyUsed = true;
 					this.wheelUsed = true;
@@ -303,14 +303,14 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		return WHEEL_APPS_SCRIPT_ENDPOINT;
 	}
 
-	private requestWheelPhoneCheck(whatsapp: string): Promise<boolean> {
+	private requestWheelPhoneCheck(whatsapp: string): Promise<boolean | null> {
 		return new Promise((resolve, reject) => {
 			const callbackName = `__wheelCheck_${Date.now()}_${Math.random().toString(36).slice(2)}`;
 			const script = document.createElement('script');
 			const timer = window.setTimeout(() => {
 				cleanup();
-				reject(new Error('wheel-check-timeout'));
-			}, 10000);
+					resolve(null);
+			}, 2500);
 			const cleanup = () => {
 				window.clearTimeout(timer);
 				delete (window as any)[callbackName];
@@ -318,12 +318,12 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 			};
 			(window as any)[callbackName] = (payload: any) => {
 				cleanup();
-				if (!payload?.success) reject(new Error(payload?.message || 'تعذر التحقق من الرقم.'));
+				if (!payload?.success) resolve(null);
 				else resolve(Boolean(payload.exists));
 			};
 			script.onerror = () => {
 				cleanup();
-				reject(new Error('wheel-check-failed'));
+				resolve(null);
 			};
 			script.src = `${this.wheelAppsScriptEndpoint()}?action=check&whatsapp=${encodeURIComponent(whatsapp)}&callback=${encodeURIComponent(callbackName)}&t=${Date.now()}`;
 			document.body.appendChild(script);
