@@ -8,6 +8,14 @@ import { StyledSelectComponent } from '../../shared/components/styled-select/sty
 
 const PHONE_PATTERN = /^01\d{9}$/;
 const WHEEL_SPIN_DURATION_MS = 7500;
+const WHEEL_APPS_SCRIPT_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyvJVNsv_v4MCnBVQm4rA7074zhpzVVYWADIJTlTcu9XeqebON6s-tQpnMH11QoE-34/exec';
+
+declare global {
+	interface Window {
+		NG_LAUNCH_OFFER_ENDPOINT?: string;
+		NG_WHEEL_APPS_SCRIPT_ENDPOINT?: string;
+	}
+}
 
 function normalizePhone(value: string): string {
 	return value
@@ -84,6 +92,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	offerSubmitted = false;
 	offerError = '';
 	private readonly launchOfferEndpoint = '/api/launch-offer';
+	private readonly staticLaunchOfferEndpoint = 'https://script.google.com/macros/s/AKfycbzOMDZcgaUgRacnKnqgngxO_97N5iUU9AVoH1bA5HHEFg0LKS3Lju8ku6yl0nYgrLdQ/exec';
 	private readonly giftWhatsAppNumber = '201080681865';
 
 	constructor(
@@ -116,12 +125,13 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		this.wheelAlreadyUsed = false;
 		this.wheelAttempts += 1;
 		try {
-		const response = await fetch('/api/wheel/spin', {
-			method: 'POST', headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ sessionId: this.wheelSessionId })
+		const endpoint = this.resolveWheelEndpoint();
+		const response = await fetch(endpoint, {
+			method: 'POST',
+			body: new URLSearchParams({ action: 'spin', sessionId: this.wheelSessionId })
 		});
 		const payload = await response.json();
-		if (!response.ok) {
+		if (!response.ok || payload.success === false) {
 			this.wheelAttempts -= 1;
 			this.giftWheelSpinning = false;
 			this.wheelClaimError = payload.message || 'تعذر تشغيل العجلة. حاول تاني.';
@@ -188,10 +198,9 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		const controller = new AbortController();
 		const timeout = window.setTimeout(() => controller.abort(), 35000);
 		try {
-			const response = await fetch('/api/wheel/claim', {
+			const response = await fetch(this.resolveWheelEndpoint(), {
 				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ name, whatsapp, program, wheelToken: this.wheelToken }),
+				body: new URLSearchParams({ action: 'claim', name, whatsapp, program, wheelToken: this.wheelToken }),
 				signal: controller.signal
 			});
 			const payload = await response.json() as { success?: boolean; alreadyRegistered?: boolean; message?: string };
@@ -213,6 +222,13 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 			window.clearTimeout(timeout);
 			this.wheelClaimSubmitting = false;
 		}
+	}
+
+	private resolveWheelEndpoint(): string {
+		if (typeof window !== 'undefined') {
+			return window.NG_WHEEL_APPS_SCRIPT_ENDPOINT || WHEEL_APPS_SCRIPT_ENDPOINT;
+		}
+		return WHEEL_APPS_SCRIPT_ENDPOINT;
 	}
 
 
@@ -309,7 +325,12 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		this.offerError = '';
 		const lead = { name: this.lead.name.trim(), whatsapp: this.lead.whatsapp.trim(), school: this.lead.school.trim(), studentType: this.lead.studentType, program: this.lead.program, source: this.lead.source, consent: this.offerContactConsent ? 'نعم' : 'لا' };
 		try {
-			const payload = await this.postLead(lead);
+			let payload: { success?: boolean; alreadyRegistered?: boolean; message?: string };
+			try {
+				payload = await this.postLead(lead);
+			} catch {
+				payload = await this.postLeadToStaticAppsScript(lead);
+			}
 			if (payload.alreadyRegistered) {
 				this.offerError = 'رقم الواتساب ده مسجل بالفعل.';
 				return;
@@ -322,5 +343,18 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		} finally {
 			this.offerSubmitting = false;
 		}
+	}
+
+	private async postLeadToStaticAppsScript(data: Record<string, string>): Promise<{ success?: boolean; alreadyRegistered?: boolean; message?: string }> {
+		const endpoint = typeof window !== 'undefined'
+			? window.NG_LAUNCH_OFFER_ENDPOINT || this.staticLaunchOfferEndpoint
+			: this.staticLaunchOfferEndpoint;
+		const response = await fetch(endpoint, {
+			method: 'POST',
+			body: new URLSearchParams(data)
+		});
+		const payload = await response.json();
+		if (!response.ok) throw new Error(payload.message || 'request-failed');
+		return payload;
 	}
 }

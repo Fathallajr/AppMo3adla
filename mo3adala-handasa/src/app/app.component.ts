@@ -12,6 +12,7 @@ import { StyledSelectComponent } from './shared/components/styled-select/styled-
 declare global {
 	interface Window {
 		NG_LAUNCH_OFFER_ENDPOINT?: string;
+		NG_WHEEL_APPS_SCRIPT_ENDPOINT?: string;
 	}
 }
 

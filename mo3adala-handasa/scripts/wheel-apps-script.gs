@@ -15,6 +15,10 @@ function doPost(event) {
   try {
     lock.waitLock(10000);
     const params = event && event.parameter ? event.parameter : {};
+    const action = String(params.action || 'claim').trim();
+
+    if (action === 'spin') return spin_(params);
+
     const name = String(params.name || '').trim();
     const whatsapp = normalizePhone_(params.whatsapp);
     const gift = String(params.gift || '').trim();
@@ -23,13 +27,35 @@ function doPost(event) {
     const createdAt = String(params.createdAt || '').trim();
     const apiSecret = String(params.apiSecret || '').trim();
 
-	if (!verifyRequest_(createdAt, wheelToken, whatsapp, gift, apiSecret)) {
-	  return jsonResponse_({ success: false, message: 'Unauthorized request' });
-	}
+    // Static hosting cannot call the Node API, so claims can use the token
+    // issued by this Apps Script deployment instead of the server-only secret.
+    const storedSpin = PropertiesService.getScriptProperties().getProperty('wheel_token_' + wheelToken);
+    let recordedGift = gift;
+    if (storedSpin) {
+      const spin = JSON.parse(storedSpin);
+      recordedGift = spin.gift.label || spin.gift;
+      if (Date.now() - Number(spin.createdAt) > 30 * 60 * 1000 || spin.claimed) {
+        return jsonResponse_({ success: false, message: 'انتهت صلاحية نتيجة العجلة. لف العجلة من جديد.' });
+      }
+      if (spin.sessionId !== String(params.sessionId || spin.sessionId)) {
+        return jsonResponse_({ success: false, message: 'نتيجة العجلة غير صالحة.' });
+      }
+      if (gift && spin.gift.label !== gift && spin.gift !== gift) return jsonResponse_({ success: false, message: 'نتيجة العجلة غير صالحة.' });
+    } else if (!verifyRequest_(createdAt, wheelToken, whatsapp, gift, apiSecret)) {
+      return jsonResponse_({ success: false, message: 'Unauthorized request' });
+    }
+
 
     if (name.length < 2) return jsonResponse_({ success: false, message: 'Invalid name' });
     if (!/^01\d{9}$/.test(whatsapp)) return jsonResponse_({ success: false, message: 'Invalid WhatsApp number' });
-    if (!gift || !wheelToken || !['معادلة هندسة', 'معادلة حاسبات'].includes(program)) return jsonResponse_({ success: false, message: 'Missing wheel result or program' });
+    if (!gift || !wheelToken || ![
+      'معادلة هندسة',
+      'معادلة حاسبات',
+      'معادلة هندسة عربي',
+      'معادلة حاسبات عربي',
+      'معادلة هندسة إنجليزي',
+      'معادلة حاسبات إنجليزي'
+    ].includes(program)) return jsonResponse_({ success: false, message: 'Missing wheel result or program' });
 
     const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
     const sheet = spreadsheet.getSheetByName(SHEET_NAME) || spreadsheet.getSheets()[0];
@@ -49,10 +75,16 @@ function doPost(event) {
     sheet.getRange(row, 2).setValue(name);
     // Plain-text format is set before the value so Google Sheets keeps the leading zero.
     sheet.getRange(row, 3).setNumberFormat('@').setValue(whatsapp);
-    sheet.getRange(row, 4).setValue(gift);
+    sheet.getRange(row, 4).setValue(recordedGift);
     sheet.getRange(row, 5).setValue(wheelToken);
     sheet.getRange(row, 6).setValue(program);
     SpreadsheetApp.flush();
+
+    if (storedSpin) {
+      const claimedSpin = JSON.parse(storedSpin);
+      claimedSpin.claimed = true;
+      propertiesForWheel_().setProperty('wheel_token_' + wheelToken, JSON.stringify(claimedSpin));
+    }
 
     return jsonResponse_({ success: true });
   } catch (error) {
@@ -60,6 +92,44 @@ function doPost(event) {
   } finally {
     try { lock.releaseLock(); } catch (_) {}
   }
+}
+
+function propertiesForWheel_() {
+  return PropertiesService.getScriptProperties();
+}
+
+function spin_(params) {
+  const sessionId = String(params.sessionId || '').trim();
+  if (!sessionId || sessionId.length > 128) return jsonResponse_({ success: false, message: 'Invalid wheel session' });
+  const properties = PropertiesService.getScriptProperties();
+  const sessionKey = 'wheel_session_' + Utilities.base64EncodeWebSafe(sessionId).slice(0, 80);
+  const existingToken = properties.getProperty(sessionKey);
+  if (existingToken) {
+    const existing = properties.getProperty('wheel_token_' + existingToken);
+    if (existing) {
+      const spin = JSON.parse(existing);
+      if (Date.now() - Number(spin.createdAt) <= 30 * 60 * 1000 && !spin.claimed) {
+        return jsonResponse_({ success: true, token: existingToken, gift: spin.gift });
+      }
+    }
+  }
+  const options = [
+    { id: 'cash-50', label: '50 جنيه', weight: 30, available: true },
+    { id: 'lucky-chance', label: 'حظ سعيد', weight: 60, available: false },
+    { id: 'discount-10', label: 'خصم 10%', weight: 10, available: true },
+    { id: 'cash-200', label: '200 جنيه', weight: 30, available: true },
+    { id: 'lucky-empty-1', label: 'حظ سعيد', weight: 60, available: false },
+    { id: 'discount-15', label: 'خصم 15%', weight: 10, available: true },
+    { id: 'cash-100', label: '100 جنيه', weight: 30, available: true },
+    { id: 'lucky-empty-2', label: 'حظ سعيد', weight: 60, available: false },
+    { id: 'discount-20', label: 'خصم 20%', weight: 10, available: true }
+  ];
+  let pick = Math.random() * options.reduce((sum, option) => sum + option.weight, 0);
+  const gift = options.find(option => (pick -= option.weight) < 0) || options[0];
+  const token = Utilities.getUuid();
+  properties.setProperty('wheel_token_' + token, JSON.stringify({ sessionId: sessionId, gift: gift, createdAt: Date.now(), claimed: false }));
+  properties.setProperty(sessionKey, token);
+  return jsonResponse_({ success: true, token: token, gift: gift });
 }
 
 function ensureHeaders_(sheet) {
