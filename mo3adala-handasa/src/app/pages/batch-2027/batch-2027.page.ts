@@ -7,7 +7,6 @@ import { SeoService } from '../../core/seo.service';
 import { StyledSelectComponent } from '../../shared/components/styled-select/styled-select.component';
 
 const PHONE_PATTERN = /^01\d{9}$/;
-const EXTRA_ATTEMPT_GIFT_ID = 'lucky-chance';
 const WHEEL_SPIN_DURATION_MS = 7500;
 
 function normalizePhone(value: string): string {
@@ -27,15 +26,15 @@ function normalizePhone(value: string): string {
 export class Batch2027PageComponent implements OnInit, OnDestroy {
 	showHeroSubscriptionChoices = false;
 	readonly giftOptions = [
-		{ id: 'discount', label: 'خصم 10% على أول شهر', value: '10%', detail: 'خصم على أول شهر', available: true, emoji: 'خصم 10%', weight: 18 },
-		{ id: 'discount-5', label: 'خصم 5% على أول شهر', value: '5%', detail: 'خصم على أول شهر', available: true, emoji: 'خصم 5%', weight: 8 },
-		{ id: 'shipping', label: 'شحن الكتاب مجاناً', value: 'مجاناً', detail: 'شحن الكتاب', available: true, emoji: 'شحن مجاني', weight: 15 },
-		{ id: 'cash-gift', label: 'هدية مالية', value: 'مالية', detail: 'هدية مالية', available: true, emoji: 'هدية مالية', weight: 10 },
-		{ id: 'discount-25', label: 'خصم 25% على أول شهر', value: '25%', detail: 'خصم على أول شهر', available: true, emoji: 'خصم 25%', weight: 4 },
-		{ id: 'content', label: 'محتوى مجاني حصري', value: 'محتوى', detail: 'محتوى حصري', available: true, emoji: 'محتوى مجاني', weight: 18 },
-		{ id: 'lucky-chance', label: 'حظ سعيد', value: 'فرصة', detail: 'محاولة إضافية', available: false, emoji: 'حظ سعيد', weight: 12 },
-		{ id: 'empty-three', label: 'حظ سعيد', value: 'فارغ', detail: 'حظ سعيد', available: false, emoji: 'حظ سعيد', weight: 8 },
-		{ id: 'free-month', label: 'أول شهر مجاناً', value: 'مجاناً', detail: 'أول شهر', available: true, emoji: 'شهر مجاني', weight: 2 }
+		{ id: 'cash-50', label: '50 جنيه', value: '50 جنيه', detail: 'هدية مالية', available: true, emoji: '50 جنيه', weight: 30 },
+		{ id: 'lucky-chance', label: 'حظ سعيد', value: 'فرصة', detail: 'محاولة إضافية', available: false, emoji: 'حظ سعيد', weight: 60 },
+		{ id: 'discount-10', label: 'خصم 10%', value: '10%', detail: 'خصم على أول شهر', available: true, emoji: 'خصم 10%', weight: 10 },
+		{ id: 'cash-200', label: '200 جنيه', value: '200 جنيه', detail: 'هدية مالية', available: true, emoji: '200 جنيه', weight: 30 },
+		{ id: 'lucky-empty-1', label: 'حظ سعيد', value: 'فارغ', detail: 'حظ سعيد', available: false, emoji: 'حظ سعيد', weight: 60 },
+		{ id: 'discount-15', label: 'خصم 15%', value: '15%', detail: 'خصم على أول شهر', available: true, emoji: 'خصم 15%', weight: 10 },
+		{ id: 'cash-100', label: '100 جنيه', value: '100 جنيه', detail: 'هدية مالية', available: true, emoji: '100 جنيه', weight: 30 },
+		{ id: 'lucky-empty-2', label: 'حظ سعيد', value: 'فارغ', detail: 'حظ سعيد', available: false, emoji: 'حظ سعيد', weight: 60 },
+		{ id: 'discount-20', label: 'خصم 20%', value: '20%', detail: 'خصم على أول شهر', available: true, emoji: 'خصم 20%', weight: 10 },
 	];
 	giftAvailable = true;
 	showGiftResult = false;
@@ -103,7 +102,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 
 	startGiftWheel(): void {
 		if (this.giftWheelSpinning || this.wheelUsed || this.wheelLocked) {
-			if (this.wheelUsed || this.wheelLocked) this.wheelClaimError = 'اللفة خلصت. لو ظهرت لك «حظ سعيد» تقدر تجرب مرة إضافية.';
+			if (this.wheelUsed || this.wheelLocked) this.wheelClaimError = 'اللفة خلصت. شكرًا لمشاركتك.';
 			return;
 		}
 		this.spinGiftWheel();
@@ -140,9 +139,8 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		this.wheelTimer = window.setTimeout(() => {
 			this.wheelResult = this.giftOptions[resultIndex];
 			this.selectedGift = '';
-			const hasExtraAttempt = this.wheelResult.id === EXTRA_ATTEMPT_GIFT_ID && this.wheelAttempts < 2;
-			this.wheelUsed = !this.wheelResult.available && !hasExtraAttempt;
-			this.wheelLocked = this.wheelAttempts >= 2 || !hasExtraAttempt;
+			this.wheelUsed = !this.wheelResult.available;
+			this.wheelLocked = true;
 			this.giftWheelSpinning = false;
 		}, WHEEL_SPIN_DURATION_MS);
 		} catch {
@@ -150,10 +148,6 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 			this.giftWheelSpinning = false;
 			this.wheelClaimError = 'تعذر تشغيل العجلة. حاول تاني.';
 		}
-	}
-
-	isExtraAttemptResult(gift: (typeof this.giftOptions)[number] | null): boolean {
-		return gift?.id === EXTRA_ATTEMPT_GIFT_ID;
 	}
 
 	updateWheelPhone(value: string): void {

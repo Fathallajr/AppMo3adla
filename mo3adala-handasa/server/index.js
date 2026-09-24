@@ -42,15 +42,15 @@ const WHEEL_SECRET_FILE = path.join(DATA_DIR, 'wheel-secret.txt');
 const WHEEL_APPS_SCRIPT_SECRET = process.env.WHEEL_APPS_SCRIPT_SECRET || readLocalWheelSecret();
 const WHEEL_TTL_MS = 30 * 60 * 1000;
 const WHEEL_OPTIONS = [
-	{ id: 'discount', label: 'خصم 10% على أول شهر', weight: 18, available: true },
-	{ id: 'discount-5', label: 'خصم 5% على أول شهر', weight: 8, available: true },
-	{ id: 'shipping', label: 'شحن الكتاب مجاناً', weight: 15, available: true },
-	{ id: 'cash-gift', label: 'هدية مالية', weight: 10, available: true },
-	{ id: 'discount-25', label: 'خصم 25% على أول شهر', weight: 4, available: true },
-	{ id: 'content', label: 'محتوى مجاني حصري', weight: 18, available: true },
-	{ id: 'lucky-chance', label: 'حظ سعيد', weight: 12, available: false },
-	{ id: 'empty-three', label: 'حظ سعيد', weight: 8, available: false },
-	{ id: 'free-month', label: 'أول شهر مجاناً', weight: 2, available: true }
+	{ id: 'cash-50', label: '50 جنيه', weight: 30, available: true },
+	{ id: 'lucky-chance', label: 'حظ سعيد', weight: 60, available: false },
+	{ id: 'discount-10', label: 'خصم 10%', weight: 10, available: true },
+	{ id: 'cash-200', label: '200 جنيه', weight: 30, available: true },
+	{ id: 'lucky-empty-1', label: 'حظ سعيد', weight: 60, available: false },
+	{ id: 'discount-15', label: 'خصم 15%', weight: 10, available: true },
+	{ id: 'cash-100', label: '100 جنيه', weight: 30, available: true },
+	{ id: 'lucky-empty-2', label: 'حظ سعيد', weight: 60, available: false },
+	{ id: 'discount-20', label: 'خصم 20%', weight: 10, available: true },
 ];
 
 function readLocalWheelSecret() {
@@ -206,10 +206,13 @@ app.post('/api/wheel/spin', (req, res) => {
 	for (const [token, spin] of Object.entries(state.spins)) {
 		if (!spin || now - spin.createdAt > WHEEL_TTL_MS) delete state.spins[token];
 	}
-	const existing = Object.values(state.spins).find(spin => spin.sessionId === sessionId);
+	let existing = Object.values(state.spins).find(spin => spin.sessionId === sessionId);
 	if (existing?.claimed) return res.status(409).json({ alreadyUsed: true, message: 'Wheel already used' });
-	if (existing && existing.gift.id !== 'lucky-chance') return res.json({ token: existing.token, gift: existing.gift });
-	if (existing && existing.attempts >= 2) return res.json({ token: existing.token, gift: existing.gift });
+	if (existing && !WHEEL_OPTIONS.some(option => option.id === existing.gift?.id)) {
+		delete state.spins[existing.token];
+		existing = undefined;
+	}
+	if (existing) return res.json({ token: existing.token, gift: existing.gift });
 
 	const totalWeight = WHEEL_OPTIONS.reduce((sum, gift) => sum + gift.weight, 0);
 	let pick = crypto.randomInt(totalWeight);

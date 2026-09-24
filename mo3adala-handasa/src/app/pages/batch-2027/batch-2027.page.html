@@ -75,7 +75,7 @@
 				<p *ngIf="wheelClaimError" class="wheel-claim-status wheel-claim-status--error" role="alert">{{ wheelClaimError }}</p>
 			</form>
 			<p *ngIf="wheelUsed && wheelClaimError && !wheelAlreadyUsed && !wheelResult?.available" class="batch-wheel-used" role="alert">{{ wheelClaimError }}</p>
-			<div *ngIf="wheelResult" class="batch-wheel-result" [class.is-empty]="!wheelResult.available" [class.is-used]="wheelAlreadyUsed" aria-live="polite"><b>{{ wheelAlreadyUsed ? 'أنت استفدت قبل كده!' : (wheelResult.available ? 'مبروك! كسبت' : (isExtraAttemptResult(wheelResult) ? 'حظ سعيد!' : 'حظ أوفر!')) }}</b><span>{{ wheelAlreadyUsed ? 'استفدت من: ' + wheelResult.label : wheelResult.label }}</span><small *ngIf="!wheelAlreadyUsed && !wheelResult.available">{{ isExtraAttemptResult(wheelResult) ? 'عندك محاولة إضافية، لف العجلة مرة كمان' : 'جرّب مرة تانية، يمكن تكسب المرة الجاية' }}</small></div>
+			<div *ngIf="wheelResult" class="batch-wheel-result" [class.is-empty]="!wheelResult.available" [class.is-used]="wheelAlreadyUsed" aria-live="polite"><b>{{ wheelAlreadyUsed ? 'أنت استفدت قبل كده!' : (wheelResult.available ? 'مبروك! كسبت' : 'حظ أوفر!') }}</b><span>{{ wheelAlreadyUsed ? 'استفدت من: ' + wheelResult.label : wheelResult.label }}</span><small *ngIf="!wheelAlreadyUsed && !wheelResult.available">شكرًا لمشاركتك، جرّب حظك في المرة الجاية</small></div>
 			<div *ngIf="wheelClaimComplete && selectedGift" class="wheel-claim-success" role="status"><b>✓ تم تسجيل هديتك بنجاح</b><span>رقمك اتسجل كما كتبته: {{ wheelClaim.whatsapp }}</span></div>
 			<button *ngIf="wheelClaimComplete && selectedGift" type="button" class="batch-button batch-button--primary batch-wheel-claim" (click)="claimGiftOnWhatsApp()">استلم هديتك على واتساب <span>←</span></button>
 		</div>
