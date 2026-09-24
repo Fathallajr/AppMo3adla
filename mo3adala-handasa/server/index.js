@@ -217,7 +217,7 @@ app.post('/api/wheel/spin', (req, res) => {
 	const totalWeight = WHEEL_OPTIONS.reduce((sum, gift) => sum + gift.weight, 0);
 	let pick = crypto.randomInt(totalWeight);
 	const gift = WHEEL_OPTIONS.find(option => (pick -= option.weight) < 0) || WHEEL_OPTIONS[0];
-	const token = crypto.randomBytes(24).toString('hex');
+	const token = `server-${crypto.randomBytes(24).toString('hex')}`;
 	state.spins[token] = { token, sessionId, gift, attempts: existing ? 2 : 1, createdAt: now, claimed: false };
 	if (existing) {
 		delete state.spins[existing.token];
