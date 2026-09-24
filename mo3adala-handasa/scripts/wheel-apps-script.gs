@@ -32,19 +32,8 @@ function check_(params) {
     return jsonResponse_({ success: false, exists: false, message: 'Invalid WhatsApp number' });
   }
 
-  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
-  const sheet = spreadsheet.getSheetByName(SHEET_NAME) || spreadsheet.getSheets()[0];
-  ensureHeaders_(sheet);
-  const lastRow = sheet.getLastRow();
-  let exists = false;
-
-  if (lastRow > 1) {
-    const rows = sheet.getRange(2, 3, lastRow - 1, 1).getDisplayValues();
-    exists = rows.some(function(row) {
-      return normalizeStoredPhone_(row[0]) === whatsapp;
-    });
-  }
-
+  const properties = PropertiesService.getScriptProperties();
+  const exists = Boolean(properties.getProperty('registered_phone_' + whatsapp));
   return jsonResponse_({ success: true, exists: exists });
 }
 
@@ -99,13 +88,9 @@ function doPost(event) {
     const sheet = spreadsheet.getSheetByName(SHEET_NAME) || spreadsheet.getSheets()[0];
     ensureHeaders_(sheet);
 
-    const lastRow = sheet.getLastRow();
-    if (lastRow > 1) {
-      const rows = sheet.getRange(2, 3, lastRow - 1, 4).getDisplayValues();
-      const duplicate = rows.some(function(row) {
-        return normalizeStoredPhone_(row[0]) === whatsapp || String(row[2]).trim() === wheelToken;
-      });
-      if (duplicate) return jsonResponse_({ success: false, alreadyRegistered: true });
+    const properties = PropertiesService.getScriptProperties();
+    if (properties.getProperty('registered_phone_' + whatsapp) || properties.getProperty('registered_token_' + wheelToken)) {
+      return jsonResponse_({ success: false, alreadyRegistered: true });
     }
 
     const row = sheet.getLastRow() + 1;
@@ -117,6 +102,9 @@ function doPost(event) {
     sheet.getRange(row, 5).setValue(wheelToken);
     sheet.getRange(row, 6).setValue(program);
     SpreadsheetApp.flush();
+
+    properties.setProperty('registered_phone_' + whatsapp, String(Date.now()));
+    properties.setProperty('registered_token_' + wheelToken, String(Date.now()));
 
     if (storedSpin) {
       const claimedSpin = JSON.parse(storedSpin);
@@ -130,6 +118,20 @@ function doPost(event) {
   } finally {
     try { lock.releaseLock(); } catch (_) {}
   }
+}
+
+// Run this once after deploying to index phone numbers already present in the sheet.
+function syncPhoneIndex() {
+  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const sheet = spreadsheet.getSheetByName(SHEET_NAME) || spreadsheet.getSheets()[0];
+  const properties = PropertiesService.getScriptProperties();
+  const lastRow = sheet.getLastRow();
+  if (lastRow <= 1) return;
+  const rows = sheet.getRange(2, 3, lastRow - 1, 1).getDisplayValues();
+  rows.forEach(function(row) {
+    const whatsapp = normalizeStoredPhone_(row[0]);
+    if (/^01\d{9}$/.test(whatsapp)) properties.setProperty('registered_phone_' + whatsapp, 'legacy');
+  });
 }
 
 function propertiesForWheel_() {
