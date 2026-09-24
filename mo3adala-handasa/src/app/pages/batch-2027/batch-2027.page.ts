@@ -337,7 +337,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 			const timer = window.setTimeout(() => {
 				cleanup();
 				reject(new Error('خدمة التسجيل اتأخرت. حاول تاني.'));
-			}, 30000);
+			}, 60000);
 			const cleanup = () => {
 				window.clearTimeout(timer);
 				delete (window as any)[callbackName];
