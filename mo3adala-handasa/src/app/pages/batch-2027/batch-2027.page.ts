@@ -8,6 +8,7 @@ import { StyledSelectComponent } from '../../shared/components/styled-select/sty
 
 const PHONE_PATTERN = /^01\d{9}$/;
 const WHEEL_SPIN_DURATION_MS = 7500;
+const WHEEL_REQUEST_TIMEOUT_MS = 15000;
 const WHEEL_APPS_SCRIPT_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyrF6S-pyZys6aKo75ExPWxXCm9F-zIRKr_t-IvV7gyeCGKIBJ-nnISHMlyaRSNk4_r/exec';
 
 declare global {
@@ -69,6 +70,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	wheelClaimComplete = false;
 	wheelUsed = false;
 	wheelAlreadyUsed = false;
+	wheelExistingGift = '';
 	private giftRevealTimer?: ReturnType<typeof setTimeout>;
 	private wheelTimer?: number;
 
@@ -123,41 +125,19 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		this.wheelResult = null;
 		this.selectedGift = '';
 		this.wheelAlreadyUsed = false;
+		this.wheelExistingGift = '';
 		this.wheelClaimError = '';
 		this.wheelAttempts += 1;
-		if (this.isStaticDeployment()) {
-			const resultIndex = this.pickLocalGiftIndex();
-			const result = this.giftOptions[resultIndex];
-			this.wheelToken = `client-${this.createClientToken()}`;
-			this.wheelRotation += 1440 + (360 - (resultIndex * 40 + 20));
-			this.wheelTimer = window.setTimeout(() => {
-				this.wheelResult = result;
-				this.wheelUsed = !result.available;
-				this.wheelLocked = true;
-				this.giftWheelSpinning = false;
-			}, WHEEL_SPIN_DURATION_MS);
-			return;
-		}
 		const controller = new AbortController();
-		const timeout = window.setTimeout(() => controller.abort(), 15000);
+		const timeout = window.setTimeout(() => controller.abort(), WHEEL_REQUEST_TIMEOUT_MS);
 		try {
-		const endpoint = this.resolveWheelEndpoint('spin');
-		const response = await fetch(endpoint, {
-			method: 'POST',
-			body: new URLSearchParams({ action: 'spin', sessionId: this.wheelSessionId }),
-			signal: controller.signal
-		});
-		const payload = await response.json();
-		if (!response.ok || payload.success === false) {
+		const payload = this.isStaticDeployment()
+			? await this.requestWheelSpin()
+			: await this.requestWheelSpinFromServer(controller.signal);
+		if (payload?.success === false || !payload?.token || !payload?.gift?.id) {
 			this.wheelAttempts -= 1;
 			this.giftWheelSpinning = false;
-			this.wheelClaimError = payload.message || 'تعذر تشغيل العجلة. حاول تاني.';
-			return;
-		}
-		if (!payload || payload.success === false) {
-			this.wheelAttempts -= 1;
-			this.giftWheelSpinning = false;
-			this.wheelClaimError = payload.message || 'تعذر تشغيل العجلة. حاول تاني.';
+			this.wheelClaimError = payload?.message || 'تعذر تشغيل العجلة. حاول تاني.';
 			return;
 		}
 		this.wheelToken = payload.token;
@@ -185,14 +165,16 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	private pickLocalGiftIndex(): number {
-		const totalWeight = this.giftOptions.reduce((sum, gift) => sum + gift.weight, 0);
-		let pick = Math.random() * totalWeight;
-		for (let index = 0; index < this.giftOptions.length; index += 1) {
-			pick -= this.giftOptions[index].weight;
-			if (pick < 0) return index;
-		}
-		return 0;
+	private async requestWheelSpinFromServer(signal: AbortSignal): Promise<any> {
+		const response = await fetch(this.resolveWheelEndpoint('spin'), {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+			body: new URLSearchParams({ action: 'spin', sessionId: this.wheelSessionId }),
+			signal
+		});
+		const payload = await response.json();
+		if (!response.ok) throw new Error(payload.message || 'تعذر تشغيل العجلة. حاول تاني.');
+		return payload;
 	}
 
 	private createClientToken(): string {
@@ -200,6 +182,38 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 			return crypto.randomUUID();
 		}
 		return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+	}
+
+	private requestWheelSpin(): Promise<any> {
+		return new Promise((resolve, reject) => {
+			const callbackName = `__wheelSpin_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+			const script = document.createElement('script');
+			const timer = window.setTimeout(() => {
+				cleanup();
+				reject(new Error('خدمة العجلة اتأخرت. حاول تاني.'));
+			}, WHEEL_REQUEST_TIMEOUT_MS);
+			const cleanup = () => {
+				window.clearTimeout(timer);
+				delete (window as any)[callbackName];
+				script.remove();
+			};
+			(window as any)[callbackName] = (payload: any) => {
+				cleanup();
+				resolve(payload || { success: false, message: 'تعذر قراءة رد العجلة.' });
+			};
+			script.onerror = () => {
+				cleanup();
+				reject(new Error('تعذر الاتصال بخدمة العجلة.'));
+			};
+			const query = new URLSearchParams({
+				action: 'spin',
+				sessionId: this.wheelSessionId,
+				callback: callbackName,
+				t: String(Date.now())
+			});
+			script.src = `${this.wheelAppsScriptEndpoint()}?${query.toString()}`;
+			document.body.appendChild(script);
+		});
 	}
 
 	updateWheelPhone(value: string): void {
@@ -215,6 +229,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		if (this.wheelClaimSubmitting) return;
 		this.wheelClaimError = '';
 		this.wheelAlreadyUsed = false;
+		this.wheelExistingGift = '';
 		const name = this.wheelClaim.name.trim();
 		const program = this.wheelClaim.program.trim();
 		const whatsapp = normalizePhone(this.wheelClaim.whatsapp);
@@ -240,18 +255,27 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		const controller = new AbortController();
 		const timeout = window.setTimeout(() => controller.abort(), 35000);
 		try {
-			const claimBody = new URLSearchParams({ action: 'claim', name, whatsapp, program, gift: this.wheelResult.label, wheelToken: this.wheelToken });
+			const claimBody = new URLSearchParams({
+				action: 'claim',
+				name,
+				whatsapp,
+				program,
+				gift: this.wheelResult.label,
+				wheelToken: this.wheelToken,
+				sessionId: this.wheelSessionId
+			});
 			if (this.isStaticDeployment() || this.isLocalBrowser()) {
 				const payload = await this.requestWheelClaim(claimBody);
 				if (payload.alreadyRegistered) {
 					this.wheelClaimError = payload.message || 'تم تسجيل هذا الرقم من قبل.';
 					this.wheelAlreadyUsed = true;
+					this.wheelExistingGift = payload.gift || '';
 					this.wheelUsed = true;
 					return;
 				}
 				if (!payload.success) throw new Error(payload.message || 'تعذر تسجيل هدية العجلة.');
 				this.wheelClaimComplete = true;
-				this.selectedGift = this.wheelResult.label;
+				this.selectedGift = payload.gift || this.wheelResult.label;
 				this.wheelUsed = true;
 				return;
 			}
@@ -260,16 +284,17 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 				body: claimBody,
 				signal: controller.signal
 			});
-			const payload = await response.json() as { success?: boolean; alreadyRegistered?: boolean; message?: string };
+			const payload = await response.json() as { success?: boolean; alreadyRegistered?: boolean; message?: string; gift?: string };
 			if (payload.alreadyRegistered) {
 				this.wheelClaimError = payload.message || 'تم استلام هدية العجلة بهذا الرقم من قبل.';
 				this.wheelAlreadyUsed = true;
+				this.wheelExistingGift = payload.gift || '';
 				this.wheelUsed = true;
 				return;
 			}
 			if (!response.ok || !payload.success) throw new Error(payload.message || 'تعذر تسجيل هدية العجلة.');
 			this.wheelClaimComplete = true;
-			this.selectedGift = this.wheelResult.label;
+			this.selectedGift = payload.gift || this.wheelResult.label;
 			this.wheelUsed = true;
 		} catch (error) {
 			this.wheelClaimError = error instanceof DOMException && error.name === 'AbortError'
@@ -330,7 +355,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	private requestWheelClaim(body: URLSearchParams): Promise<{ success?: boolean; alreadyRegistered?: boolean; message?: string }> {
+	private requestWheelClaim(body: URLSearchParams): Promise<{ success?: boolean; alreadyRegistered?: boolean; message?: string; gift?: string }> {
 		return new Promise((resolve, reject) => {
 			const callbackName = `__wheelClaim_${Date.now()}_${Math.random().toString(36).slice(2)}`;
 			const script = document.createElement('script');
@@ -398,7 +423,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		if (typeof window === 'undefined') return;
-		this.wheelSessionId = sessionStorage.getItem('batch-2027-wheel-session') || crypto.randomUUID();
+		this.wheelSessionId = sessionStorage.getItem('batch-2027-wheel-session') || this.createClientToken();
 		sessionStorage.setItem('batch-2027-wheel-session', this.wheelSessionId);
 
 		const siteUrl = (window as any)['NG_SITE_URL'] || 'https://www.appmo3adla.com';

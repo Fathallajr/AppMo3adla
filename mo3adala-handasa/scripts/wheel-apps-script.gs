@@ -32,19 +32,36 @@ function check_(params) {
     return jsonResponse_({ success: false, exists: false, message: 'Invalid WhatsApp number' });
   }
 
-  const properties = PropertiesService.getScriptProperties();
-  const exists = Boolean(properties.getProperty('registered_phone_' + whatsapp));
-  return jsonResponse_({ success: true, exists: exists });
+  const claim = findClaimByPhone_(whatsapp);
+  return jsonResponse_({ success: true, exists: Boolean(claim), gift: claim ? claim.gift : '' });
+}
+
+function findClaimByPhone_(whatsapp, sheet) {
+  const claimsSheet = sheet || getClaimsSheet_();
+  const lastRow = claimsSheet.getLastRow();
+  if (lastRow < 2) return null;
+  const rows = claimsSheet.getRange(2, 3, lastRow - 1, 2).getDisplayValues();
+  for (let index = rows.length - 1; index >= 0; index -= 1) {
+    if (normalizeStoredPhone_(rows[index][0]) === whatsapp) {
+      return { gift: String(rows[index][1] || '').trim() };
+    }
+  }
+  return null;
+}
+
+function getClaimsSheet_() {
+  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+  return spreadsheet.getSheetByName(SHEET_NAME) || spreadsheet.getSheets()[0];
 }
 
 function doPost(event) {
+  const params = event && event.parameter ? event.parameter : {};
+  const action = String(params.action || 'claim').trim();
+  if (action === 'spin') return spin_(params);
+
   const lock = LockService.getScriptLock();
   try {
     lock.waitLock(10000);
-    const params = event && event.parameter ? event.parameter : {};
-    const action = String(params.action || 'claim').trim();
-
-    if (action === 'spin') return spin_(params);
 
     const name = String(params.name || '').trim();
     const whatsapp = normalizePhone_(params.whatsapp);
@@ -52,7 +69,7 @@ function doPost(event) {
     const program = String(params.program || '').trim();
     const wheelToken = String(params.wheelToken || '').trim();
     const createdAt = String(params.createdAt || '').trim();
-    const apiSecret = String(params.apiSecret || '').trim();
+    const apiSignature = String(params.apiSignature || '').trim();
 
     // Static hosting cannot call the Node API, so claims can use the token
     // issued by this Apps Script deployment instead of the server-only secret.
@@ -64,11 +81,11 @@ function doPost(event) {
       if (Date.now() - Number(spin.createdAt) > 30 * 60 * 1000 || spin.claimed) {
         return jsonResponse_({ success: false, message: 'انتهت صلاحية نتيجة العجلة. لف العجلة من جديد.' });
       }
-      if (spin.sessionId !== String(params.sessionId || spin.sessionId)) {
+      if (spin.sessionId !== String(params.sessionId || '').trim()) {
         return jsonResponse_({ success: false, message: 'نتيجة العجلة غير صالحة.' });
       }
       if (gift && spin.gift.label !== gift && spin.gift !== gift) return jsonResponse_({ success: false, message: 'نتيجة العجلة غير صالحة.' });
-    } else if (!/^(client|server)-[A-Za-z0-9_-]+$/.test(wheelToken) && !verifyRequest_(createdAt, wheelToken, whatsapp, gift, apiSecret)) {
+    } else if (!verifyRequest_(createdAt, wheelToken, whatsapp, gift, apiSignature)) {
       return jsonResponse_({ success: false, message: 'Unauthorized request' });
     }
 
@@ -84,13 +101,13 @@ function doPost(event) {
       'معادلة حاسبات إنجليزي'
     ].includes(program)) return jsonResponse_({ success: false, message: 'Missing wheel result or program' });
 
-    const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
-    const sheet = spreadsheet.getSheetByName(SHEET_NAME) || spreadsheet.getSheets()[0];
+    const sheet = getClaimsSheet_();
     ensureHeaders_(sheet);
 
     const properties = PropertiesService.getScriptProperties();
-    if (properties.getProperty('registered_phone_' + whatsapp) || properties.getProperty('registered_token_' + wheelToken)) {
-      return jsonResponse_({ success: false, alreadyRegistered: true });
+    const previousClaim = findClaimByPhone_(whatsapp, sheet);
+    if (previousClaim || properties.getProperty('registered_phone_' + whatsapp) || properties.getProperty('registered_token_' + wheelToken)) {
+      return jsonResponse_({ success: false, alreadyRegistered: true, gift: previousClaim ? previousClaim.gift : '' });
     }
 
     const row = sheet.getLastRow() + 1;
@@ -112,7 +129,7 @@ function doPost(event) {
       propertiesForWheel_().setProperty('wheel_token_' + wheelToken, JSON.stringify(claimedSpin));
     }
 
-    return jsonResponse_({ success: true });
+    return jsonResponse_({ success: true, gift: recordedGift });
   } catch (error) {
     return jsonResponse_({ success: false, message: String(error && error.message || error) });
   } finally {
@@ -139,6 +156,18 @@ function propertiesForWheel_() {
 }
 
 function spin_(params) {
+  const lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(10000);
+    return spinUnlocked_(params);
+  } catch (error) {
+    return jsonResponse_({ success: false, message: 'تعذر تشغيل العجلة. حاول تاني.' });
+  } finally {
+    try { lock.releaseLock(); } catch (_) {}
+  }
+}
+
+function spinUnlocked_(params) {
   const sessionId = String(params.sessionId || '').trim();
   if (!sessionId || sessionId.length > 128) return jsonResponse_({ success: false, message: 'Invalid wheel session' });
   const properties = PropertiesService.getScriptProperties();
@@ -191,18 +220,22 @@ function normalizeStoredPhone_(value) {
   return digits.length === 10 && digits.charAt(0) === '1' ? '0' + digits : digits;
 }
 
-function verifyRequest_(createdAt, wheelToken, whatsapp, gift, apiSecret) {
+function verifyRequest_(createdAt, wheelToken, whatsapp, gift, apiSignature) {
   const secret = String(
     PropertiesService.getScriptProperties().getProperty('WHEEL_API_SECRET') || ''
   ).trim();
-  return Boolean(
-    createdAt &&
-    wheelToken &&
-    whatsapp &&
-    gift &&
-    apiSecret &&
-    apiSecret === secret
+  if (!createdAt || !wheelToken || !whatsapp || !gift || !apiSignature || !secret) return false;
+  const timestamp = Date.parse(createdAt);
+  if (!Number.isFinite(timestamp) || Math.abs(Date.now() - timestamp) > 5 * 60 * 1000) return false;
+  const bytes = Utilities.computeHmacSha256Signature(
+    [createdAt, wheelToken, whatsapp, gift].join('|'),
+    secret
   );
+  const expected = bytes.map(function(byte) {
+    const value = (byte < 0 ? byte + 256 : byte).toString(16);
+    return value.length === 1 ? '0' + value : value;
+  }).join('');
+  return expected === apiSignature.toLowerCase();
 }
 
 function jsonResponse_(payload) {

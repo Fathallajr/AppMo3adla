@@ -61,6 +61,13 @@ function readLocalWheelSecret() {
 	}
 }
 
+function createWheelSignature(createdAt, wheelToken, whatsapp, gift) {
+	return crypto
+		.createHmac('sha256', WHEEL_APPS_SCRIPT_SECRET)
+		.update([createdAt, wheelToken, whatsapp, gift].join('|'))
+		.digest('hex');
+}
+
 function loadTokens() {
 	try {
 		if (fssync.existsSync(TOKENS_FILE)) {
@@ -331,7 +338,13 @@ app.post('/api/wheel/claim', async (req, res) => {
 		return res.status(400).json({ success: false, message: 'هذه النتيجة لا تحتوي على هدية قابلة للاستلام.' });
 	}
 	if (spin.claimed || state.claims[whatsapp]) {
-		return res.json({ success: false, alreadyRegistered: true, message: 'تم استلام هدية العجلة بهذا الرقم من قبل.' });
+		const previousSpin = state.spins[state.claims[whatsapp]];
+		return res.json({
+			success: false,
+			alreadyRegistered: true,
+			gift: previousSpin?.gift?.label || '',
+			message: 'تم استلام هدية العجلة بهذا الرقم من قبل.'
+		});
 	}
 	if (!WHEEL_APPS_SCRIPT_ENDPOINT) {
 		return res.status(503).json({ success: false, message: 'خدمة تسجيل العجلة غير مفعلة بعد.' });
@@ -349,7 +362,8 @@ app.post('/api/wheel/claim', async (req, res) => {
 			gift: spin.gift.label,
 			wheelToken,
 			createdAt,
-			apiSecret: WHEEL_APPS_SCRIPT_SECRET
+			apiSignature: createWheelSignature(createdAt, wheelToken, whatsapp, spin.gift.label),
+			sessionId: spin.sessionId
 		}, WHEEL_CLAIM_TIMEOUT_MS);
 		if (!payload.success && !payload.alreadyRegistered) {
 			return res.status(502).json({ success: false, message: payload.message || 'تعذر تسجيل هدية العجلة.' });
