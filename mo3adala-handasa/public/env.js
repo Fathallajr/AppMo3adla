@@ -2,7 +2,7 @@
 window.NG_SITE_URL = window.NG_SITE_URL || 'https://www.appmo3adla.com';
 window.NG_FORMSPREE_ENDPOINT = window.NG_FORMSPREE_ENDPOINT || 'https://formspree.io/f/XXXXXXX';
 window.NG_LAUNCH_OFFER_ENDPOINT = window.NG_LAUNCH_OFFER_ENDPOINT || 'https://script.google.com/macros/s/AKfycbzOMDZcgaUgRacnKnqgngxO_97N5iUU9AVoH1bA5HHEFg0LKS3Lju8ku6yl0nYgrLdQ/exec';
-window.NG_WHEEL_APPS_SCRIPT_ENDPOINT = window.NG_WHEEL_APPS_SCRIPT_ENDPOINT || 'https://script.google.com/macros/s/AKfycbyvJVNsv_v4MCnBVQm4rA7074zhpzVVYWADIJTlTcu9XeqebON6s-tQpnMH11QoE-34/exec';
+window.NG_WHEEL_APPS_SCRIPT_ENDPOINT = window.NG_WHEEL_APPS_SCRIPT_ENDPOINT || 'https://script.google.com/macros/s/AKfycbyrF6S-pyZys6aKo75ExPWxXCm9F-zIRKr_t-IvV7gyeCGKIBJ-nnISHMlyaRSNk4_r/exec';
 window.NG_WHATSAPP = window.NG_WHATSAPP || '201554843745';
 window.NG_GISCUS_REPO = window.NG_GISCUS_REPO || '';
 window.NG_GISCUS_REPO_ID = window.NG_GISCUS_REPO_ID || '';

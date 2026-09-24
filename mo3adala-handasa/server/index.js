@@ -8,7 +8,7 @@ const multer = require('multer');
 const app = express();
 const PORT = process.env.PORT || 3001;
 const LAUNCH_OFFER_ENDPOINT = process.env.LAUNCH_OFFER_ENDPOINT || 'https://script.google.com/macros/s/AKfycbzOMDZcgaUgRacnKnqgngxO_97N5iUU9AVoH1bA5HHEFg0LKS3Lju8ku6yl0nYgrLdQ/exec';
-const WHEEL_APPS_SCRIPT_ENDPOINT = process.env.WHEEL_APPS_SCRIPT_ENDPOINT || 'https://script.google.com/macros/s/AKfycbyvJVNsv_v4MCnBVQm4rA7074zhpzVVYWADIJTlTcu9XeqebON6s-tQpnMH11QoE-34/exec';
+const WHEEL_APPS_SCRIPT_ENDPOINT = process.env.WHEEL_APPS_SCRIPT_ENDPOINT || 'https://script.google.com/macros/s/AKfycbyrF6S-pyZys6aKo75ExPWxXCm9F-zIRKr_t-IvV7gyeCGKIBJ-nnISHMlyaRSNk4_r/exec';
 // Apps Script can be slow while scanning the sheet for an existing phone.
 // Give it enough time to finish so the UI does not invite duplicate retries.
 const LAUNCH_OFFER_TIMEOUT_MS = 60000;

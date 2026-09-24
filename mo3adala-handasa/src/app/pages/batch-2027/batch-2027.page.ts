@@ -8,7 +8,7 @@ import { StyledSelectComponent } from '../../shared/components/styled-select/sty
 
 const PHONE_PATTERN = /^01\d{9}$/;
 const WHEEL_SPIN_DURATION_MS = 7500;
-const WHEEL_APPS_SCRIPT_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyvJVNsv_v4MCnBVQm4rA7074zhpzVVYWADIJTlTcu9XeqebON6s-tQpnMH11QoE-34/exec';
+const WHEEL_APPS_SCRIPT_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyrF6S-pyZys6aKo75ExPWxXCm9F-zIRKr_t-IvV7gyeCGKIBJ-nnISHMlyaRSNk4_r/exec';
 
 declare global {
 	interface Window {
