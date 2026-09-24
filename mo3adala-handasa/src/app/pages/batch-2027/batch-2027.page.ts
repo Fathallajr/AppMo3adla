@@ -120,32 +120,39 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	private async spinGiftWheel(): Promise<void> {
 		if (this.giftWheelSpinning) return;
 		this.giftWheelSpinning = true;
-		// Start a visible movement immediately while the result request is in flight.
-		this.wheelRotation += 360;
 		this.wheelResult = null;
 		this.selectedGift = '';
 		this.wheelAlreadyUsed = false;
+		this.wheelClaimError = '';
 		this.wheelAttempts += 1;
+		if (this.isStaticDeployment()) {
+			const resultIndex = this.pickLocalGiftIndex();
+			const result = this.giftOptions[resultIndex];
+			this.wheelToken = `client-${this.createClientToken()}`;
+			this.wheelRotation += 1440 + (360 - (resultIndex * 40 + 20));
+			this.wheelTimer = window.setTimeout(() => {
+				this.wheelResult = result;
+				this.wheelUsed = !result.available;
+				this.wheelLocked = true;
+				this.giftWheelSpinning = false;
+			}, WHEEL_SPIN_DURATION_MS);
+			return;
+		}
 		const controller = new AbortController();
 		const timeout = window.setTimeout(() => controller.abort(), 15000);
 		try {
-		let payload: any;
-		if (this.isStaticDeployment()) {
-			payload = await this.requestStaticWheelSpin();
-		} else {
-			const endpoint = this.resolveWheelEndpoint('spin');
-			const response = await fetch(endpoint, {
-				method: 'POST',
-				body: new URLSearchParams({ action: 'spin', sessionId: this.wheelSessionId }),
-				signal: controller.signal
-			});
-			payload = await response.json();
-			if (!response.ok || payload.success === false) {
-				this.wheelAttempts -= 1;
-				this.giftWheelSpinning = false;
-				this.wheelClaimError = payload.message || 'تعذر تشغيل العجلة. حاول تاني.';
-				return;
-			}
+		const endpoint = this.resolveWheelEndpoint('spin');
+		const response = await fetch(endpoint, {
+			method: 'POST',
+			body: new URLSearchParams({ action: 'spin', sessionId: this.wheelSessionId }),
+			signal: controller.signal
+		});
+		const payload = await response.json();
+		if (!response.ok || payload.success === false) {
+			this.wheelAttempts -= 1;
+			this.giftWheelSpinning = false;
+			this.wheelClaimError = payload.message || 'تعذر تشغيل العجلة. حاول تاني.';
+			return;
 		}
 		if (!payload || payload.success === false) {
 			this.wheelAttempts -= 1;
@@ -176,6 +183,23 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		} finally {
 			window.clearTimeout(timeout);
 		}
+	}
+
+	private pickLocalGiftIndex(): number {
+		const totalWeight = this.giftOptions.reduce((sum, gift) => sum + gift.weight, 0);
+		let pick = Math.random() * totalWeight;
+		for (let index = 0; index < this.giftOptions.length; index += 1) {
+			pick -= this.giftOptions[index].weight;
+			if (pick < 0) return index;
+		}
+		return 0;
+	}
+
+	private createClientToken(): string {
+		if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+			return crypto.randomUUID();
+		}
+		return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 	}
 
 	updateWheelPhone(value: string): void {
@@ -263,33 +287,6 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	private isStaticDeployment(): boolean {
 		return typeof window !== 'undefined' && !['localhost', '127.0.0.1'].includes(window.location.hostname);
 	}
-
-	private requestStaticWheelSpin(): Promise<any> {
-		return new Promise((resolve, reject) => {
-			const callbackName = `__wheelSpin_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-			const script = document.createElement('script');
-			const timer = window.setTimeout(() => {
-				cleanup();
-				reject(new Error('wheel-timeout'));
-			}, 15000);
-			const cleanup = () => {
-				window.clearTimeout(timer);
-				delete (window as any)[callbackName];
-				script.remove();
-			};
-			(window as any)[callbackName] = (payload: any) => {
-				cleanup();
-				resolve(payload);
-			};
-			script.onerror = () => {
-				cleanup();
-				reject(new Error('wheel-request-failed'));
-			};
-			script.src = `${this.resolveWheelEndpoint('spin')}?action=spin&sessionId=${encodeURIComponent(this.wheelSessionId)}&callback=${encodeURIComponent(callbackName)}&t=${Date.now()}`;
-			document.body.appendChild(script);
-		});
-	}
-
 
 	closeGiftResult(): void {
 		if (this.wheelTimer) clearTimeout(this.wheelTimer);

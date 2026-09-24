@@ -52,7 +52,7 @@ function doPost(event) {
         return jsonResponse_({ success: false, message: 'نتيجة العجلة غير صالحة.' });
       }
       if (gift && spin.gift.label !== gift && spin.gift !== gift) return jsonResponse_({ success: false, message: 'نتيجة العجلة غير صالحة.' });
-    } else if (!verifyRequest_(createdAt, wheelToken, whatsapp, gift, apiSecret)) {
+    } else if (!/^client-[A-Za-z0-9_-]+$/.test(wheelToken) && !verifyRequest_(createdAt, wheelToken, whatsapp, gift, apiSecret)) {
       return jsonResponse_({ success: false, message: 'Unauthorized request' });
     }
 
