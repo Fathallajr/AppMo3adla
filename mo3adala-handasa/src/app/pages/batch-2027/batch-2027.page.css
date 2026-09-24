@@ -166,7 +166,9 @@
 .batch-gift-wheel__center-box { display: grid; width: 82px; height: 82px; place-items: center; border: 3px solid #fff; border-radius: 50%; color: #fff; background: #ed6b22; box-shadow: 0 5px 0 #b94227, 0 0 0 3px #ffb16f; }
 .batch-gift-wheel__center-box b { font-size: 14px; line-height: 1.25; }
 .batch-gift-wheel.is-spinning .batch-gift-wheel__spin { animation: cinematicPulse 1s ease-in-out infinite; }
+.batch-gift-wheel.is-awaiting-result .batch-gift-wheel__disc { animation: wheel-pre-spin .8s linear infinite; }
 .batch-gift-wheel.is-spinning:before { content: ''; position: absolute; inset: -18px; z-index: -1; border: 2px solid rgba(237,107,34,.35); border-radius: 50%; animation: cinematicRing 1.3s ease-out infinite; }
+@keyframes wheel-pre-spin { to { transform: rotate(360deg); } }
 .batch-gift-wheel__spin small { font-size: 21px; }
 .batch-gift-wheel__spin:disabled { cursor: wait; opacity: .8; }
 .batch-wheel-result { display: grid; gap: 4px; min-height: 68px; margin: 0 auto 18px; color: #172452; }

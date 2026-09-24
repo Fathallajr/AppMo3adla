@@ -51,6 +51,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	selectedGift = '';
 	openedGift = '';
 	giftWheelSpinning = false;
+	wheelAwaitingResult = false;
 	wheelRotation = 0;
 	wheelAttempts = 0;
 	wheelLocked = false;
@@ -120,6 +121,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	private async spinGiftWheel(): Promise<void> {
 		if (this.giftWheelSpinning) return;
 		this.giftWheelSpinning = true;
+		this.wheelAwaitingResult = true;
 		this.wheelResult = null;
 		this.selectedGift = '';
 		this.wheelAlreadyUsed = false;
@@ -137,6 +139,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		if (!response.ok || payload.success === false) {
 			this.wheelAttempts -= 1;
 			this.giftWheelSpinning = false;
+			this.wheelAwaitingResult = false;
 			this.wheelClaimError = payload.message || 'تعذر تشغيل العجلة. حاول تاني.';
 			return;
 		}
@@ -145,9 +148,11 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		if (resultIndex < 0) {
 			this.wheelAttempts -= 1;
 			this.giftWheelSpinning = false;
+			this.wheelAwaitingResult = false;
 			this.wheelClaimError = 'تعذر قراءة نتيجة العجلة. حاول تاني.';
 			return;
 		}
+		this.wheelAwaitingResult = false;
 		this.wheelRotation += 1440 + (360 - (resultIndex * 40 + 20));
 		this.wheelTimer = window.setTimeout(() => {
 			this.wheelResult = this.giftOptions[resultIndex];
@@ -159,6 +164,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		} catch {
 			this.wheelAttempts -= 1;
 			this.giftWheelSpinning = false;
+			this.wheelAwaitingResult = false;
 			this.wheelClaimError = 'تعذر تشغيل العجلة. حاول تاني.';
 		} finally {
 			window.clearTimeout(timeout);
