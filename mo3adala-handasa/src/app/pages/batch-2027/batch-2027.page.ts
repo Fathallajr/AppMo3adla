@@ -242,14 +242,14 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		try {
 			const claimBody = new URLSearchParams({ action: 'claim', name, whatsapp, program, wheelToken: this.wheelToken });
 			if (this.isStaticDeployment() || this.isLocalBrowser()) {
-				const exists = await this.requestWheelPhoneCheck(whatsapp);
-				if (exists === true) {
-					this.wheelClaimError = 'تم تسجيل هذا الرقم من قبل.';
+				const payload = await this.requestWheelClaim(claimBody);
+				if (payload.alreadyRegistered) {
+					this.wheelClaimError = payload.message || 'تم تسجيل هذا الرقم من قبل.';
 					this.wheelAlreadyUsed = true;
 					this.wheelUsed = true;
 					return;
 				}
-				void fetch(this.wheelAppsScriptEndpoint(), { method: 'POST', mode: 'no-cors', body: claimBody });
+				if (!payload.success) throw new Error(payload.message || 'تعذر تسجيل هدية العجلة.');
 				this.wheelClaimComplete = true;
 				this.selectedGift = this.wheelResult.label;
 				this.wheelUsed = true;
@@ -326,6 +326,35 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 				resolve(null);
 			};
 			script.src = `${this.wheelAppsScriptEndpoint()}?action=check&whatsapp=${encodeURIComponent(whatsapp)}&callback=${encodeURIComponent(callbackName)}&t=${Date.now()}`;
+			document.body.appendChild(script);
+		});
+	}
+
+	private requestWheelClaim(body: URLSearchParams): Promise<{ success?: boolean; alreadyRegistered?: boolean; message?: string }> {
+		return new Promise((resolve, reject) => {
+			const callbackName = `__wheelClaim_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+			const script = document.createElement('script');
+			const timer = window.setTimeout(() => {
+				cleanup();
+				reject(new Error('خدمة التسجيل اتأخرت. حاول تاني.'));
+			}, 30000);
+			const cleanup = () => {
+				window.clearTimeout(timer);
+				delete (window as any)[callbackName];
+				script.remove();
+			};
+			(window as any)[callbackName] = (payload: any) => {
+				cleanup();
+				resolve(payload || { success: false, message: 'تعذر قراءة رد التسجيل.' });
+			};
+			script.onerror = () => {
+				cleanup();
+				reject(new Error('تعذر الاتصال بخدمة التسجيل.'));
+			};
+			const query = new URLSearchParams(body.toString());
+			query.set('callback', callbackName);
+			query.set('t', String(Date.now()));
+			script.src = `${this.wheelAppsScriptEndpoint()}?${query.toString()}`;
 			document.body.appendChild(script);
 		});
 	}

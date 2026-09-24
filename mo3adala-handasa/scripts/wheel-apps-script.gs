@@ -9,8 +9,12 @@ const HEADERS = ['وقت التسجيل', 'الاسم', 'رقم الواتساب
 function doGet(event) {
   const params = event && event.parameter ? event.parameter : {};
   const action = String(params.action || '').trim();
-  if (action === 'spin' || action === 'check') {
-    const response = action === 'spin' ? spin_(params) : check_(params);
+  if (action === 'spin' || action === 'check' || action === 'claim') {
+    const response = action === 'spin'
+      ? spin_(params)
+      : action === 'check'
+        ? check_(params)
+        : doPost({ parameter: params });
     const callback = String(params.callback || '').trim();
     if (callback && /^[A-Za-z_$][\w$]*$/.test(callback)) {
       return ContentService
