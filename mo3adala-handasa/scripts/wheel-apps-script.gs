@@ -6,7 +6,18 @@ const SPREADSHEET_ID = '1lDtfrNTh-q4kXZfg7qt9S8CgmhMkxeLB8UBtgMifTKo';
 const SHEET_NAME = 'Wheel Claims';
 const HEADERS = ['وقت التسجيل', 'الاسم', 'رقم الواتساب', 'الهدية', 'Wheel Token', 'نوع المعادلة'];
 
-function doGet() {
+function doGet(event) {
+  const params = event && event.parameter ? event.parameter : {};
+  if (String(params.action || '').trim() === 'spin') {
+    const response = spin_(params);
+    const callback = String(params.callback || '').trim();
+    if (callback && /^[A-Za-z_$][\w$]*$/.test(callback)) {
+      return ContentService
+        .createTextOutput(callback + '(' + response.getContent() + ');')
+        .setMimeType(ContentService.MimeType.JAVASCRIPT);
+    }
+    return response;
+  }
   return jsonResponse_({ success: true, service: 'wheel-claims' });
 }
 

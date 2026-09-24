@@ -129,14 +129,25 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		const controller = new AbortController();
 		const timeout = window.setTimeout(() => controller.abort(), 15000);
 		try {
-		const endpoint = this.resolveWheelEndpoint('spin');
-		const response = await fetch(endpoint, {
-			method: 'POST',
-			body: new URLSearchParams({ action: 'spin', sessionId: this.wheelSessionId }),
-			signal: controller.signal
-		});
-		const payload = await response.json();
-		if (!response.ok || payload.success === false) {
+		let payload: any;
+		if (this.isStaticDeployment()) {
+			payload = await this.requestStaticWheelSpin();
+		} else {
+			const endpoint = this.resolveWheelEndpoint('spin');
+			const response = await fetch(endpoint, {
+				method: 'POST',
+				body: new URLSearchParams({ action: 'spin', sessionId: this.wheelSessionId }),
+				signal: controller.signal
+			});
+			payload = await response.json();
+			if (!response.ok || payload.success === false) {
+				this.wheelAttempts -= 1;
+				this.giftWheelSpinning = false;
+				this.wheelClaimError = payload.message || 'تعذر تشغيل العجلة. حاول تاني.';
+				return;
+			}
+		}
+		if (!payload || payload.success === false) {
 			this.wheelAttempts -= 1;
 			this.giftWheelSpinning = false;
 			this.wheelClaimError = payload.message || 'تعذر تشغيل العجلة. حاول تاني.';
@@ -205,9 +216,17 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		const controller = new AbortController();
 		const timeout = window.setTimeout(() => controller.abort(), 35000);
 		try {
+			const claimBody = new URLSearchParams({ action: 'claim', name, whatsapp, program, wheelToken: this.wheelToken });
+			if (this.isStaticDeployment()) {
+				await fetch(this.resolveWheelEndpoint('claim'), { method: 'POST', mode: 'no-cors', body: claimBody });
+				this.wheelClaimComplete = true;
+				this.selectedGift = this.wheelResult.label;
+				this.wheelUsed = true;
+				return;
+			}
 			const response = await fetch(this.resolveWheelEndpoint('claim'), {
 				method: 'POST',
-				body: new URLSearchParams({ action: 'claim', name, whatsapp, program, wheelToken: this.wheelToken }),
+				body: claimBody,
 				signal: controller.signal
 			});
 			const payload = await response.json() as { success?: boolean; alreadyRegistered?: boolean; message?: string };
@@ -239,6 +258,36 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 			return window.NG_WHEEL_APPS_SCRIPT_ENDPOINT || WHEEL_APPS_SCRIPT_ENDPOINT;
 		}
 		return WHEEL_APPS_SCRIPT_ENDPOINT;
+	}
+
+	private isStaticDeployment(): boolean {
+		return typeof window !== 'undefined' && !['localhost', '127.0.0.1'].includes(window.location.hostname);
+	}
+
+	private requestStaticWheelSpin(): Promise<any> {
+		return new Promise((resolve, reject) => {
+			const callbackName = `__wheelSpin_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+			const script = document.createElement('script');
+			const timer = window.setTimeout(() => {
+				cleanup();
+				reject(new Error('wheel-timeout'));
+			}, 15000);
+			const cleanup = () => {
+				window.clearTimeout(timer);
+				delete (window as any)[callbackName];
+				script.remove();
+			};
+			(window as any)[callbackName] = (payload: any) => {
+				cleanup();
+				resolve(payload);
+			};
+			script.onerror = () => {
+				cleanup();
+				reject(new Error('wheel-request-failed'));
+			};
+			script.src = `${this.resolveWheelEndpoint('spin')}?action=spin&sessionId=${encodeURIComponent(this.wheelSessionId)}&callback=${encodeURIComponent(callbackName)}`;
+			document.body.appendChild(script);
+		});
 	}
 
 
