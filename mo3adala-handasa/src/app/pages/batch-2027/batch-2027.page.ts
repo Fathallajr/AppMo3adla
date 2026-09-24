@@ -285,7 +285,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 				cleanup();
 				reject(new Error('wheel-request-failed'));
 			};
-			script.src = `${this.resolveWheelEndpoint('spin')}?action=spin&sessionId=${encodeURIComponent(this.wheelSessionId)}&callback=${encodeURIComponent(callbackName)}`;
+			script.src = `${this.resolveWheelEndpoint('spin')}?action=spin&sessionId=${encodeURIComponent(this.wheelSessionId)}&callback=${encodeURIComponent(callbackName)}&t=${Date.now()}`;
 			document.body.appendChild(script);
 		});
 	}
