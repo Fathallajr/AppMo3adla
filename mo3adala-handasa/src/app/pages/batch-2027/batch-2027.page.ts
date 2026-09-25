@@ -7,8 +7,8 @@ import { SeoService } from '../../core/seo.service';
 import { StyledSelectComponent } from '../../shared/components/styled-select/styled-select.component';
 
 const PHONE_PATTERN = /^01\d{9}$/;
-const WHEEL_SPIN_DURATION_MS = 7500;
-const WHEEL_REQUEST_TIMEOUT_MS = 15000;
+const WHEEL_SPIN_DURATION_MS = 4600;
+const WHEEL_REQUEST_TIMEOUT_MS = 10000;
 const WHEEL_APPS_SCRIPT_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyrF6S-pyZys6aKo75ExPWxXCm9F-zIRKr_t-IvV7gyeCGKIBJ-nnISHMlyaRSNk4_r/exec';
 
 declare global {
@@ -73,7 +73,6 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	wheelExistingGift = '';
 	private giftRevealTimer?: ReturnType<typeof setTimeout>;
 	private wheelTimer?: number;
-	wheelAwaitingResult = false;
 	wheelTransitionDuration = WHEEL_SPIN_DURATION_MS;
 
 	toggleHeroSubscriptionChoices(event: Event): void {
@@ -124,8 +123,6 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	private async spinGiftWheel(): Promise<void> {
 		if (this.giftWheelSpinning) return;
 		this.giftWheelSpinning = true;
-		this.wheelAwaitingResult = true;
-		const spinStartedAt = performance.now();
 		this.wheelResult = null;
 		this.selectedGift = '';
 		this.wheelAlreadyUsed = false;
@@ -135,45 +132,44 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		const controller = new AbortController();
 		const timeout = window.setTimeout(() => controller.abort(), WHEEL_REQUEST_TIMEOUT_MS);
 		try {
-		const payload = this.isStaticDeployment()
-			? await this.requestWheelSpin()
-			: await this.requestWheelSpinFromServer(controller.signal);
-		if (payload?.success === false || !payload?.token || !payload?.gift?.id) {
+			const payload = this.isStaticDeployment()
+				? await this.requestWheelSpin()
+				: await this.requestWheelSpinFromServer(controller.signal);
+			if (payload?.success === false || !payload?.token || !payload?.gift?.id) {
 			this.wheelAttempts -= 1;
 			this.giftWheelSpinning = false;
 			this.wheelClaimError = payload?.message || 'تعذر تشغيل العجلة. حاول تاني.';
 			return;
-		}
-		this.wheelToken = payload.token;
-		const resultIndex = this.giftOptions.findIndex(gift => gift.id === payload.gift?.id);
-		if (resultIndex < 0) {
+			}
+
+			const resultIndex = this.giftOptions.findIndex(gift => gift.id === payload.gift.id);
+			if (resultIndex < 0) {
 			this.wheelAttempts -= 1;
 			this.giftWheelSpinning = false;
 			this.wheelClaimError = 'تعذر قراءة نتيجة العجلة. حاول تاني.';
 			return;
-		}
-		const remainingSpinDuration = Math.max(1200, WHEEL_SPIN_DURATION_MS - (performance.now() - spinStartedAt));
-		this.wheelTransitionDuration = remainingSpinDuration;
-		this.wheelAwaitingResult = false;
-		window.requestAnimationFrame(() => {
-			this.wheelRotation += 1440 + (360 - (resultIndex * 40 + 20));
-		});
-		this.wheelTimer = window.setTimeout(() => {
-			this.wheelResult = this.giftOptions[resultIndex];
-			this.selectedGift = '';
-			this.wheelUsed = !this.wheelResult.available;
-			this.wheelLocked = true;
-			this.giftWheelSpinning = false;
+			}
+
+			this.wheelToken = payload.token;
 			this.wheelTransitionDuration = WHEEL_SPIN_DURATION_MS;
-		}, remainingSpinDuration);
+			this.wheelRotation += 1440 + (360 - (resultIndex * 40 + 20));
+			this.wheelTimer = window.setTimeout(() => this.finishGiftWheel(resultIndex), WHEEL_SPIN_DURATION_MS);
 		} catch {
 			this.wheelAttempts -= 1;
-			this.wheelAwaitingResult = false;
 			this.giftWheelSpinning = false;
 			this.wheelClaimError = 'تعذر تشغيل العجلة. حاول تاني.';
 		} finally {
 			window.clearTimeout(timeout);
 		}
+	}
+
+	private finishGiftWheel(resultIndex: number): void {
+		this.wheelResult = this.giftOptions[resultIndex];
+		this.selectedGift = '';
+		this.wheelUsed = !this.wheelResult.available;
+		this.wheelLocked = true;
+		this.giftWheelSpinning = false;
+		this.wheelTimer = undefined;
 	}
 
 	private async requestWheelSpinFromServer(signal: AbortSignal): Promise<any> {
@@ -402,7 +398,6 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		this.giftRewardsVisible = false;
 		this.openedGift = '';
 		this.giftWheelSpinning = false;
-		this.wheelAwaitingResult = false;
 		this.wheelResult = null;
 		if (this.giftRevealTimer) clearTimeout(this.giftRevealTimer);
 	}
