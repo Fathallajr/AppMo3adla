@@ -74,6 +74,7 @@
 				</button>
 				<p *ngIf="wheelClaimError" class="wheel-claim-status wheel-claim-status--error" role="alert">{{ wheelClaimError }}</p>
 			</form>
+			<p *ngIf="wheelClaimError && !wheelResult && !giftWheelSpinning" class="wheel-claim-status wheel-claim-status--error" role="alert">{{ wheelClaimError }}</p>
 			<p *ngIf="wheelUsed && wheelClaimError && !wheelAlreadyUsed && !wheelResult?.available" class="batch-wheel-used" role="alert">{{ wheelClaimError }}</p>
 			<div *ngIf="wheelResult" class="batch-wheel-result" [class.is-empty]="!wheelResult.available" [class.is-used]="wheelAlreadyUsed" aria-live="polite"><b>{{ wheelAlreadyUsed ? 'أنت استفدت قبل كده!' : (wheelResult.available ? 'مبروك! كسبت' : 'حظ أوفر!') }}</b><span>{{ wheelAlreadyUsed ? (wheelExistingGift ? 'استفدت من: ' + wheelExistingGift : 'تم تسجيل استفادتك السابقة') : wheelResult.label }}</span><small *ngIf="!wheelAlreadyUsed && !wheelResult.available">شكرًا لمشاركتك، جرّب حظك في المرة الجاية</small></div>
 			<div *ngIf="wheelClaimComplete && selectedGift" class="wheel-claim-success" role="status"><b>✓ تم تسجيل هديتك بنجاح</b><span>رقمك اتسجل كما كتبته: {{ wheelClaim.whatsapp }}</span></div>
