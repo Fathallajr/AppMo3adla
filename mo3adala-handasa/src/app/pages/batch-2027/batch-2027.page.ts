@@ -73,6 +73,8 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	wheelExistingGift = '';
 	private giftRevealTimer?: ReturnType<typeof setTimeout>;
 	private wheelTimer?: number;
+	wheelAwaitingResult = false;
+	wheelTransitionDuration = WHEEL_SPIN_DURATION_MS;
 
 	toggleHeroSubscriptionChoices(event: Event): void {
 		event.preventDefault();
@@ -122,6 +124,8 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 	private async spinGiftWheel(): Promise<void> {
 		if (this.giftWheelSpinning) return;
 		this.giftWheelSpinning = true;
+		this.wheelAwaitingResult = true;
+		const spinStartedAt = performance.now();
 		this.wheelResult = null;
 		this.selectedGift = '';
 		this.wheelAlreadyUsed = false;
@@ -148,16 +152,23 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 			this.wheelClaimError = 'تعذر قراءة نتيجة العجلة. حاول تاني.';
 			return;
 		}
-		this.wheelRotation += 1440 + (360 - (resultIndex * 40 + 20));
+		const remainingSpinDuration = Math.max(1200, WHEEL_SPIN_DURATION_MS - (performance.now() - spinStartedAt));
+		this.wheelTransitionDuration = remainingSpinDuration;
+		this.wheelAwaitingResult = false;
+		window.requestAnimationFrame(() => {
+			this.wheelRotation += 1440 + (360 - (resultIndex * 40 + 20));
+		});
 		this.wheelTimer = window.setTimeout(() => {
 			this.wheelResult = this.giftOptions[resultIndex];
 			this.selectedGift = '';
 			this.wheelUsed = !this.wheelResult.available;
 			this.wheelLocked = true;
 			this.giftWheelSpinning = false;
-		}, WHEEL_SPIN_DURATION_MS);
+			this.wheelTransitionDuration = WHEEL_SPIN_DURATION_MS;
+		}, remainingSpinDuration);
 		} catch {
 			this.wheelAttempts -= 1;
+			this.wheelAwaitingResult = false;
 			this.giftWheelSpinning = false;
 			this.wheelClaimError = 'تعذر تشغيل العجلة. حاول تاني.';
 		} finally {
@@ -391,6 +402,7 @@ export class Batch2027PageComponent implements OnInit, OnDestroy {
 		this.giftRewardsVisible = false;
 		this.openedGift = '';
 		this.giftWheelSpinning = false;
+		this.wheelAwaitingResult = false;
 		this.wheelResult = null;
 		if (this.giftRevealTimer) clearTimeout(this.giftRevealTimer);
 	}
