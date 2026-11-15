@@ -68,7 +68,7 @@
 		<header class="review-chapter">
 			<span><i class="bi bi-diagram-3-fill"></i> HOW IT WORKS</span>
 			<h2>رحلة اشتراك واضحة من البداية للنهاية</h2>
-			<p>أربع خطوات بسيطة، وكل خطوة موضحة بالتفصيل</p>
+			<p>خطوات بسيطة، وكل خطوة موضحة بالتفصيل</p>
 		</header>
 
 		<section class="review-flow">
@@ -118,21 +118,10 @@
 						</ng-container>
 					</div>
 
-					<div class="review-transfer-data">
-						<header>
-							<span class="review-transfer-data__icon"><i class="bi bi-clipboard-check"></i></span>
-							<div><h3>بيانات التحويل المطلوبة</h3><p>جهّز البيانات دي علشان نأكد اشتراكك بسرعة</p></div>
-						</header>
-						<div>
-							<span *ngFor="let info of subscriptionDetails.requiredInfo; let i = index">
-								<b>{{ (i + 1).toString().padStart(2, '0') }}</b>{{ info }}
-							</span>
-						</div>
-					</div>
 				</div>
 			</article>
 
-			<div class="review-flow__split">
+			<div class="review-flow__split review-flow__split--registration">
 				<article class="review-step review-step--form">
 					<header class="review-step__head">
 						<b>03</b>
@@ -140,70 +129,26 @@
 					</header>
 
 					<div class="review-form" *ngIf="getForm() as form">
-						<div class="review-form__title">
-							<span><i class="bi bi-file-earmark-text"></i></span>
-							<div><strong>فورم {{ form.label }}</strong><small>{{ form.description }}</small></div>
-							<b [class.is-closed]="isEnrollmentClosed">
-								{{ isEnrollmentClosed ? 'مغلق مؤقتًا' : 'متاح الآن' }}
-							</b>
-						</div>
-						<ul>
-							<li><i class="bi bi-person-vcard"></i><span><b>الخطوة الأولى</b>اكتب بياناتك ورقم واتساب بشكل صحيح</span><em>1</em></li>
-							<li><i class="bi bi-receipt"></i><span><b>الخطوة الثانية</b>ارفع صورة واضحة لإيصال التحويل</span><em>2</em></li>
-						</ul>
-						<button
-							(click)="openGoogleForm()"
-							class="review-primary-button"
-							[class.is-disabled]="isEnrollmentClosed"
-							[attr.disabled]="isEnrollmentClosed ? '' : null">
-							{{ form.buttonText }} <i class="bi bi-arrow-up-left"></i>
-						</button>
-						<div class="review-form__telegram-step">
-							<div class="review-form__telegram-head"><i class="bi bi-telegram"></i><div><strong>بعد التسجيل في الفورم</strong><small>ادخل جروبات المواد على تيليجرام</small></div></div>
-							<form class="delivery-whatsapp-form" (ngSubmit)="submitMaterialsTelegram()" novalidate>
-								<label><span>اسمك الثلاثي <b>*</b></span><input name="materialsTelegramName" [(ngModel)]="materialsTelegramName" required placeholder="اكتب اسمك كما كتبته في الفورم"></label>
-								<small class="support-field-error" *ngIf="materialsTelegramSubmitted && !materialsTelegramName.trim()">الاسم مطلوب</small>
-								<label><span>نوع المعادلة</span><input name="materialsTelegramEquation" [ngModel]="subscriptionProgramLabel" readonly aria-readonly="true"></label>
-								<label><span>سجلت في الفورم؟ <b>*</b></span><select name="materialsTelegramRegistered" [(ngModel)]="materialsTelegramRegistered" required><option value="" disabled>اختار الإجابة</option><option value="نعم">نعم</option><option value="لا">لا</option></select></label>
-								<small class="support-field-error" *ngIf="materialsTelegramSubmitted && !materialsTelegramRegistered">اختار نعم أو لا</small>
-								<small class="support-field-error" *ngIf="materialsTelegramSubmitted && materialsTelegramRegistered === 'لا'">لازم تسجل الفورم أولاً قبل دخول جروبات المواد.</small>
-								<small class="support-field-error" *ngIf="materialsTelegramSubmitted && isEnrollmentClosed">الاشتراك مقفول حاليًا، لا يمكن إرسال رسالة.</small>
-								<button type="submit" [disabled]="isEnrollmentClosed" [class.is-disabled]="isEnrollmentClosed"><i class="bi bi-telegram"></i> دخول جروبات المواد</button>
-							</form>
-						</div>
-					</div>
-				</article>
-
-				<article class="review-step review-step--delivery">
-					<header class="review-step__head">
-						<b>04</b>
-						<div><h2>استلم الكود</h2><p>الكود هيوصلك على واتساب</p></div>
-					</header>
-					<div class="review-delivery">
-						<div class="review-delivery__icon"><i class="bi bi-whatsapp"></i></div>
-						<span><i></i> الإرسال عبر واتساب</span>
-						<h3>ابعت بياناتك على واتساب</h3>
-						<p>املأ البيانات مرة واحدة فقط وتجنب إرسالها أكثر من مرة. عادةً يتم تسليم كود التفعيل خلال 24 ساعة بعد مراجعة البيانات.</p>
-						<form class="delivery-whatsapp-form" (ngSubmit)="submitDeliveryWhatsApp()" novalidate>
-							<label>
-								<span>اسمك <b>*</b></span>
-								<input name="deliveryName" [(ngModel)]="deliveryName" required placeholder="اكتب اسمك">
-							</label>
-							<small class="support-field-error" *ngIf="deliveryFormSubmitted && !deliveryName.trim()">الاسم مطلوب</small>
-							<label>
-								<span>نوع المعادلة</span>
-								<input name="deliveryEquationType" [ngModel]="subscriptionProgramLabel" readonly aria-readonly="true">
-							</label>
-							<label>
-								<span>حولت الاشتراك وسجلت في الفورم؟ <b>*</b></span>
-								<select name="deliveryRegistered" [(ngModel)]="deliveryRegistered" required><option value="" disabled>اختار الإجابة</option><option value="نعم">نعم</option><option value="لا">لا</option></select>
-							</label>
-							<small class="support-field-error" *ngIf="deliveryFormSubmitted && !deliveryRegistered">اختار نعم أو لا</small>
-							<small class="support-field-error" *ngIf="deliveryFormSubmitted && deliveryRegistered === 'لا'">لازم تسجل الفورم أولاً قبل استلام الكود.</small>
-							<small class="support-field-error" *ngIf="deliveryFormSubmitted && isEnrollmentClosed">الاشتراك مقفول حاليًا، لا يمكن إرسال رسالة.</small>
-							<button type="submit" [disabled]="isEnrollmentClosed" [class.is-disabled]="isEnrollmentClosed"><i class="bi bi-whatsapp"></i> إرسال على واتساب</button>
+						<div class="review-form__title"><span><i class="bi bi-file-earmark-text"></i></span><div><strong>تسجيل {{ subscriptionProgramLabel }}</strong><small>اكتب بياناتك وارفع مستندات التحويل مرة واحدة</small></div><b [class.is-closed]="isEnrollmentClosed">{{ isEnrollmentClosed ? 'مغلق مؤقتًا' : 'متاح الآن' }}</b></div>
+						<form class="subscription-registration-form" [class.subscription-registration-form--disabled]="isEnrollmentClosed" (ngSubmit)="submitSubscriptionRequest()" novalidate *ngIf="!studentRequestId">
+							<fieldset class="subscription-registration-fieldset" [disabled]="isEnrollmentClosed">
+							<div class="subscription-form-grid">
+								<label><span>الاسم الثلاثي <b>*</b></span><input #studentNameModel="ngModel" name="studentName" [(ngModel)]="studentName" placeholder="اكتب الاسم الأول واسم الأب والعائلة"><small class="subscription-field-error" *ngIf="(studentFormSubmitted || studentNameModel.touched) && studentNameValidation">{{ studentNameValidation }}</small></label>
+								<label><span>رقم الواتساب <b>*</b></span><input #studentWhatsappModel="ngModel" name="studentWhatsapp" [(ngModel)]="studentWhatsapp" inputmode="numeric" maxlength="11" dir="ltr" placeholder="01xxxxxxxxx"><small class="subscription-field-error" *ngIf="(studentFormSubmitted || studentWhatsappModel.touched) && studentWhatsappValidation">{{ studentWhatsappValidation }}</small></label>
+								<label><span>رقم التليجرام <b>*</b></span><input #studentTelegramModel="ngModel" name="studentTelegram" [(ngModel)]="studentTelegram" inputmode="numeric" maxlength="11" dir="ltr" placeholder="01xxxxxxxxx"><small class="subscription-field-error" *ngIf="(studentFormSubmitted || studentTelegramModel.touched) && studentTelegramValidation">{{ studentTelegramValidation }}</small></label>
+								<label><span>اختار المساعد <b>*</b></span><select #studentSupervisorModel="ngModel" name="studentSupervisor" [(ngModel)]="studentSupervisor"><option value="" disabled>اختار المساعد</option><option *ngFor="let supervisor of subscriptionSupervisors" [value]="supervisor">{{ supervisor }}</option></select><small class="subscription-field-error" *ngIf="(studentFormSubmitted || studentSupervisorModel.touched) && studentSupervisorValidation">{{ studentSupervisorValidation }}</small></label>
+								<label><span>الرقم اللي حولت عليه <b>*</b></span><select #studentPaymentRecipientModel="ngModel" name="studentPaymentRecipient" [(ngModel)]="studentPaymentRecipient"><option value="" disabled>اختار رقم فودافون كاش</option><option *ngFor="let wallet of subscriptionDetails.vodafoneNumbers" [value]="wallet.number">{{ wallet.number }} — {{ wallet.owner }}</option></select><small class="subscription-field-error" *ngIf="(studentFormSubmitted || studentPaymentRecipientModel.touched) && studentPaymentRecipientValidation">{{ studentPaymentRecipientValidation }}</small></label>
+								<label><span>الرقم اللي حولت منه <b>*</b></span><input #studentTransferFromModel="ngModel" name="studentTransferFrom" [(ngModel)]="studentTransferFrom" inputmode="numeric" maxlength="11" dir="ltr" placeholder="01xxxxxxxxx"><small class="subscription-field-error" *ngIf="(studentFormSubmitted || studentTransferFromModel.touched) && studentTransferFromValidation">{{ studentTransferFromValidation }}</small></label>
+								<label><span>وقت وتاريخ التحويل <b>*</b></span><input #studentTransferAtModel="ngModel" name="studentTransferAt" [(ngModel)]="studentTransferAt" type="datetime-local" [max]="studentTransferMax"><small class="subscription-field-error" *ngIf="(studentFormSubmitted || studentTransferAtModel.touched) && studentTransferAtValidation">{{ studentTransferAtValidation }}</small></label>
+								<label><span>المدرسة <b>*</b></span><input #studentSchoolModel="ngModel" name="studentSchool" [(ngModel)]="studentSchool" placeholder="اكتب اسم المدرسة"><small class="subscription-field-error" *ngIf="(studentFormSubmitted || studentSchoolModel.touched) && studentSchoolValidation">{{ studentSchoolValidation }}</small></label>
+								<label class="subscription-file-field"><span>سكرين الدفع <b>*</b></span><input type="file" accept="image/jpeg,image/png,image/webp" (change)="selectStudentFile('receipt', $event)"><small>{{ studentPaymentReceipt?.name || 'اختار صورة الإيصال' }}</small><small class="subscription-field-error" *ngIf="studentPaymentReceiptValidation">{{ studentPaymentReceiptValidation }}</small></label>
+								<label class="subscription-file-field"><span>صورة البطاقة <b>*</b></span><input type="file" accept="image/jpeg,image/png,image/webp" (change)="selectStudentFile('identity', $event)"><small>{{ studentIdentityCard?.name || 'اختار صورة البطاقة' }}</small><small class="subscription-field-error" *ngIf="studentIdentityCardValidation">{{ studentIdentityCardValidation }}</small></label>
+							</div>
+							<p class="subscription-form-error" *ngIf="studentFormError" role="alert">{{ studentFormError }}</p>
+							<button type="submit" class="review-primary-button" [disabled]="isEnrollmentClosed || studentFormSubmitting"><i class="bi bi-check2-circle"></i> {{ studentFormSubmitting ? 'جاري تسجيل البيانات...' : 'إرسال بيانات الاشتراك' }}</button>
+							</fieldset>
 						</form>
-						<small>نوع المعادلة بيتحدد تلقائيًا حسب صفحة الاشتراك المفتوحة.</small>
+						<div class="subscription-form-success" *ngIf="studentRequestId" role="status"><i class="bi bi-check-circle-fill"></i><strong>{{ studentRequestMessage }}</strong><p class="subscription-form-success__lead">تم تسجيل طلبك بنجاح. التواصل هنا على خطوتين منفصلتين ولا واحدة منهم تغني عن الثانية.</p><div class="subscription-success-actions" aria-label="خطوات التواصل بعد التسجيل"><button type="button" class="subscription-inline-whatsapp" (click)="submitDeliveryWhatsApp()" [disabled]="isEnrollmentClosed"><span class="subscription-action-step">1</span><span class="subscription-action-copy"><strong>سجّل واتساب أولًا</strong><small>أرسل بياناتك الأساسية واستلم الكود بعد المراجعة</small></span><i class="bi bi-whatsapp"></i></button><button type="button" class="subscription-inline-telegram" (click)="materialsTelegramName = studentName; materialsTelegramRegistered = 'نعم'; submitMaterialsTelegram()" [disabled]="isEnrollmentClosed"><span class="subscription-action-step">2</span><span class="subscription-action-copy"><strong>بعدها سجّل تيليجرام</strong><small>ادخل جروبات المواد بعد تسجيل خطوة واتساب</small></span><i class="bi bi-telegram"></i></button></div></div>
 					</div>
 				</article>
 			</div>

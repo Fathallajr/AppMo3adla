@@ -124,12 +124,12 @@
 				<div *ngFor="let photo of currentStudentPhotos | slice:0:8; let i = index" 
 					 class="photo-card photo-card-slider cursor-pointer"
 					 (click)="openPhoto(photo)">
-					<img [src]="'assets/' + photo" 
+					<img [src]="photoAssetUrl(photo)"
 						 alt="طالب ناجح من دفعة 2026" 
 						 class="w-full object-cover" 
 						 loading="lazy"
 						 decoding="async"
-						 onerror="this.src='/assets/logo.webp'">
+						 (error)="usePhotoFallback($event)">
 				</div>
 			</div>
 			
@@ -147,7 +147,7 @@
 				
 				<!-- Photo -->
 				<div class="max-w-full max-h-full" (click)="$event.stopPropagation()">
-					<img [src]="'assets/' + selectedPhoto" 
+					<img [src]="photoAssetUrl(selectedPhoto)"
 						 alt="صورة طالب ناجح" 
 						 class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl">
 				</div>

@@ -344,6 +344,17 @@ export class HomePageComponent implements OnInit, AfterViewInit, OnDestroy {
 		}
 		return shuffled;
 	}
+
+	photoAssetUrl(photo: string | null | undefined): string {
+		return photo ? `assets/${photo.split('/').map(part => encodeURIComponent(part)).join('/')}` : 'assets/logo.webp';
+	}
+
+	usePhotoFallback(event: Event): void {
+		const image = event.target as HTMLImageElement | null;
+		if (!image || image.dataset['fallbackApplied'] === 'true') return;
+		image.dataset['fallbackApplied'] = 'true';
+		image.src = 'assets/logo.webp';
+	}
 	
 	private startDescriptionAnimation() {
 		if (typeof window === 'undefined' || this.descriptions.length < 2) return;

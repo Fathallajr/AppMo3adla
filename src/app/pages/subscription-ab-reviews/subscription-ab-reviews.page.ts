@@ -1,13 +1,14 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { HttpClient } from '@angular/common/http';
 import { SeoService } from '../../core/seo.service';
 import { CanonicalService } from '../../core/canonical.service';
 import { MonthlyContentService } from '../../core/services/monthly-content.service';
 import { displayProgramLabel } from '../../core/program-labels';
 import { CmsPageKey, cmsPageDefaults } from '../../core/cms-page.registry';
-import { Subscription } from 'rxjs';
+import { Subscription, finalize } from 'rxjs';
 
 interface ScheduleImage {
 	group: string;
@@ -73,22 +74,159 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 		return this.isEnglishSubscription ? 'October 10' : this.closingDateLabel;
 	}
 
-	get deliveryWhatsAppUrl(): string {
-		const message = [
-			`الاسم: ${this.deliveryName.trim()}`,
-			`نوع المعادلة: ${this.subscriptionProgramLabel}`,
-			`حولت الاشتراك وسجلت في الفورم؟ ${this.deliveryRegistered}`
-		].join('\n');
-		return `https://api.whatsapp.com/send/?phone=201080681865&text=${encodeURIComponent(message)}&type=phone_number&app_absent=0`;
-	}
 	deliveryName = '';
 	deliveryRegistered = '';
 	deliveryFormSubmitted = false;
+	studentName = '';
+	studentWhatsapp = '';
+	studentTelegram = '';
+	studentSupervisor = '';
+	studentPaymentRecipient = '';
+	studentTransferFrom = '';
+	studentTransferAt = '';
+	studentSchool = '';
+	studentPaymentReceipt: File | null = null;
+	studentIdentityCard: File | null = null;
+	studentPaymentReceiptError = '';
+	studentIdentityCardError = '';
+	studentFormSubmitted = false;
+	studentFormSubmitting = false;
+	studentFormError = '';
+	studentRequestId = '';
+	studentReferenceCode = '';
+	studentRequestMessage = '';
+	readonly subscriptionSupervisors = ['مهندسة حبيبة', 'مهندسة هدير', 'مهندسة ندى', 'مهندسة مي', 'مهندسة إيمان', 'مهندسة أشروقت', 'طالب جديد'];
+	private readonly http = inject(HttpClient);
 
 	submitDeliveryWhatsApp(): void {
 		this.deliveryFormSubmitted = true;
-		if (this.isEnrollmentClosed || !this.deliveryName.trim() || this.deliveryRegistered !== 'نعم') return;
+		if (this.isEnrollmentClosed || !this.studentRequestId || this.deliveryRegistered !== 'نعم') return;
 		window.open(this.deliveryWhatsAppUrl, '_blank', 'noopener');
+	}
+
+	get studentDeliveryMessage(): string {
+		return [
+			'طلب استلام كود التفعيل',
+			`الرقم المرجعي: ${this.studentReferenceCode || this.studentRequestId}`,
+			`الاسم: ${this.studentName.trim()}`,
+			`واتساب: ${this.studentWhatsapp.trim()}`,
+			`تليجرام: ${this.studentTelegram.trim()}`,
+			`المشرف: ${this.studentSupervisor}`,
+			`نوع المعادلة: ${this.subscriptionProgramLabel}`,
+			`حولت على رقم: ${this.studentPaymentRecipient}`,
+			`حولت من رقم: ${this.studentTransferFrom.trim()}`,
+			`وقت التحويل: ${this.formatTransferAtForWhatsApp(this.studentTransferAt)}`,
+			`المدرسة: ${this.studentSchool.trim()}`,
+			'تم رفع صورة إيصال الدفع وصورة البطاقة داخل طلب التسجيل.'
+		].join('\n');
+	}
+
+	private formatTransferAtForWhatsApp(value: string): string {
+		const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(value || '');
+		if (!match) return value || '—';
+
+		const [, year, month, day, rawHour, minutes] = match;
+		const hour = Number(rawHour);
+		const hour12 = hour % 12 || 12;
+		const period = hour >= 12 ? 'PM' : 'AM';
+		return `${day}/${month}/${year} ${String(hour12).padStart(2, '0')}:${minutes} ${period}`;
+	}
+
+	get deliveryWhatsAppUrl(): string {
+		return `https://api.whatsapp.com/send/?phone=201080681865&text=${encodeURIComponent(this.studentDeliveryMessage)}&type=phone_number&app_absent=0`;
+	}
+
+	get studentNameValidation(): string {
+		const parts = this.studentName.trim().split(/\s+/).filter(Boolean);
+		if (!this.studentName.trim()) return 'الاسم الثلاثي مطلوب.';
+		return parts.length >= 3 ? '' : 'اكتب الاسم ثلاثيًا: الاسم الأول واسم الأب واسم العائلة.';
+	}
+
+	private validateStudentPhone(value: string, label: string): string {
+		if (!value.trim()) return `${label} مطلوب.`;
+		return /^01\d{9}$/.test(value.trim()) ? '' : 'اكتب رقمًا مصريًا صحيحًا من 11 رقمًا يبدأ بـ 01.';
+	}
+
+	get studentWhatsappValidation(): string { return this.validateStudentPhone(this.studentWhatsapp, 'رقم الواتساب'); }
+	get studentTelegramValidation(): string { return this.validateStudentPhone(this.studentTelegram, 'رقم التليجرام'); }
+	get studentSupervisorValidation(): string { return this.studentSupervisor ? '' : 'اختار المهندسة المشرفة.'; }
+	get studentPaymentRecipientValidation(): string { return this.studentPaymentRecipient ? '' : 'اختار رقم فودافون كاش الذي حوّلت إليه.'; }
+	get studentTransferFromValidation(): string {
+		const phoneValidation = this.validateStudentPhone(this.studentTransferFrom, 'رقم التحويل');
+		if (phoneValidation) return phoneValidation;
+
+		const transferFrom = this.normalizeStudentPhone(this.studentTransferFrom);
+		const recipientNumbers = (this.subscriptionDetails?.vodafoneNumbers || []).map(wallet => this.normalizeStudentPhone(wallet.number));
+		return recipientNumbers.includes(transferFrom)
+			? 'مينفعش تكتب رقمًا من أرقام فودافون كاش التي حوّلت إليها. اكتب رقم الشخص الذي حوّلت منه.'
+			: '';
+	}
+	private normalizeStudentPhone(value: string): string {
+		return value.replace(/[٠-٩]/g, digit => String('٠١٢٣٤٥٦٧٨٩'.indexOf(digit))).replace(/\D/g, '');
+	}
+	get studentTransferMax(): string { const now = new Date(); const pad = (value: number) => String(value).padStart(2, '0'); return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`; }
+	get studentTransferAtValidation(): string {
+		if (!this.studentTransferAt) return 'وقت وتاريخ التحويل مطلوبان.';
+		const transferDate = new Date(this.studentTransferAt);
+		if (Number.isNaN(transferDate.getTime())) return 'اختار تاريخًا ووقتًا صحيحين.';
+		return transferDate.getTime() <= Date.now() ? '' : 'وقت التحويل لا يمكن أن يكون في المستقبل.';
+	}
+	get studentSchoolValidation(): string { return this.studentSchool.trim() ? '' : 'اسم المدرسة مطلوب.'; }
+	get studentPaymentReceiptValidation(): string {
+		return this.studentPaymentReceiptError || (this.studentFormSubmitted && !this.studentPaymentReceipt ? 'صورة إيصال الدفع مطلوبة.' : '');
+	}
+	get studentIdentityCardValidation(): string {
+		return this.studentIdentityCardError || (this.studentFormSubmitted && !this.studentIdentityCard ? 'صورة البطاقة مطلوبة.' : '');
+	}
+
+	selectStudentFile(kind: 'receipt' | 'identity', event: Event): void {
+		const file = (event.target as HTMLInputElement).files?.[0] || null;
+		const error = file && !['image/jpeg', 'image/png', 'image/webp'].includes(file.type)
+			? 'الملف يجب أن يكون JPG أو PNG أو WEBP.'
+			: file && file.size > 5 * 1024 * 1024
+				? 'حجم الصورة يجب ألا يتجاوز 5 ميجابايت.'
+				: '';
+		if (kind === 'receipt') {
+			this.studentPaymentReceipt = error ? null : file;
+			this.studentPaymentReceiptError = error;
+		} else {
+			this.studentIdentityCard = error ? null : file;
+			this.studentIdentityCardError = error;
+		}
+	}
+
+	submitSubscriptionRequest(): void {
+		this.studentFormSubmitted = true;
+		this.studentFormError = '';
+		if (this.studentFormSubmitting || this.isEnrollmentClosed) return;
+		if (this.studentNameValidation || this.studentWhatsappValidation || this.studentTelegramValidation || this.studentSupervisorValidation || this.studentPaymentRecipientValidation || this.studentTransferFromValidation || this.studentTransferAtValidation || this.studentSchoolValidation || this.studentPaymentReceiptValidation || this.studentIdentityCardValidation) {
+			this.studentFormError = 'من فضلك أكمل كل البيانات وارفع صورة الإيصال والبطاقة.';
+			return;
+		}
+		const body = new FormData();
+		body.append('name', this.studentName.trim()); body.append('whatsapp', this.studentWhatsapp.trim()); body.append('telegram', this.studentTelegram.trim());
+		body.append('supervisor', this.studentSupervisor); body.append('paymentRecipient', this.studentPaymentRecipient); body.append('transferFrom', this.studentTransferFrom.trim());
+		body.append('transferAt', this.studentTransferAt); body.append('school', this.studentSchool.trim()); body.append('program', this.subscriptionProgramLabel);
+		body.append('paymentReceipt', this.studentPaymentReceipt!); body.append('identityCard', this.studentIdentityCard!);
+		this.studentFormSubmitting = true;
+		this.http.post<{ success: boolean; requestId: string; request?: { referenceCode?: string }; message: string }>('/api/subscription-requests', body).pipe(
+			finalize(() => {
+				this.studentFormSubmitting = false;
+				this.changeDetector.detectChanges();
+			})
+		).subscribe({
+			next: result => {
+				this.studentRequestId = result.requestId;
+				this.studentReferenceCode = result.request?.referenceCode || '';
+				this.studentRequestMessage = result.message;
+				this.deliveryName = this.studentName;
+				this.deliveryRegistered = 'نعم';
+				this.materialsTelegramName = this.studentName;
+			},
+			error: error => {
+				this.studentFormError = error?.error?.message || 'تعذر تسجيل الطلب. حاول مرة أخرى.';
+			}
+		});
 	}
 
 	get materialsTelegramUrl(): string {

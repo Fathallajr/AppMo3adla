@@ -152,16 +152,4 @@
 		<button type="button" class="cms-add-btn" (click)="addFeature()">+ إضافة ميزة</button>
 	</div>
 
-	<!-- البيانات المطلوبة -->
-	<div class="cms-section">
-		<div class="cms-section-title">البيانات المطلوبة بعد الدفع</div>
-		<div class="cms-array-list">
-			<div class="cms-array-item" *ngFor="let r of data.subscriptionDetails.requiredInfo; let i = index">
-				<input class="cms-input" [(ngModel)]="data.subscriptionDetails.requiredInfo[i]" placeholder="بيان مطلوب..." style="flex:1" />
-				<button type="button" class="cms-array-item__del" (click)="removeRequired(i)">×</button>
-			</div>
-		</div>
-		<button type="button" class="cms-add-btn" (click)="addRequired()">+ إضافة بيان</button>
-	</div>
-
 </div>

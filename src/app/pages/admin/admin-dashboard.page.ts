@@ -9,7 +9,7 @@ import { CmsPageKey, cmsPageDefaults, cmsPageOptions } from '../../core/cms-page
 import { displayProgramLabel } from '../../core/program-labels';
 import { AdminAuthService } from '../../core/services/admin-auth.service';
 import { MonthlyContentService } from '../../core/services/monthly-content.service';
-import { AdminApiService, AdminUser, Customer, DashboardSummary, Feedback, FreeCodeCampaign, FreeCodeInventoryStat, FreeCodeRequest, FreeCodeStatus, Lead, Program, WheelClaim } from '../../core/services/admin-api.service';
+import { AdminApiService, AdminUser, Customer, DashboardSummary, Feedback, FreeCodeCampaign, FreeCodeInventoryStat, FreeCodeRequest, FreeCodeStatus, Lead, Program, SubscriptionCampaign, SubscriptionRequest, WheelClaim } from '../../core/services/admin-api.service';
 import { SeoService } from '../../core/seo.service';
 import { ContactFormComponent } from './forms/contact-form.component';
 import { FaqFormComponent } from './forms/faq-form.component';
@@ -38,7 +38,7 @@ interface PageOption {
 	group: string;
 }
 
-type AdminDataView = 'overview' | 'leads' | 'customers' | 'feedback' | 'programs' | 'wheel' | 'free-codes' | 'admins' | 'analytics' | 'finance' | 'finance-payroll' | 'finance-studio' | 'finance-application';
+type AdminDataView = 'overview' | 'leads' | 'customers' | 'feedback' | 'programs' | 'wheel' | 'free-codes' | 'subscription-requests' | 'subscription-codes' | 'admins' | 'analytics' | 'finance' | 'finance-payroll' | 'finance-studio' | 'finance-application';
 type PaginationItem = number | '…';
 interface FreeCodeCalendarDay { iso: string; label: number; inMonth: boolean; }
 
@@ -76,7 +76,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	financeMenuOpen = false;
 	subscriptionMenuOpen = false;
 	engagementMenuOpen = false;
-	activeView: 'overview' | 'leads' | 'customers' | 'feedback' | 'programs' | 'wheel' | 'free-codes' | 'admins' | 'analytics' | 'finance' | 'finance-payroll' | 'finance-studio' | 'finance-application' | 'cms' = 'leads';
+	activeView: 'overview' | 'leads' | 'customers' | 'feedback' | 'programs' | 'wheel' | 'free-codes' | 'subscription-requests' | 'subscription-codes' | 'admins' | 'analytics' | 'finance' | 'finance-payroll' | 'finance-studio' | 'finance-application' | 'cms' = 'leads';
 	dashboard: DashboardSummary | null = {
 		totalLeads: 0,
 		todayLeads: 0,
@@ -119,6 +119,39 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	freeCodeDetailCampaign: FreeCodeCampaign | null = null;
 	freeCodeDetailInventory: Array<{ id: string; program: string; code: string; expiresAt?: string; status: string; studentName?: string; whatsapp?: string; usedAt?: string; requestedAt?: string }> = [];
 	freeCodeDetailStats: FreeCodeInventoryStat[] = [];
+	subscriptionRequests: SubscriptionRequest[] = [];
+	subscriptionCampaigns: SubscriptionCampaign[] = [];
+	subscriptionCampaignPage = 1;
+	subscriptionCampaignPageSize = 6;
+	subscriptionCampaign: SubscriptionCampaign | null = null;
+	subscriptionCampaignDetailId = '';
+	subscriptionInventoryStats: Array<{ program: string; total: number; available: number; used: number }> = [];
+	subscriptionInventory: Array<{ id: string; program: string; code: string; status: string; requestId?: string; referenceCode?: string; studentName?: string; studentWhatsapp?: string; studentTelegram?: string; usedAt?: string; createdAt?: string }> = [];
+	subscriptionInventorySearch = '';
+	subscriptionInventoryStatus = '';
+	subscriptionInventoryProgram = '';
+	subscriptionInventoryPage = 1;
+	subscriptionInventoryPageSize = 10;
+	subscriptionFiles: Record<string, File> = {};
+	subscriptionCodeCounts: Record<string, number> = {};
+	subscriptionFileValidation: Record<string, string> = {};
+	subscriptionCampaignDraft = { name: '', monthLabel: '' };
+	subscriptionCampaignModalOpen = false;
+	subscriptionCampaignModalSubmitted = false;
+	subscriptionSearch = ''; subscriptionStatus = ''; subscriptionProgram = ''; subscriptionSupervisor = ''; subscriptionCampaignFilter = '';
+	readonly subscriptionSupervisors = ['مهندسة حبيبة', 'مهندسة هدير', 'مهندسة ندى', 'مهندسة مي', 'مهندسة إيمان', 'مهندسة أشروقت', 'طالب جديد'];
+	subscriptionPage = 1; subscriptionPages = 1; subscriptionTotal = 0; isLoadingSubscriptionRequests = false; isSavingSubscription = false;
+	private subscriptionSearchTimer?: ReturnType<typeof setTimeout>;
+	subscriptionPendingIssue: SubscriptionRequest | null = null; subscriptionIssueDraft = ''; subscriptionPendingView: SubscriptionRequest | null = null; subscriptionIssueMessageSelections: string[] = [];
+	readonly subscriptionIssueMessageOptions = [
+		{ key: 'transfer', label: 'مشكلة رقم التحويل (اللي حول منه)', message: 'الرقم اللي حول منه مش ظاهر عندي في التحويلات\nاستأذنك ترجع للراجل اللي حولت منه عشان بيكون عنده كذا رقم للتحويل' },
+		{ key: 'identity', label: 'مشكلة صورة البطاقة غير واضحة أو خاطئة', message: 'هندسة استأذنك تبعت بطاقتك كاملة والصورة تكون واضحة\nأو لو رافع شهادة الميلاد\nفين بطاقتك؟' },
+		{ key: 'receipt', label: 'مشكلة سكرين الدفع', message: 'هندسة سكرين الدفع مش مرفوع\nاستأذنك تبعته عشان نكمل مراجعه البيانات' }
+	];
+	subscriptionDocumentPreviewUrls: Record<string, string> = {};
+	subscriptionDocumentModal: { item: SubscriptionRequest; kind: 'payment_receipt' | 'identity_card'; url: string; mimeType: string } | null = null;
+	subscriptionDocumentLoading = false;
+	private subscriptionDocumentPreviousOverflow = '';
 	isLoadingFreeCodeDetail = false;
 	isLoadingFreeCodeRequests = false;
 	isSavingFreeCodeSettings = false;
@@ -162,7 +195,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	private wheelClaimsLoaded = false;
 	private adminUsersLoaded = false;
 	get adminPageOptions(): PageOption[] { return cmsPageOptions.filter(page => !this.hiddenAdminPageKeys.has(page.key)); }
-	readonly adminFeatureOptions = [{ key: 'leads', title: 'الليدز' }, { key: 'customers', title: 'العملاء' }, { key: 'wheel', title: 'نتائج العجلة' }, { key: 'free-codes', title: 'طلبات الأكواد المجانية' }, { key: 'feedback', title: 'آراء الطلاب' }, { key: 'analytics', title: 'تحليل الموقع' }, { key: 'finance', title: 'الحسابات والمصروفات' }, { key: 'finance-payroll', title: 'كشف الرواتب' }, { key: 'finance-studio', title: 'حسابات الاستوديو' }, { key: 'finance-application', title: 'حسابات الأبلكيشن' }];
+	readonly adminFeatureOptions = [{ key: 'leads', title: 'الليدز' }, { key: 'customers', title: 'العملاء' }, { key: 'wheel', title: 'نتائج العجلة' }, { key: 'free-codes', title: 'طلبات الأكواد المجانية' }, { key: 'subscription-requests', title: 'طلبات الاشتراك' }, { key: 'subscription-codes', title: 'أكواد الاشتراك' }, { key: 'feedback', title: 'آراء الطلاب' }, { key: 'analytics', title: 'تحليل الموقع' }, { key: 'finance', title: 'الحسابات والمصروفات' }, { key: 'finance-payroll', title: 'كشف الرواتب' }, { key: 'finance-studio', title: 'حسابات الاستوديو' }, { key: 'finance-application', title: 'حسابات الأبلكيشن' }];
 	wheelSearch = '';
 	wheelGift = '';
 	wheelProgram = '';
@@ -222,6 +255,8 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	leadPendingView: Lead | null = null;
 	openLeadActionMenuId: string | null = null;
 	get openLeadAction(): Lead | null { return this.leads.find(lead => lead.id === this.openLeadActionMenuId) || null; }
+	openSubscriptionActionMenuId: string | null = null;
+	get openSubscriptionAction(): SubscriptionRequest | null { return this.subscriptionRequests.find(item => item.id === this.openSubscriptionActionMenuId) || null; }
 	leadNoteDraft = '';
 	isSavingLeadNote = false;
 	wheelPendingDeletion: WheelClaim | null = null;
@@ -242,7 +277,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	constructor(
 		private contentService: MonthlyContentService,
 		private auth: AdminAuthService,
-		private adminApi: AdminApiService,
+		readonly adminApi: AdminApiService,
 		private router: Router,
 		private route: ActivatedRoute,
 		private seo: SeoService,
@@ -289,7 +324,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 		this.adminUsername = this.auth.getUsername();
 		if (this.auth.isAuthenticated()) {
 			this.auth.loadCurrentUser().subscribe({
-				next: user => { this.adminUsername = user.username || this.adminUsername; this.authStateReady = true; this.syncRouteState(); this.refreshView(); },
+				next: user => { this.adminUsername = user.username || this.adminUsername; if (this.adminUsername === 'localadmin') this.subscriptionMenuOpen = true; this.authStateReady = true; this.syncRouteState(); this.refreshView(); },
 				error: () => { this.authStateReady = true; this.syncRouteState(); this.refreshView(); }
 			});
 		} else {
@@ -316,6 +351,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 			clearInterval(this.feedbackRefreshTimer);
 			this.feedbackRefreshTimer = null;
 		}
+		this.closeSubscriptionDocument(false);
 	}
 
 	private syncRouteState(): void {
@@ -345,35 +381,42 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 				if (this.activeView === 'programs') this.loadPrograms();
 				if (this.activeView === 'wheel') this.loadWheelClaims();
 				if (this.activeView === 'free-codes') this.loadFreeCodeRequests();
+				if (this.activeView === 'subscription-requests') this.loadSubscriptionRequests();
+				if (this.activeView === 'subscription-codes') this.loadSubscriptionCampaigns();
 				if (this.activeView === 'admins') this.loadAdminUsers();
 				this.loadSiteMode();
 				} else if (canOpenCmsPage) {
 					this.activeView = 'cms';
 				} else if (this.auth.getRole() === 'employee') {
 					this.activeView = 'finance-payroll';
-				} else if (this.auth.isLeadsOnly() || this.auth.canAccessFeature('leads') || this.auth.canAccessFeature('customers') || this.auth.canAccessFeature('wheel') || this.auth.canAccessFeature('free-codes') || this.auth.canAccessFeature('feedback') || this.auth.canAccessFeature('analytics') || this.auth.canAccessFeature('finance') || this.auth.canAccessFeature('finance-payroll') || this.auth.canAccessFeature('finance-studio') || this.auth.canAccessFeature('finance-application')) {
+				} else if (this.auth.isLeadsOnly() || this.auth.canAccessFeature('leads') || this.auth.canAccessFeature('customers') || this.auth.canAccessFeature('wheel') || this.auth.canAccessFeature('free-codes') || this.auth.canAccessFeature('subscription-requests') || this.auth.canAccessFeature('subscription-codes') || this.auth.canAccessFeature('feedback') || this.auth.canAccessFeature('analytics') || this.auth.canAccessFeature('finance') || this.auth.canAccessFeature('finance-payroll') || this.auth.canAccessFeature('finance-studio') || this.auth.canAccessFeature('finance-application')) {
 					const canLoadLeads = this.auth.canAccessFeature('leads');
 					const canLoadCustomers = this.auth.canAccessFeature('customers');
 					const canLoadWheel = this.auth.canAccessFeature('wheel');
 					const canLoadFreeCodes = this.auth.canAccessFeature('free-codes');
+					const canLoadSubscriptionRequests = this.auth.canAccessFeature('subscription-requests');
+					const canLoadSubscriptionCodes = this.auth.canAccessFeature('subscription-codes');
 					const canLoadFeedback = this.auth.canAccessFeature('feedback');
 					const canLoadFinance = this.auth.canAccessFeature('finance');
 					const canLoadPayroll = this.auth.canAccessFeature('finance-payroll');
 					const canLoadStudio = this.auth.canAccessFeature('finance-studio');
 					const canLoadApplication = this.auth.canAccessFeature('finance-application');
 					const canLoadAnalytics = this.auth.canAccessFeature('analytics');
-					const defaultView = canLoadLeads ? 'leads' : canLoadCustomers ? 'customers' : canLoadWheel ? 'wheel' : canLoadFreeCodes ? 'free-codes' : canLoadFeedback ? 'feedback' : canLoadAnalytics ? 'analytics' : canLoadFinance ? 'finance' : canLoadPayroll ? 'finance-payroll' : canLoadStudio ? 'finance-studio' : canLoadApplication ? 'finance-application' : 'feedback';
+					const defaultView = canLoadLeads ? 'leads' : canLoadCustomers ? 'customers' : canLoadWheel ? 'wheel' : canLoadFreeCodes ? 'free-codes' : canLoadSubscriptionRequests ? 'subscription-requests' : canLoadSubscriptionCodes ? 'subscription-codes' : canLoadFeedback ? 'feedback' : canLoadAnalytics ? 'analytics' : canLoadFinance ? 'finance' : canLoadPayroll ? 'finance-payroll' : canLoadStudio ? 'finance-studio' : canLoadApplication ? 'finance-application' : 'feedback';
 					this.activeView = requestedView || defaultView;
 					if (canLoadLeads) this.loadLeads();
 					if (canLoadCustomers) this.loadCustomers();
 					if (canLoadWheel) this.loadWheelClaims();
 					if (canLoadFreeCodes) this.loadFreeCodeRequests();
+					if (canLoadSubscriptionRequests) this.loadSubscriptionRequests();
+					if (canLoadSubscriptionCodes) this.loadSubscriptionCampaigns();
 					if (canLoadFeedback) this.loadFeedback();
 				} else {
 					this.activeView = 'cms';
 				}
 			}
 		if (this.activeView === 'finance' || this.activeView === 'finance-payroll' || this.activeView === 'finance-studio' || this.activeView === 'finance-application' || (this.activeView === 'cms' && pageKey === 'employees')) this.financeMenuOpen = true;
+		if (this.activeView === 'subscription-requests' || this.activeView === 'subscription-codes') this.subscriptionMenuOpen = true;
 		if (!isCmsNavigation && this.activeView === 'cms') this.loadPage(pageKey);
 		this.routeStateReady = true;
 	}
@@ -406,6 +449,8 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 		if (view === 'customers' && !this.auth.canAccessFeature('customers')) return;
 		if (view === 'wheel' && !this.auth.canAccessFeature('wheel')) return;
 		if (view === 'free-codes' && !this.auth.canAccessFeature('free-codes')) return;
+		if (view === 'subscription-requests' && !this.auth.canAccessFeature('subscription-requests')) return;
+		if (view === 'subscription-codes' && !this.auth.canAccessFeature('subscription-codes')) return;
 		if (view === 'feedback' && !this.auth.canAccessFeature('feedback')) return;
 		if (view === 'analytics' && !this.auth.canAccessFeature('analytics') && this.adminUsername !== 'localadmin') return;
 		if (view === 'finance' && !this.auth.canAccessFeature('finance')) return;
@@ -414,7 +459,8 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 		if (view === 'finance-application' && !this.auth.canAccessFeature('finance-application')) return;
 		if (view === 'finance' || view === 'finance-payroll' || view === 'finance-studio' || view === 'finance-application') this.financeMenuOpen = true;
 		if (view === 'wheel' || view === 'free-codes') this.engagementMenuOpen = true;
-		if (view !== 'cms' && view !== 'leads' && view !== 'customers' && view !== 'wheel' && view !== 'free-codes' && view !== 'feedback' && view !== 'analytics' && view !== 'finance' && view !== 'finance-payroll' && view !== 'finance-studio' && view !== 'finance-application' && this.auth.getRole() !== 'admin') return;
+		if (view === 'subscription-requests' || view === 'subscription-codes') this.subscriptionMenuOpen = true;
+		if (view !== 'cms' && view !== 'leads' && view !== 'customers' && view !== 'wheel' && view !== 'free-codes' && view !== 'subscription-requests' && view !== 'subscription-codes' && view !== 'feedback' && view !== 'analytics' && view !== 'finance' && view !== 'finance-payroll' && view !== 'finance-studio' && view !== 'finance-application' && this.auth.getRole() !== 'admin') return;
 		if (this.activeView === view) {
 			this.sidebarOpen = false;
 			return;
@@ -435,6 +481,8 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 		if (view === 'programs') this.loadPrograms();
 		if (view === 'wheel') this.loadWheelClaims();
 		if (view === 'free-codes') this.loadFreeCodeRequests();
+		if (view === 'subscription-requests') this.loadSubscriptionRequests();
+		if (view === 'subscription-codes') this.loadSubscriptionCampaigns();
 		if (view === 'feedback') this.loadFeedback();
 		if (view === 'admins') this.loadAdminUsers();
 	}
@@ -532,11 +580,12 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 		this.closeActionMenus();
 	}
 	private closeActionMenus(): void {
-		if (this.openLeadActionMenuId === null && this.openWheelActionMenuId === null && this.openAdminActionUser === null && this.openCustomerActionMenuId === null) return;
+		if (this.openLeadActionMenuId === null && this.openWheelActionMenuId === null && this.openAdminActionUser === null && this.openCustomerActionMenuId === null && this.openSubscriptionActionMenuId === null) return;
 		this.openLeadActionMenuId = null;
 		this.openWheelActionMenuId = null;
 		this.openAdminActionUser = null;
 		this.openCustomerActionMenuId = null;
+		this.openSubscriptionActionMenuId = null;
 		this.refreshView();
 	}
 	loadFeedback(force = false): void {
@@ -1232,6 +1281,136 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	get selectedPageRoute(): string {
 		return this.pageOptions.find(page => page.key === this.selectedPageKey)?.route || '';
 	}
+	get studentTransferMaxForAdmin(): string { const now = new Date(); const pad = (value: number) => String(value).padStart(2, '0'); return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`; }
+	loadSubscriptionRequests(force = false): void { if (this.isLoadingSubscriptionRequests && !force) return; this.isLoadingSubscriptionRequests = true; this.adminApi.listSubscriptionRequests({ page: this.subscriptionPage, limit: 20, search: this.subscriptionSearch, status: this.subscriptionStatus, program: this.subscriptionProgram, supervisor: this.subscriptionSupervisor, campaignId: this.subscriptionCampaignFilter }).pipe(finalize(() => { this.isLoadingSubscriptionRequests = false; this.refreshView(); })).subscribe({ next: result => { this.subscriptionRequests = result.data; this.subscriptionTotal = result.total; this.subscriptionPages = result.pagination.pages || 1; this.subscriptionCampaigns = result.campaigns || []; this.refreshView(); }, error: err => this.handleApiError(err) }); }
+	exportSubscriptionRequests(): void { this.adminApi.exportSubscriptionRequests({ search: this.subscriptionSearch, status: this.subscriptionStatus, program: this.subscriptionProgram, supervisor: this.subscriptionSupervisor, campaignId: this.subscriptionCampaignFilter }).subscribe({ next: blob => { if (!blob || blob.size === 0) { this.errorMessage = 'لم يتم إنشاء ملف Excel.'; return; } const url = URL.createObjectURL(blob); const anchor = document.createElement('a'); anchor.href = url; anchor.download = `subscription-requests-${this.subscriptionCampaignFilter || 'all'}.xlsx`; anchor.style.display = 'none'; document.body.appendChild(anchor); anchor.click(); anchor.remove(); window.setTimeout(() => URL.revokeObjectURL(url), 1000); this.statusMessage = 'تم تصدير كل الطلبات والصور داخل ملف Excel.'; this.errorMessage = ''; }, error: err => this.handleApiError(err) }); }
+	searchSubscriptionRequests(): void { this.subscriptionPage = 1; this.loadSubscriptionRequests(true); }
+	scheduleSubscriptionSearch(): void { if (this.subscriptionSearchTimer) clearTimeout(this.subscriptionSearchTimer); this.subscriptionSearchTimer = setTimeout(() => { this.subscriptionSearchTimer = undefined; this.searchSubscriptionRequests(); }, 250); }
+	resetSubscriptionFilters(): void { if (this.subscriptionSearchTimer) clearTimeout(this.subscriptionSearchTimer); this.subscriptionSearchTimer = undefined; this.subscriptionSearch = ''; this.subscriptionStatus = ''; this.subscriptionProgram = ''; this.subscriptionSupervisor = ''; this.subscriptionCampaignFilter = ''; this.searchSubscriptionRequests(); }
+	setSubscriptionView(view: 'subscription-requests' | 'subscription-codes'): void { this.closeActionMenus(); this.activeView = view; this.sidebarOpen = false; void this.router.navigate(['/admin'], { queryParams: { view }, replaceUrl: true }); if (view === 'subscription-requests') this.loadSubscriptionRequests(); else this.loadSubscriptionCampaigns(); }
+	loadSubscriptionCampaigns(): void { this.subscriptionCampaignDetailId = this.route.snapshot.queryParamMap.get('campaignId') || ''; this.adminApi.listSubscriptionCampaigns().subscribe({ next: result => { this.subscriptionCampaigns = result.data; this.subscriptionCampaignPage = Math.min(this.subscriptionCampaignPage, this.subscriptionCampaignPages); this.subscriptionCampaign = (this.subscriptionCampaignDetailId ? result.data.find(item => item.id === this.subscriptionCampaignDetailId) : null) || result.data.find(item => item.enabled && item.status === 'active') || result.data[0] || null; if (this.subscriptionCampaign) this.loadSubscriptionInventory(this.subscriptionCampaign.id); this.refreshView(); }, error: err => this.handleApiError(err) }); }
+	get pagedSubscriptionCampaigns(): SubscriptionCampaign[] { const start = (this.subscriptionCampaignPage - 1) * this.subscriptionCampaignPageSize; return this.subscriptionCampaigns.slice(start, start + this.subscriptionCampaignPageSize); }
+	get subscriptionCampaignPages(): number { return Math.max(1, Math.ceil(this.subscriptionCampaigns.length / this.subscriptionCampaignPageSize)); }
+	get subscriptionCampaignPageNumbers(): PaginationItem[] { return this.buildPaginationItems(this.subscriptionCampaignPage, this.subscriptionCampaignPages); }
+	setSubscriptionCampaignPage(page: number): void { this.subscriptionCampaignPage = Math.min(Math.max(page, 1), this.subscriptionCampaignPages); }
+	loadSubscriptionInventory(id: string): void { this.subscriptionCampaign = this.subscriptionCampaigns.find(item => item.id === id) || this.subscriptionCampaign; this.adminApi.getSubscriptionInventory(id).subscribe({ next: result => { this.subscriptionInventoryStats = result.stats || []; this.subscriptionInventory = result.data || []; this.subscriptionInventoryPage = 1; this.refreshView(); }, error: err => this.handleApiError(err) }); }
+	get filteredSubscriptionInventory() {
+		const search = this.subscriptionInventorySearch.trim().toLowerCase();
+		return this.subscriptionInventory.filter(item => {
+			const matchesSearch = !search || [item.code, item.referenceCode, item.studentName, item.studentWhatsapp, item.studentTelegram].some(value => String(value || '').toLowerCase().includes(search));
+			const matchesStatus = !this.subscriptionInventoryStatus || item.status === this.subscriptionInventoryStatus;
+			const matchesProgram = !this.subscriptionInventoryProgram || item.program === this.subscriptionInventoryProgram;
+			return matchesSearch && matchesStatus && matchesProgram;
+		});
+	}
+	get subscriptionInventoryPrograms(): string[] { return Array.from(new Set(this.subscriptionInventory.map(item => item.program).filter(Boolean))); }
+	get subscriptionInventoryPages(): number { return Math.max(1, Math.ceil(this.filteredSubscriptionInventory.length / this.subscriptionInventoryPageSize)); }
+	get subscriptionInventoryPageNumbers(): PaginationItem[] { return this.buildPaginationItems(this.subscriptionInventoryPage, this.subscriptionInventoryPages); }
+	get pagedSubscriptionInventory() { const start = (this.subscriptionInventoryPage - 1) * this.subscriptionInventoryPageSize; return this.filteredSubscriptionInventory.slice(start, start + this.subscriptionInventoryPageSize); }
+	resetSubscriptionInventoryPage(): void { this.subscriptionInventoryPage = 1; }
+	setSubscriptionInventoryPage(page: number): void { this.subscriptionInventoryPage = Math.min(Math.max(page, 1), this.subscriptionInventoryPages); }
+	resetSubscriptionInventoryFilters(): void { this.subscriptionInventorySearch = ''; this.subscriptionInventoryStatus = ''; this.subscriptionInventoryProgram = ''; this.subscriptionInventoryPage = 1; }
+	openSubscriptionCampaignModal(): void { this.errorMessage = ''; this.statusMessage = ''; this.subscriptionCampaignModalSubmitted = false; this.subscriptionCampaignModalOpen = true; }
+	closeSubscriptionCampaignModal(): void { if (!this.isSavingSubscription) this.subscriptionCampaignModalOpen = false; }
+	normalizeSubscriptionProgram(value: unknown): string { return String(value ?? '').trim().toLowerCase().replace(/[\s\-_]+/g, '').replace(/إنجليزي/g, 'لغات').replace(/انجليزي/g, 'لغات'); }
+	private subscriptionCellText(value: unknown): string { const raw = (value as any)?.text ?? (value as any)?.result ?? value ?? ''; return String(raw).trim(); }
+	isSubscriptionFileValid(key: string): boolean { return this.subscriptionFileValidation[key]?.startsWith('تم التحقق') === true; }
+	async onSubscriptionFileSelected(index: number, event: Event): Promise<void> {
+		const file = (event.target as HTMLInputElement).files?.[0];
+		const key = `file_${index}`;
+		const expectedProgram = this.freeCodePrograms[index];
+		if (!file) { delete this.subscriptionFiles[key]; this.subscriptionFileValidation[key] = 'اختار ملف Excel.'; return; }
+		delete this.subscriptionFiles[key];
+		this.subscriptionFileValidation[key] = '';
+		try {
+			const workbook = new ExcelJS.Workbook(); await workbook.xlsx.load(await file.arrayBuffer());
+			const sheet = workbook.worksheets[0];
+			if (!sheet) throw new Error('ملف Excel غير صالح.');
+			let headerRow = 0; let codeColumn = 2; let programColumn = 3;
+			for (let rowNumber = 1; rowNumber <= Math.min(sheet.rowCount, 10); rowNumber += 1) {
+				const values = sheet.getRow(rowNumber).values as unknown[];
+				const headers = values.map(value => this.subscriptionCellText(value).toLowerCase());
+				const foundCode = headers.findIndex(value => { const header = String(value ?? ''); return header === 'code' || header.includes('كود'); });
+				const foundProgram = headers.findIndex(value => { const header = String(value ?? ''); return header.includes('معادلة') || header.includes('program'); });
+				if (foundCode >= 0) { headerRow = rowNumber; codeColumn = foundCode || 1; programColumn = foundProgram >= 0 ? foundProgram || 1 : 3; break; }
+			}
+			if (!headerRow) throw new Error('لم أجد صف العناوين. يجب أن يحتوي الشيت على عمود Code ونوع المعادلة.');
+			const codes: string[] = []; const programValues: string[] = [];
+			sheet.eachRow((row, rowNumber) => { if (rowNumber <= headerRow) return; const code = this.subscriptionCellText(row.getCell(codeColumn).value); if (code) { codes.push(code); const program = this.subscriptionCellText(row.getCell(programColumn).value); if (program) programValues.push(program); } });
+			const expectedCount = Number(this.subscriptionCodeCounts[expectedProgram]) || 0;
+			if (!expectedCount) throw new Error(`اكتب عدد أكواد ${expectedProgram} أولًا.`);
+			if (codes.length !== expectedCount) throw new Error(`عدد الأكواد داخل الشيت ${codes.length} وليس ${expectedCount}.`);
+			const mismatched = programValues.find(value => this.normalizeSubscriptionProgram(value) !== this.normalizeSubscriptionProgram(expectedProgram));
+			if (mismatched) throw new Error(`نوع المعادلة داخل الشيت (${mismatched}) لا يطابق ${expectedProgram}.`);
+			this.subscriptionFiles[key] = file;
+			this.subscriptionFileValidation[key] = `تم التحقق: ${codes.length} كود ونوع المعادلة مطابق.`;
+		} catch (error) { this.subscriptionFileValidation[key] = `تعذر قراءة الشيت: ${error instanceof Error ? error.message : 'صيغة الملف غير صحيحة.'}`; }
+		this.refreshView();
+	}
+	createSubscriptionCampaign(): void {
+		if (this.isSavingSubscription) return;
+		this.subscriptionCampaignModalSubmitted = true;
+		const draft = { ...this.subscriptionCampaignDraft };
+		if (!draft.name.trim() || !draft.monthLabel.trim()) { this.errorMessage = 'اكتب اسم الحملة واسم الشهر.'; return; }
+		const missing = this.freeCodePrograms.find(program => !Number(this.subscriptionCodeCounts[program]) || !this.subscriptionFiles[`file_${this.freeCodePrograms.indexOf(program)}`] || !this.subscriptionFileValidation[`file_${this.freeCodePrograms.indexOf(program)}`]?.startsWith('تم التحقق'));
+		if (missing) { this.errorMessage = `راجع عدد الأكواد وملف ${missing} قبل إنشاء الحملة.`; return; }
+		const files = { ...this.subscriptionFiles };
+		const counts = { ...this.subscriptionCodeCounts };
+		this.isSavingSubscription = true;
+		this.adminApi.createSubscriptionCampaign(draft).subscribe({
+			next: campaign => {
+				this.subscriptionCampaign = campaign;
+				this.adminApi.uploadSubscriptionCodes(campaign.id, files, counts).subscribe({
+					next: result => {
+						this.isSavingSubscription = false;
+						this.subscriptionCampaignDraft = { name: '', monthLabel: '' };
+						this.subscriptionCodeCounts = {};
+						this.subscriptionFiles = {};
+						this.subscriptionFileValidation = {};
+						this.subscriptionCampaignModalOpen = false;
+						this.statusMessage = `تم إنشاء الحملة ورفع ${result.imported || result.inserted?.length || 0} كود بنجاح.`;
+						this.errorMessage = '';
+						this.loadSubscriptionCampaigns();
+					},
+					error: err => { this.isSavingSubscription = false; this.adminApi.deleteSubscriptionCampaign(campaign.id).subscribe({ error: () => undefined }); this.handleApiError(err); this.refreshView(); }
+				});
+			},
+			error: err => { this.isSavingSubscription = false; this.handleApiError(err); this.refreshView(); }
+		});
+	}
+	uploadSubscriptionCodes(): void { if (!this.subscriptionCampaign) { this.errorMessage = 'اختار حملة أولًا.'; return; } const missing = this.freeCodePrograms.find(program => !this.subscriptionCodeCounts[program] || !this.subscriptionFiles[`file_${this.freeCodePrograms.indexOf(program)}`] || this.subscriptionFileValidation[`file_${this.freeCodePrograms.indexOf(program)}`]?.startsWith('تم التحقق') === false); if (missing) { this.errorMessage = `راجع عدد الأكواد وملف ${missing}.`; return; } if (Object.keys(this.subscriptionFiles).length !== 4) { this.errorMessage = 'ارفع ملف Excel لكل نوع معادلة.'; return; } this.isSavingSubscription = true; this.adminApi.uploadSubscriptionCodes(this.subscriptionCampaign.id, this.subscriptionFiles, this.subscriptionCodeCounts).pipe(finalize(() => { this.isSavingSubscription = false; })).subscribe({ next: result => { this.subscriptionFiles = {}; this.subscriptionFileValidation = {}; this.subscriptionInventoryStats = result.stats || []; this.statusMessage = `تم رفع ${result.imported || result.inserted?.length || 0} كود. المكرر: ${result.duplicates || result.duplicates?.length || 0}.`; this.loadSubscriptionInventory(this.subscriptionCampaign!.id); }, error: err => this.handleApiError(err) }); }
+	openSubscriptionCampaignDetails(campaign: SubscriptionCampaign): void { window.open(`${window.location.origin}/admin?view=subscription-codes&campaignId=${encodeURIComponent(campaign.id)}`, '_blank', 'noopener,noreferrer'); }
+	toggleSubscriptionCampaign(campaign: SubscriptionCampaign): void {
+		const nextEnabled = !(campaign.enabled && campaign.status === 'active');
+		this.adminApi.updateSubscriptionCampaign(campaign.id, { enabled: nextEnabled, status: nextEnabled ? 'active' : 'closed' }).subscribe({
+			next: updated => { Object.assign(campaign, updated); this.statusMessage = nextEnabled ? 'تم تفعيل الحملة وإغلاق أي حملة أخرى نشطة.' : 'تم إيقاف الحملة.'; this.errorMessage = ''; this.loadSubscriptionCampaigns(); },
+			error: err => this.handleApiError(err)
+		});
+	}
+	closeSubscriptionCampaignDetails(): void { void this.router.navigate(['/admin'], { queryParams: { view: 'subscription-codes' }, replaceUrl: true }); }
+	toggleSubscriptionActionMenu(item: SubscriptionRequest, event?: MouseEvent): void {
+		const shouldOpen = this.openSubscriptionActionMenuId !== item.id;
+		this.openSubscriptionActionMenuId = shouldOpen ? item.id : null;
+		if (shouldOpen) {
+			const trigger = event?.currentTarget as HTMLElement | null;
+			const rowIndex = this.subscriptionRequests.indexOf(item);
+			this.positionActionMenu(trigger, '--subscription-actions-top', '--subscription-actions-left', 160, 145, '.subscription-actions-menu__panel', () => document.querySelectorAll<HTMLElement>('.subscription-actions-menu__trigger').item(rowIndex));
+		}
+		this.refreshView();
+	}
+	closeSubscriptionActionMenu(): void { this.openSubscriptionActionMenuId = null; this.refreshView(); }
+	approveSubscriptionRequest(item: SubscriptionRequest): void { this.adminApi.updateSubscriptionRequest(item.id, { status: 'approved' }).subscribe({ next: updated => { Object.assign(item, updated); this.statusMessage = 'تم اعتماد الطلب للمراجعة النهائية.'; }, error: err => this.handleApiError(err) }); }
+	openSubscriptionIssue(item: SubscriptionRequest): void { this.subscriptionPendingIssue = item; this.subscriptionIssueDraft = ''; this.subscriptionIssueMessageSelections = []; this.errorMessage = ''; }
+	toggleSubscriptionIssueMessage(key: string, event: Event): void { const checked = (event.target as HTMLInputElement).checked; this.subscriptionIssueMessageSelections = checked ? [...new Set([...this.subscriptionIssueMessageSelections, key])] : this.subscriptionIssueMessageSelections.filter(item => item !== key); }
+	saveSubscriptionIssue(): void { if (!this.subscriptionPendingIssue) return; if (!this.subscriptionIssueMessageSelections.length && !this.subscriptionIssueDraft.trim()) { this.errorMessage = 'اختار رسالة أو اكتب تفاصيل إضافية لإرسالها للطالب.'; return; } const item = this.subscriptionPendingIssue; const selectedMessages = this.subscriptionIssueMessageOptions.filter(option => this.subscriptionIssueMessageSelections.includes(option.key)).map(option => option.message); const customMessage = this.subscriptionIssueDraft.trim(); const messageParts = [...selectedMessages, customMessage].filter(Boolean); const savedReason = messageParts.join('\n\n'); const whatsappMessage = messageParts.join('\n\n'); this.adminApi.issueSubscriptionProblem(item.id, savedReason).subscribe({ next: updated => { Object.assign(item, updated); this.openSubscriptionWhatsapp(updated, whatsappMessage, true); this.subscriptionPendingIssue = null; this.statusMessage = 'تم حفظ المشكلة وتجهيز رسالة واتساب بالرسائل المحددة.'; this.errorMessage = ''; }, error: err => this.handleApiError(err) }); }
+	sendSubscriptionCode(item: SubscriptionRequest): void { const whatsappWindow = window.open('about:blank', '_blank'); this.adminApi.sendSubscriptionCode(item.id).subscribe({ next: updated => { Object.assign(item, updated); const whatsappUrl = this.getSubscriptionWhatsappUrl(updated, 'يارب يكون شهر مميز !', true); if (whatsappWindow && !whatsappWindow.closed) whatsappWindow.location.href = whatsappUrl; else { const opened = window.open(whatsappUrl, '_blank', 'noopener,noreferrer'); if (!opened) window.location.assign(whatsappUrl); } this.statusMessage = 'تم تخصيص الكود وفتح واتساب برسالة الطالب.'; this.errorMessage = ''; this.loadSubscriptionRequests(true); }, error: err => { if (whatsappWindow && !whatsappWindow.closed) whatsappWindow.close(); this.handleApiError(err); } }); }
+	getSubscriptionWhatsappUrl(item: SubscriptionRequest, heading: string, compact = false, rawMessage = false): string { const message = rawMessage ? heading : compact ? [heading, `كود التفعيل لشهر ${item.monthLabel || 'الحملة الحالية'}`, `الكود: ${item.assignedCode || '—'}`, `الاسم: ${item.name}`, `نوع المعادلة: ${item.program}`].join('\n') : [heading, `الرقم المرجعي: ${item.referenceCode || item.id}`, `الاسم: ${item.name}`, `واتساب: ${item.whatsapp}`, `تليجرام: ${item.telegram}`, `المشرف: ${item.supervisor}`, `نوع المعادلة: ${item.program}`, `حولت على رقم: ${item.paymentRecipient}`, `حولت من رقم: ${item.transferFrom}`, `وقت التحويل: ${item.transferAt}`, `المدرسة: ${item.school}`, item.assignedCode ? `الكود: ${item.assignedCode}` : '', item.issueReason ? `سبب المشكلة: ${item.issueReason}` : ''].filter(Boolean).join('\n'); const digits = item.whatsapp.replace(/\D/g, ''); const international = digits.startsWith('20') ? digits : digits.startsWith('0') ? `20${digits.slice(1)}` : `20${digits}`; return `https://wa.me/${international}?text=${encodeURIComponent(message)}`; }
+	openSubscriptionWhatsapp(item: SubscriptionRequest, heading: string, rawMessage = false): void { window.open(this.getSubscriptionWhatsappUrl(item, heading, false, rawMessage), '_blank', 'noopener,noreferrer'); }
+	openSubscriptionView(item: SubscriptionRequest): void { this.subscriptionPendingView = item; for (const kind of ['payment_receipt', 'identity_card']) { const key = `${item.id}:${kind}`; this.adminApi.getSubscriptionDocument(item.id, kind).subscribe({ next: blob => { const old = this.subscriptionDocumentPreviewUrls[key]; if (old) URL.revokeObjectURL(old); this.subscriptionDocumentPreviewUrls[key] = URL.createObjectURL(blob); this.refreshView(); }, error: err => this.handleApiError(err) }); } }
+	openSubscriptionDocument(item: SubscriptionRequest, kind: 'payment_receipt' | 'identity_card'): void { this.closeSubscriptionDocument(false); this.subscriptionDocumentPreviousOverflow = document.body.style.overflow; document.body.style.overflow = 'hidden'; this.subscriptionDocumentLoading = true; this.subscriptionDocumentModal = { item, kind, url: '', mimeType: '' }; this.adminApi.getSubscriptionDocument(item.id, kind).subscribe({ next: blob => { this.subscriptionDocumentModal = { item, kind, url: URL.createObjectURL(blob), mimeType: blob.type || 'application/octet-stream' }; this.subscriptionDocumentLoading = false; this.refreshView(); }, error: err => { this.closeSubscriptionDocument(false); this.handleApiError(err); } }); }
+	closeSubscriptionDocument(refresh = true): void { if (this.subscriptionDocumentModal?.url) URL.revokeObjectURL(this.subscriptionDocumentModal.url); if (this.subscriptionDocumentModal || this.subscriptionDocumentLoading) document.body.style.overflow = this.subscriptionDocumentPreviousOverflow; this.subscriptionDocumentPreviousOverflow = ''; this.subscriptionDocumentModal = null; this.subscriptionDocumentLoading = false; if (refresh) this.refreshView(); }
+	isSubscriptionDocumentImage(): boolean { return this.subscriptionDocumentModal?.mimeType.startsWith('image/') === true; }
+	downloadSubscriptionDocument(): void { const modal = this.subscriptionDocumentModal; if (!modal?.url) return; const extension = modal.mimeType === 'application/pdf' ? 'pdf' : modal.mimeType.split('/')[1]?.replace('jpeg', 'jpg') || 'bin'; const label = modal.kind === 'payment_receipt' ? 'إيصال-الدفع' : 'صورة-البطاقة'; const anchor = document.createElement('a'); anchor.href = modal.url; anchor.download = `${label}-${modal.item.referenceCode || modal.item.id}.${extension}`; anchor.click(); }
 
 	get hasCustomForm(): boolean {
 		return ['home', 'faq', 'contact', 'subscription-details', 'subscription-engineering-ar', 'subscription-engineering-en', 'subscription-computers-ar', 'subscription-computers-en', 'news-app', 'news-equation', 'launch-offer'].includes(this.selectedPageKey);
@@ -1243,12 +1422,15 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 			: this.fullAdminAccount
 				? this.pageOptions
 				: this.pageOptions.filter(page => this.auth.canAccessPage(page.key));
-		return visiblePages.reduce<Array<{ group: string; pages: PageOption[] }>>((groups, page) => {
-			const existingGroup = groups.find(item => item.group === page.group);
-			if (existingGroup) { existingGroup.pages.push(page); return groups; }
-			groups.push({ group: page.group, pages: [page] });
-			return groups;
+		const groups = visiblePages.reduce<Array<{ group: string; pages: PageOption[] }>>((result, page) => {
+			const existingGroup = result.find(item => item.group === page.group);
+			if (existingGroup) { existingGroup.pages.push(page); return result; }
+			result.push({ group: page.group, pages: [page] });
+			return result;
 		}, []);
+		const canAccessSubscriptionAdmin = this.auth.canAccessFeature('subscription-requests') || this.auth.canAccessFeature('subscription-codes');
+		if (canAccessSubscriptionAdmin && !groups.some(item => item.group === 'الاشتراكات')) groups.push({ group: 'الاشتراكات', pages: [] });
+		return groups;
 	}
 	sidebarPageTitle(page: PageOption): string { return page.title.replace(/\s*[—-]\s*دفعة 2027\s*$/u, ''); }
 
@@ -1265,13 +1447,15 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	}
 
 	private resolveDataView(value: string | null): AdminDataView | null {
-		const allowed: AdminDataView[] = ['overview', 'leads', 'customers', 'feedback', 'programs', 'wheel', 'free-codes', 'admins', 'analytics', 'finance', 'finance-payroll', 'finance-studio', 'finance-application'];
+		const allowed: AdminDataView[] = ['overview', 'leads', 'customers', 'feedback', 'programs', 'wheel', 'free-codes', 'subscription-requests', 'subscription-codes', 'admins', 'analytics', 'finance', 'finance-payroll', 'finance-studio', 'finance-application'];
 		if (!value || !allowed.includes(value as AdminDataView)) return null;
 		const view = value as AdminDataView;
 		if (this.employeeAccount && !this.canManageEmployees && view !== 'finance-payroll') return null;
 		if (view === 'feedback') return this.auth.canAccessFeature('feedback') ? view : null;
 		if (view === 'customers') return this.auth.canAccessFeature('customers') ? view : null;
 		if (view === 'free-codes') return this.auth.canAccessFeature('free-codes') ? view : null;
+		if (view === 'subscription-requests') return this.auth.canAccessFeature('subscription-requests') ? view : null;
+		if (view === 'subscription-codes') return this.auth.canAccessFeature('subscription-codes') ? view : null;
 		if (view === 'overview' || view === 'programs' || view === 'admins') {
 			return this.auth.getRole() === 'admin' ? view : null;
 		}
@@ -1295,6 +1479,6 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 
 	canAccessPage(pageKey: string): boolean { return this.auth.canAccessPage(pageKey); }
 
-	canAccessFeature(feature: 'leads' | 'customers' | 'wheel' | 'free-codes' | 'feedback' | 'analytics' | 'finance' | 'finance-payroll' | 'finance-studio' | 'finance-application'): boolean { return this.auth.canAccessFeature(feature); }
+	canAccessFeature(feature: 'leads' | 'customers' | 'wheel' | 'free-codes' | 'subscription-requests' | 'subscription-codes' | 'feedback' | 'analytics' | 'finance' | 'finance-payroll' | 'finance-studio' | 'finance-application'): boolean { return this.auth.canAccessFeature(feature); }
 	canAccessCustomerPermission(_permission: string): boolean { return this.auth.canAccessFeature('customers'); }
 }

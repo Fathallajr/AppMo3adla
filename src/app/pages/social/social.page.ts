@@ -83,6 +83,7 @@ export class SocialPageComponent implements OnInit {
 			if (payload.alreadyRegistered) { this.offerError = 'رقم الواتساب ده مسجل بالفعل.'; return; }
 			if (!payload.success && !payload.localSaved) throw new Error(payload.message || 'request-failed');
 			this.offerSubmitted = true;
+			if (typeof window !== 'undefined') localStorage.setItem('launch-offer-lead', JSON.stringify({ ...lead, createdAt: new Date().toISOString() }));
 		} catch (error) {
 			this.offerError = error instanceof Error && !['invalid-response', 'request-failed'].includes(error.message) ? error.message : 'حصلت مشكلة بسيطة في الاتصال. حاول تاني من فضلك.';
 		} finally { this.offerSubmitting = false; this.changeDetector.detectChanges(); }

@@ -7,6 +7,7 @@ const multer = require('multer');
 const compression = require('compression');
 const swaggerUi = require('swagger-ui-express');
 const ExcelJS = require('exceljs');
+const archiver = require('archiver');
 const geoip = require('geoip-lite');
 const database = require('./database');
 
@@ -105,6 +106,9 @@ const SUBSCRIPTION_PAGE_KEYS = [
 	'subscription-computers-en'
 ];
 const SUPPORT_WHATSAPP_NUMBER = '201080681865';
+const SUBSCRIPTION_PROGRAMS = ['معادلة هندسة عربي', 'معادلة حاسبات عربي', 'معادلة هندسة لغات', 'معادلة حاسبات لغات'];
+const SUBSCRIPTION_SUPERVISORS = ['مهندسة حبيبة', 'مهندسة هدير', 'مهندسة ندى', 'مهندسة مي', 'مهندسة إيمان', 'مهندسة أشروقت', 'طالب جديد'];
+const SUBSCRIPTION_STATUSES = ['pending_review', 'approved', 'data_issue', 'sent'];
 const SUBSCRIPTION_VALIDITY_POINTS = [
 	'الكود شغال لغاية آخر الشهر فقط',
 	'مع انتهاء الشهر بيقفل المحتوى تلقائياً',
@@ -333,6 +337,40 @@ async function getFreeCodeStatus() {
 function normalizeFreeCode(value) { return String(value || '').trim().replace(/\s+/g, '').toUpperCase(); }
 function normalizeFreeCodeProgram(value) { const program = String(value || '').trim(); return program.replace(/معادلة هندسة إنجليزي/g, 'معادلة هندسة لغات').replace(/معادلة حاسبات إنجليزي/g, 'معادلة حاسبات لغات'); }
 function normalizeFreeCodeExpiry(value) { if (!value) return ''; const date = value instanceof Date ? value : new Date(String(value)); return Number.isNaN(date.getTime()) ? '' : date.toISOString(); }
+function normalizeSubscriptionProgram(value) { return String(value || '').trim().toLowerCase().replace(/[\s\-_]+/g, '').replace(/إنجليزي/g, 'لغات').replace(/انجليزي/g, 'لغات'); }
+function subscriptionCellText(cell) { const value = cell?.value; return String(value?.text || value?.result || value || '').trim(); }
+async function parseSubscriptionCodeSheet(buffer, expectedProgram, expectedCount) {
+	const workbook = new ExcelJS.Workbook();
+	await workbook.xlsx.load(buffer);
+	const sheet = workbook.worksheets[0];
+	if (!sheet) throw new Error('ملف Excel غير صالح.');
+	let headerRow = 0; let codeColumn = 2; let programColumn = 3;
+	for (let rowNumber = 1; rowNumber <= Math.min(sheet.rowCount, 10); rowNumber += 1) {
+		const values = sheet.getRow(rowNumber).values || [];
+		let codeIndex = -1; let programIndex = -1;
+		for (let index = 1; index < values.length; index += 1) {
+			const header = String(values[index]?.text ?? values[index]?.result ?? values[index] ?? '').trim().toLowerCase();
+			if (header === 'code' || String(header).includes('كود')) codeIndex = index;
+			if (String(header).includes('معادلة') || String(header).includes('program')) programIndex = index;
+		}
+		if (codeIndex > 0) { headerRow = rowNumber; codeColumn = codeIndex; programColumn = programIndex > 0 ? programIndex : 3; break; }
+	}
+	if (!headerRow) throw new Error('لم أجد صف العناوين. يجب أن يحتوي الشيت على عمود Code ونوع المعادلة.');
+	const rows = []; const programValues = [];
+	sheet.eachRow((row, rowNumber) => {
+		if (rowNumber <= headerRow) return;
+		const code = subscriptionCellText(row.getCell(codeColumn));
+		if (!code) return;
+		const programValue = subscriptionCellText(row.getCell(programColumn));
+		if (programValue) programValues.push(programValue);
+		rows.push({ program: expectedProgram, code, normalizedCode: normalizeFreeCode(code) });
+	});
+	if (!rows.length) throw new Error(`لم يتم العثور على أكواد ${expectedProgram} داخل الشيت.`);
+	if (Number(expectedCount) !== rows.length) throw new Error(`عدد الأكواد داخل شيت ${expectedProgram} هو ${rows.length} وليس ${expectedCount}.`);
+	const mismatch = programValues.find(value => normalizeSubscriptionProgram(value) !== normalizeSubscriptionProgram(expectedProgram));
+	if (mismatch) throw new Error(`نوع المعادلة داخل الشيت (${mismatch}) لا يطابق ${expectedProgram}.`);
+	return rows;
+}
 function freeCodeProgramFromSheet(name) {
 	const normalized = String(name || '').trim().replace(/[أإآ]/g, 'ا').replace(/ي/g, 'ى');
 	return FREE_CODE_PROGRAMS.find(program => program.replace(/[أإآ]/g, 'ا').replace(/ي/g, 'ى') === normalized) || null;
@@ -402,7 +440,7 @@ async function requireAdmin(req, res, next) {
 			}
 			const permissions = normalizeUserPermissions(databaseUser.permissions).filter(item => item !== '*');
 			const employeeAccount = databaseUser.role === 'employee' || permissions.some(item => /^employee:\d+$/.test(item));
-			req.adminRole = employeeAccount ? 'employee' : 'editor';
+			req.adminRole = databaseUser.role === 'admin' ? 'admin' : employeeAccount ? 'employee' : 'editor';
 			req.adminPermissions = permissions;
 		} else if (req.adminUsername && req.adminUsername !== LEADS_ADMIN_USERNAME && (req.adminRole !== 'admin' || req.adminUsername !== ADMIN_USERNAME)) {
 			// Keep scoped/editor sessions synchronized when permissions are changed
@@ -415,7 +453,7 @@ async function requireAdmin(req, res, next) {
 			}
 			const permissions = normalizeUserPermissions(databaseUser.permissions).filter(item => item !== '*');
 			const employeeAccount = databaseUser.role === 'employee' || permissions.some(item => /^employee:\d+$/.test(item));
-			req.adminRole = employeeAccount ? 'employee' : 'editor';
+			req.adminRole = databaseUser.role === 'admin' ? 'admin' : employeeAccount ? 'employee' : 'editor';
 			req.adminPermissions = permissions;
 		}
 		await database.getAnalyticsSummary.touchAdminActivity(token, req.adminUsername, req.adminRole);
@@ -429,7 +467,7 @@ function requirePermission(permission) {
 	return (req, res, next) => {
 		// The local bootstrap owner account keeps access to newly introduced
 		// owner-only admin modules while its legacy session is being refreshed.
-		if (permission === 'analytics:read' && req.adminUsername === 'localadmin') return next();
+		if (req.adminUsername === 'localadmin' && (permission === 'analytics:read' || permission === 'subscription-requests' || permission === 'subscription-codes')) return next();
 		const groupedReadWritePermissions = {
 			leads: new Set(['leads:read', 'leads:update']),
 			analytics: new Set(['analytics:read']),
@@ -814,7 +852,7 @@ app.post('/api/auth/login', rateLimit({ name: 'login', windowMs: 15 * 60 * 1000,
 		// permission. This keeps older production records limited even if their role
 		// was created before the employee-account migration.
 		const isEmployeeAccount = Boolean(databaseUser && (databaseUser.role === 'employee' || databasePermissions.some(item => /^employee:\d+$/.test(item))));
-		const role = isFullAdmin ? 'admin' : isLeadsAdmin ? 'leads' : isEmployeeAccount ? 'employee' : 'editor';
+		const role = isFullAdmin ? 'admin' : isLeadsAdmin ? 'leads' : databaseUser?.role === 'admin' ? 'admin' : isEmployeeAccount ? 'employee' : 'editor';
 		const session = await issueToken(role, isFullAdmin ? ADMIN_USERNAME : isLeadsAdmin ? LEADS_ADMIN_USERNAME : databaseUser.username, isFullAdmin ? ['*'] : isLeadsAdmin ? ['leads:read', 'leads:update', 'wheel:read', 'batch-2027'] : databasePermissions);
 		res.json(session);
 	} catch (error) {
@@ -976,6 +1014,60 @@ app.post('/api/launch-offer', rateLimit({ name: 'launch-offer', windowMs: 15 * 6
 	}
 
 	return res.status(201).json({ success: true, localSaved: true, message: 'تم تسجيل بياناتك بنجاح.' });
+});
+
+const subscriptionSubmissionUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 }, fileFilter: (_req, file, cb) => {
+	if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.mimetype)) return cb(new Error('UNSUPPORTED_IMAGE_TYPE'));
+	cb(null, true);
+} });
+function parseSubscriptionForm(req, res, next) {
+	subscriptionSubmissionUpload.fields([{ name: 'paymentReceipt', maxCount: 1 }, { name: 'identityCard', maxCount: 1 }])(req, res, error => {
+		if (!error) return next();
+		if (error instanceof multer.MulterError && error.code === 'LIMIT_FILE_SIZE') return res.status(413).json({ message: 'حجم الصورة يجب ألا يتجاوز 5 ميجابايت.' });
+		return res.status(400).json({ message: 'ارفع صور JPG أو PNG أو WEBP فقط.' });
+	});
+}
+app.post('/api/subscription-requests', rateLimit({ name: 'subscription-requests', windowMs: 15 * 60 * 1000, max: 8 }), parseSubscriptionForm, async (req, res, next) => {
+	const body = req.body || {};
+	const program = String(body.program || '').trim();
+	const values = {
+		name: String(body.name || '').trim(), whatsapp: normalizePhone(body.whatsapp), telegram: normalizePhone(body.telegram),
+		supervisor: String(body.supervisor || '').trim(), paymentRecipient: String(body.paymentRecipient || '').trim(),
+		transferFrom: normalizePhone(body.transferFrom), transferAt: String(body.transferAt || '').trim(), school: String(body.school || '').trim(), program
+	};
+	const nameParts = values.name.split(/\s+/).filter(Boolean);
+	if (values.name.length < 2 || values.name.length > 120) return res.status(400).json({ message: 'الاسم يجب أن يكون بين حرفين و120 حرفًا.' });
+	if (nameParts.length < 3) return res.status(400).json({ message: 'الاسم يجب أن يكون ثلاثيًا.' });
+	if (![values.whatsapp, values.telegram, values.transferFrom].every(phone => /^01\d{9}$/.test(phone))) return res.status(400).json({ message: 'أرقام الهاتف يجب أن تبدأ بـ 01 وتتكون من 11 رقمًا.' });
+	if (!SUBSCRIPTION_PROGRAMS.includes(program)) return res.status(400).json({ message: 'نوع المعادلة غير صحيح.' });
+	if (!SUBSCRIPTION_SUPERVISORS.includes(values.supervisor)) return res.status(400).json({ message: 'اختار المشرف.' });
+	if (!values.paymentRecipient || values.paymentRecipient.length > 30) return res.status(400).json({ message: 'اختار رقم التحويل.' });
+	if (!values.transferAt || Number.isNaN(Date.parse(values.transferAt))) return res.status(400).json({ message: 'وقت وتاريخ التحويل غير صحيح.' });
+	if (Date.parse(values.transferAt) > Date.now()) return res.status(400).json({ message: 'وقت التحويل لا يمكن أن يكون في المستقبل.' });
+	if (values.school.length < 2 || values.school.length > 160) return res.status(400).json({ message: 'اكتب اسم المدرسة بشكل صحيح.' });
+	const files = req.files || {};
+	const receipt = files.paymentReceipt?.[0]; const identity = files.identityCard?.[0];
+	if (!receipt || !identity) return res.status(400).json({ message: 'صورة إيصال الدفع وصورة البطاقة مطلوبتان.' });
+	try {
+		await syncSubscriptionCampaignWithPages();
+		const subscriptionPageKeys = ['subscription-engineering-ar', 'subscription-computers-ar', 'subscription-engineering-en', 'subscription-computers-en'];
+		const store = await readStore();
+		const recipientNumbers = new Set(subscriptionPageKeys.flatMap(key => {
+			const wallets = store.pages?.[key]?.data?.vodafoneNumbers;
+			return Array.isArray(wallets) ? wallets.map(wallet => normalizePhone(wallet.number)) : [];
+		}));
+		if (recipientNumbers.has(values.transferFrom)) return res.status(400).json({ message: 'مينفعش تكتب رقمًا من أرقام فودافون كاش التي حوّلت إليها. اكتب رقم الشخص الذي حوّلت منه.' });
+		const now = getNowIso(); const id = crypto.randomUUID();
+		const request = await database.createSubscriptionRequest({ id, ...values, createdAt: now }, [
+			{ id: crypto.randomUUID(), kind: 'payment_receipt', originalName: receipt.originalname, mimeType: receipt.mimetype, data: receipt.buffer },
+			{ id: crypto.randomUUID(), kind: 'identity_card', originalName: identity.originalname, mimeType: identity.mimetype, data: identity.buffer }
+		]);
+		res.status(201).json({ success: true, requestId: id, request, message: 'تم تسجيل طلبك بنجاح. استخدم واتساب أو تيليجرام من هنا لإكمال التواصل واستلام الكود.' });
+	} catch (error) {
+		if (error.code === 'DUPLICATE_SUBSCRIPTION') return res.status(409).json({ message: 'الرقم ده مسجل بالفعل في حملة الشهر الحالية.', alreadyRegistered: true });
+		if (error.code === 'SUBSCRIPTION_CAMPAIGN_CLOSED') return res.status(409).json({ message: 'التسجيل مغلق حاليًا.' });
+		next(error);
+	}
 });
 
 app.post('/api/leads', rateLimit({ name: 'leads', windowMs: 15 * 60 * 1000, max: 10 }), async (req, res) => {
@@ -1280,7 +1372,7 @@ app.patch('/api/admin/feedback/:id', requireAdmin, requirePermission('feedback:u
 
 function normalizeUserPermissions(value) {
 	if (!Array.isArray(value)) return [];
-	const allowed = new Set([...PAGE_KEYS, 'leads', 'customers', 'wheel', 'free-codes', 'feedback', 'analytics', 'employees', 'finance', 'finance-payroll', 'finance-studio', 'finance-application']);
+	const allowed = new Set([...PAGE_KEYS, 'leads', 'customers', 'wheel', 'free-codes', 'subscription-requests', 'subscription-codes', 'feedback', 'analytics', 'employees', 'finance', 'finance-payroll', 'finance-studio', 'finance-application']);
 	const normalized = [];
 	for (const rawItem of value) {
 		const item = String(rawItem || '').trim();
@@ -1687,6 +1779,44 @@ app.delete('/api/admin/wheel/claims/:token', requireAdmin, requirePermission('wh
 	if (!deleted) return res.status(404).json({ message: 'Wheel claim not found' });
 	res.status(204).send();
 });
+
+async function syncSubscriptionCampaignWithPages() {
+	const campaigns = await database.listSubscriptionCampaigns();
+	const active = campaigns.find(item => item.enabled && item.status === 'active') || null;
+	if (!active) return campaigns;
+	const store = await readStore();
+	const pageKeys = ['subscription-engineering-ar', 'subscription-computers-ar', 'subscription-engineering-en', 'subscription-computers-en'];
+	const pages = pageKeys.map(key => store.pages?.[key]?.data).filter(Boolean);
+	if (pages.length !== pageKeys.length) return campaigns;
+	const now = Date.now();
+	const open = pages.some(page => page.isEnrollmentClosed !== true && (!page.enrollmentWindow?.expiresAt || Date.parse(page.enrollmentWindow.expiresAt) > now));
+	const expiryDates = pages.map(page => Date.parse(page.enrollmentWindow?.expiresAt || '')).filter(value => Number.isFinite(value) && value > now);
+	const closeAt = expiryDates.length ? new Date(Math.min(...expiryDates)).toISOString() : active.closeAt || null;
+	const nextStatus = open ? 'active' : 'closed';
+	const nextEnabled = open;
+	if (active.status !== nextStatus || active.enabled !== nextEnabled || active.closeAt !== closeAt) await database.updateSubscriptionCampaign(active.id, { status: nextStatus, enabled: nextEnabled, closeAt });
+	return database.listSubscriptionCampaigns();
+}
+
+app.get('/api/admin/subscription-campaigns', requireAdmin, requirePermission('subscription-codes'), async (_req, res, next) => { try { const campaigns = await syncSubscriptionCampaignWithPages(); res.json({ data: campaigns }); } catch (error) { next(error); } });
+app.post('/api/admin/subscription-campaigns', requireAdmin, requirePermission('subscription-codes'), async (req, res, next) => {
+	try { const name=String(req.body?.name||'').trim(); const monthLabel=String(req.body?.monthLabel||'').trim(); const closeAt=String(req.body?.closeAt||'').trim(); if(name.length<2||monthLabel.length<2)return res.status(400).json({message:'اسم الحملة والشهر مطلوبان.'}); if(closeAt && (Number.isNaN(Date.parse(closeAt)) || Date.parse(closeAt) <= Date.now())) return res.status(400).json({message:'تاريخ غلق الحملة يجب أن يكون في المستقبل.'}); const campaign=await database.createSubscriptionCampaign({id:crypto.randomUUID(),name,monthLabel,closeAt:closeAt || null,createdAt:getNowIso()}); res.status(201).json(campaign); } catch(error){next(error);}
+});
+app.patch('/api/admin/subscription-campaigns/:id', requireAdmin, requirePermission('subscription-codes'), async (req, res, next) => { try { const changes={}; if(req.body?.name!==undefined)changes.name=String(req.body.name).trim(); if(req.body?.monthLabel!==undefined)changes.monthLabel=String(req.body.monthLabel).trim(); if(req.body?.status!==undefined&&['active','closed','completed'].includes(req.body.status))changes.status=req.body.status; if(req.body?.enabled!==undefined)changes.enabled=Boolean(req.body.enabled); if(changes.enabled === false) changes.status = 'closed'; if(changes.enabled === true || changes.status === 'active') for (const other of await database.listSubscriptionCampaigns()) if (other.id !== req.params.id && other.status === 'active' && other.enabled) await database.updateSubscriptionCampaign(other.id, { status: 'closed', enabled: false }); if(req.body?.closeAt!==undefined){const closeAt=String(req.body.closeAt||'').trim();if(closeAt&&(Number.isNaN(Date.parse(closeAt))||Date.parse(closeAt)<=Date.now()))return res.status(400).json({message:'تاريخ غلق الحملة يجب أن يكون في المستقبل.'});changes.closeAt=closeAt||null;} const campaign=await database.updateSubscriptionCampaign(req.params.id,changes); if(!campaign)return res.status(404).json({message:'الحملة غير موجودة.'}); res.json(campaign); } catch(error){next(error);} });
+app.delete('/api/admin/subscription-campaigns/:id', requireAdmin, requirePermission('subscription-codes'), async (req, res, next) => { try { const deleted = await database.deleteSubscriptionCampaign(req.params.id); if (!deleted) return res.status(404).json({ message: 'الحملة غير موجودة.' }); res.json({ success: true }); } catch(error) { next(error); } });
+const subscriptionCodeUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 20 * 1024 * 1024 } });
+app.post('/api/admin/subscription-campaigns/:id/codes', requireAdmin, requirePermission('subscription-codes'), subscriptionCodeUpload.fields([{name:'file_0',maxCount:1},{name:'file_1',maxCount:1},{name:'file_2',maxCount:1},{name:'file_3',maxCount:1}]), async (req,res,next)=>{
+	try { const campaigns = await database.listSubscriptionCampaigns(); const campaign=campaigns.find(x=>x.id===req.params.id); if(!campaign)return res.status(404).json({message:'الحملة غير موجودة.'}); const files=req.files||{}; let expectedCounts={}; try { expectedCounts=JSON.parse(String(req.body?.expectedCounts||'{}')); } catch { return res.status(400).json({message:'بيانات عدد الأكواد غير صحيحة.'}); } const rows=[]; for(let i=0;i<SUBSCRIPTION_PROGRAMS.length;i+=1){const file=files[`file_${i}`]?.[0]; const expectedProgram=SUBSCRIPTION_PROGRAMS[i]; if(!file)return res.status(400).json({message:`ارفع ملف أكواد ${expectedProgram}.`}); const parsed=await parseSubscriptionCodeSheet(file.buffer,expectedProgram,Number(expectedCounts[expectedProgram])||0); rows.push(...parsed); } if(!rows.length)return res.status(400).json({message:'لم يتم العثور على أكواد.'}); const result=await database.importSubscriptionCodes(req.params.id,rows); res.json({campaign, imported:result.inserted.length, duplicates:result.duplicates.length, ...result, stats:await database.getSubscriptionInventoryStats(req.params.id)}); } catch(error){ if(error instanceof Error && error.message) return res.status(400).json({message:error.message}); next(error);}
+});
+app.get('/api/admin/subscription-campaigns/:id/inventory', requireAdmin, requirePermission('subscription-codes'), async (req,res,next)=>{try{const campaign=(await database.listSubscriptionCampaigns()).find(x=>x.id===req.params.id);if(!campaign)return res.status(404).json({message:'الحملة غير موجودة.'});res.json({campaign,data:await database.getSubscriptionInventory(req.params.id),stats:await database.getSubscriptionInventoryStats(req.params.id)});}catch(error){next(error);}});
+function subscriptionFilters(query){ return { search:String(query.search||'').trim(), status:String(query.status||'').trim(), program:String(query.program||'').trim(), supervisor:String(query.supervisor||'').trim(), campaignId:String(query.campaignId||'').trim(), from:String(query.from||'').trim(), to:String(query.to||'').trim() }; }
+app.get('/api/admin/subscription-requests', requireAdmin, requirePermission('subscription-requests'), async (req,res,next)=>{try{const filters=subscriptionFilters(req.query);const page=Math.max(Number.parseInt(req.query.page,10)||1,1);const limit=Math.min(Math.max(Number.parseInt(req.query.limit,10)||20,1),100);const [data,total,campaigns]=await Promise.all([database.listSubscriptionRequestsPage(page,limit,filters),database.countSubscriptionRequests(filters),database.listSubscriptionCampaigns()]);res.json({data,total,pagination:{page,limit,total,pages:Math.max(Math.ceil(total/limit),1)},campaigns,programs:SUBSCRIPTION_PROGRAMS,supervisors:SUBSCRIPTION_SUPERVISORS});}catch(error){next(error);}});
+app.get('/api/admin/subscription-requests/:id', requireAdmin, requirePermission('subscription-requests'), async(req,res,next)=>{try{if(req.params.id==='export')return next();const item=await database.getSubscriptionRequest(req.params.id);if(!item)return res.status(404).json({message:'طلب الاشتراك غير موجود.'});res.json(item);}catch(error){next(error);}});
+app.patch('/api/admin/subscription-requests/:id', requireAdmin, requirePermission('subscription-requests'), async(req,res,next)=>{try{const allowed=['name','whatsapp','telegram','supervisor','paymentRecipient','transferFrom','transferAt','school','status','issueReason'];const changes={};for(const key of allowed)if(req.body?.[key]!==undefined)changes[key]=String(req.body[key]).trim();if(changes.status&&!SUBSCRIPTION_STATUSES.includes(changes.status))return res.status(400).json({message:'حالة الطلب غير صحيحة.'});const item=await database.updateSubscriptionRequest(req.params.id,changes);if(!item)return res.status(404).json({message:'طلب الاشتراك غير موجود.'});await database.createAuditLog({id:crypto.randomUUID(),action:'updated',entityType:'subscription_request',entityId:req.params.id,actor:req.adminUsername||'',ip:req.ip,createdAt:getNowIso()});res.json(item);}catch(error){next(error);}});
+app.post('/api/admin/subscription-requests/:id/issue', requireAdmin, requirePermission('subscription-requests'), async(req,res,next)=>{try{const reason=String(req.body?.reason||'').trim();if(reason.length<3||reason.length>1000)return res.status(400).json({message:'اكتب سبب المشكلة.'});const current=await database.getSubscriptionRequest(req.params.id);if(!current)return res.status(404).json({message:'طلب الاشتراك غير موجود.'});if(current.status==='sent'||current.assignedCode)return res.status(409).json({message:'لا يمكن تسجيل مشكلة بعد إرسال كود الاشتراك للطالب.'});const item=await database.updateSubscriptionRequest(req.params.id,{status:'data_issue',issueReason:reason,reviewedAt:getNowIso(),reviewedBy:req.adminUsername||''});res.json(item);}catch(error){next(error);}});
+app.post('/api/admin/subscription-requests/:id/send-code', requireAdmin, requirePermission('subscription-requests'), async(req,res,next)=>{try{const item=await database.issueSubscriptionCode(req.params.id,req.adminUsername||'');await database.createAuditLog({id:crypto.randomUUID(),action:'subscription_code_sent',entityType:'subscription_request',entityId:req.params.id,actor:req.adminUsername||'',ip:req.ip,createdAt:getNowIso()});res.json(item);}catch(error){if(error.code==='SUBSCRIPTION_CODE_EMPTY')return res.status(409).json({message:'لا يوجد كود متاح لهذا النوع في الحملة الحالية.'});if(error.code==='SUBSCRIPTION_REQUEST_NOT_FOUND')return res.status(404).json({message:'طلب الاشتراك غير موجود.'});next(error);}});
+app.get('/api/admin/subscription-requests/export', requireAdmin, requirePermission('subscription-requests'), async(req,res,next)=>{try{const filters=subscriptionFilters(req.query);const items=await database.listSubscriptionRequestsPage(1,100000,filters);const workbook=new ExcelJS.Workbook();const sheet=workbook.addWorksheet('طلبات الاشتراك');const headers=['الرقم المرجعي','الاسم','المدرسة','واتساب','تليجرام','المشرف','نوع المعادلة','رقم التحويل إليه','رقم التحويل منه','وقت التحويل','الشهر / الحملة','الحالة','الكود','سبب المشكلة','اسم ملف الإيصال','اسم ملف البطاقة'];sheet.columns=headers.map(header=>({header,key:header,width:20}));sheet.getColumn(1).width=14;sheet.getColumn(2).width=24;sheet.getColumn(3).width=20;sheet.getColumn(15).width=24;sheet.getColumn(16).width=24;sheet.getRow(1).font={bold:true,color:{argb:'FFFFFFFF'}};sheet.getRow(1).fill={type:'pattern',pattern:'solid',fgColor:{argb:'FF5B43C9'}};for(const item of items){const receipt=await database.readSubscriptionDocument(item.id,'payment_receipt');const identity=await database.readSubscriptionDocument(item.id,'identity_card');sheet.addRow([item.referenceCode,item.name,item.school,item.whatsapp,item.telegram,item.supervisor,item.program,item.paymentRecipient,item.transferFrom,item.transferAt,item.monthLabel||item.campaignName,item.status,item.assignedCode,item.issueReason,receipt?.originalName||'',identity?.originalName||'']);}sheet.views=[{rightToLeft:true}];res.set({'Content-Type':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','Content-Disposition':'attachment; filename="subscription-requests-export.xlsx"','Cache-Control':'private, no-store'});const output=await workbook.xlsx.writeBuffer();res.setHeader('Content-Length',String(output.length));res.send(Buffer.from(output));}catch(error){next(error);}});
+app.get('/api/admin/subscription-requests/:id/documents/:kind', requireAdmin, requirePermission('subscription-requests'), async(req,res,next)=>{try{if(!['payment_receipt','identity_card'].includes(req.params.kind))return res.status(400).end();const doc=await database.readSubscriptionDocument(req.params.id,req.params.kind);if(!doc)return res.status(404).end();res.setHeader('Content-Type',doc.mimeType);res.setHeader('Content-Disposition',`inline; filename*=UTF-8''${encodeURIComponent(doc.originalName||doc.kind)}`);res.setHeader('Cache-Control','private, no-store');res.send(doc.data);}catch(error){next(error);}});
 
 app.get('/api/admin/free-codes/settings', requireAdmin, requirePermission('free-codes'), async (_req, res, next) => {
 	try { res.json(await getFreeCodeStatus()); } catch (error) { next(error); }

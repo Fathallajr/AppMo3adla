@@ -50,7 +50,7 @@
       <label><span>نوع التعليم <b>*</b></span><app-styled-select name="socialOfferStudentType" [(ngModel)]="lead.studentType" [options]="offerStudentTypeOptions" placeholder="اختار نوع التعليم"></app-styled-select></label>
       <label><span>نوع المعادلة <b>*</b></span><app-styled-select name="socialOfferProgram" [(ngModel)]="lead.program" [options]="programOptions" placeholder="اختار نوع المعادلة"></app-styled-select></label>
       <label><span>عرفتنا منين؟ <b>*</b></span><app-styled-select name="socialOfferSource" [(ngModel)]="lead.source" [options]="offerSourceOptions" placeholder="اختار مصدر معرفتك بنا"></app-styled-select></label>
-      <label class="social-contact-consent"><input type="checkbox" name="socialOfferConsent" [(ngModel)]="offerContactConsent" required (change)="offerError = ''" /><span>أوافق على التواصل معي بخصوص العرض والدفعة الجديدة <b>*</b></span></label>
+      <label class="social-contact-consent launch-offer-consent"><input type="checkbox" name="socialOfferConsent" [(ngModel)]="offerContactConsent" required (change)="offerError = ''" /><span>أوافق على التواصل معي بخصوص العرض والدفعة الجديدة <b>*</b></span></label>
       <button type="submit" [disabled]="offerSubmitting">{{ offerSubmitting ? 'جاري التسجيل...' : 'احصل على الخصم الآن' }} <span>←</span></button>
       <p *ngIf="offerError" class="social-contact-error" role="alert">⚠ {{ offerError }}</p>
     </form>
