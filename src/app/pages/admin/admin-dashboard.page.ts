@@ -125,6 +125,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	subscriptionCampaignPageSize = 6;
 	subscriptionCampaign: SubscriptionCampaign | null = null;
 	subscriptionCampaignDetailId = '';
+	subscriptionCampaignUpdatingId = '';
 	subscriptionInventoryStats: Array<{ program: string; total: number; available: number; used: number }> = [];
 	subscriptionInventory: Array<{ id: string; program: string; code: string; status: string; requestId?: string; referenceCode?: string; studentName?: string; studentWhatsapp?: string; studentTelegram?: string; usedAt?: string; createdAt?: string }> = [];
 	subscriptionInventorySearch = '';
@@ -1382,9 +1383,11 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	uploadSubscriptionCodes(): void { if (!this.subscriptionCampaign) { this.errorMessage = 'اختار حملة أولًا.'; return; } const missing = this.freeCodePrograms.find(program => !this.subscriptionCodeCounts[program] || !this.subscriptionFiles[`file_${this.freeCodePrograms.indexOf(program)}`] || this.subscriptionFileValidation[`file_${this.freeCodePrograms.indexOf(program)}`]?.startsWith('تم التحقق') === false); if (missing) { this.errorMessage = `راجع عدد الأكواد وملف ${missing}.`; return; } if (Object.keys(this.subscriptionFiles).length !== 4) { this.errorMessage = 'ارفع ملف Excel لكل نوع معادلة.'; return; } this.isSavingSubscription = true; this.adminApi.uploadSubscriptionCodes(this.subscriptionCampaign.id, this.subscriptionFiles, this.subscriptionCodeCounts).pipe(finalize(() => { this.isSavingSubscription = false; })).subscribe({ next: result => { this.subscriptionFiles = {}; this.subscriptionFileValidation = {}; this.subscriptionInventoryStats = result.stats || []; this.statusMessage = `تم رفع ${result.imported || result.inserted?.length || 0} كود. المكرر: ${result.duplicates || result.duplicates?.length || 0}.`; this.loadSubscriptionInventory(this.subscriptionCampaign!.id); }, error: err => this.handleApiError(err) }); }
 	openSubscriptionCampaignDetails(campaign: SubscriptionCampaign): void { window.open(`${window.location.origin}/admin?view=subscription-codes&campaignId=${encodeURIComponent(campaign.id)}`, '_blank', 'noopener,noreferrer'); }
 	toggleSubscriptionCampaign(campaign: SubscriptionCampaign): void {
+		if (this.subscriptionCampaignUpdatingId === campaign.id) return;
 		const nextEnabled = !(campaign.enabled && campaign.status === 'active');
-		this.adminApi.updateSubscriptionCampaign(campaign.id, { enabled: nextEnabled, status: nextEnabled ? 'active' : 'closed' }).subscribe({
-			next: updated => { Object.assign(campaign, updated); this.statusMessage = nextEnabled ? 'تم تفعيل الحملة وإغلاق أي حملة أخرى نشطة.' : 'تم إيقاف الحملة.'; this.errorMessage = ''; this.loadSubscriptionCampaigns(); },
+		this.subscriptionCampaignUpdatingId = campaign.id;
+		this.adminApi.updateSubscriptionCampaign(campaign.id, { enabled: nextEnabled, status: nextEnabled ? 'active' : 'closed' }).pipe(finalize(() => { this.subscriptionCampaignUpdatingId = ''; this.refreshView(); })).subscribe({
+			next: updated => { Object.assign(campaign, updated); this.subscriptionCampaign = this.subscriptionCampaign?.id === updated.id ? updated : this.subscriptionCampaign; this.statusMessage = nextEnabled ? 'تم تفعيل الحملة وإغلاق أي حملة أخرى نشطة.' : 'تم إيقاف الحملة.'; this.errorMessage = ''; this.loadSubscriptionCampaigns(); },
 			error: err => this.handleApiError(err)
 		});
 	}
