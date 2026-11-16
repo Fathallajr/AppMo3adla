@@ -220,6 +220,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	leadsPage = 1;
 	copiedLeadWhatsapp = '';
 	copiedSubscriptionCode = '';
+	copiedSubscriptionTransferFrom = '';
 	leadsPages = 1;
 	leadPageNumbers: PaginationItem[] = [1];
 	leadsTotal = 0;
@@ -1405,7 +1406,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	closeSubscriptionActionMenu(): void { this.openSubscriptionActionMenuId = null; this.refreshView(); }
 	openSubscriptionNote(item: SubscriptionRequest): void { this.closeSubscriptionActionMenu(); this.subscriptionNotePreviousOverflow = document.body.style.overflow; document.body.style.overflow = 'hidden'; this.subscriptionPendingNote = item; this.subscriptionNoteDraft = item.adminNote || ''; this.errorMessage = ''; }
 	closeSubscriptionNote(): void { if (this.isSavingSubscriptionNote) return; document.body.style.overflow = this.subscriptionNotePreviousOverflow; this.subscriptionNotePreviousOverflow = ''; this.subscriptionPendingNote = null; this.subscriptionNoteDraft = ''; this.refreshView(); }
-	saveSubscriptionNote(): void { const item = this.subscriptionPendingNote; if (!item || this.isSavingSubscriptionNote) return; this.isSavingSubscriptionNote = true; this.adminApi.updateSubscriptionRequest(item.id, { adminNote: this.subscriptionNoteDraft.trim() }).pipe(finalize(() => { this.isSavingSubscriptionNote = false; this.refreshView(); })).subscribe({ next: updated => { Object.assign(item, updated); document.body.style.overflow = this.subscriptionNotePreviousOverflow; this.subscriptionNotePreviousOverflow = ''; this.subscriptionPendingNote = null; this.subscriptionNoteDraft = ''; this.statusMessage = 'تم حفظ الملاحظة.'; this.errorMessage = ''; this.loadSubscriptionRequests(true); }, error: err => this.handleApiError(err) }); }
+	saveSubscriptionNote(): void { const item = this.subscriptionPendingNote; if (!item || this.isSavingSubscriptionNote) return; this.isSavingSubscriptionNote = true; this.adminApi.updateSubscriptionRequest(item.id, { adminNote: this.subscriptionNoteDraft.trim() }).pipe(finalize(() => { this.isSavingSubscriptionNote = false; this.refreshView(); })).subscribe({ next: updated => { Object.assign(item, updated); document.body.style.overflow = this.subscriptionNotePreviousOverflow; this.subscriptionNotePreviousOverflow = ''; this.subscriptionPendingNote = null; this.subscriptionNoteDraft = ''; this.statusMessage = 'تم حفظ المبلغ.'; this.errorMessage = ''; this.loadSubscriptionRequests(true); }, error: err => this.handleApiError(err) }); }
 	async copySubscriptionCode(code: string): Promise<void> {
 		if (!code) return;
 		this.copiedSubscriptionCode = code;
@@ -1418,6 +1419,20 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 			}
 			window.setTimeout(() => { if (this.copiedSubscriptionCode === code) this.copiedSubscriptionCode = ''; }, 1600);
 		} catch { this.copiedSubscriptionCode = ''; this.errorMessage = 'تعذر نسخ الكود، حاول مرة أخرى.'; }
+	}
+	async copySubscriptionTransferFrom(phone: string): Promise<void> {
+		const normalized = String(phone || '').trim();
+		if (!normalized || normalized === '—') return;
+		this.copiedSubscriptionTransferFrom = normalized;
+		this.errorMessage = '';
+		this.changeDetector.detectChanges();
+		try {
+			if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(normalized);
+			else {
+				const input = document.createElement('textarea'); input.value = normalized; input.style.position = 'fixed'; input.style.opacity = '0'; document.body.appendChild(input); input.focus(); input.select(); document.execCommand('copy'); input.remove();
+			}
+			window.setTimeout(() => { if (this.copiedSubscriptionTransferFrom === normalized) this.copiedSubscriptionTransferFrom = ''; }, 1600);
+		} catch { this.copiedSubscriptionTransferFrom = ''; this.errorMessage = 'تعذر نسخ الرقم، حاول مرة أخرى.'; }
 	}
 	approveSubscriptionRequest(item: SubscriptionRequest): void { this.adminApi.updateSubscriptionRequest(item.id, { status: 'approved' }).subscribe({ next: updated => { Object.assign(item, updated); this.statusMessage = 'تم اعتماد الطلب للمراجعة النهائية.'; }, error: err => this.handleApiError(err) }); }
 	openSubscriptionIssue(item: SubscriptionRequest): void { this.subscriptionPendingIssue = item; this.subscriptionIssueDraft = ''; this.subscriptionIssueMessageSelections = []; this.errorMessage = ''; }
