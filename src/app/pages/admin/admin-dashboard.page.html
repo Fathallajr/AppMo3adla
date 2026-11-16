@@ -36,7 +36,7 @@
 						<button
 							type="button"
 							class="page-item"
-							*ngIf="page.key !== 'employees' && page.key !== 'batch-2027' && page.key !== 'launch-offer' && page.key !== 'schools' && page.key !== 'news-equation'"
+							*ngIf="page.key !== 'employees' && page.key !== 'schools' && page.key !== 'news-equation'"
 							[hidden]="!fullAdminAccount && !canAccessPage(page.key)"
 							[class.page-item--active]="activeView === 'cms' && isSelected(page.key)"
 							(click)="selectPage(page.key)">
@@ -44,7 +44,7 @@
 						</button>
 					</ng-container><button *ngIf="group.group === 'الاشتراكات' && canAccessFeature('subscription-requests')" type="button" class="page-item page-item--subscription-admin" [class.page-item--active]="activeView === 'subscription-requests'" (click)="setSubscriptionView('subscription-requests')">طلبات الاشتراك</button><button *ngIf="group.group === 'الاشتراكات' && canAccessFeature('subscription-codes')" type="button" class="page-item page-item--subscription-admin" [class.page-item--active]="activeView === 'subscription-codes'" (click)="setSubscriptionView('subscription-codes')">أكواد الاشتراك</button></div>
 					<ng-container *ngIf="group.group !== 'الاشتراكات'"><ng-container *ngFor="let page of group.pages">
-						<button type="button" class="page-item" *ngIf="page.key !== 'employees' && page.key !== 'batch-2027' && page.key !== 'launch-offer' && page.key !== 'schools' && page.key !== 'news-equation'" [hidden]="!fullAdminAccount && !canAccessPage(page.key)" [class.page-item--active]="activeView === 'cms' && isSelected(page.key)" (click)="selectPage(page.key)"><div class="page-item__title">{{ page.title }}</div></button>
+						<button type="button" class="page-item" *ngIf="page.key !== 'employees' && page.key !== 'schools' && page.key !== 'news-equation'" [hidden]="!fullAdminAccount && !canAccessPage(page.key)" [class.page-item--active]="activeView === 'cms' && isSelected(page.key)" (click)="selectPage(page.key)"><div class="page-item__title">{{ page.title }}</div></button>
 					</ng-container></ng-container>
 				</div>
 				<button *ngIf="false" type="button" class="page-item page-item--profile"><div class="page-item__title">ملفي الشخصي</div></button>
