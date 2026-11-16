@@ -41,6 +41,17 @@ interface PageOption {
 type AdminDataView = 'overview' | 'leads' | 'customers' | 'feedback' | 'programs' | 'wheel' | 'free-codes' | 'subscription-requests' | 'subscription-codes' | 'admins' | 'analytics' | 'finance' | 'finance-payroll' | 'finance-studio' | 'finance-application';
 type PaginationItem = number | '…';
 interface FreeCodeCalendarDay { iso: string; label: number; inMonth: boolean; }
+interface SubscriptionRequestEditDraft {
+	program: string;
+	name: string;
+	whatsapp: string;
+	telegram: string;
+	supervisor: string;
+	paymentRecipient: string;
+	transferFrom: string;
+	transferAt: string;
+	school: string;
+}
 
 @Component({
 	selector: 'app-admin-dashboard-page',
@@ -143,7 +154,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	readonly subscriptionSupervisors = ['مهندسة حبيبة', 'مهندسة هدير', 'مهندسة ندى', 'مهندسة مي', 'مهندسة إيمان', 'مهندسة أشروقت', 'طالب جديد'];
 	subscriptionPage = 1; subscriptionPages = 1; subscriptionTotal = 0; isLoadingSubscriptionRequests = false; isSavingSubscription = false;
 	private subscriptionSearchTimer?: ReturnType<typeof setTimeout>;
-	subscriptionPendingIssue: SubscriptionRequest | null = null; subscriptionIssueDraft = ''; subscriptionPendingView: SubscriptionRequest | null = null; subscriptionPendingNote: SubscriptionRequest | null = null; subscriptionNoteDraft = ''; isSavingSubscriptionNote = false; private subscriptionNotePreviousOverflow = ''; subscriptionIssueMessageSelections: string[] = [];
+	subscriptionPendingIssue: SubscriptionRequest | null = null; subscriptionIssueDraft = ''; subscriptionPendingView: SubscriptionRequest | null = null; subscriptionPendingNote: SubscriptionRequest | null = null; subscriptionNoteDraft = ''; isSavingSubscriptionNote = false; private subscriptionNotePreviousOverflow = ''; subscriptionPendingEdit: SubscriptionRequest | null = null; subscriptionEditDraft: SubscriptionRequestEditDraft = { program: '', name: '', whatsapp: '', telegram: '', supervisor: '', paymentRecipient: '', transferFrom: '', transferAt: '', school: '' }; isSavingSubscriptionEdit = false; private subscriptionEditPreviousOverflow = ''; subscriptionIssueMessageSelections: string[] = [];
 	readonly subscriptionIssueMessageOptions = [
 		{ key: 'transfer', label: 'مشكلة رقم التحويل (اللي حول منه)', message: 'الرقم اللي حول منه مش ظاهر عندي في التحويلات\nاستأذنك ترجع للراجل اللي حولت منه عشان بيكون عنده كذا رقم للتحويل' },
 		{ key: 'identity', label: 'مشكلة صورة البطاقة غير واضحة أو خاطئة', message: 'هندسة استأذنك تبعت بطاقتك كاملة والصورة تكون واضحة\nأو لو رافع شهادة الميلاد\nفين بطاقتك؟' },
@@ -153,6 +164,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	subscriptionDocumentModal: { item: SubscriptionRequest; kind: 'payment_receipt' | 'identity_card'; url: string; mimeType: string } | null = null;
 	subscriptionDocumentLoading = false;
 	private subscriptionDocumentPreviousOverflow = '';
+	private subscriptionViewPreviousOverflow = '';
 	isLoadingFreeCodeDetail = false;
 	isLoadingFreeCodeRequests = false;
 	isSavingFreeCodeSettings = false;
@@ -1404,6 +1416,48 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 		this.refreshView();
 	}
 	closeSubscriptionActionMenu(): void { this.openSubscriptionActionMenuId = null; this.refreshView(); }
+	openSubscriptionEdit(item: SubscriptionRequest): void {
+		this.closeSubscriptionActionMenu();
+		this.subscriptionEditPreviousOverflow = document.body.style.overflow;
+		document.body.style.overflow = 'hidden';
+		this.subscriptionPendingEdit = item;
+		this.subscriptionEditDraft = {
+			program: item.program || '',
+			name: item.name || '',
+			whatsapp: item.whatsapp || '',
+			telegram: item.telegram || '',
+			supervisor: item.supervisor || '',
+			paymentRecipient: item.paymentRecipient || '',
+			transferFrom: item.transferFrom || '',
+			transferAt: item.transferAt || '',
+			school: item.school || ''
+		};
+		this.errorMessage = '';
+	}
+	closeSubscriptionEdit(): void {
+		if (this.isSavingSubscriptionEdit) return;
+		document.body.style.overflow = this.subscriptionEditPreviousOverflow;
+		this.subscriptionEditPreviousOverflow = '';
+		this.subscriptionPendingEdit = null;
+		this.refreshView();
+	}
+	saveSubscriptionEdit(): void {
+		const item = this.subscriptionPendingEdit;
+		if (!item || this.isSavingSubscriptionEdit) return;
+		const payload = Object.fromEntries(Object.entries(this.subscriptionEditDraft).map(([key, value]) => [key, String(value ?? '').trim()])) as Partial<SubscriptionRequest>;
+		this.isSavingSubscriptionEdit = true;
+		this.adminApi.updateSubscriptionRequest(item.id, payload).pipe(finalize(() => { this.isSavingSubscriptionEdit = false; this.refreshView(); })).subscribe({
+			next: updated => {
+				Object.assign(item, updated);
+				this.isSavingSubscriptionEdit = false;
+				this.closeSubscriptionEdit();
+				this.statusMessage = 'تم تعديل بيانات الطالب بنجاح.';
+				this.errorMessage = '';
+				this.loadSubscriptionRequests(true);
+			},
+			error: err => this.handleApiError(err)
+		});
+	}
 	openSubscriptionNote(item: SubscriptionRequest): void { this.closeSubscriptionActionMenu(); this.subscriptionNotePreviousOverflow = document.body.style.overflow; document.body.style.overflow = 'hidden'; this.subscriptionPendingNote = item; this.subscriptionNoteDraft = item.adminNote || ''; this.errorMessage = ''; }
 	closeSubscriptionNote(): void { if (this.isSavingSubscriptionNote) return; document.body.style.overflow = this.subscriptionNotePreviousOverflow; this.subscriptionNotePreviousOverflow = ''; this.subscriptionPendingNote = null; this.subscriptionNoteDraft = ''; this.refreshView(); }
 	saveSubscriptionNote(): void { const item = this.subscriptionPendingNote; if (!item || this.isSavingSubscriptionNote) return; this.isSavingSubscriptionNote = true; this.adminApi.updateSubscriptionRequest(item.id, { adminNote: this.subscriptionNoteDraft.trim() }).pipe(finalize(() => { this.isSavingSubscriptionNote = false; this.refreshView(); })).subscribe({ next: updated => { Object.assign(item, updated); document.body.style.overflow = this.subscriptionNotePreviousOverflow; this.subscriptionNotePreviousOverflow = ''; this.subscriptionPendingNote = null; this.subscriptionNoteDraft = ''; this.statusMessage = 'تم حفظ المبلغ.'; this.errorMessage = ''; this.loadSubscriptionRequests(true); }, error: err => this.handleApiError(err) }); }
@@ -1442,7 +1496,8 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	withdrawSubscriptionRequest(item: SubscriptionRequest): void { if (item.status === 'withdrawn' || !window.confirm(`تأكيد تسجيل انسحاب ${item.name}؟ سيتم حفظ أن المبلغ تم استرداده.`)) return; this.adminApi.withdrawSubscriptionRequest(item.id).subscribe({ next: updated => { Object.assign(item, updated); this.statusMessage = 'تم تسجيل الانسحاب بنجاح وتم استرداد المبلغ.'; this.errorMessage = ''; this.closeSubscriptionActionMenu(); this.loadSubscriptionRequests(true); }, error: err => this.handleApiError(err) }); }
 	getSubscriptionWhatsappUrl(item: SubscriptionRequest, heading: string, compact = false, rawMessage = false): string { const message = rawMessage ? heading : compact ? [heading, `كود التفعيل لشهر ${item.monthLabel || 'الحملة الحالية'}`, `الكود: ${item.assignedCode || '—'}`, `الاسم: ${item.name}`, `نوع المعادلة: ${item.program}`].join('\n') : [heading, `الرقم المرجعي: ${item.referenceCode || item.id}`, `الاسم: ${item.name}`, `واتساب: ${item.whatsapp}`, `تليجرام: ${item.telegram}`, `المشرف: ${item.supervisor}`, `نوع المعادلة: ${item.program}`, `حولت على رقم: ${item.paymentRecipient}`, `حولت من رقم: ${item.transferFrom}`, `وقت التحويل: ${item.transferAt}`, `المدرسة: ${item.school}`, item.assignedCode ? `الكود: ${item.assignedCode}` : '', item.issueReason ? `سبب المشكلة: ${item.issueReason}` : ''].filter(Boolean).join('\n'); const digits = item.whatsapp.replace(/\D/g, ''); const international = digits.startsWith('20') ? digits : digits.startsWith('0') ? `20${digits.slice(1)}` : `20${digits}`; return `https://wa.me/${international}?text=${encodeURIComponent(message)}`; }
 	openSubscriptionWhatsapp(item: SubscriptionRequest, heading: string, rawMessage = false): void { window.open(this.getSubscriptionWhatsappUrl(item, heading, false, rawMessage), '_blank', 'noopener,noreferrer'); }
-	openSubscriptionView(item: SubscriptionRequest): void { this.subscriptionPendingView = item; for (const kind of ['payment_receipt', 'identity_card']) { const key = `${item.id}:${kind}`; this.adminApi.getSubscriptionDocument(item.id, kind).subscribe({ next: blob => { const old = this.subscriptionDocumentPreviewUrls[key]; if (old) URL.revokeObjectURL(old); this.subscriptionDocumentPreviewUrls[key] = URL.createObjectURL(blob); this.refreshView(); }, error: err => this.handleApiError(err) }); } }
+	openSubscriptionView(item: SubscriptionRequest): void { this.subscriptionViewPreviousOverflow = document.body.style.overflow; document.body.style.overflow = 'hidden'; this.subscriptionPendingView = item; for (const kind of ['payment_receipt', 'identity_card']) { const key = `${item.id}:${kind}`; this.adminApi.getSubscriptionDocument(item.id, kind).subscribe({ next: blob => { const old = this.subscriptionDocumentPreviewUrls[key]; if (old) URL.revokeObjectURL(old); this.subscriptionDocumentPreviewUrls[key] = URL.createObjectURL(blob); this.refreshView(); }, error: err => this.handleApiError(err) }); } }
+	closeSubscriptionView(): void { document.body.style.overflow = this.subscriptionViewPreviousOverflow; this.subscriptionViewPreviousOverflow = ''; this.subscriptionPendingView = null; this.refreshView(); }
 	openSubscriptionDocument(item: SubscriptionRequest, kind: 'payment_receipt' | 'identity_card'): void { this.closeSubscriptionDocument(false); this.subscriptionDocumentPreviousOverflow = document.body.style.overflow; document.body.style.overflow = 'hidden'; this.subscriptionDocumentLoading = true; this.subscriptionDocumentModal = { item, kind, url: '', mimeType: '' }; this.adminApi.getSubscriptionDocument(item.id, kind).subscribe({ next: blob => { this.subscriptionDocumentModal = { item, kind, url: URL.createObjectURL(blob), mimeType: blob.type || 'application/octet-stream' }; this.subscriptionDocumentLoading = false; this.refreshView(); }, error: err => { this.closeSubscriptionDocument(false); this.handleApiError(err); } }); }
 	closeSubscriptionDocument(refresh = true): void { if (this.subscriptionDocumentModal?.url) URL.revokeObjectURL(this.subscriptionDocumentModal.url); if (this.subscriptionDocumentModal || this.subscriptionDocumentLoading) document.body.style.overflow = this.subscriptionDocumentPreviousOverflow; this.subscriptionDocumentPreviousOverflow = ''; this.subscriptionDocumentModal = null; this.subscriptionDocumentLoading = false; if (refresh) this.refreshView(); }
 	isSubscriptionDocumentImage(): boolean { return this.subscriptionDocumentModal?.mimeType.startsWith('image/') === true; }

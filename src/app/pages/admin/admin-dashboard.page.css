@@ -898,3 +898,17 @@ tbody tr:hover { background:#faf9ff; }
 .subscription-document-modal-backdrop{width:100%;height:100dvh;min-height:0}
 .subscription-admin-view .filter-reset-btn{min-height:42px;border:1px solid #dfe4ef;border-radius:10px;color:#59677f;background:#fff;font:inherit;font-weight:800;cursor:pointer}.subscription-admin-view .filter-reset-btn:hover{border-color:#b9aaff;color:#5c43c8;background:#faf9ff}
 .subscription-status-badge.is-withdrawn{color:#7c2d12;background:#ffedd5;border:1px solid #fdba74}.subscription-transfer-cell{white-space:nowrap}.copy-subscription-code-btn{display:inline-grid;place-items:center;width:25px;height:25px;margin-inline-start:6px;padding:0;border:1px solid #cfc5ff;border-radius:50%;color:#6241df;background:#f4f1ff;cursor:pointer;vertical-align:middle}.copy-subscription-code-btn:hover{background:#e9e3ff}.copy-subscription-code-btn.is-copied{color:#08734e;border-color:#84ddb8;background:#e5faf1}.subscription-withdraw-action{color:#9a3412!important;background:#fff7ed!important}.subscription-withdraw-action:hover{color:#fff!important;background:#ea580c!important}
+body.admin-modal-open{overflow:hidden!important}
+.subscription-document-modal-backdrop,.subscription-details-modal-backdrop{position:fixed!important;inset:0!important;width:100vw!important;min-width:100vw!important;height:100vh!important;min-height:100vh!important;box-sizing:border-box;z-index:2147483000!important;overflow:hidden!important;background:rgba(18,25,48,.72)!important;overscroll-behavior:none;touch-action:none}
+.subscription-document-modal-backdrop{display:flex!important;align-items:center!important;justify-content:center!important;padding:16px 18px!important}
+.subscription-details-modal-backdrop{display:grid!important;place-items:center!important;padding:20px!important}
+.subscription-document-modal,.subscription-details-modal-backdrop .lead-view-card{position:relative;z-index:1;max-height:calc(100vh - 32px);overflow:auto}
+@media(max-width:700px){.subscription-document-modal-backdrop,.subscription-details-modal-backdrop{padding:8px!important}.subscription-document-modal,.subscription-details-modal-backdrop .lead-view-card{max-height:calc(100vh - 16px)}}
+.subscription-edit-dialog{width:min(760px,100%);max-height:calc(100vh - 32px);overflow:auto;text-align:right}
+.subscription-edit-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px;text-align:right}
+.subscription-edit-grid label{display:grid;gap:6px;min-width:0;color:#526078;font-size:12px;font-weight:800}
+.subscription-edit-grid label span{color:#526078}
+.subscription-edit-grid input{width:100%;min-height:42px;box-sizing:border-box;padding:9px 11px;border:1px solid #d9d3ff;border-radius:11px;color:#202b42;background:#fafaff;font:inherit;font-size:13px;outline:none}
+.subscription-edit-grid input:focus{border-color:#6241df;box-shadow:0 0 0 3px rgba(98,65,223,.12)}
+.subscription-edit-field--wide{grid-column:1/-1}
+@media(max-width:620px){.subscription-edit-grid{grid-template-columns:1fr}.subscription-edit-field--wide{grid-column:auto}.subscription-edit-dialog{padding:24px 18px 20px}}
