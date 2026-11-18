@@ -11,6 +11,12 @@
 	--green: #13b96c;
 }
 
+@media (max-width: 600px) {
+	.review-closed {
+		margin: 18px auto 1.5rem;
+	}
+}
+
 /* Final override: match computer benefit cards to the lighter engineering style. */
 .review-page--computers .review-benefits article {
 	border: 1px solid #e2e8f0;
