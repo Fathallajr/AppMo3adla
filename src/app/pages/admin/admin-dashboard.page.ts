@@ -153,6 +153,10 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	subscriptionCampaignModalSubmitted = false;
 	subscriptionSearch = ''; subscriptionStatus = ''; subscriptionProgram = ''; subscriptionSupervisor = ''; subscriptionCampaignFilter = '';
 	readonly subscriptionSupervisors = ['مهندسة حبيبة', 'مهندسة هدير', 'مهندسة ندى', 'مهندسة مي', 'مهندسة إيمان', 'مهندسة أشرقت', 'طالب جديد'];
+		get subscriptionSupervisorOptions(): string[] {
+			const isLanguages = this.subscriptionProgram === 'معادلة هندسة لغات' || this.subscriptionProgram === 'معادلة حاسبات لغات';
+			return isLanguages ? ['مهندسة هدير', 'طالب جديد'] : this.subscriptionSupervisors.filter(name => name !== 'مهندسة هدير');
+		}
 	subscriptionPage = 1; subscriptionPages = 1; subscriptionTotal = 0; isLoadingSubscriptionRequests = false; isSavingSubscription = false;
 	private subscriptionSearchTimer?: ReturnType<typeof setTimeout>;
 	subscriptionPendingIssue: SubscriptionRequest | null = null; subscriptionIssueDraft = ''; subscriptionPendingView: SubscriptionRequest | null = null; subscriptionPendingNote: SubscriptionRequest | null = null; subscriptionPendingDelete: SubscriptionRequest | null = null; subscriptionNoteDraft = ''; isSavingSubscriptionNote = false; private subscriptionNotePreviousOverflow = ''; subscriptionPendingEdit: SubscriptionRequest | null = null; subscriptionEditDraft: SubscriptionRequestEditDraft = { program: '', name: '', whatsapp: '', telegram: '', supervisor: '', groupType: '', paymentRecipient: '', transferFrom: '', transferAt: '', school: '' }; isSavingSubscriptionEdit = false; private subscriptionEditPreviousOverflow = ''; subscriptionIssueMessageSelections: string[] = [];
@@ -1304,6 +1308,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	searchSubscriptionRequests(): void { this.subscriptionPage = 1; this.loadSubscriptionRequests(true); }
 	scheduleSubscriptionSearch(): void { if (this.subscriptionSearchTimer) clearTimeout(this.subscriptionSearchTimer); this.subscriptionSearchTimer = setTimeout(() => { this.subscriptionSearchTimer = undefined; this.searchSubscriptionRequests(); }, 250); }
 	resetSubscriptionFilters(): void { if (this.subscriptionSearchTimer) clearTimeout(this.subscriptionSearchTimer); this.subscriptionSearchTimer = undefined; this.subscriptionSearch = ''; this.subscriptionStatus = ''; this.subscriptionProgram = ''; this.subscriptionSupervisor = ''; this.subscriptionCampaignFilter = ''; this.searchSubscriptionRequests(); }
+	onSubscriptionProgramChange(): void { if (this.subscriptionSupervisor && !this.subscriptionSupervisorOptions.includes(this.subscriptionSupervisor)) this.subscriptionSupervisor = ''; this.searchSubscriptionRequests(); }
 	setSubscriptionView(view: 'subscription-requests' | 'subscription-codes'): void { this.closeActionMenus(); this.activeView = view; this.sidebarOpen = false; void this.router.navigate(['/admin'], { queryParams: { view }, replaceUrl: true }); if (view === 'subscription-requests') this.loadSubscriptionRequests(); else this.loadSubscriptionCampaigns(); }
 	loadSubscriptionCampaigns(): void { this.subscriptionCampaignDetailId = this.route.snapshot.queryParamMap.get('campaignId') || ''; this.adminApi.listSubscriptionCampaigns().subscribe({ next: result => { this.subscriptionCampaigns = result.data; this.subscriptionCampaignPage = Math.min(this.subscriptionCampaignPage, this.subscriptionCampaignPages); this.subscriptionCampaign = (this.subscriptionCampaignDetailId ? result.data.find(item => item.id === this.subscriptionCampaignDetailId) : null) || result.data.find(item => item.enabled && item.status === 'active') || result.data[0] || null; if (this.subscriptionCampaign) this.loadSubscriptionInventory(this.subscriptionCampaign.id); this.refreshView(); }, error: err => this.handleApiError(err) }); }
 	get pagedSubscriptionCampaigns(): SubscriptionCampaign[] { const start = (this.subscriptionCampaignPage - 1) * this.subscriptionCampaignPageSize; return this.subscriptionCampaigns.slice(start, start + this.subscriptionCampaignPageSize); }
@@ -1516,6 +1521,34 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	openSubscriptionWhatsapp(item: SubscriptionRequest, heading: string, rawMessage = false): void { window.open(this.getSubscriptionWhatsappUrl(item, heading, false, rawMessage), '_blank', 'noopener,noreferrer'); }
 	openSubscriptionView(item: SubscriptionRequest): void { this.subscriptionViewPreviousOverflow = document.body.style.overflow; document.body.style.overflow = 'hidden'; this.subscriptionPendingView = item; for (const kind of ['payment_receipt', 'identity_card']) { const key = `${item.id}:${kind}`; this.adminApi.getSubscriptionDocument(item.id, kind).subscribe({ next: blob => { const old = this.subscriptionDocumentPreviewUrls[key]; if (old) URL.revokeObjectURL(old); this.subscriptionDocumentPreviewUrls[key] = URL.createObjectURL(blob); this.refreshView(); }, error: err => this.handleApiError(err) }); } }
 	closeSubscriptionView(): void { document.body.style.overflow = this.subscriptionViewPreviousOverflow; this.subscriptionViewPreviousOverflow = ''; this.subscriptionPendingView = null; this.refreshView(); }
+	@HostListener('document:keydown.escape')
+	closeSubscriptionPopupsOnEscape(): void {
+		if (this.subscriptionDocumentModal || this.subscriptionDocumentLoading) return this.closeSubscriptionDocument();
+		if (this.subscriptionPendingView) return this.closeSubscriptionView();
+		if (this.subscriptionPendingEdit) return this.closeSubscriptionEdit();
+		if (this.subscriptionPendingDelete) return this.closeSubscriptionDelete();
+		if (this.subscriptionPendingNote) return this.closeSubscriptionNote();
+		if (this.subscriptionPendingIssue) { this.subscriptionPendingIssue = null; this.refreshView(); return; }
+		if (this.subscriptionCampaignModalOpen) return this.closeSubscriptionCampaignModal();
+		if (this.freeCodeCampaignModalOpen) return this.closeFreeCodeCampaignModal();
+		if (this.freeCodeDetailCampaign) return this.closeFreeCodeCampaignDetails();
+		if (this.customerImportPreview) return this.cancelCustomerImport();
+		if (this.customerImportInstructionsOpen) return this.closeCustomerImportInstructions();
+		if (this.customerPendingEdit) return this.closeCustomerEdit();
+		if (this.customerPendingDeletion) return this.closeDeleteCustomerDialog();
+		if (this.customerPendingNote) return this.closeCustomerNote();
+		if (this.customerPendingReadNote) return this.closeCustomerReadNote();
+		if (this.customerPendingView) return this.closeCustomerView();
+		if (this.leadPendingDeletion) return this.closeDeleteLeadDialog();
+		if (this.leadPendingNote) return this.closeLeadNote();
+		if (this.leadPendingReadNote) return this.closeLeadReadNote();
+		if (this.leadPendingView) return this.closeLeadView();
+		if (this.wheelPendingDeletion) return this.closeDeleteWheelDialog();
+		if (this.wheelPendingNote) return this.closeWheelNote();
+		if (this.wheelPendingReadNote) return this.closeWheelReadNote();
+		if (this.wheelPendingView) return this.closeWheelView();
+		if (this.newsPendingDeletion) return this.closeNewsDeleteDialog();
+	}
 	openSubscriptionDocument(item: SubscriptionRequest, kind: 'payment_receipt' | 'identity_card'): void { this.closeSubscriptionDocument(false); this.subscriptionDocumentPreviousOverflow = document.body.style.overflow; document.body.style.overflow = 'hidden'; this.subscriptionDocumentLoading = true; this.subscriptionDocumentModal = { item, kind, url: '', mimeType: '' }; this.adminApi.getSubscriptionDocument(item.id, kind).subscribe({ next: blob => { this.subscriptionDocumentModal = { item, kind, url: URL.createObjectURL(blob), mimeType: blob.type || 'application/octet-stream' }; this.subscriptionDocumentLoading = false; this.refreshView(); }, error: err => { this.closeSubscriptionDocument(false); this.handleApiError(err); } }); }
 	closeSubscriptionDocument(refresh = true): void { if (this.subscriptionDocumentModal?.url) URL.revokeObjectURL(this.subscriptionDocumentModal.url); if (this.subscriptionDocumentModal || this.subscriptionDocumentLoading) document.body.style.overflow = this.subscriptionDocumentPreviousOverflow; this.subscriptionDocumentPreviousOverflow = ''; this.subscriptionDocumentModal = null; this.subscriptionDocumentLoading = false; if (refresh) this.refreshView(); }
 	isSubscriptionDocumentImage(): boolean { return this.subscriptionDocumentModal?.mimeType.startsWith('image/') === true; }
