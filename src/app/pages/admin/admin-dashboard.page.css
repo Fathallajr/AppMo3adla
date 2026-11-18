@@ -908,7 +908,13 @@ body.admin-modal-open{overflow:hidden!important}
 .subscription-edit-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px;text-align:right}
 .subscription-edit-grid label{display:grid;gap:6px;min-width:0;color:#526078;font-size:12px;font-weight:800}
 .subscription-edit-grid label span{color:#526078}
-.subscription-edit-grid input{width:100%;min-height:42px;box-sizing:border-box;padding:9px 11px;border:1px solid #d9d3ff;border-radius:11px;color:#202b42;background:#fafaff;font:inherit;font-size:13px;outline:none}
-.subscription-edit-grid input:focus{border-color:#6241df;box-shadow:0 0 0 3px rgba(98,65,223,.12)}
+.subscription-edit-grid input,.subscription-edit-grid select{width:100%;min-height:42px;box-sizing:border-box;padding:9px 11px;border:1px solid #d9d3ff;border-radius:11px;color:#202b42;background:#fafaff;font:inherit;font-size:13px;outline:none}
+.subscription-edit-grid input:focus,.subscription-edit-grid select:focus{border-color:#6241df;box-shadow:0 0 0 3px rgba(98,65,223,.12)}
 .subscription-edit-field--wide{grid-column:1/-1}
+.subscription-telegram-cell,.subscription-transfer-cell{white-space:nowrap}
+.subscription-telegram-cell{display:table-cell!important;vertical-align:middle}
+.subscription-telegram-cell .copy-whatsapp-btn{margin-inline-start:6px;vertical-align:middle}
+.subscription-edit-dialog{border:1px solid #d9d3ff;box-shadow:0 24px 70px rgba(30,35,80,.22)}
+.subscription-edit-dialog h2{margin:4px 0 8px;color:#24345a;font-size:22px}
+.subscription-edit-dialog>p{margin:0;color:#71809a;line-height:1.8}
 @media(max-width:620px){.subscription-edit-grid{grid-template-columns:1fr}.subscription-edit-field--wide{grid-column:auto}.subscription-edit-dialog{padding:24px 18px 20px}}

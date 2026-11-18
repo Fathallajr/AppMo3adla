@@ -47,6 +47,7 @@ interface SubscriptionRequestEditDraft {
 	whatsapp: string;
 	telegram: string;
 	supervisor: string;
+	groupType: string;
 	paymentRecipient: string;
 	transferFrom: string;
 	transferAt: string;
@@ -151,10 +152,10 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	subscriptionCampaignModalOpen = false;
 	subscriptionCampaignModalSubmitted = false;
 	subscriptionSearch = ''; subscriptionStatus = ''; subscriptionProgram = ''; subscriptionSupervisor = ''; subscriptionCampaignFilter = '';
-	readonly subscriptionSupervisors = ['مهندسة حبيبة', 'مهندسة هدير', 'مهندسة ندى', 'مهندسة مي', 'مهندسة إيمان', 'مهندسة أشروقت', 'طالب جديد'];
+	readonly subscriptionSupervisors = ['مهندسة حبيبة', 'مهندسة هدير', 'مهندسة ندى', 'مهندسة مي', 'مهندسة إيمان', 'مهندسة أشرقت', 'طالب جديد'];
 	subscriptionPage = 1; subscriptionPages = 1; subscriptionTotal = 0; isLoadingSubscriptionRequests = false; isSavingSubscription = false;
 	private subscriptionSearchTimer?: ReturnType<typeof setTimeout>;
-	subscriptionPendingIssue: SubscriptionRequest | null = null; subscriptionIssueDraft = ''; subscriptionPendingView: SubscriptionRequest | null = null; subscriptionPendingNote: SubscriptionRequest | null = null; subscriptionNoteDraft = ''; isSavingSubscriptionNote = false; private subscriptionNotePreviousOverflow = ''; subscriptionPendingEdit: SubscriptionRequest | null = null; subscriptionEditDraft: SubscriptionRequestEditDraft = { program: '', name: '', whatsapp: '', telegram: '', supervisor: '', paymentRecipient: '', transferFrom: '', transferAt: '', school: '' }; isSavingSubscriptionEdit = false; private subscriptionEditPreviousOverflow = ''; subscriptionIssueMessageSelections: string[] = [];
+	subscriptionPendingIssue: SubscriptionRequest | null = null; subscriptionIssueDraft = ''; subscriptionPendingView: SubscriptionRequest | null = null; subscriptionPendingNote: SubscriptionRequest | null = null; subscriptionPendingDelete: SubscriptionRequest | null = null; subscriptionNoteDraft = ''; isSavingSubscriptionNote = false; private subscriptionNotePreviousOverflow = ''; subscriptionPendingEdit: SubscriptionRequest | null = null; subscriptionEditDraft: SubscriptionRequestEditDraft = { program: '', name: '', whatsapp: '', telegram: '', supervisor: '', groupType: '', paymentRecipient: '', transferFrom: '', transferAt: '', school: '' }; isSavingSubscriptionEdit = false; private subscriptionEditPreviousOverflow = ''; subscriptionIssueMessageSelections: string[] = [];
 	readonly subscriptionIssueMessageOptions = [
 		{ key: 'transfer', label: 'مشكلة رقم التحويل (اللي حول منه)', message: 'الرقم اللي حول منه مش ظاهر عندي في التحويلات\nاستأذنك ترجع للراجل اللي حولت منه عشان بيكون عنده كذا رقم للتحويل' },
 		{ key: 'identity', label: 'مشكلة صورة البطاقة غير واضحة أو خاطئة', message: 'هندسة استأذنك تبعت بطاقتك كاملة والصورة تكون واضحة\nأو لو رافع شهادة الميلاد\nفين بطاقتك؟' },
@@ -233,6 +234,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	copiedLeadWhatsapp = '';
 	copiedSubscriptionCode = '';
 	copiedSubscriptionTransferFrom = '';
+	copiedSubscriptionTelegram = '';
 	leadsPages = 1;
 	leadPageNumbers: PaginationItem[] = [1];
 	leadsTotal = 0;
@@ -1427,6 +1429,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 			whatsapp: item.whatsapp || '',
 			telegram: item.telegram || '',
 			supervisor: item.supervisor || '',
+			groupType: item.groupType || '',
 			paymentRecipient: item.paymentRecipient || '',
 			transferFrom: item.transferFrom || '',
 			transferAt: item.transferAt || '',
@@ -1434,6 +1437,9 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 		};
 		this.errorMessage = '';
 	}
+	openSubscriptionDelete(item: SubscriptionRequest): void { this.closeSubscriptionActionMenu(); this.subscriptionPendingDelete = item; this.subscriptionEditPreviousOverflow = document.body.style.overflow; document.body.style.overflow = 'hidden'; this.refreshView(); }
+	closeSubscriptionDelete(): void { this.subscriptionPendingDelete = null; document.body.style.overflow = this.subscriptionEditPreviousOverflow; this.refreshView(); }
+	deleteSubscriptionRequest(): void { const item = this.subscriptionPendingDelete; if (!item || this.isSavingSubscription) return; this.isSavingSubscription = true; this.adminApi.deleteSubscriptionRequest(item.id).pipe(finalize(() => { this.isSavingSubscription = false; this.refreshView(); })).subscribe({ next: () => { this.closeSubscriptionDelete(); this.loadSubscriptionRequests(true); }, error: err => this.handleApiError(err) }); }
 	closeSubscriptionEdit(): void {
 		if (this.isSavingSubscriptionEdit) return;
 		document.body.style.overflow = this.subscriptionEditPreviousOverflow;
@@ -1487,6 +1493,18 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 			}
 			window.setTimeout(() => { if (this.copiedSubscriptionTransferFrom === normalized) this.copiedSubscriptionTransferFrom = ''; }, 1600);
 		} catch { this.copiedSubscriptionTransferFrom = ''; this.errorMessage = 'تعذر نسخ الرقم، حاول مرة أخرى.'; }
+	}
+	async copySubscriptionTelegram(phone: string): Promise<void> {
+		const normalized = String(phone || '').trim();
+		if (!normalized || normalized === '—') return;
+		this.copiedSubscriptionTelegram = normalized;
+		this.errorMessage = '';
+		this.changeDetector.detectChanges();
+		try {
+			if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(normalized);
+			else { const input = document.createElement('textarea'); input.value = normalized; input.style.position = 'fixed'; input.style.opacity = '0'; document.body.appendChild(input); input.focus(); input.select(); document.execCommand('copy'); input.remove(); }
+			window.setTimeout(() => { if (this.copiedSubscriptionTelegram === normalized) this.copiedSubscriptionTelegram = ''; }, 1600);
+		} catch { this.copiedSubscriptionTelegram = ''; this.errorMessage = 'تعذر نسخ الرقم، حاول مرة أخرى.'; }
 	}
 	approveSubscriptionRequest(item: SubscriptionRequest): void { this.adminApi.updateSubscriptionRequest(item.id, { status: 'approved' }).subscribe({ next: updated => { Object.assign(item, updated); this.statusMessage = 'تم اعتماد الطلب للمراجعة النهائية.'; }, error: err => this.handleApiError(err) }); }
 	openSubscriptionIssue(item: SubscriptionRequest): void { this.subscriptionPendingIssue = item; this.subscriptionIssueDraft = ''; this.subscriptionIssueMessageSelections = []; this.errorMessage = ''; }

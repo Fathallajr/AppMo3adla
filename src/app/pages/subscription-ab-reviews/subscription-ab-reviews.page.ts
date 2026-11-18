@@ -81,6 +81,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 	studentWhatsapp = '';
 	studentTelegram = '';
 	studentSupervisor = '';
+	studentGroupType = '';
 	studentPaymentRecipient = '';
 	studentTransferFrom = '';
 	studentTransferAt = '';
@@ -95,7 +96,9 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 	studentRequestId = '';
 	studentReferenceCode = '';
 	studentRequestMessage = '';
-	readonly subscriptionSupervisors = ['مهندسة حبيبة', 'مهندسة هدير', 'مهندسة ندى', 'مهندسة مي', 'مهندسة إيمان', 'مهندسة أشروقت', 'طالب جديد'];
+	readonly subscriptionSupervisors = ['مهندسة حبيبة', 'مهندسة هدير', 'مهندسة ندى', 'مهندسة مي', 'مهندسة إيمان', 'مهندسة أشرقت', 'طالب جديد'];
+	readonly subscriptionGroupTypes = ['جروب A', 'جروب B'];
+	get availableSubscriptionSupervisors(): string[] { return this.isEnglishSubscription ? ['مهندسة هدير', 'طالب جديد'] : this.subscriptionSupervisors.filter(supervisor => supervisor !== 'مهندسة هدير'); }
 	private readonly http = inject(HttpClient);
 
 	submitDeliveryWhatsApp(): void {
@@ -150,6 +153,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 	get studentWhatsappValidation(): string { return this.validateStudentPhone(this.studentWhatsapp, 'رقم الواتساب'); }
 	get studentTelegramValidation(): string { return this.validateStudentPhone(this.studentTelegram, 'رقم التليجرام'); }
 	get studentSupervisorValidation(): string { return this.studentSupervisor ? '' : 'اختار المهندسة المشرفة.'; }
+	get studentGroupTypeValidation(): string { return this.studentGroupType ? '' : 'اختار نوع الجروب.'; }
 	get studentPaymentRecipientValidation(): string { return this.studentPaymentRecipient ? '' : 'اختار رقم فودافون كاش الذي حوّلت إليه.'; }
 	get studentTransferFromValidation(): string {
 		const phoneValidation = this.validateStudentPhone(this.studentTransferFrom, 'رقم التحويل');
@@ -199,13 +203,13 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 		this.studentFormSubmitted = true;
 		this.studentFormError = '';
 		if (this.studentFormSubmitting || this.isEnrollmentClosed) return;
-		if (this.studentNameValidation || this.studentWhatsappValidation || this.studentTelegramValidation || this.studentSupervisorValidation || this.studentPaymentRecipientValidation || this.studentTransferFromValidation || this.studentTransferAtValidation || this.studentSchoolValidation || this.studentPaymentReceiptValidation || this.studentIdentityCardValidation) {
+		if (this.studentNameValidation || this.studentWhatsappValidation || this.studentTelegramValidation || this.studentSupervisorValidation || this.studentGroupTypeValidation || this.studentPaymentRecipientValidation || this.studentTransferFromValidation || this.studentTransferAtValidation || this.studentSchoolValidation || this.studentPaymentReceiptValidation || this.studentIdentityCardValidation) {
 			this.studentFormError = 'من فضلك أكمل كل البيانات المطلوبة.';
 			return;
 		}
 		const body = new FormData();
 		body.append('name', this.studentName.trim()); body.append('whatsapp', this.studentWhatsapp.trim()); body.append('telegram', this.studentTelegram.trim());
-		body.append('supervisor', this.studentSupervisor); body.append('paymentRecipient', this.studentPaymentRecipient); body.append('transferFrom', this.studentTransferFrom.trim());
+		body.append('supervisor', this.studentSupervisor); body.append('groupType', this.studentGroupType); body.append('paymentRecipient', this.studentPaymentRecipient); body.append('transferFrom', this.studentTransferFrom.trim());
 		body.append('transferAt', this.studentTransferAt); body.append('school', this.studentSchool.trim()); body.append('program', this.subscriptionProgramLabel);
 		if (this.studentPaymentReceipt) body.append('paymentReceipt', this.studentPaymentReceipt);
 		if (this.studentIdentityCard) body.append('identityCard', this.studentIdentityCard);
