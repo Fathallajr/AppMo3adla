@@ -726,6 +726,14 @@
 	box-shadow: 0 16px 34px rgba(185, 28, 28, .12);
 }
 
+/* On mobile, give the closed notice breathing room below the engineering hero.
+   Keep the desktop overlap and computer-science layout unchanged. */
+@media (max-width: 600px) {
+	.review-page:not(.review-page--computers) .review-closed {
+		margin: 18px auto 1.5rem;
+	}
+}
+
 .review-closed strong { color: #b91c1c; font-size: 1.2rem; }
 .review-closed p { margin: .45rem 0; color: #7f1d1d; }
 .review-closed span { color: #991b1b; font-weight: 800; }
