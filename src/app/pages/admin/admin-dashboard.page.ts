@@ -1460,6 +1460,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 		this.adminApi.updateSubscriptionRequest(item.id, payload).pipe(finalize(() => { this.isSavingSubscriptionEdit = false; this.refreshView(); })).subscribe({
 			next: updated => {
 				Object.assign(item, updated);
+				item.groupType = updated.groupType || payload.groupType || '';
 				this.isSavingSubscriptionEdit = false;
 				this.closeSubscriptionEdit();
 				this.statusMessage = 'تم تعديل بيانات الطالب بنجاح.';
@@ -1472,6 +1473,18 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	openSubscriptionNote(item: SubscriptionRequest): void { this.closeSubscriptionActionMenu(); this.subscriptionNotePreviousOverflow = document.body.style.overflow; document.body.style.overflow = 'hidden'; this.subscriptionPendingNote = item; this.subscriptionNoteDraft = item.adminNote || ''; this.errorMessage = ''; }
 	closeSubscriptionNote(): void { if (this.isSavingSubscriptionNote) return; document.body.style.overflow = this.subscriptionNotePreviousOverflow; this.subscriptionNotePreviousOverflow = ''; this.subscriptionPendingNote = null; this.subscriptionNoteDraft = ''; this.refreshView(); }
 	saveSubscriptionNote(): void { const item = this.subscriptionPendingNote; if (!item || this.isSavingSubscriptionNote) return; this.isSavingSubscriptionNote = true; this.adminApi.updateSubscriptionRequest(item.id, { adminNote: this.subscriptionNoteDraft.trim() }).pipe(finalize(() => { this.isSavingSubscriptionNote = false; this.refreshView(); })).subscribe({ next: updated => { Object.assign(item, updated); document.body.style.overflow = this.subscriptionNotePreviousOverflow; this.subscriptionNotePreviousOverflow = ''; this.subscriptionPendingNote = null; this.subscriptionNoteDraft = ''; this.statusMessage = 'تم حفظ المبلغ.'; this.errorMessage = ''; this.loadSubscriptionRequests(true); }, error: err => this.handleApiError(err) }); }
+	formatSubscriptionDateTime(value: string | undefined): string {
+		if (!value) return '—';
+		const date = new Date(value);
+		if (Number.isNaN(date.getTime())) return value;
+		const pad = (part: number) => String(part).padStart(2, '0');
+		const hours = date.getHours();
+		const period = hours >= 12 ? 'PM' : 'AM';
+		const hour12 = hours % 12 || 12;
+		return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(hour12)}:${pad(date.getMinutes())} ${period}`;
+	}
+	formatSubscriptionDatePart(value: string | undefined): string { return this.formatSubscriptionDateTime(value).split(' ')[0]; }
+	formatSubscriptionTimePart(value: string | undefined): string { return this.formatSubscriptionDateTime(value).split(' ').slice(1).join(' '); }
 	async copySubscriptionCode(code: string): Promise<void> {
 		if (!code) return;
 		this.copiedSubscriptionCode = code;
