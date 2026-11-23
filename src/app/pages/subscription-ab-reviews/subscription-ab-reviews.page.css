@@ -1260,6 +1260,7 @@
 
 .review-step--form,
 .review-step--delivery {
+	overflow-anchor: none;
 	min-height: 390px;
 }
 

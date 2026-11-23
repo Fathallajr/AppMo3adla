@@ -79,6 +79,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 	deliveryFormSubmitted = false;
 	studentName = '';
 	studentWhatsapp = '';
+	studentParentWhatsapp = '';
 	studentTelegram = '';
 	studentSupervisor = '';
 	studentGroupType = '';
@@ -119,6 +120,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 			`تليجرام: ${this.studentTelegram.trim()}`,
 			`المشرف: ${this.studentSupervisor}`,
 			`نوع المعادلة: ${this.subscriptionProgramLabel}`,
+			`نوع الجروب: ${this.studentGroupType}`,
 			`حولت على رقم: ${this.studentPaymentRecipient}`,
 			`حولت من رقم: ${this.studentTransferFrom.trim()}`,
 			`وقت التحويل: ${this.formatTransferAtForWhatsApp(this.studentTransferAt)}`,
@@ -154,6 +156,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 	}
 
 	get studentWhatsappValidation(): string { return this.validateStudentPhone(this.studentWhatsapp, 'رقم الواتساب'); }
+	get studentParentWhatsappValidation(): string { return this.validateStudentPhone(this.studentParentWhatsapp, 'رقم ولي الأمر'); }
 	get studentTelegramValidation(): string { return this.validateStudentPhone(this.studentTelegram, 'رقم التليجرام'); }
 	get studentSupervisorValidation(): string { return this.studentSupervisor ? '' : 'اختار المهندسة المشرفة.'; }
 	get studentGroupTypeValidation(): string { return this.studentGroupType ? '' : 'اختار نوع الجروب.'; }
@@ -206,12 +209,12 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 		this.studentFormSubmitted = true;
 		this.studentFormError = '';
 		if (this.studentFormSubmitting || this.isEnrollmentClosed) return;
-		if (this.studentNameValidation || this.studentWhatsappValidation || this.studentTelegramValidation || this.studentSupervisorValidation || this.studentGroupTypeValidation || this.studentPaymentRecipientValidation || this.studentTransferFromValidation || this.studentTransferAtValidation || this.studentSchoolValidation || this.studentPaymentReceiptValidation || this.studentIdentityCardValidation) {
+		if (this.studentNameValidation || this.studentWhatsappValidation || this.studentParentWhatsappValidation || this.studentTelegramValidation || this.studentSupervisorValidation || this.studentGroupTypeValidation || this.studentPaymentRecipientValidation || this.studentTransferFromValidation || this.studentTransferAtValidation || this.studentSchoolValidation || this.studentPaymentReceiptValidation || this.studentIdentityCardValidation) {
 			this.studentFormError = 'من فضلك أكمل كل البيانات المطلوبة.';
 			return;
 		}
 		const body = new FormData();
-		body.append('name', this.studentName.trim()); body.append('whatsapp', this.studentWhatsapp.trim()); body.append('telegram', this.studentTelegram.trim());
+		body.append('name', this.studentName.trim()); body.append('whatsapp', this.studentWhatsapp.trim()); body.append('parentWhatsapp', this.studentParentWhatsapp.trim()); body.append('telegram', this.studentTelegram.trim());
 		body.append('supervisor', this.studentSupervisor); body.append('groupType', this.studentGroupType); body.append('paymentRecipient', this.studentPaymentRecipient); body.append('transferFrom', this.studentTransferFrom.trim());
 		body.append('transferAt', this.studentTransferAt); body.append('school', this.studentSchool.trim()); body.append('program', this.subscriptionProgramLabel);
 		if (this.studentPaymentReceipt) body.append('paymentReceipt', this.studentPaymentReceipt);
@@ -229,7 +232,8 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 				this.studentRequestMessage = result.message;
 				this.deliveryName = this.studentName;
 				this.deliveryRegistered = 'نعم';
-				this.materialsTelegramName = this.studentName;
+					this.materialsTelegramName = this.studentName;
+					this.scrollToRegistrationStepStart();
 			},
 			error: error => {
 				this.studentFormError = error?.error?.message || 'تعذر تسجيل الطلب. حاول مرة أخرى.';
@@ -237,8 +241,32 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 		});
 	}
 
+	private scrollToRegistrationStepStart(): void {
+		if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+		const restore = (): void => {
+			const step = document.querySelector<HTMLElement>('#subscription-registration-step');
+			if (!step) return;
+			const headerOffset = 92;
+			const targetTop = Math.max(0, window.scrollY + step.getBoundingClientRect().top - headerOffset);
+			window.scrollTo(0, targetTop);
+			if (document.scrollingElement) document.scrollingElement.scrollTop = targetTop;
+		};
+
+		this.changeDetector.detectChanges();
+		window.requestAnimationFrame(restore);
+		window.requestAnimationFrame(() => window.requestAnimationFrame(restore));
+		window.setTimeout(restore, 0);
+		window.setTimeout(restore, 80);
+		window.setTimeout(restore, 220);
+	}
+
 	get materialsTelegramUrl(): string {
-		const message = [`الاسم الثلاثي: ${this.materialsTelegramName.trim()}`, `نوع المعادلة: ${this.subscriptionProgramLabel}`].join('\n');
+		const message = [
+			`الاسم الثلاثي: ${this.materialsTelegramName.trim()}`,
+			`نوع المعادلة: ${this.subscriptionProgramLabel}`,
+			`نوع الجروب: ${this.studentGroupType}`
+		].join('\n');
 		return `https://t.me/AssAm268?text=${encodeURIComponent(message)}`;
 	}
 	materialsTelegramName = '';

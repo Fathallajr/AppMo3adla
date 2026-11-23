@@ -83,6 +83,7 @@ interface SubscriptionRequestEditDraft {
 })
 export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	private feedbackRefreshTimer: ReturnType<typeof setInterval> | null = null;
+	private readonly sidebarStateStorageKey = 'admin-sidebar-state-v1';
 	sidebarOpen = false;
 	sidebarCollapsed = false;
 	financeMenuOpen = false;
@@ -157,7 +158,27 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 			const isLanguages = this.subscriptionProgram === 'معادلة هندسة لغات' || this.subscriptionProgram === 'معادلة حاسبات لغات';
 			return isLanguages ? ['مهندسة هدير', 'طالب جديد'] : this.subscriptionSupervisors.filter(name => name !== 'مهندسة هدير');
 		}
+		get subscriptionEditSupervisorOptions(): string[] {
+			const isLanguages = this.subscriptionEditDraft.program === 'معادلة هندسة لغات' || this.subscriptionEditDraft.program === 'معادلة حاسبات لغات';
+			return isLanguages ? ['مهندسة هدير', 'طالب جديد'] : this.subscriptionSupervisors.filter(name => name !== 'مهندسة هدير');
+		}
+		get subscriptionGroupTypeOptions(): string[] {
+			const subscriptionPages = ['subscription-engineering-ar', 'subscription-engineering-en', 'subscription-computers-ar', 'subscription-computers-en'] as CmsPageKey[];
+			const configuredLabels = subscriptionPages.flatMap(pageKey => {
+				const page = cmsPageDefaults[pageKey] as any;
+				return Array.isArray(page?.subscriptionDetails?.pricingGroups)
+					? page.subscriptionDetails.pricingGroups.map((group: any) => String(group?.label || '').trim()).filter(Boolean)
+					: [];
+			});
+			const savedRequestLabels = [
+				...this.subscriptionKnownGroupTypes,
+				...this.subscriptionRequests.map(item => String(item.groupType || '').trim()).filter(Boolean)
+			];
+			const labels = [...configuredLabels, ...savedRequestLabels];
+			return Array.from(new Map(labels.map(label => [label.toLocaleLowerCase('en-US'), label])).values());
+		}
 	subscriptionPage = 1; subscriptionPages = 1; subscriptionTotal = 0; isLoadingSubscriptionRequests = false; isSavingSubscription = false;
+	subscriptionKnownGroupTypes: string[] = [];
 	private subscriptionSearchTimer?: ReturnType<typeof setTimeout>;
 	subscriptionPendingIssue: SubscriptionRequest | null = null; subscriptionIssueDraft = ''; subscriptionPendingView: SubscriptionRequest | null = null; subscriptionPendingNote: SubscriptionRequest | null = null; subscriptionPendingDelete: SubscriptionRequest | null = null; subscriptionNoteDraft = ''; isSavingSubscriptionNote = false; private subscriptionNotePreviousOverflow = ''; subscriptionPendingEdit: SubscriptionRequest | null = null; subscriptionEditDraft: SubscriptionRequestEditDraft = { program: '', name: '', whatsapp: '', telegram: '', supervisor: '', groupType: '', paymentRecipient: '', transferFrom: '', transferAt: '', school: '' }; isSavingSubscriptionEdit = false; private subscriptionEditPreviousOverflow = ''; subscriptionIssueMessageSelections: string[] = [];
 	readonly subscriptionIssueMessageOptions = [
@@ -342,6 +363,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit(): void {
+		this.restoreSidebarState();
 		this.adminUsername = this.auth.getUsername();
 		if (this.auth.isAuthenticated()) {
 			this.auth.loadCurrentUser().subscribe({
@@ -368,6 +390,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy(): void {
+		this.persistSidebarState();
 		if (this.feedbackRefreshTimer) {
 			clearInterval(this.feedbackRefreshTimer);
 			this.feedbackRefreshTimer = null;
@@ -483,10 +506,10 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 		if (view === 'subscription-requests' || view === 'subscription-codes') this.subscriptionMenuOpen = true;
 		if (view !== 'cms' && view !== 'leads' && view !== 'customers' && view !== 'wheel' && view !== 'free-codes' && view !== 'subscription-requests' && view !== 'subscription-codes' && view !== 'feedback' && view !== 'analytics' && view !== 'finance' && view !== 'finance-payroll' && view !== 'finance-studio' && view !== 'finance-application' && this.auth.getRole() !== 'admin') return;
 		if (this.activeView === view) {
-			this.sidebarOpen = false;
+			this.closeSidebar();
 			return;
 		}
-		this.sidebarOpen = false;
+		this.closeSidebar();
 		this.activeView = view;
 		this.statusMessage = '';
 		this.errorMessage = '';
@@ -514,7 +537,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	openEmployeesFromFinance(): void {
 		if (!this.canAccessPage('employees')) return;
 		this.financeMenuOpen = true;
-		this.sidebarOpen = false;
+		this.closeSidebar();
 		this.activeView = 'cms';
 		this.selectedPageKey = 'employees';
 		this.loadPage('employees');
@@ -524,7 +547,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	openEmployeeFromPayroll(employeeId: number): void {
 		if (!this.canAccessPage('employees') || !Number.isInteger(employeeId) || employeeId < 1) return;
 		this.financeMenuOpen = true;
-		this.sidebarOpen = false;
+		this.closeSidebar();
 		this.activeView = 'cms';
 		this.selectedPageKey = 'employees';
 		this.loadPage('employees');
@@ -1145,7 +1168,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	}
 
 	selectPage(pageKey: CmsPageKey): void {
-		this.sidebarOpen = false;
+		this.closeSidebar();
 		if (pageKey.startsWith('subscription-')) this.subscriptionMenuOpen = true;
 		if (pageKey === 'batch-2027' || pageKey === 'launch-offer') this.engagementMenuOpen = true;
 		const currentRoutePageKey = this.route.snapshot.paramMap.get('pageKey');
@@ -1169,7 +1192,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 		const permission = this.auth.getPermissions().find(item => /^employee:\d+$/.test(String(item || '')));
 		if (!permission) return;
 		const employeeId = permission.slice('employee:'.length);
-		this.sidebarOpen = false;
+		this.closeSidebar();
 		this.activeView = 'cms';
 		this.selectedPageKey = 'employees';
 		this.loadPage('employees');
@@ -1179,6 +1202,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 
 	toggleSidebar(): void {
 		this.sidebarOpen = !this.sidebarOpen;
+		this.persistSidebarState();
 	}
 	toggleSidebarControl(): void {
 		if (window.innerWidth <= 1100) {
@@ -1187,7 +1211,26 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 		}
 		this.toggleDesktopSidebar();
 	}
-	toggleDesktopSidebar(): void { this.sidebarCollapsed = !this.sidebarCollapsed; this.refreshView(); }
+	toggleDesktopSidebar(): void { this.sidebarCollapsed = !this.sidebarCollapsed; this.persistSidebarState(); this.refreshView(); }
+	closeSidebar(): void { this.sidebarOpen = false; this.persistSidebarState(); }
+	private restoreSidebarState(): void {
+		if (typeof window === 'undefined') return;
+		try {
+			const saved = JSON.parse(window.localStorage.getItem(this.sidebarStateStorageKey) || 'null');
+			if (typeof saved?.sidebarOpen === 'boolean') this.sidebarOpen = saved.sidebarOpen;
+			if (typeof saved?.sidebarCollapsed === 'boolean') this.sidebarCollapsed = saved.sidebarCollapsed;
+		} catch {
+			// Ignore malformed local state and use the safe closed defaults.
+		}
+	}
+	private persistSidebarState(): void {
+		if (typeof window === 'undefined') return;
+		try {
+			window.localStorage.setItem(this.sidebarStateStorageKey, JSON.stringify({ sidebarOpen: this.sidebarOpen, sidebarCollapsed: this.sidebarCollapsed }));
+		} catch {
+			// Storage can be unavailable in private browsing; the UI still works.
+		}
+	}
 
 	loadPage(pageKey: CmsPageKey): void {
 		const requestId = ++this.pageLoadRequestId;
@@ -1303,13 +1346,13 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 		return this.pageOptions.find(page => page.key === this.selectedPageKey)?.route || '';
 	}
 	get studentTransferMaxForAdmin(): string { const now = new Date(); const pad = (value: number) => String(value).padStart(2, '0'); return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`; }
-	loadSubscriptionRequests(force = false): void { if (this.isLoadingSubscriptionRequests && !force) return; this.isLoadingSubscriptionRequests = true; this.adminApi.listSubscriptionRequests({ page: this.subscriptionPage, limit: 20, search: this.subscriptionSearch, status: this.subscriptionStatus, program: this.subscriptionProgram, supervisor: this.subscriptionSupervisor, campaignId: this.subscriptionCampaignFilter, groupType: this.subscriptionGroupType }).pipe(finalize(() => { this.isLoadingSubscriptionRequests = false; this.refreshView(); })).subscribe({ next: result => { this.subscriptionRequests = result.data; this.subscriptionTotal = result.total; this.subscriptionPages = result.pagination.pages || 1; this.subscriptionCampaigns = result.campaigns || []; this.refreshView(); }, error: err => this.handleApiError(err) }); }
+	loadSubscriptionRequests(force = false): void { if (this.isLoadingSubscriptionRequests && !force) return; this.isLoadingSubscriptionRequests = true; this.adminApi.listSubscriptionRequests({ page: this.subscriptionPage, limit: 20, search: this.subscriptionSearch, status: this.subscriptionStatus, program: this.subscriptionProgram, supervisor: this.subscriptionSupervisor, campaignId: this.subscriptionCampaignFilter, groupType: this.subscriptionGroupType }).pipe(finalize(() => { this.isLoadingSubscriptionRequests = false; this.refreshView(); })).subscribe({ next: result => { const incomingGroupTypes = result.data.map(item => String(item.groupType || '').trim()).filter(Boolean); this.subscriptionKnownGroupTypes = Array.from(new Map([...this.subscriptionKnownGroupTypes, ...incomingGroupTypes].map(value => [value.toLocaleLowerCase('en-US'), value])).values()); this.subscriptionRequests = result.data; this.subscriptionTotal = result.total; this.subscriptionPages = result.pagination.pages || 1; this.subscriptionCampaigns = result.campaigns || []; this.refreshView(); }, error: err => this.handleApiError(err) }); }
 	exportSubscriptionRequests(): void { this.adminApi.exportSubscriptionRequests({ search: this.subscriptionSearch, status: this.subscriptionStatus, program: this.subscriptionProgram, supervisor: this.subscriptionSupervisor, campaignId: this.subscriptionCampaignFilter, groupType: this.subscriptionGroupType }).subscribe({ next: blob => { if (!blob || blob.size === 0) { this.errorMessage = 'لم يتم إنشاء ملف Excel.'; return; } const url = URL.createObjectURL(blob); const anchor = document.createElement('a'); anchor.href = url; anchor.download = `subscription-requests-${this.subscriptionCampaignFilter || 'all'}.xlsx`; anchor.style.display = 'none'; document.body.appendChild(anchor); anchor.click(); anchor.remove(); window.setTimeout(() => URL.revokeObjectURL(url), 1000); this.statusMessage = 'تم تصدير كل الطلبات والصور داخل ملف Excel.'; this.errorMessage = ''; }, error: err => this.handleApiError(err) }); }
 	searchSubscriptionRequests(): void { this.subscriptionPage = 1; this.loadSubscriptionRequests(true); }
 	scheduleSubscriptionSearch(): void { if (this.subscriptionSearchTimer) clearTimeout(this.subscriptionSearchTimer); this.subscriptionSearchTimer = setTimeout(() => { this.subscriptionSearchTimer = undefined; this.searchSubscriptionRequests(); }, 250); }
 	resetSubscriptionFilters(): void { if (this.subscriptionSearchTimer) clearTimeout(this.subscriptionSearchTimer); this.subscriptionSearchTimer = undefined; this.subscriptionSearch = ''; this.subscriptionStatus = ''; this.subscriptionProgram = ''; this.subscriptionSupervisor = ''; this.subscriptionCampaignFilter = ''; this.subscriptionGroupType = ''; this.searchSubscriptionRequests(); }
 	onSubscriptionProgramChange(): void { if (this.subscriptionSupervisor && !this.subscriptionSupervisorOptions.includes(this.subscriptionSupervisor)) this.subscriptionSupervisor = ''; this.searchSubscriptionRequests(); }
-	setSubscriptionView(view: 'subscription-requests' | 'subscription-codes'): void { this.closeActionMenus(); this.activeView = view; this.sidebarOpen = false; void this.router.navigate(['/admin'], { queryParams: { view }, replaceUrl: true }); if (view === 'subscription-requests') this.loadSubscriptionRequests(); else this.loadSubscriptionCampaigns(); }
+	setSubscriptionView(view: 'subscription-requests' | 'subscription-codes'): void { this.closeActionMenus(); this.activeView = view; this.closeSidebar(); void this.router.navigate(['/admin'], { queryParams: { view }, replaceUrl: true }); if (view === 'subscription-requests') this.loadSubscriptionRequests(); else this.loadSubscriptionCampaigns(); }
 	loadSubscriptionCampaigns(): void { this.subscriptionCampaignDetailId = this.route.snapshot.queryParamMap.get('campaignId') || ''; this.adminApi.listSubscriptionCampaigns().subscribe({ next: result => { this.subscriptionCampaigns = result.data; this.subscriptionCampaignPage = Math.min(this.subscriptionCampaignPage, this.subscriptionCampaignPages); this.subscriptionCampaign = (this.subscriptionCampaignDetailId ? result.data.find(item => item.id === this.subscriptionCampaignDetailId) : null) || result.data.find(item => item.enabled && item.status === 'active') || result.data[0] || null; if (this.subscriptionCampaign) this.loadSubscriptionInventory(this.subscriptionCampaign.id); this.refreshView(); }, error: err => this.handleApiError(err) }); }
 	get pagedSubscriptionCampaigns(): SubscriptionCampaign[] { const start = (this.subscriptionCampaignPage - 1) * this.subscriptionCampaignPageSize; return this.subscriptionCampaigns.slice(start, start + this.subscriptionCampaignPageSize); }
 	get subscriptionCampaignPages(): number { return Math.max(1, Math.ceil(this.subscriptionCampaigns.length / this.subscriptionCampaignPageSize)); }
@@ -1441,6 +1484,9 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 			school: item.school || ''
 		};
 		this.errorMessage = '';
+	}
+	onSubscriptionEditProgramChange(): void {
+		if (!this.subscriptionEditSupervisorOptions.includes(this.subscriptionEditDraft.supervisor)) this.subscriptionEditDraft.supervisor = '';
 	}
 	openSubscriptionDelete(item: SubscriptionRequest): void { this.closeSubscriptionActionMenu(); this.subscriptionPendingDelete = item; this.subscriptionEditPreviousOverflow = document.body.style.overflow; document.body.style.overflow = 'hidden'; this.refreshView(); }
 	closeSubscriptionDelete(): void { this.subscriptionPendingDelete = null; document.body.style.overflow = this.subscriptionEditPreviousOverflow; this.refreshView(); }
