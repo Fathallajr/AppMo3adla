@@ -177,10 +177,22 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 			const labels = [...configuredLabels, ...savedRequestLabels];
 			return Array.from(new Map(labels.map(label => [label.toLocaleLowerCase('en-US'), label])).values());
 		}
-	subscriptionPage = 1; subscriptionPages = 1; subscriptionTotal = 0; isLoadingSubscriptionRequests = false; isSavingSubscription = false;
+		get subscriptionPaymentRecipientOptions(): string[] {
+			const subscriptionPages = ['subscription-engineering-ar', 'subscription-engineering-en', 'subscription-computers-ar', 'subscription-computers-en'] as CmsPageKey[];
+			const configuredNumbers = subscriptionPages.flatMap(pageKey => {
+				const page = cmsPageDefaults[pageKey] as any;
+				return Array.isArray(page?.subscriptionDetails?.vodafoneNumbers)
+					? page.subscriptionDetails.vodafoneNumbers.map((wallet: any) => String(wallet?.number || '').trim()).filter(Boolean)
+					: [];
+			});
+			const savedNumbers = this.subscriptionRequests.map(item => String(item.paymentRecipient || '').trim()).filter(Boolean);
+			return Array.from(new Map([...configuredNumbers, ...savedNumbers].map(value => [value, value])).values());
+		}
+	subscriptionPage = 1; subscriptionPages = 1; subscriptionPageNumbers: PaginationItem[] = [1]; subscriptionTotal = 0; isLoadingSubscriptionRequests = false; isSavingSubscription = false;
 	subscriptionKnownGroupTypes: string[] = [];
 	private subscriptionSearchTimer?: ReturnType<typeof setTimeout>;
 	subscriptionPendingIssue: SubscriptionRequest | null = null; subscriptionIssueDraft = ''; subscriptionPendingView: SubscriptionRequest | null = null; subscriptionPendingNote: SubscriptionRequest | null = null; subscriptionPendingDelete: SubscriptionRequest | null = null; subscriptionNoteDraft = ''; isSavingSubscriptionNote = false; private subscriptionNotePreviousOverflow = ''; subscriptionPendingEdit: SubscriptionRequest | null = null; subscriptionEditDraft: SubscriptionRequestEditDraft = { program: '', name: '', whatsapp: '', telegram: '', supervisor: '', groupType: '', paymentRecipient: '', transferFrom: '', transferAt: '', school: '' }; isSavingSubscriptionEdit = false; private subscriptionEditPreviousOverflow = ''; subscriptionIssueMessageSelections: string[] = [];
+	subscriptionEditValidationError = '';
 	readonly subscriptionIssueMessageOptions = [
 		{ key: 'transfer', label: 'مشكلة رقم التحويل (اللي حول منه)', message: 'الرقم اللي حول منه مش ظاهر عندي في التحويلات\nاستأذنك ترجع للراجل اللي حولت منه عشان بيكون عنده كذا رقم للتحويل' },
 		{ key: 'identity', label: 'مشكلة صورة البطاقة غير واضحة أو خاطئة', message: 'هندسة استأذنك تبعت بطاقتك كاملة والصورة تكون واضحة\nأو لو رافع شهادة الميلاد\nفين بطاقتك؟' },
@@ -260,6 +272,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	copiedSubscriptionCode = '';
 	copiedSubscriptionTransferFrom = '';
 	copiedSubscriptionTelegram = '';
+	copiedSubscriptionParentWhatsapp = '';
 	leadsPages = 1;
 	leadPageNumbers: PaginationItem[] = [1];
 	leadsTotal = 0;
@@ -480,7 +493,11 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 		this.isSavingSiteMode = true;
 		this.adminApi.setSiteMaintenance(nextValue).pipe(finalize(() => { this.isSavingSiteMode = false; this.refreshView(); })).subscribe({
 			next: value => { this.siteMaintenance = value.maintenance; this.statusMessage = value.maintenance ? 'تم قفل الموقع أمام الزوار.' : 'تم فتح الموقع أمام الزوار.'; },
-			error: err => this.handleApiError(err)
+			error: err => {
+				this.subscriptionEditValidationError = err?.error?.message || 'تعذر حفظ التعديلات.';
+				this.errorMessage = '';
+				this.refreshView();
+			}
 		});
 	}
 
@@ -1346,9 +1363,10 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 		return this.pageOptions.find(page => page.key === this.selectedPageKey)?.route || '';
 	}
 	get studentTransferMaxForAdmin(): string { const now = new Date(); const pad = (value: number) => String(value).padStart(2, '0'); return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`; }
-	loadSubscriptionRequests(force = false): void { if (this.isLoadingSubscriptionRequests && !force) return; this.isLoadingSubscriptionRequests = true; this.adminApi.listSubscriptionRequests({ page: this.subscriptionPage, limit: 20, search: this.subscriptionSearch, status: this.subscriptionStatus, program: this.subscriptionProgram, supervisor: this.subscriptionSupervisor, campaignId: this.subscriptionCampaignFilter, groupType: this.subscriptionGroupType }).pipe(finalize(() => { this.isLoadingSubscriptionRequests = false; this.refreshView(); })).subscribe({ next: result => { const incomingGroupTypes = result.data.map(item => String(item.groupType || '').trim()).filter(Boolean); this.subscriptionKnownGroupTypes = Array.from(new Map([...this.subscriptionKnownGroupTypes, ...incomingGroupTypes].map(value => [value.toLocaleLowerCase('en-US'), value])).values()); this.subscriptionRequests = result.data; this.subscriptionTotal = result.total; this.subscriptionPages = result.pagination.pages || 1; this.subscriptionCampaigns = result.campaigns || []; this.refreshView(); }, error: err => this.handleApiError(err) }); }
+	loadSubscriptionRequests(force = false): void { if (this.isLoadingSubscriptionRequests && !force) return; this.isLoadingSubscriptionRequests = true; this.adminApi.listSubscriptionRequests({ page: this.subscriptionPage, limit: 20, search: this.subscriptionSearch, status: this.subscriptionStatus, program: this.subscriptionProgram, supervisor: this.subscriptionSupervisor, campaignId: this.subscriptionCampaignFilter, groupType: this.subscriptionGroupType }).pipe(finalize(() => { this.isLoadingSubscriptionRequests = false; this.refreshView(); })).subscribe({ next: result => { const incomingGroupTypes = result.data.map(item => String(item.groupType || '').trim()).filter(Boolean); this.subscriptionKnownGroupTypes = Array.from(new Map([...this.subscriptionKnownGroupTypes, ...incomingGroupTypes].map(value => [value.toLocaleLowerCase('en-US'), value])).values()); this.subscriptionRequests = result.data; this.subscriptionTotal = result.total; this.subscriptionPages = result.pagination.pages || 1; this.subscriptionPageNumbers = this.buildPaginationItems(this.subscriptionPage, this.subscriptionPages); this.subscriptionCampaigns = result.campaigns || []; this.refreshView(); }, error: err => this.handleApiError(err) }); }
 	exportSubscriptionRequests(): void { this.adminApi.exportSubscriptionRequests({ search: this.subscriptionSearch, status: this.subscriptionStatus, program: this.subscriptionProgram, supervisor: this.subscriptionSupervisor, campaignId: this.subscriptionCampaignFilter, groupType: this.subscriptionGroupType }).subscribe({ next: blob => { if (!blob || blob.size === 0) { this.errorMessage = 'لم يتم إنشاء ملف Excel.'; return; } const url = URL.createObjectURL(blob); const anchor = document.createElement('a'); anchor.href = url; anchor.download = `subscription-requests-${this.subscriptionCampaignFilter || 'all'}.xlsx`; anchor.style.display = 'none'; document.body.appendChild(anchor); anchor.click(); anchor.remove(); window.setTimeout(() => URL.revokeObjectURL(url), 1000); this.statusMessage = 'تم تصدير كل الطلبات والصور داخل ملف Excel.'; this.errorMessage = ''; }, error: err => this.handleApiError(err) }); }
 	searchSubscriptionRequests(): void { this.subscriptionPage = 1; this.loadSubscriptionRequests(true); }
+	goToSubscriptionPage(page: number | string): void { if (typeof page !== 'number') return; const nextPage = Math.min(Math.max(Math.trunc(page) || 1, 1), this.subscriptionPages); if (nextPage === this.subscriptionPage && this.subscriptionRequests.length) return; this.subscriptionPage = nextPage; this.loadSubscriptionRequests(true); }
 	scheduleSubscriptionSearch(): void { if (this.subscriptionSearchTimer) clearTimeout(this.subscriptionSearchTimer); this.subscriptionSearchTimer = setTimeout(() => { this.subscriptionSearchTimer = undefined; this.searchSubscriptionRequests(); }, 250); }
 	resetSubscriptionFilters(): void { if (this.subscriptionSearchTimer) clearTimeout(this.subscriptionSearchTimer); this.subscriptionSearchTimer = undefined; this.subscriptionSearch = ''; this.subscriptionStatus = ''; this.subscriptionProgram = ''; this.subscriptionSupervisor = ''; this.subscriptionCampaignFilter = ''; this.subscriptionGroupType = ''; this.searchSubscriptionRequests(); }
 	onSubscriptionProgramChange(): void { if (this.subscriptionSupervisor && !this.subscriptionSupervisorOptions.includes(this.subscriptionSupervisor)) this.subscriptionSupervisor = ''; this.searchSubscriptionRequests(); }
@@ -1484,6 +1502,12 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 			school: item.school || ''
 		};
 		this.errorMessage = '';
+		this.subscriptionEditValidationError = '';
+	}
+	subscriptionEditPhoneError(value: string, label: string): string {
+		const normalized = String(value || '').trim();
+		if (!normalized) return `${label} مطلوب.`;
+		return /^01\d{9}$/.test(normalized) ? '' : `${label} يجب أن يكون رقمًا مصريًا صحيحًا من 11 رقمًا يبدأ بـ 01.`;
 	}
 	onSubscriptionEditProgramChange(): void {
 		if (!this.subscriptionEditSupervisorOptions.includes(this.subscriptionEditDraft.supervisor)) this.subscriptionEditDraft.supervisor = '';
@@ -1496,11 +1520,18 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 		document.body.style.overflow = this.subscriptionEditPreviousOverflow;
 		this.subscriptionEditPreviousOverflow = '';
 		this.subscriptionPendingEdit = null;
+		this.subscriptionEditValidationError = '';
 		this.refreshView();
 	}
 	saveSubscriptionEdit(): void {
 		const item = this.subscriptionPendingEdit;
 		if (!item || this.isSavingSubscriptionEdit) return;
+		const phoneError = this.subscriptionEditPhoneError(this.subscriptionEditDraft.whatsapp, 'رقم واتساب')
+			|| this.subscriptionEditPhoneError(this.subscriptionEditDraft.telegram, 'رقم تليجرام')
+			|| this.subscriptionEditPhoneError(this.subscriptionEditDraft.paymentRecipient, 'رقم التحويل إليه')
+			|| this.subscriptionEditPhoneError(this.subscriptionEditDraft.transferFrom, 'رقم التحويل منه');
+		if (phoneError) { this.subscriptionEditValidationError = phoneError; return; }
+		this.subscriptionEditValidationError = '';
 		const payload = Object.fromEntries(Object.entries(this.subscriptionEditDraft).map(([key, value]) => [key, String(value ?? '').trim()])) as Partial<SubscriptionRequest>;
 		this.isSavingSubscriptionEdit = true;
 		this.adminApi.updateSubscriptionRequest(item.id, payload).pipe(finalize(() => { this.isSavingSubscriptionEdit = false; this.refreshView(); })).subscribe({
@@ -1513,7 +1544,11 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 				this.errorMessage = '';
 				this.loadSubscriptionRequests(true);
 			},
-			error: err => this.handleApiError(err)
+			error: err => {
+				this.subscriptionEditValidationError = err?.error?.message || 'تعذر حفظ التعديلات.';
+				this.errorMessage = '';
+				this.refreshView();
+			}
 		});
 	}
 	openSubscriptionNote(item: SubscriptionRequest): void { this.closeSubscriptionActionMenu(); this.subscriptionNotePreviousOverflow = document.body.style.overflow; document.body.style.overflow = 'hidden'; this.subscriptionPendingNote = item; this.subscriptionNoteDraft = item.adminNote || ''; this.errorMessage = ''; }
@@ -1569,6 +1604,18 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 			else { const input = document.createElement('textarea'); input.value = normalized; input.style.position = 'fixed'; input.style.opacity = '0'; document.body.appendChild(input); input.focus(); input.select(); document.execCommand('copy'); input.remove(); }
 			window.setTimeout(() => { if (this.copiedSubscriptionTelegram === normalized) this.copiedSubscriptionTelegram = ''; }, 1600);
 		} catch { this.copiedSubscriptionTelegram = ''; this.errorMessage = 'تعذر نسخ الرقم، حاول مرة أخرى.'; }
+	}
+	async copySubscriptionParentWhatsapp(phone: string): Promise<void> {
+		const normalized = String(phone || '').trim();
+		if (!normalized || normalized === '—') return;
+		this.copiedSubscriptionParentWhatsapp = normalized;
+		this.errorMessage = '';
+		this.changeDetector.detectChanges();
+		try {
+			if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(normalized);
+			else { const input = document.createElement('textarea'); input.value = normalized; input.style.position = 'fixed'; input.style.opacity = '0'; document.body.appendChild(input); input.focus(); input.select(); document.execCommand('copy'); input.remove(); }
+			window.setTimeout(() => { if (this.copiedSubscriptionParentWhatsapp === normalized) this.copiedSubscriptionParentWhatsapp = ''; }, 1600);
+		} catch { this.copiedSubscriptionParentWhatsapp = ''; this.errorMessage = 'تعذر نسخ رقم ولي الأمر، حاول مرة أخرى.'; }
 	}
 	approveSubscriptionRequest(item: SubscriptionRequest): void { this.adminApi.updateSubscriptionRequest(item.id, { status: 'approved' }).subscribe({ next: updated => { Object.assign(item, updated); this.statusMessage = 'تم اعتماد الطلب للمراجعة النهائية.'; }, error: err => this.handleApiError(err) }); }
 	openSubscriptionIssue(item: SubscriptionRequest): void { this.subscriptionPendingIssue = item; this.subscriptionIssueDraft = ''; this.subscriptionIssueMessageSelections = []; this.errorMessage = ''; }
