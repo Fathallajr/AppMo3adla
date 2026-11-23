@@ -77,9 +77,11 @@
 					<b>01</b>
 					<div><h2>سعر الاشتراك</h2><p>اشتراك واحد يشمل كل المحتوى</p></div>
 				</header>
-				<div class="review-plan">
-					<div><span>{{ getReviewName() }}</span><small>اشتراك كامل</small></div>
-					<strong>{{ getPrice() }} <small>ج</small></strong>
+				<div class="review-plan-list" aria-label="اشتراكات الجروبات">
+					<button type="button" class="review-plan" *ngFor="let group of subscriptionPricingGroups" [class.is-selected]="studentGroupType === group.label" (click)="studentGroupType = group.label">
+						<div><span>{{ group.name }}</span><small>اشتراك كامل</small></div>
+						<strong>{{ group.price }} <small>ج</small></strong>
+					</button>
 				</div>
 			</article>
 
@@ -137,6 +139,7 @@
 								<label><span>رقم الواتساب <b>*</b></span><input #studentWhatsappModel="ngModel" name="studentWhatsapp" [(ngModel)]="studentWhatsapp" inputmode="numeric" maxlength="11" dir="ltr" placeholder="01xxxxxxxxx"><small class="subscription-field-error" *ngIf="(studentFormSubmitted || studentWhatsappModel.touched) && studentWhatsappValidation">{{ studentWhatsappValidation }}</small></label>
 								<label><span>رقم التليجرام <b>*</b></span><input #studentTelegramModel="ngModel" name="studentTelegram" [(ngModel)]="studentTelegram" inputmode="numeric" maxlength="11" dir="ltr" placeholder="01xxxxxxxxx"><small class="subscription-field-error" *ngIf="(studentFormSubmitted || studentTelegramModel.touched) && studentTelegramValidation">{{ studentTelegramValidation }}</small></label>
 								<label><span>اختار المساعد <b>*</b></span><select #studentSupervisorModel="ngModel" name="studentSupervisor" [(ngModel)]="studentSupervisor"><option value="" disabled>اختار المساعد</option><option *ngFor="let supervisor of availableSubscriptionSupervisors" [value]="supervisor">{{ supervisor }}</option></select><small class="subscription-field-error" *ngIf="(studentFormSubmitted || studentSupervisorModel.touched) && studentSupervisorValidation">{{ studentSupervisorValidation }}</small></label>
+								<label class="subscription-static-field"><span>نوع المعادلة</span><output>{{ subscriptionProgramLabel }}</output></label>
 								<label><span>نوع الجروب <b>*</b></span><select #studentGroupTypeModel="ngModel" name="studentGroupType" [(ngModel)]="studentGroupType"><option value="" disabled>اختار نوع الجروب</option><option *ngFor="let groupType of subscriptionGroupTypes" [value]="groupType">{{ groupType }}</option></select><small class="subscription-field-error" *ngIf="(studentFormSubmitted || studentGroupTypeModel.touched) && studentGroupTypeValidation">{{ studentGroupTypeValidation }}</small></label>
 								<label><span>الرقم اللي حولت عليه <b>*</b></span><select #studentPaymentRecipientModel="ngModel" name="studentPaymentRecipient" [(ngModel)]="studentPaymentRecipient"><option value="" disabled>اختار رقم فودافون كاش</option><option *ngFor="let wallet of subscriptionDetails.vodafoneNumbers" [value]="wallet.number">{{ wallet.number }} — {{ wallet.owner }}</option></select><small class="subscription-field-error" *ngIf="(studentFormSubmitted || studentPaymentRecipientModel.touched) && studentPaymentRecipientValidation">{{ studentPaymentRecipientValidation }}</small></label>
 								<label><span>الرقم اللي حولت منه <b>*</b></span><input #studentTransferFromModel="ngModel" name="studentTransferFrom" [(ngModel)]="studentTransferFrom" inputmode="numeric" maxlength="11" dir="ltr" placeholder="01xxxxxxxxx"><small class="subscription-field-error" *ngIf="(studentFormSubmitted || studentTransferFromModel.touched) && studentTransferFromValidation">{{ studentTransferFromValidation }}</small></label>

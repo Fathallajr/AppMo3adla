@@ -35,6 +35,22 @@
 				<input class="cms-input" [(ngModel)]="data.subscriptionDetails.groupC.price" placeholder="800" dir="ltr" />
 			</div>
 		</div>
+		<div class="cms-subsection">
+			<div class="cms-section-title">أسعار الجروبات</div>
+			<p class="cms-help">أضف أي عدد من الجروبات، ولكل جروب اسم وسعر مستقل.</p>
+			<div class="cms-array-list">
+				<div class="cms-array-item cms-pricing-group-item" *ngFor="let group of data.subscriptionDetails.pricingGroups; let i = index">
+					<div class="cms-array-item__num cms-pricing-group-item__title">جروب {{ i + 1 }}</div>
+					<div class="cms-row cms-pricing-group-fields">
+						<div class="cms-field"><label class="cms-label">اسم الجروب في الاختيار</label><input class="cms-input" [(ngModel)]="group.label" placeholder="جروب C" /></div>
+						<div class="cms-field"><label class="cms-label">النص الظاهر داخل الكارت</label><input class="cms-input" [(ngModel)]="group.name" placeholder="اكتب النص كما سيظهر للطالب" /></div>
+						<div class="cms-field"><label class="cms-label">السعر</label><input class="cms-input" [(ngModel)]="group.price" placeholder="800" dir="ltr" /></div>
+					</div>
+					<div class="cms-pricing-group-actions"><label class="cms-switch"><input type="checkbox" [(ngModel)]="group.isActive" /><span class="cms-slider"></span></label><button type="button" class="cms-remove-button" (click)="removePricingGroup(i)">حذف</button></div>
+				</div>
+			</div>
+			<button type="button" class="cms-button cms-button--secondary" (click)="addPricingGroup()">+ إضافة جروب</button>
+		</div>
 		<div class="cms-field" style="margin-bottom:0">
 			<label class="cms-label">رقم واتساب للدعم</label>
 			<input class="cms-input" [(ngModel)]="data.subscriptionDetails.whatsappNumber" placeholder="201080681865" dir="ltr" />

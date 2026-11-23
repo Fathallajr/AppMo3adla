@@ -2146,6 +2146,29 @@ async function migrateSubscriptionContentOnce() {
 	console.log('Applied one-time subscription content migration.');
 }
 
+async function migrateSubscriptionPricingGroupsOnce() {
+	const migrationKey = 'subscription-pricing-groups-v1';
+	if (await database.getMetadata(migrationKey)) return;
+
+	const store = await readStore();
+	for (const pageKey of SUBSCRIPTION_PAGE_KEYS) {
+		const entry = store.pages[pageKey];
+		if (!entry?.data?.subscriptionDetails) continue;
+		const data = JSON.parse(JSON.stringify(entry.data));
+		const details = data.subscriptionDetails;
+		if (!Array.isArray(details.pricingGroups) || !details.pricingGroups.length) {
+			const legacyPrice = String(details.review?.price || details.groupA?.price || details.groupB?.price || (pageKey.includes('computers') ? '600' : '800'));
+				details.pricingGroups = [
+					{ key: 'groupA', label: 'جروب A', name: `${details.review?.name || 'اشتراك'} — جروب A`, price: legacyPrice, isActive: true },
+					{ key: 'groupB', label: 'جروب B', name: `${details.review?.name || 'اشتراك'} — جروب B`, price: legacyPrice, isActive: true }
+			];
+		}
+		await database.savePage(pageKey, data, getNowIso());
+	}
+	await database.setMetadata(migrationKey, getNowIso());
+	console.log('Applied subscription pricing groups migration.');
+}
+
 async function migrateLaunchOfferOnce() {
 	const migrationKey = 'launch-offer-cms-v1';
 	if (await database.getMetadata(migrationKey)) return;
@@ -2512,6 +2535,7 @@ app.use((error, req, res, next) => {
 (async () => {
 	try {
 		await migrateSubscriptionContentOnce();
+		await migrateSubscriptionPricingGroupsOnce();
 		await migrateLaunchOfferOnce();
 		await migrateBatch2027JoinCopyOnce();
 		await migrateFeedbackPageOnce();

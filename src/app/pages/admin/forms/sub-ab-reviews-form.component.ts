@@ -33,6 +33,17 @@ export class SubAbReviewsFormComponent implements OnChanges {
 		sd.requiredInfo ??= [];
 		sd.videoUrl ??= '';
 		sd.review ??= { name: 'مراجعات A-B', price: '800' };
+		sd.pricingGroups ??= [
+			{ key: 'groupA', label: 'جروب A', name: 'اشتراك جروب A', price: String(sd.review.price || '800'), isActive: true },
+			{ key: 'groupB', label: 'جروب B', name: 'اشتراك جروب B', price: String(sd.review.price || '800'), isActive: true }
+		];
+		for (const group of sd.pricingGroups) {
+			group.key ||= `group-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+			group.label ??= '';
+			group.name ??= '';
+			group.price ??= '';
+			group.isActive = group.isActive !== false;
+		}
 		sd.googleForm ??= {};
 		if (!sd.googleForm.link && sd.googleForms) {
 			sd.googleForm = { ...sd.googleForm, ...(sd.googleForms.groupA ?? sd.googleForms.groupB ?? {}) };
@@ -116,6 +127,11 @@ export class SubAbReviewsFormComponent implements OnChanges {
 
 	addRequired(): void { this.data.subscriptionDetails.requiredInfo.push(''); }
 	removeRequired(i: number): void { this.data.subscriptionDetails.requiredInfo.splice(i, 1); }
+	addPricingGroup(): void {
+		const index = this.data.subscriptionDetails.pricingGroups.length + 1;
+		this.data.subscriptionDetails.pricingGroups.push({ key: `group-${Date.now()}`, label: '', name: '', price: '', isActive: true });
+	}
+	removePricingGroup(i: number): void { this.data.subscriptionDetails.pricingGroups.splice(i, 1); }
 
 	uploadScheduleImage(index: number, event: Event): void {
 		const input = event.target as HTMLInputElement;

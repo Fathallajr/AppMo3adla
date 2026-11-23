@@ -97,7 +97,10 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 	studentReferenceCode = '';
 	studentRequestMessage = '';
 	readonly subscriptionSupervisors = ['مهندسة حبيبة', 'مهندسة هدير', 'مهندسة ندى', 'مهندسة مي', 'مهندسة إيمان', 'مهندسة أشرقت', 'طالب جديد'];
-	readonly subscriptionGroupTypes = ['جروب A', 'جروب B'];
+	get subscriptionPricingGroups(): Array<{ key: string; label: string; name: string; price: string; isActive?: boolean }> {
+		return (this.subscriptionDetails?.pricingGroups || []).filter((group: any) => group?.isActive !== false && String(group.label || '').trim());
+	}
+	get subscriptionGroupTypes(): string[] { return this.subscriptionPricingGroups.map(group => group.label); }
 	get availableSubscriptionSupervisors(): string[] { return this.isEnglishSubscription ? ['مهندسة هدير', 'طالب جديد'] : this.subscriptionSupervisors.filter(supervisor => supervisor !== 'مهندسة هدير'); }
 	private readonly http = inject(HttpClient);
 
@@ -322,12 +325,13 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 				// first CMS refresh instead of waiting for a later interaction.
 				videoUrl: String(loaded.videoUrl || '').trim() || this.subscriptionDetails.videoUrl,
 				whatsappNumber: '201080681865',
-				review: {
+					review: {
 					...this.subscriptionDetails.review,
 					...(loaded.review ?? {}),
 					name: loaded.review?.name ?? this.subscriptionDetails.review.name,
-					price: loaded.review?.price ?? loaded.groupB?.price ?? loaded.groupA?.price ?? this.subscriptionDetails.review.price
+					price: loaded.review?.price ?? this.subscriptionDetails.review.price
 				},
+				pricingGroups: Array.isArray(loaded.pricingGroups) ? loaded.pricingGroups.map((group: any) => ({ ...group, name: String(group.name ?? '') })) : this.subscriptionDetails.pricingGroups,
 				googleForm: {
 					...this.subscriptionDetails.googleForm,
 					...(legacyForm ?? {})
@@ -378,6 +382,10 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 	subscriptionDetails = {
 		month: 'الشهر الأول — أكتوبر',
 		videoUrl: '',
+		pricingGroups: [
+			{ key: 'groupA', label: 'جروب A', name: 'اشتراك جروب A', price: '800', isActive: true },
+			{ key: 'groupB', label: 'جروب B', name: 'اشتراك جروب B', price: '800', isActive: true }
+		],
 		review: {
 			name: 'اشتراك الشهر الأول',
 			price: '800'
@@ -708,7 +716,8 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 	}
 
 	getPrice(): string {
-		return this.subscriptionDetails.review.price;
+		const selected = this.subscriptionPricingGroups.find(group => group.label === this.studentGroupType);
+		return selected?.price || '—';
 	}
 
 	getReviewName(): string {

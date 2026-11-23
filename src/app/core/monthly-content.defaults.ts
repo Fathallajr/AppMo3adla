@@ -7,6 +7,9 @@ export const monthlyContentDefaults = {
 		subscriptionDetails: {
 			month: ' شهر مايو 2026',
 			videoUrl: '',
+			pricingGroups: [
+				{ key: 'groupC', label: 'جروب C', name: 'اشتراك جروب C', price: '800', isActive: true }
+			],
 			groupC: {
 				name: 'جروب C',
 				price: '800',
@@ -85,6 +88,10 @@ export const monthlyContentDefaults = {
 		subscriptionDetails: {
 			month: 'الشهر الأول — أكتوبر',
 				videoUrl: '',
+			pricingGroups: [
+				{ key: 'groupA', label: 'جروب A', name: 'اشتراك جروب A', price: '800', isActive: true },
+				{ key: 'groupB', label: 'جروب B', name: 'اشتراك جروب B', price: '800', isActive: true }
+			],
 			review: {
 				name: 'اشتراك الشهر الأول',
 				price: '800'

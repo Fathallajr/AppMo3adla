@@ -32,7 +32,15 @@ export const subscriptionFormStyles = `
 .cms-array-list { gap:.75rem; }
 .cms-array-item { padding:1rem; border-color:#e5e9f2; border-radius:14px; box-shadow:0 4px 14px rgba(36,47,85,.035); }
 .cms-array-item__num { color:#6d4aff; }
+.cms-pricing-group-item { display:grid; grid-template-columns:1fr; gap:.8rem; padding:1rem 1.1rem 1.05rem; border:1px solid #ddd8ff; border-radius:16px; background:linear-gradient(145deg,#fff,#faf9ff); box-shadow:0 7px 18px rgba(85,64,201,.06); }
+.cms-pricing-group-item__title { display:flex; align-items:center; justify-content:space-between; margin:0; padding-bottom:.65rem; border-bottom:1px solid #eeebff; font-size:.8rem; }
+.cms-pricing-group-fields { grid-template-columns:1.1fr 1.6fr .75fr; gap:.7rem; align-items:end; }
+.cms-pricing-group-fields .cms-field { margin-bottom:0; }
+.cms-pricing-group-actions { display:flex; align-items:center; justify-content:space-between; gap:.75rem; padding-top:.15rem; }
+.cms-pricing-group-actions .cms-switch { order:2; }
+.cms-remove-button { border:0; border-radius:9px; padding:.45rem .8rem; color:#b4233f; background:#fff0f3; cursor:pointer; font:inherit; font-size:.8rem; font-weight:900; transition:background .2s,transform .2s; }
+.cms-remove-button:hover { background:#ffe1e8; transform:translateY(-1px); }
 .cms-add-btn { margin-top:.75rem; background:#f4f1ff; }
 .cms-image-field { padding:.7rem; border:1px dashed #d4cef9; border-radius:12px; background:#faf9ff; }
-@media(max-width:700px){.cms-section{padding:1rem;border-radius:16px}.cms-section--collapsible{padding:0}.cms-section--collapsible > .cms-section-title{padding:1rem}.cms-section--collapsible > :not(summary){margin-inline:1rem}.cms-section--collapsible > :last-child{margin-bottom:1rem}.cms-row,.cms-row-3{grid-template-columns:1fr}.cms-subsection{padding:.8rem}}
+@media(max-width:700px){.cms-section{padding:1rem;border-radius:16px}.cms-section--collapsible{padding:0}.cms-section--collapsible > .cms-section-title{padding:1rem}.cms-section--collapsible > :not(summary){margin-inline:1rem}.cms-section--collapsible > :last-child{margin-bottom:1rem}.cms-row,.cms-row-3,.cms-pricing-group-fields{grid-template-columns:1fr}.cms-subsection{padding:.8rem}}
 `;

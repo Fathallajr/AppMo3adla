@@ -30,6 +30,14 @@ export class SubDetailsFormComponent implements OnChanges {
 		sd.videoUrl ??= '';
 		sd.offers ??= [];
 		sd.groupC ??= { name: 'جروب C', price: '800' };
+		sd.pricingGroups ??= [{ key: 'groupC', label: sd.groupC.name || 'جروب C', name: 'اشتراك جروب C', price: String(sd.groupC.price || '800'), isActive: true }];
+		for (const group of sd.pricingGroups) {
+			group.key ||= `group-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+			group.label ??= '';
+			group.name ??= '';
+			group.price ??= '';
+			group.isActive = group.isActive !== false;
+		}
 		sd.googleForms ??= { groupC: {} };
 		sd.googleForms.groupC ??= {};
 		this.data = raw;
@@ -46,6 +54,11 @@ export class SubDetailsFormComponent implements OnChanges {
 
 	addRequired(): void { this.data.subscriptionDetails.requiredInfo.push(''); }
 	removeRequired(i: number): void { this.data.subscriptionDetails.requiredInfo.splice(i, 1); }
+	addPricingGroup(): void {
+		const index = this.data.subscriptionDetails.pricingGroups.length + 1;
+		this.data.subscriptionDetails.pricingGroups.push({ key: `group-${Date.now()}`, label: '', name: '', price: '', isActive: true });
+	}
+	removePricingGroup(i: number): void { this.data.subscriptionDetails.pricingGroups.splice(i, 1); }
 
 	uploadScheduleImage(index: number, event: Event): void {
 		const file = (event.target as HTMLInputElement).files?.[0];
