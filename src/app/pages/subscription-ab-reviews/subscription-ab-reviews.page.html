@@ -199,16 +199,23 @@
 			<div class="subscription-schedule" *ngIf="isScheduleReady && getSelectedSchedules().length">
 				<header class="review-section-head">
 					<div class="review-section-icon"><i class="bi bi-calendar3"></i></div>
-					<div><h2>{{ getScheduleHeading() }}</h2></div>
+					<div><h2>{{ getScheduleHeading(getActiveSchedule(), activeScheduleIndex) }}</h2><p *ngIf="getSelectedSchedules().length > 1">حرّك بين جداول الجروبات</p></div>
 				</header>
-				<div class="subscription-schedule__grid">
-					<article *ngFor="let schedule of getSelectedSchedules()">
-						<button type="button" class="subscription-schedule__preview" (click)="openImageModal($event, schedule)" [attr.aria-label]="'فتح ' + schedule.alt">
-							<img [src]="schedule.src" [alt]="schedule.alt || 'صورة جدول الاشتراك'" loading="eager" fetchpriority="high" decoding="async">
-							<span><i class="bi bi-arrows-fullscreen"></i> اضغط للتكبير</span>
-						</button>
-						<button type="button" class="subscription-schedule__download" (click)="downloadSchedule($event, schedule)"><i class="bi bi-download"></i> تحميل الجدول</button>
-					</article>
+				<div class="subscription-schedule__carousel" *ngIf="getActiveSchedule() as schedule">
+					<button *ngIf="getSelectedSchedules().length > 1" type="button" class="subscription-schedule__nav" (click)="previousSchedule()" aria-label="الجدول السابق"><i class="bi bi-chevron-right"></i></button>
+					<div class="subscription-schedule__grid">
+						<article>
+							<button type="button" class="subscription-schedule__preview" (click)="openImageModal($event, schedule)" [attr.aria-label]="'فتح ' + schedule.alt">
+								<img [src]="schedule.src" [alt]="schedule.alt || 'صورة جدول الاشتراك'" loading="eager" fetchpriority="high" decoding="async">
+								<span><i class="bi bi-arrows-fullscreen"></i> اضغط للتكبير</span>
+							</button>
+							<button type="button" class="subscription-schedule__download" (click)="downloadSchedule($event, schedule)"><i class="bi bi-download"></i> تحميل الجدول</button>
+						</article>
+					</div>
+					<button *ngIf="getSelectedSchedules().length > 1" type="button" class="subscription-schedule__nav" (click)="nextSchedule()" aria-label="الجدول التالي"><i class="bi bi-chevron-left"></i></button>
+				</div>
+				<div class="subscription-schedule__dots" *ngIf="getSelectedSchedules().length > 1" aria-label="اختيار جدول">
+					<button *ngFor="let item of getSelectedSchedules(); let i = index" type="button" [class.is-active]="i === activeScheduleIndex" (click)="selectSchedule(i)" [attr.aria-label]="'عرض ' + getScheduleHeading(item, i)" [attr.aria-current]="i === activeScheduleIndex ? 'true' : null"></button>
 				</div>
 			</div>
 		</section>

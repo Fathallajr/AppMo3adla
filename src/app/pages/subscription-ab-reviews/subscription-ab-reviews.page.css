@@ -2243,6 +2243,7 @@
 /* Rebuilt subscription schedule: one CMS image, one preview, one download action. */
 .subscription-schedule {
 	min-width: 0;
+	overflow: hidden;
 	margin-top: 1.2rem;
 	padding: clamp(1rem, 2.5vw, 1.5rem);
 	border: 1px solid var(--line);
@@ -2267,6 +2268,60 @@
 	display: grid;
 	place-items: center;
 	width: 100%;
+}
+
+.subscription-schedule__carousel {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr) auto;
+	align-items: center;
+	gap: .65rem;
+	min-width: 0;
+	min-height: 0;
+	width: 100%;
+	overflow: hidden;
+}
+
+.subscription-schedule__nav {
+	display: inline-grid;
+	place-items: center;
+	width: 42px;
+	height: 42px;
+	border: 1px solid rgba(91, 67, 201, .2);
+	border-radius: 50%;
+	color: var(--purple, #5b43c9);
+	background: #fff;
+	font-size: 1.05rem;
+	cursor: pointer;
+	transition: transform .2s ease, background .2s ease, color .2s ease;
+}
+
+.subscription-schedule__nav:hover {
+	color: #fff;
+	background: var(--purple, #5b43c9);
+	transform: translateY(-2px);
+}
+
+.subscription-schedule__dots {
+	display: flex;
+	justify-content: center;
+	gap: .45rem;
+	margin-top: .8rem;
+}
+
+.subscription-schedule__dots button {
+	width: 9px;
+	height: 9px;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background: #cbd5e1;
+	cursor: pointer;
+	transition: transform .2s ease, background .2s ease;
+}
+
+.subscription-schedule__dots button.is-active {
+	background: var(--orange);
+	transform: scale(1.35);
 }
 
 .subscription-schedule__grid article {
@@ -4005,10 +4060,17 @@
 		min-height: 0;
 	}
 
+	.review-media-roadmap > .subscription-schedule .subscription-schedule__carousel {
+		flex: 1;
+		min-height: 0;
+	}
+
 	.review-media-roadmap > .subscription-schedule .subscription-schedule__grid {
 		flex: 1;
 		min-height: 0;
+		height: 100%;
 		place-items: stretch;
+		overflow: hidden;
 	}
 
 	.review-media-roadmap > .subscription-schedule .subscription-schedule__grid > article {
@@ -4016,6 +4078,7 @@
 		height: 100%;
 		min-height: 0;
 		padding: .85rem;
+		overflow: hidden;
 	}
 
 	.review-media-roadmap > .subscription-schedule .subscription-schedule__preview {
@@ -4027,7 +4090,9 @@
 	}
 
 	.review-media-roadmap > .subscription-schedule .subscription-schedule__preview img {
+		display: block;
 		width: 100%;
+		max-width: 100%;
 		max-height: 100%;
 		height: auto;
 		object-fit: contain;
@@ -4041,6 +4106,27 @@
 @media (max-width: 900px) {
 	.review-media-roadmap {
 		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 520px) {
+	.subscription-schedule__carousel {
+		grid-template-columns: 1fr;
+	}
+
+	.subscription-schedule__nav {
+		position: absolute;
+		z-index: 2;
+		width: 36px;
+		height: 36px;
+	}
+
+	.subscription-schedule__nav:first-child {
+		inset-inline-start: 1.15rem;
+	}
+
+	.subscription-schedule__nav:last-child {
+		inset-inline-end: 1.15rem;
 	}
 }
 

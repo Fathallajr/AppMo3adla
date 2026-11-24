@@ -46,6 +46,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 	copiedNumber: string | null = null;
 	isImageModalOpen = false;
 	activeScheduleImage: ScheduleImage | null = null;
+	activeScheduleIndex = 0;
 	isScheduleReady = false;
 	isEnrollmentClosed = false;
 	isCountdownEnabled = false;
@@ -763,9 +764,32 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 		}));
 	}
 
-	getScheduleHeading(): string {
-		return this.getSelectedSchedules()[0]?.group
-			|| `جدول شهر أكتوبر ${this.isComputersSubscription ? 'حاسبات' : 'هندسة'} ${this.isEnglishSubscription ? 'لغات' : 'عربي'}`;
+	getScheduleHeading(schedule?: ScheduleImage | null, index = 0): string {
+		if (schedule?.group) return schedule.group;
+		const fallback = `جدول شهر أكتوبر ${this.isComputersSubscription ? 'حاسبات' : 'هندسة'} ${this.isEnglishSubscription ? 'لغات' : 'عربي'}`;
+		return index > 0 ? `${fallback} ${index + 1}` : fallback;
+	}
+
+	getActiveSchedule(): ScheduleImage | null {
+		const schedules = this.getSelectedSchedules();
+		if (!schedules.length) return null;
+		const index = Math.min(Math.max(this.activeScheduleIndex, 0), schedules.length - 1);
+		return schedules[index];
+	}
+
+	selectSchedule(index: number): void {
+		const count = this.getSelectedSchedules().length;
+		if (count) this.activeScheduleIndex = Math.min(Math.max(index, 0), count - 1);
+	}
+
+	previousSchedule(): void {
+		const count = this.getSelectedSchedules().length;
+		if (count > 1) this.activeScheduleIndex = (this.activeScheduleIndex - 1 + count) % count;
+	}
+
+	nextSchedule(): void {
+		const count = this.getSelectedSchedules().length;
+		if (count > 1) this.activeScheduleIndex = (this.activeScheduleIndex + 1) % count;
 	}
 
 	async downloadSchedule(event: MouseEvent, schedule: ScheduleImage): Promise<void> {
