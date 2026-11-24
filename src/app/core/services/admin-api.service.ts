@@ -168,6 +168,7 @@ export class AdminApiService {
 	deleteSubscriptionCampaign(id: string): Observable<{ success: boolean }> { return this.http.delete<{ success: boolean }>(`${this.base}/admin/subscription-campaigns/${encodeURIComponent(id)}`); }
 	uploadSubscriptionCodes(campaignId: string, files: Record<string, File>, expectedCounts: Record<string, number> = {}): Observable<any> { const form = new FormData(); Object.entries(files).forEach(([key, file]) => form.append(key, file)); form.append('expectedCounts', JSON.stringify(expectedCounts)); return this.http.post<any>(`${this.base}/admin/subscription-campaigns/${encodeURIComponent(campaignId)}/codes`, form); }
 	getSubscriptionInventory(campaignId: string): Observable<any> { return this.http.get<any>(`${this.base}/admin/subscription-campaigns/${encodeURIComponent(campaignId)}/inventory`); }
+	exportSubscriptionInventory(campaignId: string): Observable<Blob> { return this.http.get(`${this.base}/admin/subscription-campaigns/${encodeURIComponent(campaignId)}/inventory/export`, { responseType: 'blob' }); }
 	subscriptionDocumentUrl(id: string, kind: string): string { return `${this.base}/admin/subscription-requests/${encodeURIComponent(id)}/documents/${encodeURIComponent(kind)}`; }
 	getSubscriptionDocument(id: string, kind: string): Observable<Blob> { return this.http.get(this.subscriptionDocumentUrl(id, kind), { responseType: 'blob' }); }
 }

@@ -140,10 +140,11 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	subscriptionCampaignDetailId = '';
 	subscriptionCampaignUpdatingId = '';
 	subscriptionInventoryStats: Array<{ program: string; total: number; available: number; used: number }> = [];
-	subscriptionInventory: Array<{ id: string; program: string; code: string; status: string; requestId?: string; referenceCode?: string; studentName?: string; studentWhatsapp?: string; studentTelegram?: string; usedAt?: string; createdAt?: string }> = [];
+	subscriptionInventory: Array<{ id: string; program: string; code: string; status: string; requestId?: string; referenceCode?: string; studentName?: string; studentWhatsapp?: string; parentWhatsapp?: string; studentTelegram?: string; supervisor?: string; groupType?: string; paymentRecipient?: string; transferFrom?: string; transferAt?: string; school?: string; requestCreatedAt?: string; requestUpdatedAt?: string; usedAt?: string; createdAt?: string }> = [];
 	subscriptionInventorySearch = '';
 	subscriptionInventoryStatus = '';
 	subscriptionInventoryProgram = '';
+	subscriptionInventoryGroupType = '';
 	subscriptionInventoryPage = 1;
 	subscriptionInventoryPageSize = 10;
 	subscriptionFiles: Record<string, File> = {};
@@ -1383,16 +1384,19 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 			const matchesSearch = !search || [item.code, item.referenceCode, item.studentName, item.studentWhatsapp, item.studentTelegram].some(value => String(value || '').toLowerCase().includes(search));
 			const matchesStatus = !this.subscriptionInventoryStatus || item.status === this.subscriptionInventoryStatus;
 			const matchesProgram = !this.subscriptionInventoryProgram || item.program === this.subscriptionInventoryProgram;
-			return matchesSearch && matchesStatus && matchesProgram;
+			const matchesGroupType = !this.subscriptionInventoryGroupType || item.groupType === this.subscriptionInventoryGroupType;
+			return matchesSearch && matchesStatus && matchesProgram && matchesGroupType;
 		});
 	}
 	get subscriptionInventoryPrograms(): string[] { return Array.from(new Set(this.subscriptionInventory.map(item => item.program).filter(Boolean))); }
+	get subscriptionInventoryGroupTypes(): string[] { return Array.from(new Set(this.subscriptionInventory.map(item => item.groupType).filter(Boolean))) as string[]; }
 	get subscriptionInventoryPages(): number { return Math.max(1, Math.ceil(this.filteredSubscriptionInventory.length / this.subscriptionInventoryPageSize)); }
 	get subscriptionInventoryPageNumbers(): PaginationItem[] { return this.buildPaginationItems(this.subscriptionInventoryPage, this.subscriptionInventoryPages); }
 	get pagedSubscriptionInventory() { const start = (this.subscriptionInventoryPage - 1) * this.subscriptionInventoryPageSize; return this.filteredSubscriptionInventory.slice(start, start + this.subscriptionInventoryPageSize); }
 	resetSubscriptionInventoryPage(): void { this.subscriptionInventoryPage = 1; }
 	setSubscriptionInventoryPage(page: number): void { this.subscriptionInventoryPage = Math.min(Math.max(page, 1), this.subscriptionInventoryPages); }
-	resetSubscriptionInventoryFilters(): void { this.subscriptionInventorySearch = ''; this.subscriptionInventoryStatus = ''; this.subscriptionInventoryProgram = ''; this.subscriptionInventoryPage = 1; }
+	resetSubscriptionInventoryFilters(): void { this.subscriptionInventorySearch = ''; this.subscriptionInventoryStatus = ''; this.subscriptionInventoryProgram = ''; this.subscriptionInventoryGroupType = ''; this.subscriptionInventoryPage = 1; }
+	exportSubscriptionInventory(): void { if (!this.subscriptionCampaignDetailId) return; this.adminApi.exportSubscriptionInventory(this.subscriptionCampaignDetailId).subscribe({ next: blob => { if (!blob || blob.size === 0) { this.errorMessage = 'لم يتم إنشاء ملف Excel.'; return; } const url = URL.createObjectURL(blob); const anchor = document.createElement('a'); anchor.href = url; anchor.download = `subscription-campaign-${this.subscriptionCampaignDetailId}-inventory.xlsx`; anchor.style.display = 'none'; document.body.appendChild(anchor); anchor.click(); anchor.remove(); window.setTimeout(() => URL.revokeObjectURL(url), 1000); this.statusMessage = 'تم تصدير كل بيانات أكواد الحملة.'; this.errorMessage = ''; }, error: err => this.handleApiError(err) }); }
 	openSubscriptionCampaignModal(): void { this.errorMessage = ''; this.statusMessage = ''; this.subscriptionCampaignModalSubmitted = false; this.subscriptionCampaignModalOpen = true; }
 	closeSubscriptionCampaignModal(): void { if (!this.isSavingSubscription) this.subscriptionCampaignModalOpen = false; }
 	normalizeSubscriptionProgram(value: unknown): string { return String(value ?? '').trim().toLowerCase().replace(/[\s\-_]+/g, '').replace(/إنجليزي/g, 'لغات').replace(/انجليزي/g, 'لغات'); }
