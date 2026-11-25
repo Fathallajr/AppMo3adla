@@ -8,7 +8,7 @@ import { CanonicalService } from '../../core/canonical.service';
 import { MonthlyContentService } from '../../core/services/monthly-content.service';
 import { displayProgramLabel } from '../../core/program-labels';
 import { CmsPageKey, cmsPageDefaults } from '../../core/cms-page.registry';
-import { Subscription, finalize } from 'rxjs';
+import { Subscription, finalize, retry, timer } from 'rxjs';
 
 interface ScheduleImage {
 	group: string;
@@ -231,6 +231,16 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 		if (this.studentIdentityCard) body.append('identityCard', this.studentIdentityCard);
 		this.studentFormSubmitting = true;
 		this.http.post<{ success: boolean; requestId: string; request?: { referenceCode?: string }; message: string }>('/api/subscription-requests', body).pipe(
+			retry({
+				count: 1,
+				delay: (error: any) => {
+					// Retry only transient infrastructure failures for pages kept open
+					// for a long time; validation and duplicate responses are untouched.
+					const status = Number(error?.status || 0);
+					if (![0, 500, 502, 503, 504].includes(status)) throw error;
+					return timer(800);
+				}
+			}),
 			finalize(() => {
 				this.studentFormSubmitting = false;
 				this.changeDetector.detectChanges();
@@ -246,7 +256,8 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 					this.scrollToRegistrationStepStart();
 			},
 			error: error => {
-				this.studentFormError = error?.error?.message || 'تعذر تسجيل الطلب. حاول مرة أخرى.';
+				const serverMessage = typeof error?.error === 'string' ? error.error : error?.error?.message;
+				this.studentFormError = serverMessage || 'تعذر تسجيل الطلب. حاول مرة أخرى.';
 			}
 		});
 	}
