@@ -306,6 +306,22 @@ function getNowIso() {
 	return new Date().toISOString();
 }
 
+// The browser sends datetime-local values without a timezone. Interpret those
+// values as Cairo local time before comparing them with the UTC server clock.
+function parseEgyptLocalDateTime(value) {
+	const match = String(value || '').match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?$/);
+	if (!match) return null;
+	const [, year, month, day, hour, minute, second = '00'] = match;
+	const naiveUtc = Date.UTC(Number(year), Number(month) - 1, Number(day), Number(hour), Number(minute), Number(second));
+	const naiveDate = new Date(naiveUtc);
+	if (naiveDate.getUTCFullYear() !== Number(year) || naiveDate.getUTCMonth() !== Number(month) - 1 || naiveDate.getUTCDate() !== Number(day) || naiveDate.getUTCHours() !== Number(hour) || naiveDate.getUTCMinutes() !== Number(minute) || naiveDate.getUTCSeconds() !== Number(second)) return null;
+	const parts = new Intl.DateTimeFormat('en-US', { timeZone: 'Africa/Cairo', timeZoneName: 'longOffset' }).formatToParts(naiveDate);
+	const offsetText = parts.find(part => part.type === 'timeZoneName')?.value || 'GMT';
+	const offsetMatch = offsetText.match(/^GMT([+-])(\d{1,2})(?::?(\d{2}))?$/);
+	const offsetMinutes = offsetMatch ? (Number(offsetMatch[2]) * 60 + Number(offsetMatch[3] || 0)) * (offsetMatch[1] === '+' ? 1 : -1) : 0;
+	return naiveUtc - offsetMinutes * 60 * 1000;
+}
+
 const DEFAULT_FREE_CODE_SETTINGS = { enabled: true, endsAt: '', limit: 0 };
 
 async function getFreeCodeSettings() {
@@ -1044,8 +1060,9 @@ app.post('/api/subscription-requests', rateLimit({ name: 'subscription-requests'
 	if (!allowedSupervisors.includes(values.supervisor)) return res.status(400).json({ message: 'اختار المشرف المناسب لنوع الاشتراك.' });
 	if (!values.groupType || values.groupType.length > 120) return res.status(400).json({ message: 'اختار نوع الجروب.' });
 	if (!values.paymentRecipient || values.paymentRecipient.length > 30) return res.status(400).json({ message: 'اختار رقم التحويل.' });
-	if (!values.transferAt || Number.isNaN(Date.parse(values.transferAt))) return res.status(400).json({ message: 'وقت وتاريخ التحويل غير صحيح.' });
-	if (Date.parse(values.transferAt) > Date.now()) return res.status(400).json({ message: 'وقت التحويل لا يمكن أن يكون في المستقبل.' });
+	const transferAtMs = parseEgyptLocalDateTime(values.transferAt);
+	if (transferAtMs === null) return res.status(400).json({ message: 'وقت وتاريخ التحويل غير صحيح.' });
+	if (transferAtMs > Date.now()) return res.status(400).json({ message: 'وقت التحويل لا يمكن أن يكون في المستقبل.' });
 	if (values.school.length < 2 || values.school.length > 160) return res.status(400).json({ message: 'اكتب اسم المدرسة بشكل صحيح.' });
 	const files = req.files || {};
 	const receipt = files.paymentReceipt?.[0]; const identity = files.identityCard?.[0];
