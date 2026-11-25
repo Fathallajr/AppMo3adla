@@ -1,37 +1,18 @@
-<div class="admin-login-page page-enter-animation">
-	<div class="admin-login-card">
-		<div class="admin-login-badge">Admin</div>
-		<h1 class="admin-login-title">لوحة التحكم</h1>
-
-		<form (ngSubmit)="submit()" class="admin-login-form">
-			<label class="admin-login-label" for="username">اسم المستخدم</label>
-			<input
-				id="username"
-				name="username"
-				type="text"
-				[(ngModel)]="username"
-				class="admin-login-input"
-				placeholder="اسم المستخدم"
-				autocomplete="username">
-
-			<label class="admin-login-label" for="password">كلمة المرور</label>
-			<div class="admin-password-field">
-			<input
-				id="password"
-				name="password"
-				type="{{ showPassword ? 'text' : 'password' }}"
-				[(ngModel)]="password"
-				class="admin-login-input"
-				placeholder="اكتب كلمة المرور"
-				autocomplete="current-password">
-			<button type="button" class="password-toggle" (click)="showPassword = !showPassword" [attr.aria-label]="showPassword ? 'إخفاء كلمة المرور' : 'إظهار كلمة المرور'">{{ showPassword ? 'إخفاء' : 'إظهار' }}</button>
-			</div>
-
-			<div *ngIf="errorMessage" class="admin-login-error">{{ errorMessage }}</div>
-
-			<button type="submit" class="admin-login-button" [disabled]="isSubmitting">
-				{{ isSubmitting ? 'جاري الدخول...' : 'دخول' }}
-			</button>
-		</form>
-	</div>
-</div>
+<main class="admin-login-page page-enter-animation" dir="rtl">
+	<div class="admin-login-orb admin-login-orb--one" aria-hidden="true"></div><div class="admin-login-orb admin-login-orb--two" aria-hidden="true"></div>
+	<section class="admin-login-shell" aria-labelledby="admin-login-title">
+		<aside class="admin-login-visual">
+			<div class="admin-visual-copy"><h2>أبلكيشن<br><em>معادلة هندسة</em></h2><p>كل أدواتك ومحتواك وبياناتك في لوحة تحكم واحدة مصممة لتسهّل يومك.</p></div>
+		</aside>
+		<div class="admin-login-panel">
+			<div class="admin-login-heading"><span class="admin-login-kicker">مرحبًا بعودتك</span><h1 id="admin-login-title">لوحة التحكم</h1><p>سجّل دخولك للوصول إلى مساحة الإدارة الخاصة بك.</p></div>
+			<form (ngSubmit)="submit()" class="admin-login-form">
+				<label class="admin-login-field" for="username"><span>اسم المستخدم</span><div class="admin-input-wrap"><i class="bi bi-person" aria-hidden="true"></i><input id="username" name="username" type="text" [(ngModel)]="username" class="admin-login-input" placeholder="اكتب اسم المستخدم" autocomplete="username"></div></label>
+				<label class="admin-login-field" for="password"><span>كلمة المرور</span><div class="admin-input-wrap admin-password-field"><i class="bi bi-key" aria-hidden="true"></i><input id="password" name="password" [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" class="admin-login-input" placeholder="اكتب كلمة المرور" autocomplete="current-password"><button type="button" class="password-toggle" (click)="showPassword = !showPassword" [attr.aria-label]="showPassword ? 'إخفاء كلمة المرور' : 'إظهار كلمة المرور'" [attr.aria-pressed]="showPassword"><i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i><span>{{ showPassword ? 'إخفاء' : 'إظهار' }}</span></button></div></label>
+				<div *ngIf="errorMessage" class="admin-login-error" role="alert"><i class="bi bi-exclamation-circle-fill"></i><span>{{ errorMessage }}</span></div>
+				<button type="submit" class="admin-login-button" [disabled]="isSubmitting"><span>{{ isSubmitting ? 'جاري التحقق...' : 'دخول إلى لوحة التحكم' }}</span><i [class]="isSubmitting ? 'bi bi-arrow-repeat admin-login-spinner' : 'bi bi-arrow-left'" aria-hidden="true"></i></button>
+			</form>
+			<p class="admin-login-help"><i class="bi bi-info-circle"></i> الدخول مخصص لفريق الإدارة فقط</p>
+		</div>
+	</section>
+</main>
