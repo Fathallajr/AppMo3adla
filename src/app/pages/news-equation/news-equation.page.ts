@@ -258,7 +258,9 @@ export class NewsEquationPageComponent implements OnInit {
 			...item,
 			excerpt: item?.excerpt || item?.description || '',
 			content: item?.content || item?.description || item?.excerpt || '',
-			date: item?.date || new Date().toISOString(),
+			// Keep the stored publication date. Falling back to "today" makes old
+			// CMS items appear as if they were published on every visit.
+			date: item?.date || item?.publishedAt || item?.createdAt || '',
 			slug,
 			category: item?.category || 'أخبار المعادلة',
 			important: item?.important === true
@@ -284,7 +286,9 @@ export class NewsEquationPageComponent implements OnInit {
 	}
 
 	formatDate(dateString: string): string {
+		if (!dateString) return '—';
 		const date = new Date(dateString);
+		if (Number.isNaN(date.getTime())) return '—';
 		return date.toLocaleDateString('ar-EG', {
 			year: 'numeric',
 			month: 'long',

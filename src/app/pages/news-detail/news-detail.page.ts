@@ -1182,7 +1182,7 @@ export class NewsDetailPageComponent implements OnInit {
 						: (dynamic.image ? [dynamic.image] : []),
 					content: dynamic.content || dynamic.description || dynamic.excerpt || '',
 					category: dynamic.category || 'أخبار المعادلة',
-					date: dynamic.date || new Date().toISOString(),
+					date: dynamic.date || dynamic.publishedAt || dynamic.createdAt || '',
 					author: dynamic.author || 'فريق المعادلة'
 				};
 				this.updatePageTitle();
@@ -1245,7 +1245,9 @@ export class NewsDetailPageComponent implements OnInit {
 	}
 
 	formatDate(dateString: string): string {
+		if (!dateString) return '—';
 		const date = new Date(dateString);
+		if (Number.isNaN(date.getTime())) return '—';
 		return date.toLocaleDateString('ar-EG', {
 			year: 'numeric',
 			month: 'long',

@@ -7,6 +7,7 @@ import { MonthlyContentService } from '../../../core/services/monthly-content.se
 export interface NewsItem {
 	title: string;
 	description: string;
+	date?: string;
 	image: string;
 	link: string;
 	descriptionColor?: string;
@@ -92,6 +93,10 @@ interface NewsContent {
 					<div class="cms-field">
 						<label class="cms-label">العنوان</label>
 						<input class="cms-input" [(ngModel)]="item.title" (ngModelChange)="onTitleChange(item, i)" placeholder="عنوان الخبر" />
+					</div>
+					<div class="cms-field">
+						<label class="cms-label">تاريخ النشر</label>
+						<input class="cms-input" type="date" [(ngModel)]="item.date" />
 					</div>
 					<div class="cms-field">
 						<label class="cms-label">الوصف</label>
@@ -252,9 +257,15 @@ export class NewsFormComponent implements OnChanges {
 	}
 
 	add(): void {
-		this.data?.items.unshift({ title: '', description: '', image: '', link: '', descriptionColor: '#374151', descriptionFontSize: '14px', descriptionAlign: 'right', descriptionBold: false, descriptionItalic: false, blocks: [] });
+		this.data?.items.unshift({ title: '', description: '', date: this.todayDate(), image: '', link: '', descriptionColor: '#374151', descriptionFontSize: '14px', descriptionAlign: 'right', descriptionBold: false, descriptionItalic: false, blocks: [] });
 		if (this.data) this.data.items[0].link = this.generateNewsLink('', 0);
 		this.editingIndex = 0;
+	}
+
+	private todayDate(): string {
+		const now = new Date();
+		const pad = (value: number) => String(value).padStart(2, '0');
+		return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
 	}
 
 	requestRemove(i: number): void {
