@@ -157,11 +157,11 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	readonly subscriptionSupervisors = ['مهندسة حبيبة', 'مهندسة هدير', 'مهندسة ندى', 'مهندسة مي', 'مهندسة إيمان', 'مهندسة أشرقت', 'طالب جديد'];
 		get subscriptionSupervisorOptions(): string[] {
 			const isLanguages = this.subscriptionProgram === 'معادلة هندسة لغات' || this.subscriptionProgram === 'معادلة حاسبات لغات';
-			return isLanguages ? ['مهندسة هدير', 'طالب جديد'] : this.subscriptionSupervisors.filter(name => name !== 'مهندسة هدير');
+			return isLanguages ? ['مهندسة هدير', 'طالب جديد'] : this.subscriptionSupervisors;
 		}
 		get subscriptionEditSupervisorOptions(): string[] {
 			const isLanguages = this.subscriptionEditDraft.program === 'معادلة هندسة لغات' || this.subscriptionEditDraft.program === 'معادلة حاسبات لغات';
-			return isLanguages ? ['مهندسة هدير', 'طالب جديد'] : this.subscriptionSupervisors.filter(name => name !== 'مهندسة هدير');
+			return isLanguages ? ['مهندسة هدير', 'طالب جديد'] : this.subscriptionSupervisors;
 		}
 		get subscriptionGroupTypeOptions(): string[] {
 			const subscriptionPages = ['subscription-engineering-ar', 'subscription-engineering-en', 'subscription-computers-ar', 'subscription-computers-en'] as CmsPageKey[];

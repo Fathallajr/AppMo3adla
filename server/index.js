@@ -1040,7 +1040,7 @@ app.post('/api/subscription-requests', rateLimit({ name: 'subscription-requests'
 	if (nameParts.length < 3) return res.status(400).json({ message: 'الاسم يجب أن يكون ثلاثيًا.' });
 	if (![values.whatsapp, values.parentWhatsapp, values.telegram, values.transferFrom].every(phone => /^01\d{9}$/.test(phone))) return res.status(400).json({ message: 'أرقام الهاتف يجب أن تبدأ بـ 01 وتتكون من 11 رقمًا.' });
 	if (!SUBSCRIPTION_PROGRAMS.includes(program)) return res.status(400).json({ message: 'نوع المعادلة غير صحيح.' });
-	const allowedSupervisors = program.includes('لغات') ? ['مهندسة هدير', 'طالب جديد'] : SUBSCRIPTION_SUPERVISORS.filter(supervisor => supervisor !== 'مهندسة هدير');
+	const allowedSupervisors = program.includes('لغات') ? ['مهندسة هدير', 'طالب جديد'] : SUBSCRIPTION_SUPERVISORS;
 	if (!allowedSupervisors.includes(values.supervisor)) return res.status(400).json({ message: 'اختار المشرف المناسب لنوع الاشتراك.' });
 	if (!values.groupType || values.groupType.length > 120) return res.status(400).json({ message: 'اختار نوع الجروب.' });
 	if (!values.paymentRecipient || values.paymentRecipient.length > 30) return res.status(400).json({ message: 'اختار رقم التحويل.' });

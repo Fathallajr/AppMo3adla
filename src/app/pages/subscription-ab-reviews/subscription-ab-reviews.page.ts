@@ -26,6 +26,15 @@ interface ReviewFormConfig {
 	allowOpenWhenClosed?: boolean;
 }
 
+const SUBSCRIPTION_FEATURES = [
+	'محاضرات تأسيسية من الصفر',
+	'محتوى السبورة (PDF)',
+	'حل الواجبات بالتفصيل',
+	'اختبارات إلكترونية تقييمية أسبوعياً',
+	'متابعة مستمرة طوال الشهر',
+	'سيستم متابعة'
+] as const;
+
 @Component({
 	selector: 'app-subscription-ab-reviews',
 	standalone: true,
@@ -34,7 +43,6 @@ interface ReviewFormConfig {
 	styleUrls: ['./subscription-ab-reviews.page.css']
 })
 export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit, OnDestroy {
-	private readonly defaultEnrollmentExpiresAt = '2026-10-10T19:00:00.000Z';
 	private readonly engineeringArabicVideoUrl = 'https://youtu.be/MWnaGMPUvXQ';
 	private readonly arabicEnrollmentFormLink = 'https://forms.gle/mhopqPdxUPxQEN9K8';
 	private readonly englishEnrollmentFormLink = 'https://forms.gle/WFv9urJ1QDu3eE5y9';
@@ -48,6 +56,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 	activeScheduleImage: ScheduleImage | null = null;
 	activeScheduleIndex = 0;
 	isScheduleReady = false;
+	isSubscriptionStateLoaded = false;
 	isEnrollmentClosed = false;
 	isCountdownEnabled = false;
 	enrollmentReopenMessage = 'سيتم فتح الاشتراك مع بداية الشهر القادم بإذن الله.';
@@ -103,7 +112,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 		return (this.subscriptionDetails?.pricingGroups || []).filter((group: any) => group?.isActive !== false && String(group.label || '').trim());
 	}
 	get subscriptionGroupTypes(): string[] { return this.subscriptionPricingGroups.map(group => group.label); }
-	get availableSubscriptionSupervisors(): string[] { return this.isEnglishSubscription ? ['مهندسة هدير', 'طالب جديد'] : this.subscriptionSupervisors.filter(supervisor => supervisor !== 'مهندسة هدير'); }
+	get availableSubscriptionSupervisors(): string[] { return this.isEnglishSubscription ? ['مهندسة هدير', 'طالب جديد'] : this.subscriptionSupervisors; }
 	private readonly http = inject(HttpClient);
 
 	submitDeliveryWhatsApp(): void {
@@ -318,6 +327,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 		if (!state) {
 			return;
 		}
+		this.isSubscriptionStateLoaded = true;
 		this.isScheduleReady = true;
 
 		const configuredExpiry = String(state.enrollmentWindow?.expiresAt || '');
@@ -361,6 +371,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 					price: loaded.review?.price ?? this.subscriptionDetails.review.price
 				},
 				pricingGroups: Array.isArray(loaded.pricingGroups) ? loaded.pricingGroups.map((group: any) => ({ ...group, name: String(group.name ?? '') })) : this.subscriptionDetails.pricingGroups,
+				features: [...new Set([...SUBSCRIPTION_FEATURES, ...(Array.isArray(loaded.features) ? loaded.features : [])])],
 				googleForm: {
 					...this.subscriptionDetails.googleForm,
 					...(legacyForm ?? {})
@@ -420,14 +431,7 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 			price: '800'
 		},
 		currency: 'ج',
-		features: [
-			'محاضرات تأسيسية من الصفر',
-			'محتوى السبورة (PDF)',
-			'حل الواجبات بالتفصيل',
-			'اختبارات إلكترونية تقييمية أسبوعياً',
-			'متابعة شخصية من التيم',
-			'سيستم متابعة لمتابعة المستوى'
-		],
+		features: [...SUBSCRIPTION_FEATURES],
 		googleForm: {
 			label: 'اشتراك الشهر الأول — دفعة 2027',
 			description: 'فورم اشتراك شهر أكتوبر',
@@ -534,16 +538,11 @@ export class SubscriptionAbReviewsPageComponent implements OnInit, AfterViewInit
 	}
 
 	private applySubscriptionProgram(): void {
-		// Render the countdown with the hero on the first paint. The CMS value
-		// replaces this fallback as soon as it arrives, without inserting the
-		// section late and making it miss the hero animation.
-		this.enrollmentExpiresAt = this.defaultEnrollmentExpiresAt;
-		this.closingDate = new Date(this.defaultEnrollmentExpiresAt);
-		this.isCountdownEnabled = true;
-		this.updateClosingCountdown();
-		if (!this.closingTimer && !this.isEnrollmentClosed) {
-			this.closingTimer = setInterval(() => this.updateClosingCountdown(), 1000);
-		}
+		// Enrollment status comes from the CMS. Do not derive a closed state from
+		// the old fallback date before the page state has loaded.
+		this.enrollmentExpiresAt = '';
+		this.closingDate = null;
+		this.isCountdownEnabled = false;
 		this.subscriptionDetails = {
 			...this.subscriptionDetails,
 			videoUrl: !this.isComputersSubscription && !this.isEnglishSubscription ? this.engineeringArabicVideoUrl : '',
