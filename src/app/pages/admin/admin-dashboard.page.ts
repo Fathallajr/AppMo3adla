@@ -195,6 +195,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	private subscriptionSearchTimer?: ReturnType<typeof setTimeout>;
 	subscriptionPendingIssue: SubscriptionRequest | null = null; subscriptionIssueDraft = ''; subscriptionPendingView: SubscriptionRequest | null = null; subscriptionPendingNote: SubscriptionRequest | null = null; subscriptionPendingDelete: SubscriptionRequest | null = null; subscriptionNoteDraft = ''; isSavingSubscriptionNote = false; private subscriptionNotePreviousOverflow = ''; subscriptionPendingEdit: SubscriptionRequest | null = null; subscriptionEditDraft: SubscriptionRequestEditDraft = { program: '', name: '', whatsapp: '', telegram: '', supervisor: '', groupType: '', paymentRecipient: '', transferFrom: '', transferAt: '', school: '' }; isSavingSubscriptionEdit = false; private subscriptionEditPreviousOverflow = ''; subscriptionIssueMessageSelections: string[] = [];
 	subscriptionEditValidationError = '';
+	subscriptionEditPhoneTouched: Record<'whatsapp' | 'telegram' | 'paymentRecipient' | 'transferFrom', boolean> = { whatsapp: false, telegram: false, paymentRecipient: false, transferFrom: false };
 	readonly subscriptionIssueMessageOptions = [
 		{ key: 'transfer', label: 'مشكلة رقم التحويل (اللي حول منه)', message: 'الرقم اللي حول منه مش ظاهر عندي في التحويلات\nاستأذنك ترجع للراجل اللي حولت منه عشان بيكون عنده كذا رقم للتحويل' },
 		{ key: 'identity', label: 'مشكلة صورة البطاقة غير واضحة أو خاطئة', message: 'هندسة استأذنك تبعت بطاقتك كاملة والصورة تكون واضحة\nأو لو رافع شهادة الميلاد\nفين بطاقتك؟' },
@@ -1509,11 +1510,21 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 		};
 		this.errorMessage = '';
 		this.subscriptionEditValidationError = '';
+		this.subscriptionEditPhoneTouched = { whatsapp: false, telegram: false, paymentRecipient: false, transferFrom: false };
 	}
 	subscriptionEditPhoneError(value: string, label: string): string {
+		const field = label === 'رقم واتساب' ? 'whatsapp' : label === 'رقم تليجرام' ? 'telegram' : label === 'رقم التحويل إليه' ? 'paymentRecipient' : 'transferFrom';
+		if (!this.subscriptionEditPhoneTouched[field]) return '';
 		const normalized = String(value || '').trim();
 		if (!normalized) return `${label} مطلوب.`;
 		return /^01\d{9}$/.test(normalized) ? '' : `${label} يجب أن يكون رقمًا مصريًا صحيحًا من 11 رقمًا يبدأ بـ 01.`;
+	}
+	subscriptionEditPhoneFieldError(field: 'whatsapp' | 'telegram' | 'paymentRecipient' | 'transferFrom', value: string, label: string): string {
+		return this.subscriptionEditPhoneTouched[field] ? this.subscriptionEditPhoneError(value, label) : '';
+	}
+	onSubscriptionEditPhoneChange(field: 'whatsapp' | 'telegram' | 'paymentRecipient' | 'transferFrom'): void {
+		this.subscriptionEditPhoneTouched[field] = true;
+		this.subscriptionEditValidationError = '';
 	}
 	onSubscriptionEditProgramChange(): void {
 		if (!this.subscriptionEditSupervisorOptions.includes(this.subscriptionEditDraft.supervisor)) this.subscriptionEditDraft.supervisor = '';
@@ -1532,11 +1543,14 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	saveSubscriptionEdit(): void {
 		const item = this.subscriptionPendingEdit;
 		if (!item || this.isSavingSubscriptionEdit) return;
-		const phoneError = this.subscriptionEditPhoneError(this.subscriptionEditDraft.whatsapp, 'رقم واتساب')
-			|| this.subscriptionEditPhoneError(this.subscriptionEditDraft.telegram, 'رقم تليجرام')
-			|| this.subscriptionEditPhoneError(this.subscriptionEditDraft.paymentRecipient, 'رقم التحويل إليه')
-			|| this.subscriptionEditPhoneError(this.subscriptionEditDraft.transferFrom, 'رقم التحويل منه');
-		if (phoneError) { this.subscriptionEditValidationError = phoneError; return; }
+		const phoneFields: Array<['whatsapp' | 'telegram' | 'paymentRecipient' | 'transferFrom', string, string]> = [
+			['whatsapp', this.subscriptionEditDraft.whatsapp, 'رقم واتساب'],
+			['telegram', this.subscriptionEditDraft.telegram, 'رقم تليجرام'],
+			['paymentRecipient', this.subscriptionEditDraft.paymentRecipient, 'رقم التحويل إليه'],
+			['transferFrom', this.subscriptionEditDraft.transferFrom, 'رقم التحويل منه']
+		];
+		phoneFields.forEach(([field]) => this.subscriptionEditPhoneTouched[field] = true);
+		if (phoneFields.some(([, value, label]) => this.subscriptionEditPhoneError(value, label))) { this.subscriptionEditValidationError = ''; return; }
 		this.subscriptionEditValidationError = '';
 		const payload = Object.fromEntries(Object.entries(this.subscriptionEditDraft).map(([key, value]) => [key, String(value ?? '').trim()])) as Partial<SubscriptionRequest>;
 		this.isSavingSubscriptionEdit = true;
