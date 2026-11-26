@@ -9,7 +9,7 @@ import { CmsPageKey, cmsPageDefaults, cmsPageOptions } from '../../core/cms-page
 import { displayProgramLabel } from '../../core/program-labels';
 import { AdminAuthService } from '../../core/services/admin-auth.service';
 import { MonthlyContentService } from '../../core/services/monthly-content.service';
-import { AdminApiService, AdminUser, Customer, DashboardSummary, Feedback, FreeCodeCampaign, FreeCodeInventoryStat, FreeCodeRequest, FreeCodeStatus, Lead, Program, SubscriptionCampaign, SubscriptionRequest, WheelClaim } from '../../core/services/admin-api.service';
+import { AdminApiService, AdminUser, Customer, DashboardSummary, Feedback, FreeCodeCampaign, FreeCodeInventoryStat, FreeCodeRequest, FreeCodeStatus, Lead, Program, SubscriptionAmountSummary, SubscriptionCampaign, SubscriptionRequest, WheelClaim } from '../../core/services/admin-api.service';
 import { SeoService } from '../../core/seo.service';
 import { ContactFormComponent } from './forms/contact-form.component';
 import { FaqFormComponent } from './forms/faq-form.component';
@@ -140,7 +140,8 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	subscriptionCampaignDetailId = '';
 	subscriptionCampaignUpdatingId = '';
 	subscriptionInventoryStats: Array<{ program: string; total: number; available: number; used: number }> = [];
-	subscriptionInventory: Array<{ id: string; program: string; code: string; status: string; requestId?: string; referenceCode?: string; studentName?: string; studentWhatsapp?: string; parentWhatsapp?: string; studentTelegram?: string; supervisor?: string; groupType?: string; paymentRecipient?: string; transferFrom?: string; transferAt?: string; school?: string; requestCreatedAt?: string; requestUpdatedAt?: string; usedAt?: string; createdAt?: string }> = [];
+	subscriptionInventoryAmountSummary: SubscriptionAmountSummary[] = [];
+	subscriptionInventory: Array<{ id: string; program: string; code: string; status: string; requestId?: string; referenceCode?: string; studentName?: string; studentWhatsapp?: string; parentWhatsapp?: string; studentTelegram?: string; supervisor?: string; groupType?: string; paymentRecipient?: string; transferFrom?: string; transferAt?: string; school?: string; adminNote?: string; requestCreatedAt?: string; requestUpdatedAt?: string; usedAt?: string; createdAt?: string }> = [];
 	subscriptionInventorySearch = '';
 	subscriptionInventoryStatus = '';
 	subscriptionInventoryProgram = '';
@@ -1377,7 +1378,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	get subscriptionCampaignPages(): number { return Math.max(1, Math.ceil(this.subscriptionCampaigns.length / this.subscriptionCampaignPageSize)); }
 	get subscriptionCampaignPageNumbers(): PaginationItem[] { return this.buildPaginationItems(this.subscriptionCampaignPage, this.subscriptionCampaignPages); }
 	setSubscriptionCampaignPage(page: number): void { this.subscriptionCampaignPage = Math.min(Math.max(page, 1), this.subscriptionCampaignPages); }
-	loadSubscriptionInventory(id: string): void { this.subscriptionCampaign = this.subscriptionCampaigns.find(item => item.id === id) || this.subscriptionCampaign; this.adminApi.getSubscriptionInventory(id).subscribe({ next: result => { this.subscriptionInventoryStats = result.stats || []; this.subscriptionInventory = result.data || []; this.subscriptionInventoryPage = 1; this.refreshView(); }, error: err => this.handleApiError(err) }); }
+	loadSubscriptionInventory(id: string): void { this.subscriptionCampaign = this.subscriptionCampaigns.find(item => item.id === id) || this.subscriptionCampaign; this.adminApi.getSubscriptionInventory(id).subscribe({ next: result => { this.subscriptionInventoryStats = result.stats || []; this.subscriptionInventoryAmountSummary = result.amountSummary || []; this.subscriptionInventory = result.data || []; this.subscriptionInventoryPage = 1; this.refreshView(); }, error: err => this.handleApiError(err) }); }
 	get filteredSubscriptionInventory() {
 		const search = this.subscriptionInventorySearch.trim().toLowerCase();
 		return this.subscriptionInventory.filter(item => {
@@ -1390,6 +1391,7 @@ export class AdminDashboardPageComponent implements OnInit, OnDestroy {
 	}
 	get subscriptionInventoryPrograms(): string[] { return Array.from(new Set(this.subscriptionInventory.map(item => item.program).filter(Boolean))); }
 	get subscriptionInventoryGroupTypes(): string[] { return Array.from(new Set(this.subscriptionInventory.map(item => item.groupType).filter(Boolean))) as string[]; }
+	get subscriptionInventoryStatsWithAmounts() { return this.subscriptionInventoryStats.map(stat => ({ ...stat, collectedAmount: this.subscriptionInventoryAmountSummary.find(item => item.program === stat.program)?.totalAmount || 0 })); }
 	get subscriptionInventoryPages(): number { return Math.max(1, Math.ceil(this.filteredSubscriptionInventory.length / this.subscriptionInventoryPageSize)); }
 	get subscriptionInventoryPageNumbers(): PaginationItem[] { return this.buildPaginationItems(this.subscriptionInventoryPage, this.subscriptionInventoryPages); }
 	get pagedSubscriptionInventory() { const start = (this.subscriptionInventoryPage - 1) * this.subscriptionInventoryPageSize; return this.filteredSubscriptionInventory.slice(start, start + this.subscriptionInventoryPageSize); }
